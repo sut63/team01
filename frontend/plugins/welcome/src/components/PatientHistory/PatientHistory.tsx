@@ -1,9 +1,10 @@
 import React, { FC, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, ThemeProvider, Theme } from '@material-ui/core/styles';
 import { Content, Header, Page, pageTheme } from '@backstage/core';
 import SaveIcon from '@material-ui/icons/Save'; // icon save
 import Swal from 'sweetalert2'; // alert
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import SearchIcon from '@material-ui/icons/Search';
 
 import {
     Container,
@@ -19,6 +20,7 @@ import {
     CardActions,
     CardContent,
     CardHeader,
+    IconButton,
 } from '@material-ui/core';
 
 
@@ -33,8 +35,11 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1,
     },
     card: {
-        width: 900,
+        width: 600,
     },
+    margin: {
+        margin: theme.spacing(3),
+    }
 }));
 
 const PatientHistory: FC<{}> = () => {
@@ -65,137 +70,33 @@ const PatientHistory: FC<{}> = () => {
                     alignItems="center"
                 >
                     <div>
-                        <Card className={classes.card}>
-                            <CardHeader title='ข้อมูลทั่วไป' />
-                            <CardContent>
-                                <div>
-                                    <TextField
-                                        required
-                                        label="เลขบัตรประชาชน 13 หลัก"
-                                        variant="outlined"
-                                        style={{ width: 415 }}
-                                        inputProps={{ maxLength: 13 }}
-                                        helperText="ถ้ามีข้อมูลอยู่เเล้วระบบจะกรอกข้อมูลทั่วไปให้อัตโนมัติ"
-                                    />
-                                    <div style={{ marginTop: 20 }}>
-                                        <FormControl style={{ width: 95 }}>
-                                            <InputLabel>คํานําหน้า</InputLabel>
-                                            <Select
-                                                id="blood_type"
-                                                onChange={handleChange}
-                                                variant='outlined'
-                                            >
-                                            </Select>
-                                        </FormControl>
-                                        <TextField
-                                            required
-                                            label="ชื่อ"
-                                            variant="outlined"
-                                            style={{ width: 300, marginLeft: 20 }}
-                                        />
-                                        <TextField
-                                            required
-                                            label="นามสกุล"
-                                            variant="outlined"
-                                            style={{ width: 300, marginLeft: 20 }}
-                                        />
-                                    </div>
-                                    <div style={{ marginTop: 20 }}>
-                                        <FormControl style={{ width: 95 }}>
-                                            <InputLabel required>เพศ</InputLabel>
-                                            <Select
-                                                id="gender"
-                                                onChange={handleChange}
-                                                variant='outlined'
-                                            >
-                                            </Select>
-                                        </FormControl>
-                                        <TextField
-                                            required
-                                            label="อายุ"
-                                            variant="outlined"
-                                            style={{ width: 95, marginLeft: 20 }}
-                                        />
-                                        <FormControl style={{ width: 95, marginLeft: 20 }}>
-                                            <InputLabel required>หมู่เลือด</InputLabel>
-                                            <Select
-                                                id="blood_type"
-                                                onChange={handleChange}
-                                                variant='outlined'
-                                            >
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                    <div style={{ marginTop: 20 }}>
-                                        <TextField
-                                            label="โรคประจําตัว"
-                                            variant="outlined"
-                                            style={{ width: 325 }}
-                                            multiline
-                                            rows={3}
-                                        />
-                                        <TextField
-                                            label="โรคเรื้อรัง"
-                                            variant="outlined"
-                                            style={{ width: 325, marginLeft: 20 }}
-                                            multiline
-                                            rows={3}
-                                        />
-                                    </div>
-                                    <div style={{ marginTop: 20 }}>
-                                        <TextField
-                                            value={phoneNumber}
-                                            label="บ้านเเลขที่"
-                                            variant="outlined"
-                                            onChange={handleChange}
-                                            style={{ width: 95 }}
-                                        />
-                                        <FormControl style={{ width: 210, marginLeft: 20 }}>
-                                            <InputLabel>จังหวัด</InputLabel>
-                                            <Select
-                                                id="blood_type"
-                                                onChange={handleChange}
-                                                variant='outlined'
-                                            >
-                                            </Select>
-                                        </FormControl>
-                                        <FormControl style={{ width: 210, marginLeft: 20 }}>
-                                            <InputLabel>อําเภอ</InputLabel>
-                                            <Select
-                                                id="blood_type"
-                                                onChange={handleChange}
-                                                variant='outlined'
-                                            >
-                                            </Select>
-                                        </FormControl>
-                                        <FormControl style={{ width: 210, marginLeft: 20 }}>
-                                            <InputLabel>ตําบล</InputLabel>
-                                            <Select
-                                                id="blood_type"
-                                                onChange={handleChange}
-                                                variant='outlined'
-                                            >
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                    <div style={{ marginTop: 20 }}>
-                                        <TextField
-                                            value={phoneNumber}
-                                            label="เบอร์โทรศัพท์"
-                                            variant="outlined"
-                                            onChange={handleChange}
-                                            style={{ width: 325 }}
-                                            inputProps={{ maxLength: 10 }}
-                                        />
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
                         <Card className={classes.card} style={{ marginTop: 10 }}>
-                            <CardHeader title='ข้อมูลซักประวัติ' />
                             <CardContent>
-                                <div>
+                                <div className={classes.margin}>
                                     <div>
+                                        <TextField
+                                            label="เลขบัตรประชาชน 13 หลัก"
+                                            required
+                                            variant='outlined'
+                                            style={{ width: 440 }}
+                                        />
+                                        <Button
+                                            variant='contained'
+                                            style={{ marginLeft: 10, height: 55 }}
+                                        >
+                                            <SearchIcon fontSize='large' />
+                                        </Button>
+                                    </div>
+                                    <div style={{ marginTop: 40 }}>
+                                        <TextField
+                                            disabled
+                                            label="ชื่อผู้ป่วย"
+                                            defaultValue="Mr. NAME SURNAME"
+                                            variant='outlined'
+                                            style={{ width: 520 }}
+                                        />
+                                    </div>
+                                    <div style={{ marginTop: 40 }}>
                                         <TextField
                                             label="เลือกวันที่"
                                             name="added"
@@ -204,7 +105,7 @@ const PatientHistory: FC<{}> = () => {
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
-                                            style={{ width: 200 }}
+                                            style={{ width: 245 }}
                                         />
                                         <TextField
                                             label="เลือกเวลา"
@@ -214,38 +115,33 @@ const PatientHistory: FC<{}> = () => {
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
-                                            style={{ marginLeft: 20, width: 150 }}
+                                            style={{ width: 245, marginLeft: 30 }}
                                         />
                                     </div>
-                                    <div style={{ marginTop: 20 }}>
+                                    <div style={{ marginTop: 40 }}>
                                         <TextField
                                             label="น้ำหนัก"
                                             variant="outlined"
-                                            style={{ width: 90 }}
+                                            style={{ width: 153 }}
                                         />
                                         <TextField
                                             label="ส่วนสูง"
                                             variant="outlined"
-                                            style={{ width: 90, marginLeft: 20 }}
-                                        />
-                                        <TextField
-                                            label="อุณหภูมิ"
-                                            variant="outlined"
-                                            style={{ width: 95, marginLeft: 20 }}
+                                            style={{ width: 153, marginLeft: 30 }}
                                         />
                                         <TextField
                                             label="ความดันโลหิต"
                                             variant="outlined"
-                                            style={{ width: 120, marginLeft: 20 }}
+                                            style={{ width: 153, marginLeft: 30 }}
                                         />
                                     </div>
-                                    <div style={{ marginTop: 20 }}>
+                                    <div style={{ marginTop: 40 }}>
                                         <TextField
                                             label="อาการเบื้องต้น"
                                             variant="outlined"
-                                            style={{ width: 370 }}
+                                            style={{ width: 520 }}
                                             multiline
-                                            rows={3}
+                                            rows={5}
                                         />
                                     </div>
                                 </div>

@@ -14,7 +14,6 @@ type DispenseMedicine struct {
 // Fields of the DispenseMedicine.
 func (DispenseMedicine) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("annotation"),
 		field.Time("datetime"),
 	}
 }
@@ -23,6 +22,6 @@ func (DispenseMedicine) Fields() []ent.Field {
 func (DispenseMedicine) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("pharmacist", Pharmacist.Type).Ref("dispensemedicine").Unique(),
-		edge.From("medicine", Medicine.Type).Ref("dispensemedicine").Unique(),
+		edge.From("annotation", Annotation.Type).Ref("dispensemedicine").Unique(),
 	}
 }

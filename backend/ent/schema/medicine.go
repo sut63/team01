@@ -30,6 +30,5 @@ func (Medicine) Edges() []ent.Edge {
 		edge.From("MedicineType", MedicineType.Type).Ref("Medicine").Unique(),
 		edge.From("UnitOfMedicine", UnitOfMedicine.Type).Ref("Medicine").Unique(),
 		edge.To("drugallergys", DrugAllergy.Type).StorageKey(edge.Column("medicine_id")),
-		edge.To("dispensemedicine", DispenseMedicine.Type).StorageKey(edge.Column("medicine_id")),
 	}
 }

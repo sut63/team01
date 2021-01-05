@@ -17,7 +17,6 @@ func (Pharmacist) Fields() []ent.Field {
 		field.String("email").NotEmpty().Unique(),
 		field.String("password").NotEmpty(),
 		field.String("name").NotEmpty(),
-		field.String("surname").NotEmpty(),
 	}
 }
 
@@ -25,6 +24,5 @@ func (Pharmacist) Fields() []ent.Field {
 func (Pharmacist) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("dispensemedicine", DispenseMedicine.Type).StorageKey(edge.Column("pharmacist_id")),
-		edge.From("nameprefix", NamePrefix.Type).Ref("pharmacist").Unique(),
 	}
 }

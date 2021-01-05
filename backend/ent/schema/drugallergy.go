@@ -22,6 +22,7 @@ func (DrugAllergy) Fields() []ent.Field {
 func (DrugAllergy) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("patient", PatientInfo.Type).Ref("drugallergys").Unique(),
-		edge.From("medicine", PatientInfo.Type).Ref("drugallergys").Unique(),
+		edge.From("medicine", Medicine.Type).Ref("drugallergys").Unique(),
+		edge.From("pharmacist", Pharmacist.Type).Ref("drugallergys").Unique(),
 	}
 }

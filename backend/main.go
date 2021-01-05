@@ -10,7 +10,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/sut63/team01/controllers"
+
+	//"github.com/sut63/team01/controllers"
 	"github.com/sut63/team01/ent"
 	//"github.com/sut63/team01/ent/user"
 )
@@ -98,14 +99,14 @@ func main() {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
 	/*
-	v1 := router.Group("/api/v1")
-	controllers.NewUserController(v1, client)
-	controllers.NewVideoController(v1, client)
-	controllers.NewResolutionController(v1, client)
-	controllers.NewPlaylistController(v1, client)
-	controllers.NewPlaylistVideoController(v1, client)
+		v1 := router.Group("/api/v1")
+		controllers.NewUserController(v1, client)
+		controllers.NewVideoController(v1, client)
+		controllers.NewResolutionController(v1, client)
+		controllers.NewPlaylistController(v1, client)
+		controllers.NewPlaylistVideoController(v1, client)
 	*/
-	
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run()
 }

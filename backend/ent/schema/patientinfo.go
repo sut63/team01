@@ -16,7 +16,6 @@ func (PatientInfo) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("cardNumber").NotEmpty().Unique(),
 		field.String("name").NotEmpty(),
-		field.String("surname").NotEmpty(),
 		field.String("gender").NotEmpty(),
 		field.Int("age").Positive(),
 	}

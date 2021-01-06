@@ -25,5 +25,6 @@ func (Pharmacist) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("dispensemedicine", DispenseMedicine.Type).StorageKey(edge.Column("pharmacist_id")),
 		edge.To("drugallergys", DrugAllergy.Type).StorageKey(edge.Column("pharmacist_id")),
+		edge.To("order", Order.Type).StorageKey(edge.Column("pharmacist_id")),
 	}
 }

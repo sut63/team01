@@ -2,9 +2,9 @@ package schema
 
 import (
 	"github.com/facebookincubator/ent"
-	"github.com/facebookincubator/ent/schema/field"
 	"github.com/facebookincubator/ent/schema/edge"
- )
+	"github.com/facebookincubator/ent/schema/field"
+)
 
 // PatientInfo holds the schema definition for the PatientInfo entity.
 type PatientInfo struct {
@@ -25,5 +25,6 @@ func (PatientInfo) Fields() []ent.Field {
 func (PatientInfo) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("drugallergys", DrugAllergy.Type).StorageKey(edge.Column("patient_id")),
+		edge.To("patientprescription", Prescription.Type).StorageKey(edge.Column("patient_id")),
 	}
 }

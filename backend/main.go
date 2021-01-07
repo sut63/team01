@@ -43,6 +43,19 @@ type Video struct {
 	Owner int
 }*/
 
+//PatientInfos Structure
+type PatientInfos struct {
+	PatientInfo []PatientInfo
+}
+
+//PatientInfo Structure
+type PatientInfo struct {
+	CardNumber	string
+	Name		string
+	Gender		string
+	Age			int
+}
+
 //Annotations Structure
 type Annotations struct {
 	Annotation []Annotation
@@ -144,6 +157,29 @@ func main() {
 	controllers.NewAnnotationController(v1, client)
 	controllers.NewPharmacistController(v1, client)
 	controllers.NewDispenseMedicineController(v1, client)
+	controllers.NewDrugAllergyController(v1, client)
+	controllers.NewPatientInfoController(v1, client)
+
+	//Set PatientInfos Data
+	Patient := PatientInfos{
+		PatientInfo: []PatientInfo{
+			PatientInfo{"1720800134909", "Mr. Thanat Sukantatoon", "Male", 21},
+			PatientInfo{"1720800125787", "Mr. Somchi Jaidee", "Male", 56},
+			PatientInfo{"1920922478655", "Mrs. Somying GingGongKaw", "Female", 30},
+			PatientInfo{"1578320214555", "Mr. Jaiped Jedsee", "Male", 80},
+			PatientInfo{"1731231232562", "Mrs. Somporn Sornsin", "Female", 45},
+			PatientInfo{"1896325211111", "Mr. Pongsak Samakkee", "Male", 99},
+		},
+	}
+	for _, p := range Patient.PatientInfo {
+		client.PatientInfo.
+			Create().
+			SetCardNumber(p.CardNumber).
+			SetName(p.Name).
+			SetGender(p.Gender).
+			SetAge(p.Age).
+			Save(context.Background())
+	}
 
 	//Set Annotations Data
 	Annota := Annotations{

@@ -91,6 +91,18 @@ type DispenseMedicine struct {
 	Pharmacist   int
 }
 
+//Doctors Structure
+type Doctors struct {
+	Doctor []Doctor
+}
+
+//Doctor Structure
+type Doctor struct {
+	email              string
+	password           string
+	name               string
+}
+
 // @title SUT SA Example API Playlist Vidoe
 // @version 1.0
 // @description This is a sample server for SUT SE 2563
@@ -159,6 +171,7 @@ func main() {
 	controllers.NewDispenseMedicineController(v1, client)
 	controllers.NewDrugAllergyController(v1, client)
 	controllers.NewPatientInfoController(v1, client)
+	controllers.NewDoctorController(v1, client)
 
 	//Set PatientInfos Data
 	Patient := PatientInfos{
@@ -213,6 +226,24 @@ func main() {
 			SetEmail(phar.Email).
 			SetPassword(phar.Password).
 			SetName(phar.Name).
+			Save(context.Background())
+	}
+
+	//Set Doctor Data
+	Doct := Doctors{
+		Doctor: []Doctor{
+			Doctor{"jennie01@gmail.com", "je1111", "Ph.D. Jennie Kim"},
+			Doctor{"jisoo02@gmail.com", "ji2222", "Ph.D. Kim Chisu"},
+			Doctor{"rose03@gmail.com", "ro3333", "Ph.D. Roseanne Park"},
+			Doctor{"lisa04@gmail.com", "li4444", "Ph.D. Lalisa Manoban"},
+		},
+	}
+	for _, doc := range Doct.Doctor {
+		client.Doctor.
+			Create().
+			SetEmail(doc.email).
+			SetPassword(doc.password).
+			SetName(doc.name).
 			Save(context.Background())
 	}
 

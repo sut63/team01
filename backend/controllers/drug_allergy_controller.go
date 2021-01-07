@@ -1,29 +1,30 @@
 package controllers
- 
+
 import (
-   "context"
-   "fmt"
-   "time"
-   "strconv"
-   "github.com/sut63/team01/ent"
-   "github.com/sut63/team01/ent/drugallergy"
-   "github.com/sut63/team01/ent/patientinfo"
-   "github.com/sut63/team01/ent/pharmacist"
-   "github.com/sut63/team01/ent/medicine"
-   "github.com/gin-gonic/gin"
+	"context"
+	"fmt"
+	"strconv"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sut63/team01/ent"
+	"github.com/sut63/team01/ent/drugallergy"
+	"github.com/sut63/team01/ent/medicine"
+	"github.com/sut63/team01/ent/patientinfo"
+	"github.com/sut63/team01/ent/pharmacist"
 )
- 
+
 // DrugAllergyController defines the struct for the drug-allergy controller
 type DrugAllergyController struct {
-   client *ent.Client
-   router gin.IRouter
+	client *ent.Client
+	router gin.IRouter
 }
 
 type DrugAllergy struct {
-	Patient		int
-	Medicine   	int
-	Pharmacist 	int
-	DateTime   	string
+	Patient    int
+	Medicine   int
+	Pharmacist int
+	DateTime   string
 }
 
 // CreateDrugAllergy handles POST requests for adding DrugAllergy entities
@@ -81,7 +82,7 @@ func (ctl *DrugAllergyController) CreateDrugAllergy(c *gin.Context) {
 		})
 		return
 	}
-  
+
 	time, err := time.Parse(time.RFC3339, obj.DateTime)
 
 	da, err := ctl.client.DrugAllergy.
@@ -97,11 +98,11 @@ func (ctl *DrugAllergyController) CreateDrugAllergy(c *gin.Context) {
 		})
 		return
 	}
-  
+
 	c.JSON(200, da)
 }
 
- // GetDrugAllergy handles GET requests to retrieve a DrugAllergy entity
+// GetDrugAllergy handles GET requests to retrieve a DrugAllergy entity
 // @Summary Get a DrugAllergy entity by ID
 // @Description get DrugAllergy by ID
 // @ID get-drug-allergy
@@ -120,7 +121,7 @@ func (ctl *DrugAllergyController) GetDrugAllergy(c *gin.Context) {
 		})
 		return
 	}
-  
+
 	da, err := ctl.client.DrugAllergy.
 		Query().
 		Where(drugallergy.IDEQ(int(id))).
@@ -131,11 +132,11 @@ func (ctl *DrugAllergyController) GetDrugAllergy(c *gin.Context) {
 		})
 		return
 	}
-  
+
 	c.JSON(200, da)
 }
 
- // ListDrugAllergy handles request to get a list of DrugAllergy entities
+// ListDrugAllergy handles request to get a list of DrugAllergy entities
 // @Summary List DrugAllergy entities
 // @Description list DrugAllergy entities
 // @ID list-drug-allergy
@@ -151,16 +152,20 @@ func (ctl *DrugAllergyController) ListDrugAllergy(c *gin.Context) {
 	limit := 10
 	if limitQuery != "" {
 		limit64, err := strconv.ParseInt(limitQuery, 10, 64)
-		if err == nil {limit = int(limit64)}
+		if err == nil {
+			limit = int(limit64)
+		}
 	}
-  
+
 	offsetQuery := c.Query("offset")
 	offset := 0
 	if offsetQuery != "" {
 		offset64, err := strconv.ParseInt(offsetQuery, 10, 64)
-		if err == nil {offset = int(offset64)}
+		if err == nil {
+			offset = int(offset64)
+		}
 	}
-  
+
 	DrugAllergys, err := ctl.client.DrugAllergy.
 		Query().
 		WithPatient().
@@ -169,15 +174,15 @@ func (ctl *DrugAllergyController) ListDrugAllergy(c *gin.Context) {
 		Limit(limit).
 		Offset(offset).
 		All(context.Background())
-		if err != nil {
-		c.JSON(400, gin.H{"error": err.Error(),})
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-  
+
 	c.JSON(200, DrugAllergys)
 }
 
- // DeleteDrugAllergy handles DELETE requests to delete a DrugAllergy entity
+// DeleteDrugAllergy handles DELETE requests to delete a DrugAllergy entity
 // @Summary Delete a DrugAllergy entity by ID
 // @Description get DrugAllergy by ID
 // @ID delete-drug-allergy
@@ -196,7 +201,7 @@ func (ctl *DrugAllergyController) DeleteDrugAllergy(c *gin.Context) {
 		})
 		return
 	}
-  
+
 	err = ctl.client.DrugAllergy.
 		DeleteOneID(int(id)).
 		Exec(context.Background())
@@ -206,11 +211,11 @@ func (ctl *DrugAllergyController) DeleteDrugAllergy(c *gin.Context) {
 		})
 		return
 	}
-  
+
 	c.JSON(200, gin.H{"result": fmt.Sprintf("ok deleted %v", id)})
 }
 
- // UpdateDrugAllergy handles PUT requests to update a DrugAllergy entity
+// UpdateDrugAllergy handles PUT requests to update a DrugAllergy entity
 // @Summary Update a DrugAllergy entity by ID
 // @Description update DrugAllergy by ID
 // @ID update-drug-allergy
@@ -230,7 +235,7 @@ func (ctl *DrugAllergyController) UpdateDrugAllergy(c *gin.Context) {
 		})
 		return
 	}
-  
+
 	obj := ent.DrugAllergy{}
 	if err := c.ShouldBind(&obj); err != nil {
 		c.JSON(400, gin.H{
@@ -243,14 +248,14 @@ func (ctl *DrugAllergyController) UpdateDrugAllergy(c *gin.Context) {
 		UpdateOne(&obj).
 		Save(context.Background())
 	if err != nil {
-		c.JSON(400, gin.H{"error": "update failed",})
+		c.JSON(400, gin.H{"error": "update failed"})
 		return
 	}
-  
+
 	c.JSON(200, u)
 }
 
- // NewDrugAllergyController creates and registers handles for the DrugAllergy controller
+// NewDrugAllergyController creates and registers handles for the DrugAllergy controller
 func NewDrugAllergyController(router gin.IRouter, client *ent.Client) *DrugAllergyController {
 	da := &DrugAllergyController{
 		client: client,
@@ -259,17 +264,16 @@ func NewDrugAllergyController(router gin.IRouter, client *ent.Client) *DrugAller
 	da.register()
 	return da
 }
-  
- // InitDrugAllergyController registers routes to the main engine
- func (ctl *DrugAllergyController) register() {
+
+// InitDrugAllergyController registers routes to the main engine
+func (ctl *DrugAllergyController) register() {
 	drugallergys := ctl.router.Group("/drugallergys")
-  
+
 	drugallergys.GET("", ctl.ListDrugAllergy)
-  
+
 	// CRUD
 	drugallergys.POST("", ctl.CreateDrugAllergy)
 	drugallergys.GET(":id", ctl.GetDrugAllergy)
 	drugallergys.PUT(":id", ctl.UpdateDrugAllergy)
 	drugallergys.DELETE(":id", ctl.DeleteDrugAllergy)
 }
- 

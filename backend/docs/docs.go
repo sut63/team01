@@ -820,7 +820,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/ent.Prescription"
+                            "$ref": "#/definitions/controllers.Prescription"
                         }
                     }
                 ],
@@ -2324,6 +2324,23 @@ var doc = `{
                 },
                 "unitOfMedicineID": {
                     "type": "integer"
+                }
+            }
+        },
+        "controllers.Prescription": {
+            "type": "object",
+            "properties": {
+                "doctorID": {
+                    "type": "integer"
+                },
+                "medicineID": {
+                    "type": "integer"
+                },
+                "patientInfoID": {
+                    "type": "integer"
+                },
+                "value": {
+                    "type": "string"
                 }
             }
         },

@@ -448,6 +448,9 @@ definitions:
     type: object
   ent.Prescription:
     properties:
+      Value:
+        description: Value holds the value of the "Value" field.
+        type: integer
       edges:
         $ref: '#/definitions/ent.PrescriptionEdges'
         description: |-
@@ -456,9 +459,6 @@ definitions:
         type: object
       id:
         description: ID of the ent.
-        type: integer
-      value:
-        description: Value holds the value of the "value" field.
         type: integer
     type: object
   ent.PrescriptionEdges:
@@ -1006,6 +1006,124 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Update a MedicineType entity by ID
+  /Prescription:
+    get:
+      description: list Prescription entities
+      operationId: list-Prescription
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Prescription'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List Prescription entities
+    post:
+      consumes:
+      - application/json
+      description: Create Prescription
+      operationId: create-Prescription
+      parameters:
+      - description: Prescription entity
+        in: body
+        name: Prescription
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Prescription'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Prescription'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create Prescription
+  /Prescription/{id}:
+    delete:
+      description: get Prescription by ID
+      operationId: delete-Prescription
+      parameters:
+      - description: Prescription ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Delete a Prescription entity by ID
+    get:
+      description: get Prescription by ID
+      operationId: get-Prescription
+      parameters:
+      - description: Prescription ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Prescription'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a Prescription entity by ID
   /UnitOfMedicine:
     get:
       description: list UnitOfMedicine entities

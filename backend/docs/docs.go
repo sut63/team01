@@ -757,6 +757,183 @@ var doc = `{
                 }
             }
         },
+        "/Prescription": {
+            "get": {
+                "description": "list Prescription entities",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List Prescription entities",
+                "operationId": "list-Prescription",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.Prescription"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create Prescription",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create Prescription",
+                "operationId": "create-Prescription",
+                "parameters": [
+                    {
+                        "description": "Prescription entity",
+                        "name": "Prescription",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.Prescription"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Prescription"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/Prescription/{id}": {
+            "get": {
+                "description": "get Prescription by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a Prescription entity by ID",
+                "operationId": "get-Prescription",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Prescription ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Prescription"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "get Prescription by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete a Prescription entity by ID",
+                "operationId": "delete-Prescription",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Prescription ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
         "/UnitOfMedicine": {
             "get": {
                 "description": "list UnitOfMedicine entities",
@@ -2705,6 +2882,10 @@ var doc = `{
         "ent.Prescription": {
             "type": "object",
             "properties": {
+                "Value": {
+                    "description": "Value holds the value of the \"Value\" field.",
+                    "type": "integer"
+                },
                 "edges": {
                     "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the PrescriptionQuery when eager-loading is set.",
                     "type": "object",
@@ -2712,10 +2893,6 @@ var doc = `{
                 },
                 "id": {
                     "description": "ID of the ent.",
-                    "type": "integer"
-                },
-                "value": {
-                    "description": "Value holds the value of the \"value\" field.",
                     "type": "integer"
                 }
             }

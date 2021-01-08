@@ -91,28 +91,28 @@ func IDLTE(id int) predicate.Prescription {
 	})
 }
 
-// Value applies equality check predicate on the "value" field. It's identical to ValueEQ.
+// Value applies equality check predicate on the "Value" field. It's identical to ValueEQ.
 func Value(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldValue), v))
 	})
 }
 
-// ValueEQ applies the EQ predicate on the "value" field.
+// ValueEQ applies the EQ predicate on the "Value" field.
 func ValueEQ(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldValue), v))
 	})
 }
 
-// ValueNEQ applies the NEQ predicate on the "value" field.
+// ValueNEQ applies the NEQ predicate on the "Value" field.
 func ValueNEQ(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldValue), v))
 	})
 }
 
-// ValueIn applies the In predicate on the "value" field.
+// ValueIn applies the In predicate on the "Value" field.
 func ValueIn(vs ...int) predicate.Prescription {
 	v := make([]interface{}, len(vs))
 	for i := range v {
@@ -129,7 +129,7 @@ func ValueIn(vs ...int) predicate.Prescription {
 	})
 }
 
-// ValueNotIn applies the NotIn predicate on the "value" field.
+// ValueNotIn applies the NotIn predicate on the "Value" field.
 func ValueNotIn(vs ...int) predicate.Prescription {
 	v := make([]interface{}, len(vs))
 	for i := range v {
@@ -146,28 +146,28 @@ func ValueNotIn(vs ...int) predicate.Prescription {
 	})
 }
 
-// ValueGT applies the GT predicate on the "value" field.
+// ValueGT applies the GT predicate on the "Value" field.
 func ValueGT(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldValue), v))
 	})
 }
 
-// ValueGTE applies the GTE predicate on the "value" field.
+// ValueGTE applies the GTE predicate on the "Value" field.
 func ValueGTE(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldValue), v))
 	})
 }
 
-// ValueLT applies the LT predicate on the "value" field.
+// ValueLT applies the LT predicate on the "Value" field.
 func ValueLT(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldValue), v))
 	})
 }
 
-// ValueLTE applies the LTE predicate on the "value" field.
+// ValueLTE applies the LTE predicate on the "Value" field.
 func ValueLTE(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldValue), v))

@@ -172,6 +172,7 @@ func main() {
 	controllers.NewDrugAllergyController(v1, client)
 	controllers.NewPatientInfoController(v1, client)
 	controllers.NewDoctorController(v1, client)
+	controllers.NewPrescriptionController(v1, client)
 
 	//Set PatientInfos Data
 	Patient := PatientInfos{

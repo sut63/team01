@@ -33,7 +33,7 @@ type Prescription struct {
 // @ID create-Prescription
 // @Accept   json
 // @Produce  json
-// @Param Prescription body ent.Prescription true "Prescription entity"
+// @Param Prescription body Prescription true "Prescription entity"
 // @Success 200 {object} ent.Prescription
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H

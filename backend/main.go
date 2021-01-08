@@ -172,10 +172,7 @@ func main() {
 	controllers.NewDrugAllergyController(v1, client)
 	controllers.NewPatientInfoController(v1, client)
 	controllers.NewDoctorController(v1, client)
-<<<<<<< HEAD
 	controllers.NewPrescriptionController(v1, client)
-=======
->>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 
 	//Set PatientInfos Data
 	Patient := PatientInfos{

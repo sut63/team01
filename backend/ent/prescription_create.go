@@ -23,11 +23,7 @@ type PrescriptionCreate struct {
 	hooks    []Hook
 }
 
-<<<<<<< HEAD
 // SetValue sets the Value field.
-=======
-// SetValue sets the value field.
->>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 func (pc *PrescriptionCreate) SetValue(i int) *PrescriptionCreate {
 	pc.mutation.SetValue(i)
 	return pc
@@ -117,11 +113,7 @@ func (pc *PrescriptionCreate) Mutation() *PrescriptionMutation {
 // Save creates the Prescription in the database.
 func (pc *PrescriptionCreate) Save(ctx context.Context) (*Prescription, error) {
 	if _, ok := pc.mutation.Value(); !ok {
-<<<<<<< HEAD
 		return nil, &ValidationError{Name: "Value", err: errors.New("ent: missing required field \"Value\"")}
-=======
-		return nil, &ValidationError{Name: "value", err: errors.New("ent: missing required field \"value\"")}
->>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 	}
 	var (
 		err  error

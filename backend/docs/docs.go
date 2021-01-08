@@ -757,7 +757,6 @@ var doc = `{
                 }
             }
         },
-<<<<<<< HEAD
         "/Prescription": {
             "get": {
                 "description": "list Prescription entities",
@@ -821,7 +820,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/ent.Prescription"
+                            "$ref": "#/definitions/controllers.Prescription"
                         }
                     }
                 ],
@@ -935,8 +934,6 @@ var doc = `{
                 }
             }
         },
-=======
->>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
         "/UnitOfMedicine": {
             "get": {
                 "description": "list UnitOfMedicine entities",
@@ -2330,6 +2327,23 @@ var doc = `{
                 }
             }
         },
+        "controllers.Prescription": {
+            "type": "object",
+            "properties": {
+                "doctorID": {
+                    "type": "integer"
+                },
+                "medicineID": {
+                    "type": "integer"
+                },
+                "patientInfoID": {
+                    "type": "integer"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
         "ent.Annotation": {
             "type": "object",
             "properties": {
@@ -2885,13 +2899,10 @@ var doc = `{
         "ent.Prescription": {
             "type": "object",
             "properties": {
-<<<<<<< HEAD
                 "Value": {
                     "description": "Value holds the value of the \"Value\" field.",
                     "type": "integer"
                 },
-=======
->>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
                 "edges": {
                     "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the PrescriptionQuery when eager-loading is set.",
                     "type": "object",
@@ -2900,13 +2911,6 @@ var doc = `{
                 "id": {
                     "description": "ID of the ent.",
                     "type": "integer"
-<<<<<<< HEAD
-=======
-                },
-                "value": {
-                    "description": "Value holds the value of the \"value\" field.",
-                    "type": "integer"
->>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
                 }
             }
         },

@@ -23,5 +23,7 @@ func (DispenseMedicine) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("pharmacist", Pharmacist.Type).Ref("dispensemedicine").Unique(),
 		edge.From("annotation", Annotation.Type).Ref("dispensemedicine").Unique(),
+		edge.From("prescription", Prescription.Type).Ref("dispensemedicine").Unique(),
+		edge.To("Bills", Bill.Type).StorageKey(edge.Column("dispensemedicine_id")).Unique(),
 	}
 }

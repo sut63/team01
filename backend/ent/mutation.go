@@ -7053,13 +7053,8 @@ type PrescriptionMutation struct {
 	op                          Op
 	typ                         string
 	id                          *int
-<<<<<<< HEAD
 	_Value                      *int
 	add_Value                   *int
-=======
-	value                       *int
-	addvalue                    *int
->>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 	clearedFields               map[string]struct{}
 	prescriptionpatient         *int
 	clearedprescriptionpatient  bool
@@ -7152,7 +7147,6 @@ func (m *PrescriptionMutation) ID() (id int, exists bool) {
 	return *m.id, true
 }
 
-<<<<<<< HEAD
 // SetValue sets the Value field.
 func (m *PrescriptionMutation) SetValue(i int) {
 	m._Value = &i
@@ -7162,28 +7156,13 @@ func (m *PrescriptionMutation) SetValue(i int) {
 // Value returns the Value value in the mutation.
 func (m *PrescriptionMutation) Value() (r int, exists bool) {
 	v := m._Value
-=======
-// SetValue sets the value field.
-func (m *PrescriptionMutation) SetValue(i int) {
-	m.value = &i
-	m.addvalue = nil
-}
-
-// Value returns the value value in the mutation.
-func (m *PrescriptionMutation) Value() (r int, exists bool) {
-	v := m.value
->>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-<<<<<<< HEAD
 // OldValue returns the old Value value of the Prescription.
-=======
-// OldValue returns the old value value of the Prescription.
->>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 // If the Prescription object wasn't provided to the builder, the object is fetched
 // from the database.
 // An error is returned if the mutation operation is not UpdateOne, or database query fails.
@@ -7201,7 +7180,6 @@ func (m *PrescriptionMutation) OldValue(ctx context.Context) (v int, err error) 
 	return oldValue.Value, nil
 }
 
-<<<<<<< HEAD
 // AddValue adds i to Value.
 func (m *PrescriptionMutation) AddValue(i int) {
 	if m.add_Value != nil {
@@ -7214,37 +7192,16 @@ func (m *PrescriptionMutation) AddValue(i int) {
 // AddedValue returns the value that was added to the Value field in this mutation.
 func (m *PrescriptionMutation) AddedValue() (r int, exists bool) {
 	v := m.add_Value
-=======
-// AddValue adds i to value.
-func (m *PrescriptionMutation) AddValue(i int) {
-	if m.addvalue != nil {
-		*m.addvalue += i
-	} else {
-		m.addvalue = &i
-	}
-}
-
-// AddedValue returns the value that was added to the value field in this mutation.
-func (m *PrescriptionMutation) AddedValue() (r int, exists bool) {
-	v := m.addvalue
->>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-<<<<<<< HEAD
 // ResetValue reset all changes of the "Value" field.
 func (m *PrescriptionMutation) ResetValue() {
 	m._Value = nil
 	m.add_Value = nil
-=======
-// ResetValue reset all changes of the "value" field.
-func (m *PrescriptionMutation) ResetValue() {
-	m.value = nil
-	m.addvalue = nil
->>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 }
 
 // SetPrescriptionpatientID sets the prescriptionpatient edge to PatientInfo by id.
@@ -7418,11 +7375,7 @@ func (m *PrescriptionMutation) Type() string {
 // fields that were in/decremented, call AddedFields().
 func (m *PrescriptionMutation) Fields() []string {
 	fields := make([]string, 0, 1)
-<<<<<<< HEAD
 	if m._Value != nil {
-=======
-	if m.value != nil {
->>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 		fields = append(fields, prescription.FieldValue)
 	}
 	return fields
@@ -7470,11 +7423,7 @@ func (m *PrescriptionMutation) SetField(name string, value ent.Value) error {
 // or decremented during this mutation.
 func (m *PrescriptionMutation) AddedFields() []string {
 	var fields []string
-<<<<<<< HEAD
 	if m.add_Value != nil {
-=======
-	if m.addvalue != nil {
->>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 		fields = append(fields, prescription.FieldValue)
 	}
 	return fields

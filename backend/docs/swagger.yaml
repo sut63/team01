@@ -448,9 +448,12 @@ definitions:
     type: object
   ent.Prescription:
     properties:
+<<<<<<< HEAD
       Value:
         description: Value holds the value of the "Value" field.
         type: integer
+=======
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
       edges:
         $ref: '#/definitions/ent.PrescriptionEdges'
         description: |-
@@ -460,6 +463,12 @@ definitions:
       id:
         description: ID of the ent.
         type: integer
+<<<<<<< HEAD
+=======
+      value:
+        description: Value holds the value of the "value" field.
+        type: integer
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
     type: object
   ent.PrescriptionEdges:
     properties:
@@ -1006,6 +1015,7 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Update a MedicineType entity by ID
+<<<<<<< HEAD
   /Prescription:
     get:
       description: list Prescription entities
@@ -1124,6 +1134,8 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Get a Prescription entity by ID
+=======
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
   /UnitOfMedicine:
     get:
       description: list UnitOfMedicine entities

@@ -19,8 +19,13 @@ type Prescription struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+<<<<<<< HEAD
 	// Value holds the value of the "Value" field.
 	Value int `json:"Value,omitempty"`
+=======
+	// Value holds the value of the "value" field.
+	Value int `json:"value,omitempty"`
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PrescriptionQuery when eager-loading is set.
 	Edges       PrescriptionEdges `json:"edges"`
@@ -104,7 +109,11 @@ func (e PrescriptionEdges) DispensemedicineOrErr() (*DispenseMedicine, error) {
 func (*Prescription) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{}, // id
+<<<<<<< HEAD
 		&sql.NullInt64{}, // Value
+=======
+		&sql.NullInt64{}, // value
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 	}
 }
 
@@ -130,7 +139,11 @@ func (pr *Prescription) assignValues(values ...interface{}) error {
 	pr.ID = int(value.Int64)
 	values = values[1:]
 	if value, ok := values[0].(*sql.NullInt64); !ok {
+<<<<<<< HEAD
 		return fmt.Errorf("unexpected type %T for field Value", values[0])
+=======
+		return fmt.Errorf("unexpected type %T for field value", values[0])
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 	} else if value.Valid {
 		pr.Value = int(value.Int64)
 	}
@@ -201,7 +214,11 @@ func (pr *Prescription) String() string {
 	var builder strings.Builder
 	builder.WriteString("Prescription(")
 	builder.WriteString(fmt.Sprintf("id=%v", pr.ID))
+<<<<<<< HEAD
 	builder.WriteString(", Value=")
+=======
+	builder.WriteString(", value=")
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 	builder.WriteString(fmt.Sprintf("%v", pr.Value))
 	builder.WriteByte(')')
 	return builder.String()

@@ -31,14 +31,22 @@ func (pu *PrescriptionUpdate) Where(ps ...predicate.Prescription) *PrescriptionU
 	return pu
 }
 
+<<<<<<< HEAD
 // SetValue sets the Value field.
+=======
+// SetValue sets the value field.
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 func (pu *PrescriptionUpdate) SetValue(i int) *PrescriptionUpdate {
 	pu.mutation.ResetValue()
 	pu.mutation.SetValue(i)
 	return pu
 }
 
+<<<<<<< HEAD
 // AddValue adds i to Value.
+=======
+// AddValue adds i to value.
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 func (pu *PrescriptionUpdate) AddValue(i int) *PrescriptionUpdate {
 	pu.mutation.AddValue(i)
 	return pu
@@ -391,14 +399,22 @@ type PrescriptionUpdateOne struct {
 	mutation *PrescriptionMutation
 }
 
+<<<<<<< HEAD
 // SetValue sets the Value field.
+=======
+// SetValue sets the value field.
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 func (puo *PrescriptionUpdateOne) SetValue(i int) *PrescriptionUpdateOne {
 	puo.mutation.ResetValue()
 	puo.mutation.SetValue(i)
 	return puo
 }
 
+<<<<<<< HEAD
 // AddValue adds i to Value.
+=======
+// AddValue adds i to value.
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 func (puo *PrescriptionUpdateOne) AddValue(i int) *PrescriptionUpdateOne {
 	puo.mutation.AddValue(i)
 	return puo

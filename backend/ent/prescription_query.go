@@ -364,7 +364,11 @@ func (pq *PrescriptionQuery) WithDispensemedicine(opts ...func(*DispenseMedicine
 // Example:
 //
 //	var v []struct {
+<<<<<<< HEAD
 //		Value int `json:"Value,omitempty"`
+=======
+//		Value int `json:"value,omitempty"`
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -390,7 +394,11 @@ func (pq *PrescriptionQuery) GroupBy(field string, fields ...string) *Prescripti
 // Example:
 //
 //	var v []struct {
+<<<<<<< HEAD
 //		Value int `json:"Value,omitempty"`
+=======
+//		Value int `json:"value,omitempty"`
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 //	}
 //
 //	client.Prescription.Query().

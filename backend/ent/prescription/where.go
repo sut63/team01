@@ -91,28 +91,44 @@ func IDLTE(id int) predicate.Prescription {
 	})
 }
 
+<<<<<<< HEAD
 // Value applies equality check predicate on the "Value" field. It's identical to ValueEQ.
+=======
+// Value applies equality check predicate on the "value" field. It's identical to ValueEQ.
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 func Value(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldValue), v))
 	})
 }
 
+<<<<<<< HEAD
 // ValueEQ applies the EQ predicate on the "Value" field.
+=======
+// ValueEQ applies the EQ predicate on the "value" field.
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 func ValueEQ(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldValue), v))
 	})
 }
 
+<<<<<<< HEAD
 // ValueNEQ applies the NEQ predicate on the "Value" field.
+=======
+// ValueNEQ applies the NEQ predicate on the "value" field.
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 func ValueNEQ(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldValue), v))
 	})
 }
 
+<<<<<<< HEAD
 // ValueIn applies the In predicate on the "Value" field.
+=======
+// ValueIn applies the In predicate on the "value" field.
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 func ValueIn(vs ...int) predicate.Prescription {
 	v := make([]interface{}, len(vs))
 	for i := range v {
@@ -129,7 +145,11 @@ func ValueIn(vs ...int) predicate.Prescription {
 	})
 }
 
+<<<<<<< HEAD
 // ValueNotIn applies the NotIn predicate on the "Value" field.
+=======
+// ValueNotIn applies the NotIn predicate on the "value" field.
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 func ValueNotIn(vs ...int) predicate.Prescription {
 	v := make([]interface{}, len(vs))
 	for i := range v {
@@ -146,28 +166,44 @@ func ValueNotIn(vs ...int) predicate.Prescription {
 	})
 }
 
+<<<<<<< HEAD
 // ValueGT applies the GT predicate on the "Value" field.
+=======
+// ValueGT applies the GT predicate on the "value" field.
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 func ValueGT(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldValue), v))
 	})
 }
 
+<<<<<<< HEAD
 // ValueGTE applies the GTE predicate on the "Value" field.
+=======
+// ValueGTE applies the GTE predicate on the "value" field.
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 func ValueGTE(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldValue), v))
 	})
 }
 
+<<<<<<< HEAD
 // ValueLT applies the LT predicate on the "Value" field.
+=======
+// ValueLT applies the LT predicate on the "value" field.
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 func ValueLT(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldValue), v))
 	})
 }
 
+<<<<<<< HEAD
 // ValueLTE applies the LTE predicate on the "Value" field.
+=======
+// ValueLTE applies the LTE predicate on the "value" field.
+>>>>>>> 68357c40a42f59ad7daf6e1c4e68a6b0e7ac2913
 func ValueLTE(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldValue), v))

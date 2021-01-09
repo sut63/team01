@@ -14,4 +14,5 @@ export const plugin = createPlugin({
     router.registerRoute('/patient_history', PatientHistory);
     router.registerRoute('/create_prescription', create_prescription);
   },
+  
 });

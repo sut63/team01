@@ -25,8 +25,8 @@ func (Order) Fields() []ent.Field {
 func (Order) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("pharmacist", Pharmacist.Type).Ref("order").Unique(),
-		edge.From("company", Company.Type).Ref("order"),
-        edge.From("medicine", Medicine.Type).Ref("order"),
+		edge.From("medicine", Medicine.Type).Ref("order").Unique(),
+		edge.From("company", Company.Type).Ref("order").Unique(),
 	}
 }
 

@@ -15,7 +15,6 @@ import (
 	"github.com/sut63/team01/ent"
 )
 
-
 //PatientInfos Structure
 type PatientInfos struct {
 	PatientInfo []PatientInfo
@@ -23,10 +22,10 @@ type PatientInfos struct {
 
 //PatientInfo Structure
 type PatientInfo struct {
-	CardNumber	string
-	Name		string
-	Gender		string
-	Age			int
+	CardNumber string
+	Name       string
+	Gender     string
+	Age        int
 }
 
 //Annotations Structure
@@ -58,9 +57,39 @@ type Doctors struct {
 
 //Doctor Structure
 type Doctor struct {
-	email              string
-	password           string
-	name               string
+	email    string
+	password string
+	name     string
+}
+
+// MedicineTypes structer input data
+type MedicineTypes struct {
+	MedicineType []MedicineType
+}
+
+// MedicineType structer input data
+type MedicineType struct {
+	Name string
+}
+
+// UnitOfMedicines structer input data
+type UnitOfMedicines struct {
+	UnitOfMedicine []UnitOfMedicine
+}
+
+// UnitOfMedicine structer input data
+type UnitOfMedicine struct {
+	Name string
+}
+
+// LevelOfDangerouss structer input data
+type LevelOfDangerouss struct {
+	LevelOfDangerous []LevelOfDangerous
+}
+
+// LevelOfDangerous structer input data
+type LevelOfDangerous struct {
+	Name string
 }
 
 // @title SUT SA Example API Playlist Vidoe
@@ -120,8 +149,6 @@ func main() {
 
 	v1 := router.Group("/api/v1")
 
-	
-
 	controllers.NewAnnotationController(v1, client)
 	controllers.NewPharmacistController(v1, client)
 	controllers.NewDispenseMedicineController(v1, client)
@@ -129,6 +156,10 @@ func main() {
 	controllers.NewPatientInfoController(v1, client)
 	controllers.NewDoctorController(v1, client)
 	controllers.NewPrescriptionController(v1, client)
+	controllers.NewMedicineTypeController(v1, client)
+	controllers.NewUnitOfMedicineController(v1, client)
+	controllers.NewLevelOfDangerousController(v1, client)
+	controllers.NewMedicineController(v1, client)
 
 	//Set PatientInfos Data
 	Patient := PatientInfos{
@@ -201,6 +232,56 @@ func main() {
 			SetEmail(doc.email).
 			SetPassword(doc.password).
 			SetName(doc.name).
+			Save(context.Background())
+	}
+
+	// Set MedicineTypes Data
+	MedicineTypes := MedicineTypes{
+		MedicineType: []MedicineType{
+			MedicineType{"General Sales List"},
+			MedicineType{"Pharmacy Medicines"},
+			MedicineType{"Precription Only Medicines"},
+			MedicineType{"Controlled Drugs"},
+		},
+	}
+
+	for _, t := range MedicineTypes.MedicineType {
+		client.MedicineType.
+			Create().
+			SetName(t.Name).
+			Save(context.Background())
+	}
+
+	// Set UnitOfMedcines Data
+	UnitOfMedicines := UnitOfMedicines{
+		UnitOfMedicine: []UnitOfMedicine{
+			UnitOfMedicine{"Tablet"},
+			UnitOfMedicine{"Bottom"},
+			UnitOfMedicine{"Pill"},
+			UnitOfMedicine{"Capsule"},
+		},
+	}
+
+	for _, u := range UnitOfMedicines.UnitOfMedicine {
+		client.UnitOfMedicine.
+			Create().
+			SetName(u.Name).
+			Save(context.Background())
+	}
+
+	// Set LevelOfDangerouss Data
+	LevelOfDangerouss := LevelOfDangerouss{
+		LevelOfDangerous: []LevelOfDangerous{
+			LevelOfDangerous{"Safe"},
+			LevelOfDangerous{"Caution"},
+			LevelOfDangerous{"Danger"},
+		},
+	}
+
+	for _, l := range LevelOfDangerouss.LevelOfDangerous {
+		client.LevelOfDangerous.
+			Create().
+			SetName(l.Name).
 			Save(context.Background())
 	}
 

@@ -66,7 +66,7 @@ func (cq *CompanyQuery) QueryOrder() *OrderQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(company.Table, company.FieldID, cq.sqlQuery()),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, company.OrderTable, company.OrderPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, company.OrderTable, company.OrderColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -270,12 +270,12 @@ func (cq *CompanyQuery) WithOrder(opts ...func(*OrderQuery)) *CompanyQuery {
 // Example:
 //
 //	var v []struct {
-//		Companyname string `json:"companyname,omitempty"`
+//		Name string `json:"name,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Company.Query().
-//		GroupBy(company.FieldCompanyname).
+//		GroupBy(company.FieldName).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -296,11 +296,11 @@ func (cq *CompanyQuery) GroupBy(field string, fields ...string) *CompanyGroupBy 
 // Example:
 //
 //	var v []struct {
-//		Companyname string `json:"companyname,omitempty"`
+//		Name string `json:"name,omitempty"`
 //	}
 //
 //	client.Company.Query().
-//		Select(company.FieldCompanyname).
+//		Select(company.FieldName).
 //		Scan(ctx, &v)
 //
 func (cq *CompanyQuery) Select(field string, fields ...string) *CompanySelect {
@@ -357,64 +357,29 @@ func (cq *CompanyQuery) sqlAll(ctx context.Context) ([]*Company, error) {
 
 	if query := cq.withOrder; query != nil {
 		fks := make([]driver.Value, 0, len(nodes))
-		ids := make(map[int]*Company, len(nodes))
-		for _, node := range nodes {
-			ids[node.ID] = node
-			fks = append(fks, node.ID)
+		nodeids := make(map[int]*Company)
+		for i := range nodes {
+			fks = append(fks, nodes[i].ID)
+			nodeids[nodes[i].ID] = nodes[i]
 		}
-		var (
-			edgeids []int
-			edges   = make(map[int][]*Company)
-		)
-		_spec := &sqlgraph.EdgeQuerySpec{
-			Edge: &sqlgraph.EdgeSpec{
-				Inverse: false,
-				Table:   company.OrderTable,
-				Columns: company.OrderPrimaryKey,
-			},
-			Predicate: func(s *sql.Selector) {
-				s.Where(sql.InValues(company.OrderPrimaryKey[0], fks...))
-			},
-
-			ScanValues: func() [2]interface{} {
-				return [2]interface{}{&sql.NullInt64{}, &sql.NullInt64{}}
-			},
-			Assign: func(out, in interface{}) error {
-				eout, ok := out.(*sql.NullInt64)
-				if !ok || eout == nil {
-					return fmt.Errorf("unexpected id value for edge-out")
-				}
-				ein, ok := in.(*sql.NullInt64)
-				if !ok || ein == nil {
-					return fmt.Errorf("unexpected id value for edge-in")
-				}
-				outValue := int(eout.Int64)
-				inValue := int(ein.Int64)
-				node, ok := ids[outValue]
-				if !ok {
-					return fmt.Errorf("unexpected node id in edges: %v", outValue)
-				}
-				edgeids = append(edgeids, inValue)
-				edges[inValue] = append(edges[inValue], node)
-				return nil
-			},
-		}
-		if err := sqlgraph.QueryEdges(ctx, cq.driver, _spec); err != nil {
-			return nil, fmt.Errorf(`query edges "order": %v`, err)
-		}
-		query.Where(order.IDIn(edgeids...))
+		query.withFKs = true
+		query.Where(predicate.Order(func(s *sql.Selector) {
+			s.Where(sql.InValues(company.OrderColumn, fks...))
+		}))
 		neighbors, err := query.All(ctx)
 		if err != nil {
 			return nil, err
 		}
 		for _, n := range neighbors {
-			nodes, ok := edges[n.ID]
+			fk := n.company_id
+			if fk == nil {
+				return nil, fmt.Errorf(`foreign-key "company_id" is nil for node %v`, n.ID)
+			}
+			node, ok := nodeids[*fk]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected "order" node returned %v`, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "company_id" returned %v for node %v`, *fk, n.ID)
 			}
-			for i := range nodes {
-				nodes[i].Edges.Order = append(nodes[i].Edges.Order, n)
-			}
+			node.Edges.Order = append(node.Edges.Order, n)
 		}
 	}
 

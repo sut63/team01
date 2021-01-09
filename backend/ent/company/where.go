@@ -91,29 +91,29 @@ func IDLTE(id int) predicate.Company {
 	})
 }
 
-// Companyname applies equality check predicate on the "companyname" field. It's identical to CompanynameEQ.
-func Companyname(v string) predicate.Company {
+// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
+func Name(v string) predicate.Company {
 	return predicate.Company(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCompanyname), v))
+		s.Where(sql.EQ(s.C(FieldName), v))
 	})
 }
 
-// CompanynameEQ applies the EQ predicate on the "companyname" field.
-func CompanynameEQ(v string) predicate.Company {
+// NameEQ applies the EQ predicate on the "name" field.
+func NameEQ(v string) predicate.Company {
 	return predicate.Company(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCompanyname), v))
+		s.Where(sql.EQ(s.C(FieldName), v))
 	})
 }
 
-// CompanynameNEQ applies the NEQ predicate on the "companyname" field.
-func CompanynameNEQ(v string) predicate.Company {
+// NameNEQ applies the NEQ predicate on the "name" field.
+func NameNEQ(v string) predicate.Company {
 	return predicate.Company(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldCompanyname), v))
+		s.Where(sql.NEQ(s.C(FieldName), v))
 	})
 }
 
-// CompanynameIn applies the In predicate on the "companyname" field.
-func CompanynameIn(vs ...string) predicate.Company {
+// NameIn applies the In predicate on the "name" field.
+func NameIn(vs ...string) predicate.Company {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -125,12 +125,12 @@ func CompanynameIn(vs ...string) predicate.Company {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldCompanyname), v...))
+		s.Where(sql.In(s.C(FieldName), v...))
 	})
 }
 
-// CompanynameNotIn applies the NotIn predicate on the "companyname" field.
-func CompanynameNotIn(vs ...string) predicate.Company {
+// NameNotIn applies the NotIn predicate on the "name" field.
+func NameNotIn(vs ...string) predicate.Company {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -142,70 +142,70 @@ func CompanynameNotIn(vs ...string) predicate.Company {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldCompanyname), v...))
+		s.Where(sql.NotIn(s.C(FieldName), v...))
 	})
 }
 
-// CompanynameGT applies the GT predicate on the "companyname" field.
-func CompanynameGT(v string) predicate.Company {
+// NameGT applies the GT predicate on the "name" field.
+func NameGT(v string) predicate.Company {
 	return predicate.Company(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldCompanyname), v))
+		s.Where(sql.GT(s.C(FieldName), v))
 	})
 }
 
-// CompanynameGTE applies the GTE predicate on the "companyname" field.
-func CompanynameGTE(v string) predicate.Company {
+// NameGTE applies the GTE predicate on the "name" field.
+func NameGTE(v string) predicate.Company {
 	return predicate.Company(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldCompanyname), v))
+		s.Where(sql.GTE(s.C(FieldName), v))
 	})
 }
 
-// CompanynameLT applies the LT predicate on the "companyname" field.
-func CompanynameLT(v string) predicate.Company {
+// NameLT applies the LT predicate on the "name" field.
+func NameLT(v string) predicate.Company {
 	return predicate.Company(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldCompanyname), v))
+		s.Where(sql.LT(s.C(FieldName), v))
 	})
 }
 
-// CompanynameLTE applies the LTE predicate on the "companyname" field.
-func CompanynameLTE(v string) predicate.Company {
+// NameLTE applies the LTE predicate on the "name" field.
+func NameLTE(v string) predicate.Company {
 	return predicate.Company(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldCompanyname), v))
+		s.Where(sql.LTE(s.C(FieldName), v))
 	})
 }
 
-// CompanynameContains applies the Contains predicate on the "companyname" field.
-func CompanynameContains(v string) predicate.Company {
+// NameContains applies the Contains predicate on the "name" field.
+func NameContains(v string) predicate.Company {
 	return predicate.Company(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldCompanyname), v))
+		s.Where(sql.Contains(s.C(FieldName), v))
 	})
 }
 
-// CompanynameHasPrefix applies the HasPrefix predicate on the "companyname" field.
-func CompanynameHasPrefix(v string) predicate.Company {
+// NameHasPrefix applies the HasPrefix predicate on the "name" field.
+func NameHasPrefix(v string) predicate.Company {
 	return predicate.Company(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldCompanyname), v))
+		s.Where(sql.HasPrefix(s.C(FieldName), v))
 	})
 }
 
-// CompanynameHasSuffix applies the HasSuffix predicate on the "companyname" field.
-func CompanynameHasSuffix(v string) predicate.Company {
+// NameHasSuffix applies the HasSuffix predicate on the "name" field.
+func NameHasSuffix(v string) predicate.Company {
 	return predicate.Company(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldCompanyname), v))
+		s.Where(sql.HasSuffix(s.C(FieldName), v))
 	})
 }
 
-// CompanynameEqualFold applies the EqualFold predicate on the "companyname" field.
-func CompanynameEqualFold(v string) predicate.Company {
+// NameEqualFold applies the EqualFold predicate on the "name" field.
+func NameEqualFold(v string) predicate.Company {
 	return predicate.Company(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldCompanyname), v))
+		s.Where(sql.EqualFold(s.C(FieldName), v))
 	})
 }
 
-// CompanynameContainsFold applies the ContainsFold predicate on the "companyname" field.
-func CompanynameContainsFold(v string) predicate.Company {
+// NameContainsFold applies the ContainsFold predicate on the "name" field.
+func NameContainsFold(v string) predicate.Company {
 	return predicate.Company(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldCompanyname), v))
+		s.Where(sql.ContainsFold(s.C(FieldName), v))
 	})
 }
 
@@ -215,7 +215,7 @@ func HasOrder() predicate.Company {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.To(OrderTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, OrderTable, OrderPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, OrderTable, OrderColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
@@ -227,7 +227,7 @@ func HasOrderWith(preds ...predicate.Order) predicate.Company {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.To(OrderInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, OrderTable, OrderPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, OrderTable, OrderColumn),
 		)
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

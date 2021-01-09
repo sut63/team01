@@ -15,8 +15,8 @@ type Company struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// Companyname holds the value of the "companyname" field.
-	Companyname string `json:"companyname,omitempty"`
+	// Name holds the value of the "name" field.
+	Name string `json:"name,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CompanyQuery when eager-loading is set.
 	Edges CompanyEdges `json:"edges"`
@@ -44,7 +44,7 @@ func (e CompanyEdges) OrderOrErr() ([]*Order, error) {
 func (*Company) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{},  // id
-		&sql.NullString{}, // companyname
+		&sql.NullString{}, // name
 	}
 }
 
@@ -61,9 +61,9 @@ func (c *Company) assignValues(values ...interface{}) error {
 	c.ID = int(value.Int64)
 	values = values[1:]
 	if value, ok := values[0].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field companyname", values[0])
+		return fmt.Errorf("unexpected type %T for field name", values[0])
 	} else if value.Valid {
-		c.Companyname = value.String
+		c.Name = value.String
 	}
 	return nil
 }
@@ -96,8 +96,8 @@ func (c *Company) String() string {
 	var builder strings.Builder
 	builder.WriteString("Company(")
 	builder.WriteString(fmt.Sprintf("id=%v", c.ID))
-	builder.WriteString(", companyname=")
-	builder.WriteString(c.Companyname)
+	builder.WriteString(", name=")
+	builder.WriteString(c.Name)
 	builder.WriteByte(')')
 	return builder.String()
 }

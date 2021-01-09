@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"github.com/facebookincubator/ent/dialect/sql"
+	"github.com/sut63/team01/ent/company"
+	"github.com/sut63/team01/ent/medicine"
 	"github.com/sut63/team01/ent/order"
 	"github.com/sut63/team01/ent/pharmacist"
 )
@@ -28,6 +30,8 @@ type Order struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrderQuery when eager-loading is set.
 	Edges         OrderEdges `json:"edges"`
+	company_id    *int
+	medicine_id   *int
 	pharmacist_id *int
 }
 
@@ -35,10 +39,10 @@ type Order struct {
 type OrderEdges struct {
 	// Pharmacist holds the value of the pharmacist edge.
 	Pharmacist *Pharmacist
-	// Company holds the value of the company edge.
-	Company []*Company
 	// Medicine holds the value of the medicine edge.
-	Medicine []*Medicine
+	Medicine *Medicine
+	// Company holds the value of the company edge.
+	Company *Company
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [3]bool
@@ -58,22 +62,32 @@ func (e OrderEdges) PharmacistOrErr() (*Pharmacist, error) {
 	return nil, &NotLoadedError{edge: "pharmacist"}
 }
 
-// CompanyOrErr returns the Company value or an error if the edge
-// was not loaded in eager-loading.
-func (e OrderEdges) CompanyOrErr() ([]*Company, error) {
-	if e.loadedTypes[1] {
-		return e.Company, nil
-	}
-	return nil, &NotLoadedError{edge: "company"}
-}
-
 // MedicineOrErr returns the Medicine value or an error if the edge
-// was not loaded in eager-loading.
-func (e OrderEdges) MedicineOrErr() ([]*Medicine, error) {
-	if e.loadedTypes[2] {
+// was not loaded in eager-loading, or loaded but was not found.
+func (e OrderEdges) MedicineOrErr() (*Medicine, error) {
+	if e.loadedTypes[1] {
+		if e.Medicine == nil {
+			// The edge medicine was loaded in eager-loading,
+			// but was not found.
+			return nil, &NotFoundError{label: medicine.Label}
+		}
 		return e.Medicine, nil
 	}
 	return nil, &NotLoadedError{edge: "medicine"}
+}
+
+// CompanyOrErr returns the Company value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e OrderEdges) CompanyOrErr() (*Company, error) {
+	if e.loadedTypes[2] {
+		if e.Company == nil {
+			// The edge company was loaded in eager-loading,
+			// but was not found.
+			return nil, &NotFoundError{label: company.Label}
+		}
+		return e.Company, nil
+	}
+	return nil, &NotLoadedError{edge: "company"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -90,6 +104,8 @@ func (*Order) scanValues() []interface{} {
 // fkValues returns the types for scanning foreign-keys values from sql.Rows.
 func (*Order) fkValues() []interface{} {
 	return []interface{}{
+		&sql.NullInt64{}, // company_id
+		&sql.NullInt64{}, // medicine_id
 		&sql.NullInt64{}, // pharmacist_id
 	}
 }
@@ -129,6 +145,18 @@ func (o *Order) assignValues(values ...interface{}) error {
 	values = values[4:]
 	if len(values) == len(order.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
+			return fmt.Errorf("unexpected type %T for edge-field company_id", value)
+		} else if value.Valid {
+			o.company_id = new(int)
+			*o.company_id = int(value.Int64)
+		}
+		if value, ok := values[1].(*sql.NullInt64); !ok {
+			return fmt.Errorf("unexpected type %T for edge-field medicine_id", value)
+		} else if value.Valid {
+			o.medicine_id = new(int)
+			*o.medicine_id = int(value.Int64)
+		}
+		if value, ok := values[2].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field pharmacist_id", value)
 		} else if value.Valid {
 			o.pharmacist_id = new(int)
@@ -143,14 +171,14 @@ func (o *Order) QueryPharmacist() *PharmacistQuery {
 	return (&OrderClient{config: o.config}).QueryPharmacist(o)
 }
 
-// QueryCompany queries the company edge of the Order.
-func (o *Order) QueryCompany() *CompanyQuery {
-	return (&OrderClient{config: o.config}).QueryCompany(o)
-}
-
 // QueryMedicine queries the medicine edge of the Order.
 func (o *Order) QueryMedicine() *MedicineQuery {
 	return (&OrderClient{config: o.config}).QueryMedicine(o)
+}
+
+// QueryCompany queries the company edge of the Order.
+func (o *Order) QueryCompany() *CompanyQuery {
+	return (&OrderClient{config: o.config}).QueryCompany(o)
 }
 
 // Update returns a builder for updating this Order.

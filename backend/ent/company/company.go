@@ -7,34 +7,30 @@ const (
 	Label = "company"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldCompanyname holds the string denoting the companyname field in the database.
-	FieldCompanyname = "companyname"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
 
 	// EdgeOrder holds the string denoting the order edge name in mutations.
 	EdgeOrder = "order"
 
 	// Table holds the table name of the company in the database.
 	Table = "companies"
-	// OrderTable is the table the holds the order relation/edge. The primary key declared below.
-	OrderTable = "company_order"
+	// OrderTable is the table the holds the order relation/edge.
+	OrderTable = "orders"
 	// OrderInverseTable is the table name for the Order entity.
 	// It exists in this package in order to avoid circular dependency with the "order" package.
 	OrderInverseTable = "orders"
+	// OrderColumn is the table column denoting the order relation/edge.
+	OrderColumn = "company_id"
 )
 
 // Columns holds all SQL columns for company fields.
 var Columns = []string{
 	FieldID,
-	FieldCompanyname,
+	FieldName,
 }
 
 var (
-	// OrderPrimaryKey and OrderColumn2 are the table columns denoting the
-	// primary key for the order relation (M2M).
-	OrderPrimaryKey = []string{"company_id", "order_id"}
-)
-
-var (
-	// CompanynameValidator is a validator for the "companyname" field. It is called by the builders before save.
-	CompanynameValidator func(string) error
+	// NameValidator is a validator for the "name" field. It is called by the builders before save.
+	NameValidator func(string) error
 )

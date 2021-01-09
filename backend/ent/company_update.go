@@ -28,9 +28,9 @@ func (cu *CompanyUpdate) Where(ps ...predicate.Company) *CompanyUpdate {
 	return cu
 }
 
-// SetCompanyname sets the companyname field.
-func (cu *CompanyUpdate) SetCompanyname(s string) *CompanyUpdate {
-	cu.mutation.SetCompanyname(s)
+// SetName sets the name field.
+func (cu *CompanyUpdate) SetName(s string) *CompanyUpdate {
+	cu.mutation.SetName(s)
 	return cu
 }
 
@@ -71,9 +71,9 @@ func (cu *CompanyUpdate) RemoveOrder(o ...*Order) *CompanyUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (cu *CompanyUpdate) Save(ctx context.Context) (int, error) {
-	if v, ok := cu.mutation.Companyname(); ok {
-		if err := company.CompanynameValidator(v); err != nil {
-			return 0, &ValidationError{Name: "companyname", err: fmt.Errorf("ent: validator failed for field \"companyname\": %w", err)}
+	if v, ok := cu.mutation.Name(); ok {
+		if err := company.NameValidator(v); err != nil {
+			return 0, &ValidationError{Name: "name", err: fmt.Errorf("ent: validator failed for field \"name\": %w", err)}
 		}
 	}
 
@@ -144,19 +144,19 @@ func (cu *CompanyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := cu.mutation.Companyname(); ok {
+	if value, ok := cu.mutation.Name(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: company.FieldCompanyname,
+			Column: company.FieldName,
 		})
 	}
 	if nodes := cu.mutation.RemovedOrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   company.OrderTable,
-			Columns: company.OrderPrimaryKey,
+			Columns: []string{company.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -172,10 +172,10 @@ func (cu *CompanyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := cu.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   company.OrderTable,
-			Columns: company.OrderPrimaryKey,
+			Columns: []string{company.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -207,9 +207,9 @@ type CompanyUpdateOne struct {
 	mutation *CompanyMutation
 }
 
-// SetCompanyname sets the companyname field.
-func (cuo *CompanyUpdateOne) SetCompanyname(s string) *CompanyUpdateOne {
-	cuo.mutation.SetCompanyname(s)
+// SetName sets the name field.
+func (cuo *CompanyUpdateOne) SetName(s string) *CompanyUpdateOne {
+	cuo.mutation.SetName(s)
 	return cuo
 }
 
@@ -250,9 +250,9 @@ func (cuo *CompanyUpdateOne) RemoveOrder(o ...*Order) *CompanyUpdateOne {
 
 // Save executes the query and returns the updated entity.
 func (cuo *CompanyUpdateOne) Save(ctx context.Context) (*Company, error) {
-	if v, ok := cuo.mutation.Companyname(); ok {
-		if err := company.CompanynameValidator(v); err != nil {
-			return nil, &ValidationError{Name: "companyname", err: fmt.Errorf("ent: validator failed for field \"companyname\": %w", err)}
+	if v, ok := cuo.mutation.Name(); ok {
+		if err := company.NameValidator(v); err != nil {
+			return nil, &ValidationError{Name: "name", err: fmt.Errorf("ent: validator failed for field \"name\": %w", err)}
 		}
 	}
 
@@ -321,19 +321,19 @@ func (cuo *CompanyUpdateOne) sqlSave(ctx context.Context) (c *Company, err error
 		return nil, &ValidationError{Name: "ID", err: fmt.Errorf("missing Company.ID for update")}
 	}
 	_spec.Node.ID.Value = id
-	if value, ok := cuo.mutation.Companyname(); ok {
+	if value, ok := cuo.mutation.Name(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: company.FieldCompanyname,
+			Column: company.FieldName,
 		})
 	}
 	if nodes := cuo.mutation.RemovedOrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   company.OrderTable,
-			Columns: company.OrderPrimaryKey,
+			Columns: []string{company.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -349,10 +349,10 @@ func (cuo *CompanyUpdateOne) sqlSave(ctx context.Context) (c *Company, err error
 	}
 	if nodes := cuo.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   company.OrderTable,
-			Columns: company.OrderPrimaryKey,
+			Columns: []string{company.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

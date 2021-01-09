@@ -70,11 +70,13 @@ const (
 	MedicinepresciptionInverseTable = "prescriptions"
 	// MedicinepresciptionColumn is the table column denoting the medicinepresciption relation/edge.
 	MedicinepresciptionColumn = "medicine_id"
-	// OrderTable is the table the holds the order relation/edge. The primary key declared below.
-	OrderTable = "medicine_order"
+	// OrderTable is the table the holds the order relation/edge.
+	OrderTable = "orders"
 	// OrderInverseTable is the table name for the Order entity.
 	// It exists in this package in order to avoid circular dependency with the "order" package.
 	OrderInverseTable = "orders"
+	// OrderColumn is the table column denoting the order relation/edge.
+	OrderColumn = "medicine_id"
 )
 
 // Columns holds all SQL columns for medicine fields.
@@ -96,7 +98,16 @@ var ForeignKeys = []string{
 }
 
 var (
-	// OrderPrimaryKey and OrderColumn2 are the table columns denoting the
-	// primary key for the order relation (M2M).
-	OrderPrimaryKey = []string{"medicine_id", "order_id"}
+	// NameValidator is a validator for the "name" field. It is called by the builders before save.
+	NameValidator func(string) error
+	// SerialValidator is a validator for the "serial" field. It is called by the builders before save.
+	SerialValidator func(string) error
+	// BrandValidator is a validator for the "brand" field. It is called by the builders before save.
+	BrandValidator func(string) error
+	// AmountValidator is a validator for the "amount" field. It is called by the builders before save.
+	AmountValidator func(int) error
+	// PriceValidator is a validator for the "price" field. It is called by the builders before save.
+	PriceValidator func(float64) error
+	// HowtouseValidator is a validator for the "howtouse" field. It is called by the builders before save.
+	HowtouseValidator func(string) error
 )

@@ -61,7 +61,7 @@ var (
 	// CompaniesColumns holds the columns for the "companies" table.
 	CompaniesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "companyname", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString},
 	}
 	// CompaniesTable holds the schema information for the "companies" table.
 	CompaniesTable = &schema.Table{
@@ -231,6 +231,8 @@ var (
 		{Name: "price", Type: field.TypeFloat64},
 		{Name: "total", Type: field.TypeFloat64},
 		{Name: "datetime", Type: field.TypeTime},
+		{Name: "company_id", Type: field.TypeInt, Nullable: true},
+		{Name: "medicine_id", Type: field.TypeInt, Nullable: true},
 		{Name: "pharmacist_id", Type: field.TypeInt, Nullable: true},
 	}
 	// OrdersTable holds the schema information for the "orders" table.
@@ -240,8 +242,22 @@ var (
 		PrimaryKey: []*schema.Column{OrdersColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:  "orders_pharmacists_order",
+				Symbol:  "orders_companies_order",
 				Columns: []*schema.Column{OrdersColumns[5]},
+
+				RefColumns: []*schema.Column{CompaniesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:  "orders_medicines_order",
+				Columns: []*schema.Column{OrdersColumns[6]},
+
+				RefColumns: []*schema.Column{MedicinesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:  "orders_pharmacists_order",
+				Columns: []*schema.Column{OrdersColumns[7]},
 
 				RefColumns: []*schema.Column{PharmacistsColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -339,60 +355,6 @@ var (
 		PrimaryKey:  []*schema.Column{UnitOfMedicinesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{},
 	}
-	// CompanyOrderColumns holds the columns for the "company_order" table.
-	CompanyOrderColumns = []*schema.Column{
-		{Name: "company_id", Type: field.TypeInt},
-		{Name: "order_id", Type: field.TypeInt},
-	}
-	// CompanyOrderTable holds the schema information for the "company_order" table.
-	CompanyOrderTable = &schema.Table{
-		Name:       "company_order",
-		Columns:    CompanyOrderColumns,
-		PrimaryKey: []*schema.Column{CompanyOrderColumns[0], CompanyOrderColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:  "company_order_company_id",
-				Columns: []*schema.Column{CompanyOrderColumns[0]},
-
-				RefColumns: []*schema.Column{CompaniesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:  "company_order_order_id",
-				Columns: []*schema.Column{CompanyOrderColumns[1]},
-
-				RefColumns: []*schema.Column{OrdersColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// MedicineOrderColumns holds the columns for the "medicine_order" table.
-	MedicineOrderColumns = []*schema.Column{
-		{Name: "medicine_id", Type: field.TypeInt},
-		{Name: "order_id", Type: field.TypeInt},
-	}
-	// MedicineOrderTable holds the schema information for the "medicine_order" table.
-	MedicineOrderTable = &schema.Table{
-		Name:       "medicine_order",
-		Columns:    MedicineOrderColumns,
-		PrimaryKey: []*schema.Column{MedicineOrderColumns[0], MedicineOrderColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:  "medicine_order_medicine_id",
-				Columns: []*schema.Column{MedicineOrderColumns[0]},
-
-				RefColumns: []*schema.Column{MedicinesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:  "medicine_order_order_id",
-				Columns: []*schema.Column{MedicineOrderColumns[1]},
-
-				RefColumns: []*schema.Column{OrdersColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AnnotationsTable,
@@ -410,8 +372,6 @@ var (
 		PharmacistsTable,
 		PrescriptionsTable,
 		UnitOfMedicinesTable,
-		CompanyOrderTable,
-		MedicineOrderTable,
 	}
 )
 
@@ -428,12 +388,10 @@ func init() {
 	MedicinesTable.ForeignKeys[0].RefTable = LevelOfDangerousTable
 	MedicinesTable.ForeignKeys[1].RefTable = MedicineTypesTable
 	MedicinesTable.ForeignKeys[2].RefTable = UnitOfMedicinesTable
-	OrdersTable.ForeignKeys[0].RefTable = PharmacistsTable
+	OrdersTable.ForeignKeys[0].RefTable = CompaniesTable
+	OrdersTable.ForeignKeys[1].RefTable = MedicinesTable
+	OrdersTable.ForeignKeys[2].RefTable = PharmacistsTable
 	PrescriptionsTable.ForeignKeys[0].RefTable = DoctorsTable
 	PrescriptionsTable.ForeignKeys[1].RefTable = MedicinesTable
 	PrescriptionsTable.ForeignKeys[2].RefTable = PatientInfosTable
-	CompanyOrderTable.ForeignKeys[0].RefTable = CompaniesTable
-	CompanyOrderTable.ForeignKeys[1].RefTable = OrdersTable
-	MedicineOrderTable.ForeignKeys[0].RefTable = MedicinesTable
-	MedicineOrderTable.ForeignKeys[1].RefTable = OrdersTable
 }

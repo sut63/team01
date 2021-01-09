@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sut63/team01/ent/ent"
+	"github.com/sut63/team01/ent"
 	"github.com/sut63/team01/ent/company"
 )
 
@@ -15,11 +15,13 @@ type CompanyController struct {
 	client *ent.Client
 	router gin.IRouter
 }
-// Company defines the struct for the company 
+
+// Company defines the struct for the company
 type Company struct {
-	Company     string
-	id     		int
+	Company string
+	id      int
 }
+
 // CreateCompany handles POST requests for adding Company entities
 // @Summary Create company
 // @Description Create company
@@ -61,7 +63,7 @@ func (ctl *CompanyController) CreateCompany(c *gin.Context) {
 // @ID get-company
 // @Produce  json
 // @Param id path int true "Company ID"
-// @Success 200 {object} ent.Company 
+// @Success 200 {object} ent.Company
 // @Failure 400 {object} gin.H
 // @Failure 404 {object} gin.H
 // @Failure 500 {object} gin.H
@@ -132,7 +134,6 @@ func (ctl *CompanyController) ListCompany(c *gin.Context) {
 	c.JSON(200, companys)
 }
 
-
 // DeleteCompany handles DELETE requests to delete a company entity
 // @Summary Delete a company entity by ID
 // @Description get company by ID
@@ -165,7 +166,6 @@ func (ctl *CompanyController) DeleteCompany(c *gin.Context) {
 
 	c.JSON(200, gin.H{"result": fmt.Sprintf("ok deleted %v", id)})
 }
-
 
 // NewCompanyController creates and registers handles for the company controller
 func NewCompanyController(router gin.IRouter, client *ent.Client) *CompanyController {

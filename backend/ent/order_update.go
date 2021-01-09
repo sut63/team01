@@ -95,34 +95,42 @@ func (ou *OrderUpdate) SetPharmacist(p *Pharmacist) *OrderUpdate {
 	return ou.SetPharmacistID(p.ID)
 }
 
-// AddCompanyIDs adds the company edge to Company by ids.
-func (ou *OrderUpdate) AddCompanyIDs(ids ...int) *OrderUpdate {
-	ou.mutation.AddCompanyIDs(ids...)
+// SetMedicineID sets the medicine edge to Medicine by id.
+func (ou *OrderUpdate) SetMedicineID(id int) *OrderUpdate {
+	ou.mutation.SetMedicineID(id)
 	return ou
 }
 
-// AddCompany adds the company edges to Company.
-func (ou *OrderUpdate) AddCompany(c ...*Company) *OrderUpdate {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// SetNillableMedicineID sets the medicine edge to Medicine by id if the given value is not nil.
+func (ou *OrderUpdate) SetNillableMedicineID(id *int) *OrderUpdate {
+	if id != nil {
+		ou = ou.SetMedicineID(*id)
 	}
-	return ou.AddCompanyIDs(ids...)
-}
-
-// AddMedicineIDs adds the medicine edge to Medicine by ids.
-func (ou *OrderUpdate) AddMedicineIDs(ids ...int) *OrderUpdate {
-	ou.mutation.AddMedicineIDs(ids...)
 	return ou
 }
 
-// AddMedicine adds the medicine edges to Medicine.
-func (ou *OrderUpdate) AddMedicine(m ...*Medicine) *OrderUpdate {
-	ids := make([]int, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+// SetMedicine sets the medicine edge to Medicine.
+func (ou *OrderUpdate) SetMedicine(m *Medicine) *OrderUpdate {
+	return ou.SetMedicineID(m.ID)
+}
+
+// SetCompanyID sets the company edge to Company by id.
+func (ou *OrderUpdate) SetCompanyID(id int) *OrderUpdate {
+	ou.mutation.SetCompanyID(id)
+	return ou
+}
+
+// SetNillableCompanyID sets the company edge to Company by id if the given value is not nil.
+func (ou *OrderUpdate) SetNillableCompanyID(id *int) *OrderUpdate {
+	if id != nil {
+		ou = ou.SetCompanyID(*id)
 	}
-	return ou.AddMedicineIDs(ids...)
+	return ou
+}
+
+// SetCompany sets the company edge to Company.
+func (ou *OrderUpdate) SetCompany(c *Company) *OrderUpdate {
+	return ou.SetCompanyID(c.ID)
 }
 
 // Mutation returns the OrderMutation object of the builder.
@@ -136,34 +144,16 @@ func (ou *OrderUpdate) ClearPharmacist() *OrderUpdate {
 	return ou
 }
 
-// RemoveCompanyIDs removes the company edge to Company by ids.
-func (ou *OrderUpdate) RemoveCompanyIDs(ids ...int) *OrderUpdate {
-	ou.mutation.RemoveCompanyIDs(ids...)
+// ClearMedicine clears the medicine edge to Medicine.
+func (ou *OrderUpdate) ClearMedicine() *OrderUpdate {
+	ou.mutation.ClearMedicine()
 	return ou
 }
 
-// RemoveCompany removes company edges to Company.
-func (ou *OrderUpdate) RemoveCompany(c ...*Company) *OrderUpdate {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return ou.RemoveCompanyIDs(ids...)
-}
-
-// RemoveMedicineIDs removes the medicine edge to Medicine by ids.
-func (ou *OrderUpdate) RemoveMedicineIDs(ids ...int) *OrderUpdate {
-	ou.mutation.RemoveMedicineIDs(ids...)
+// ClearCompany clears the company edge to Company.
+func (ou *OrderUpdate) ClearCompany() *OrderUpdate {
+	ou.mutation.ClearCompany()
 	return ou
-}
-
-// RemoveMedicine removes medicine edges to Medicine.
-func (ou *OrderUpdate) RemoveMedicine(m ...*Medicine) *OrderUpdate {
-	ids := make([]int, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
-	}
-	return ou.RemoveMedicineIDs(ids...)
 }
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
@@ -325,36 +315,33 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nodes := ou.mutation.RemovedCompanyIDs(); len(nodes) > 0 {
+	if ou.mutation.MedicineCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   order.CompanyTable,
-			Columns: order.CompanyPrimaryKey,
+			Table:   order.MedicineTable,
+			Columns: []string{order.MedicineColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
-					Column: company.FieldID,
+					Column: medicine.FieldID,
 				},
 			},
 		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.CompanyIDs(); len(nodes) > 0 {
+	if nodes := ou.mutation.MedicineIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   order.CompanyTable,
-			Columns: order.CompanyPrimaryKey,
+			Table:   order.MedicineTable,
+			Columns: []string{order.MedicineColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
-					Column: company.FieldID,
+					Column: medicine.FieldID,
 				},
 			},
 		}
@@ -363,36 +350,33 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nodes := ou.mutation.RemovedMedicineIDs(); len(nodes) > 0 {
+	if ou.mutation.CompanyCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   order.MedicineTable,
-			Columns: order.MedicinePrimaryKey,
+			Table:   order.CompanyTable,
+			Columns: []string{order.CompanyColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
-					Column: medicine.FieldID,
+					Column: company.FieldID,
 				},
 			},
 		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ou.mutation.MedicineIDs(); len(nodes) > 0 {
+	if nodes := ou.mutation.CompanyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   order.MedicineTable,
-			Columns: order.MedicinePrimaryKey,
+			Table:   order.CompanyTable,
+			Columns: []string{order.CompanyColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
-					Column: medicine.FieldID,
+					Column: company.FieldID,
 				},
 			},
 		}
@@ -483,34 +467,42 @@ func (ouo *OrderUpdateOne) SetPharmacist(p *Pharmacist) *OrderUpdateOne {
 	return ouo.SetPharmacistID(p.ID)
 }
 
-// AddCompanyIDs adds the company edge to Company by ids.
-func (ouo *OrderUpdateOne) AddCompanyIDs(ids ...int) *OrderUpdateOne {
-	ouo.mutation.AddCompanyIDs(ids...)
+// SetMedicineID sets the medicine edge to Medicine by id.
+func (ouo *OrderUpdateOne) SetMedicineID(id int) *OrderUpdateOne {
+	ouo.mutation.SetMedicineID(id)
 	return ouo
 }
 
-// AddCompany adds the company edges to Company.
-func (ouo *OrderUpdateOne) AddCompany(c ...*Company) *OrderUpdateOne {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// SetNillableMedicineID sets the medicine edge to Medicine by id if the given value is not nil.
+func (ouo *OrderUpdateOne) SetNillableMedicineID(id *int) *OrderUpdateOne {
+	if id != nil {
+		ouo = ouo.SetMedicineID(*id)
 	}
-	return ouo.AddCompanyIDs(ids...)
-}
-
-// AddMedicineIDs adds the medicine edge to Medicine by ids.
-func (ouo *OrderUpdateOne) AddMedicineIDs(ids ...int) *OrderUpdateOne {
-	ouo.mutation.AddMedicineIDs(ids...)
 	return ouo
 }
 
-// AddMedicine adds the medicine edges to Medicine.
-func (ouo *OrderUpdateOne) AddMedicine(m ...*Medicine) *OrderUpdateOne {
-	ids := make([]int, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+// SetMedicine sets the medicine edge to Medicine.
+func (ouo *OrderUpdateOne) SetMedicine(m *Medicine) *OrderUpdateOne {
+	return ouo.SetMedicineID(m.ID)
+}
+
+// SetCompanyID sets the company edge to Company by id.
+func (ouo *OrderUpdateOne) SetCompanyID(id int) *OrderUpdateOne {
+	ouo.mutation.SetCompanyID(id)
+	return ouo
+}
+
+// SetNillableCompanyID sets the company edge to Company by id if the given value is not nil.
+func (ouo *OrderUpdateOne) SetNillableCompanyID(id *int) *OrderUpdateOne {
+	if id != nil {
+		ouo = ouo.SetCompanyID(*id)
 	}
-	return ouo.AddMedicineIDs(ids...)
+	return ouo
+}
+
+// SetCompany sets the company edge to Company.
+func (ouo *OrderUpdateOne) SetCompany(c *Company) *OrderUpdateOne {
+	return ouo.SetCompanyID(c.ID)
 }
 
 // Mutation returns the OrderMutation object of the builder.
@@ -524,34 +516,16 @@ func (ouo *OrderUpdateOne) ClearPharmacist() *OrderUpdateOne {
 	return ouo
 }
 
-// RemoveCompanyIDs removes the company edge to Company by ids.
-func (ouo *OrderUpdateOne) RemoveCompanyIDs(ids ...int) *OrderUpdateOne {
-	ouo.mutation.RemoveCompanyIDs(ids...)
+// ClearMedicine clears the medicine edge to Medicine.
+func (ouo *OrderUpdateOne) ClearMedicine() *OrderUpdateOne {
+	ouo.mutation.ClearMedicine()
 	return ouo
 }
 
-// RemoveCompany removes company edges to Company.
-func (ouo *OrderUpdateOne) RemoveCompany(c ...*Company) *OrderUpdateOne {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return ouo.RemoveCompanyIDs(ids...)
-}
-
-// RemoveMedicineIDs removes the medicine edge to Medicine by ids.
-func (ouo *OrderUpdateOne) RemoveMedicineIDs(ids ...int) *OrderUpdateOne {
-	ouo.mutation.RemoveMedicineIDs(ids...)
+// ClearCompany clears the company edge to Company.
+func (ouo *OrderUpdateOne) ClearCompany() *OrderUpdateOne {
+	ouo.mutation.ClearCompany()
 	return ouo
-}
-
-// RemoveMedicine removes medicine edges to Medicine.
-func (ouo *OrderUpdateOne) RemoveMedicine(m ...*Medicine) *OrderUpdateOne {
-	ids := make([]int, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
-	}
-	return ouo.RemoveMedicineIDs(ids...)
 }
 
 // Save executes the query and returns the updated entity.
@@ -711,36 +685,33 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (o *Order, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nodes := ouo.mutation.RemovedCompanyIDs(); len(nodes) > 0 {
+	if ouo.mutation.MedicineCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   order.CompanyTable,
-			Columns: order.CompanyPrimaryKey,
+			Table:   order.MedicineTable,
+			Columns: []string{order.MedicineColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
-					Column: company.FieldID,
+					Column: medicine.FieldID,
 				},
 			},
 		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.CompanyIDs(); len(nodes) > 0 {
+	if nodes := ouo.mutation.MedicineIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   order.CompanyTable,
-			Columns: order.CompanyPrimaryKey,
+			Table:   order.MedicineTable,
+			Columns: []string{order.MedicineColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
-					Column: company.FieldID,
+					Column: medicine.FieldID,
 				},
 			},
 		}
@@ -749,36 +720,33 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (o *Order, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nodes := ouo.mutation.RemovedMedicineIDs(); len(nodes) > 0 {
+	if ouo.mutation.CompanyCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   order.MedicineTable,
-			Columns: order.MedicinePrimaryKey,
+			Table:   order.CompanyTable,
+			Columns: []string{order.CompanyColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
-					Column: medicine.FieldID,
+					Column: company.FieldID,
 				},
 			},
 		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ouo.mutation.MedicineIDs(); len(nodes) > 0 {
+	if nodes := ouo.mutation.CompanyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   order.MedicineTable,
-			Columns: order.MedicinePrimaryKey,
+			Table:   order.CompanyTable,
+			Columns: []string{order.CompanyColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
-					Column: medicine.FieldID,
+					Column: company.FieldID,
 				},
 			},
 		}

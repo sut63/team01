@@ -18,10 +18,10 @@ const (
 
 	// EdgePharmacist holds the string denoting the pharmacist edge name in mutations.
 	EdgePharmacist = "pharmacist"
-	// EdgeCompany holds the string denoting the company edge name in mutations.
-	EdgeCompany = "company"
 	// EdgeMedicine holds the string denoting the medicine edge name in mutations.
 	EdgeMedicine = "medicine"
+	// EdgeCompany holds the string denoting the company edge name in mutations.
+	EdgeCompany = "company"
 
 	// Table holds the table name of the order in the database.
 	Table = "orders"
@@ -32,16 +32,20 @@ const (
 	PharmacistInverseTable = "pharmacists"
 	// PharmacistColumn is the table column denoting the pharmacist relation/edge.
 	PharmacistColumn = "pharmacist_id"
-	// CompanyTable is the table the holds the company relation/edge. The primary key declared below.
-	CompanyTable = "company_order"
-	// CompanyInverseTable is the table name for the Company entity.
-	// It exists in this package in order to avoid circular dependency with the "company" package.
-	CompanyInverseTable = "companies"
-	// MedicineTable is the table the holds the medicine relation/edge. The primary key declared below.
-	MedicineTable = "medicine_order"
+	// MedicineTable is the table the holds the medicine relation/edge.
+	MedicineTable = "orders"
 	// MedicineInverseTable is the table name for the Medicine entity.
 	// It exists in this package in order to avoid circular dependency with the "medicine" package.
 	MedicineInverseTable = "medicines"
+	// MedicineColumn is the table column denoting the medicine relation/edge.
+	MedicineColumn = "medicine_id"
+	// CompanyTable is the table the holds the company relation/edge.
+	CompanyTable = "orders"
+	// CompanyInverseTable is the table name for the Company entity.
+	// It exists in this package in order to avoid circular dependency with the "company" package.
+	CompanyInverseTable = "companies"
+	// CompanyColumn is the table column denoting the company relation/edge.
+	CompanyColumn = "company_id"
 )
 
 // Columns holds all SQL columns for order fields.
@@ -55,17 +59,10 @@ var Columns = []string{
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Order type.
 var ForeignKeys = []string{
+	"company_id",
+	"medicine_id",
 	"pharmacist_id",
 }
-
-var (
-	// CompanyPrimaryKey and CompanyColumn2 are the table columns denoting the
-	// primary key for the company relation (M2M).
-	CompanyPrimaryKey = []string{"company_id", "order_id"}
-	// MedicinePrimaryKey and MedicineColumn2 are the table columns denoting the
-	// primary key for the medicine relation (M2M).
-	MedicinePrimaryKey = []string{"medicine_id", "order_id"}
-)
 
 var (
 	// AmountValidator is a validator for the "amount" field. It is called by the builders before save.

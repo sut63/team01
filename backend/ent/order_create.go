@@ -66,34 +66,42 @@ func (oc *OrderCreate) SetPharmacist(p *Pharmacist) *OrderCreate {
 	return oc.SetPharmacistID(p.ID)
 }
 
-// AddCompanyIDs adds the company edge to Company by ids.
-func (oc *OrderCreate) AddCompanyIDs(ids ...int) *OrderCreate {
-	oc.mutation.AddCompanyIDs(ids...)
+// SetMedicineID sets the medicine edge to Medicine by id.
+func (oc *OrderCreate) SetMedicineID(id int) *OrderCreate {
+	oc.mutation.SetMedicineID(id)
 	return oc
 }
 
-// AddCompany adds the company edges to Company.
-func (oc *OrderCreate) AddCompany(c ...*Company) *OrderCreate {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// SetNillableMedicineID sets the medicine edge to Medicine by id if the given value is not nil.
+func (oc *OrderCreate) SetNillableMedicineID(id *int) *OrderCreate {
+	if id != nil {
+		oc = oc.SetMedicineID(*id)
 	}
-	return oc.AddCompanyIDs(ids...)
-}
-
-// AddMedicineIDs adds the medicine edge to Medicine by ids.
-func (oc *OrderCreate) AddMedicineIDs(ids ...int) *OrderCreate {
-	oc.mutation.AddMedicineIDs(ids...)
 	return oc
 }
 
-// AddMedicine adds the medicine edges to Medicine.
-func (oc *OrderCreate) AddMedicine(m ...*Medicine) *OrderCreate {
-	ids := make([]int, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+// SetMedicine sets the medicine edge to Medicine.
+func (oc *OrderCreate) SetMedicine(m *Medicine) *OrderCreate {
+	return oc.SetMedicineID(m.ID)
+}
+
+// SetCompanyID sets the company edge to Company by id.
+func (oc *OrderCreate) SetCompanyID(id int) *OrderCreate {
+	oc.mutation.SetCompanyID(id)
+	return oc
+}
+
+// SetNillableCompanyID sets the company edge to Company by id if the given value is not nil.
+func (oc *OrderCreate) SetNillableCompanyID(id *int) *OrderCreate {
+	if id != nil {
+		oc = oc.SetCompanyID(*id)
 	}
-	return oc.AddMedicineIDs(ids...)
+	return oc
+}
+
+// SetCompany sets the company edge to Company.
+func (oc *OrderCreate) SetCompany(c *Company) *OrderCreate {
+	return oc.SetCompanyID(c.ID)
 }
 
 // Mutation returns the OrderMutation object of the builder.
@@ -231,17 +239,17 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.CompanyIDs(); len(nodes) > 0 {
+	if nodes := oc.mutation.MedicineIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   order.CompanyTable,
-			Columns: order.CompanyPrimaryKey,
+			Table:   order.MedicineTable,
+			Columns: []string{order.MedicineColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
-					Column: company.FieldID,
+					Column: medicine.FieldID,
 				},
 			},
 		}
@@ -250,17 +258,17 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.MedicineIDs(); len(nodes) > 0 {
+	if nodes := oc.mutation.CompanyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   order.MedicineTable,
-			Columns: order.MedicinePrimaryKey,
+			Table:   order.CompanyTable,
+			Columns: []string{order.CompanyColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
-					Column: medicine.FieldID,
+					Column: company.FieldID,
 				},
 			},
 		}

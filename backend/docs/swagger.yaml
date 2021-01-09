@@ -20,6 +20,17 @@ definitions:
       unitOfMedicineID:
         type: integer
     type: object
+  controllers.Order:
+    properties:
+      company:
+        type: integer
+      datetime:
+        type: string
+      medicine:
+        type: integer
+      pharmacist:
+        type: integer
+    type: object
   controllers.Prescription:
     properties:
       doctorID:
@@ -89,9 +100,6 @@ definitions:
     type: object
   ent.Company:
     properties:
-      companyname:
-        description: Companyname holds the value of the "companyname" field.
-        type: string
       edges:
         $ref: '#/definitions/ent.CompanyEdges'
         description: |-
@@ -101,6 +109,9 @@ definitions:
       id:
         description: ID of the ent.
         type: integer
+      name:
+        description: Name holds the value of the "name" field.
+        type: string
     type: object
   ent.CompanyEdges:
     properties:
@@ -338,15 +349,13 @@ definitions:
   ent.OrderEdges:
     properties:
       company:
+        $ref: '#/definitions/ent.Company'
         description: Company holds the value of the company edge.
-        items:
-          $ref: '#/definitions/ent.Company'
-        type: array
+        type: object
       medicine:
+        $ref: '#/definitions/ent.Medicine'
         description: Medicine holds the value of the medicine edge.
-        items:
-          $ref: '#/definitions/ent.Medicine'
-        type: array
+        type: object
       pharmacist:
         $ref: '#/definitions/ent.Pharmacist'
         description: Pharmacist holds the value of the pharmacist edge.
@@ -1411,6 +1420,96 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Update a annotation entity by ID
+  /companys:
+    get:
+      description: list company entities
+      operationId: list-company
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Company'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List company entities
+  /companys/{id}:
+    delete:
+      description: get company by ID
+      operationId: delete-company
+      parameters:
+      - description: Company ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Delete a company entity by ID
+    get:
+      description: get company by ID
+      operationId: get-company
+      parameters:
+      - description: Company ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Company'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a company entity by ID
   /dispensemedicines:
     get:
       description: list dispensemedicine entities
@@ -1714,6 +1813,124 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Update a DrugAllergy entity by ID
+  /institutions:
+    post:
+      consumes:
+      - application/json
+      description: Create company
+      operationId: create-company
+      parameters:
+      - description: Company entity
+        in: body
+        name: company
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Company'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Company'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create company
+  /orders:
+    get:
+      description: list order entities
+      operationId: list-order
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Order'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List order entities
+    post:
+      consumes:
+      - application/json
+      description: Create order
+      operationId: create-order
+      parameters:
+      - description: Order entity
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.Order'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Order'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create order
+  /orders/{id}:
+    delete:
+      description: get order by ID
+      operationId: delete-order
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Delete a order entity by ID
   /patientinfos:
     get:
       description: list PatientInfo entities

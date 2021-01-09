@@ -255,6 +255,36 @@ func (mu *MedicineUpdate) RemoveOrder(o ...*Order) *MedicineUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (mu *MedicineUpdate) Save(ctx context.Context) (int, error) {
+	if v, ok := mu.mutation.Name(); ok {
+		if err := medicine.NameValidator(v); err != nil {
+			return 0, &ValidationError{Name: "name", err: fmt.Errorf("ent: validator failed for field \"name\": %w", err)}
+		}
+	}
+	if v, ok := mu.mutation.Serial(); ok {
+		if err := medicine.SerialValidator(v); err != nil {
+			return 0, &ValidationError{Name: "serial", err: fmt.Errorf("ent: validator failed for field \"serial\": %w", err)}
+		}
+	}
+	if v, ok := mu.mutation.Brand(); ok {
+		if err := medicine.BrandValidator(v); err != nil {
+			return 0, &ValidationError{Name: "brand", err: fmt.Errorf("ent: validator failed for field \"brand\": %w", err)}
+		}
+	}
+	if v, ok := mu.mutation.Amount(); ok {
+		if err := medicine.AmountValidator(v); err != nil {
+			return 0, &ValidationError{Name: "amount", err: fmt.Errorf("ent: validator failed for field \"amount\": %w", err)}
+		}
+	}
+	if v, ok := mu.mutation.Price(); ok {
+		if err := medicine.PriceValidator(v); err != nil {
+			return 0, &ValidationError{Name: "price", err: fmt.Errorf("ent: validator failed for field \"price\": %w", err)}
+		}
+	}
+	if v, ok := mu.mutation.Howtouse(); ok {
+		if err := medicine.HowtouseValidator(v); err != nil {
+			return 0, &ValidationError{Name: "howtouse", err: fmt.Errorf("ent: validator failed for field \"howtouse\": %w", err)}
+		}
+	}
 
 	var (
 		err      error
@@ -562,10 +592,10 @@ func (mu *MedicineUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := mu.mutation.RemovedOrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   medicine.OrderTable,
-			Columns: medicine.OrderPrimaryKey,
+			Columns: []string{medicine.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -581,10 +611,10 @@ func (mu *MedicineUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := mu.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   medicine.OrderTable,
-			Columns: medicine.OrderPrimaryKey,
+			Columns: []string{medicine.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -838,6 +868,36 @@ func (muo *MedicineUpdateOne) RemoveOrder(o ...*Order) *MedicineUpdateOne {
 
 // Save executes the query and returns the updated entity.
 func (muo *MedicineUpdateOne) Save(ctx context.Context) (*Medicine, error) {
+	if v, ok := muo.mutation.Name(); ok {
+		if err := medicine.NameValidator(v); err != nil {
+			return nil, &ValidationError{Name: "name", err: fmt.Errorf("ent: validator failed for field \"name\": %w", err)}
+		}
+	}
+	if v, ok := muo.mutation.Serial(); ok {
+		if err := medicine.SerialValidator(v); err != nil {
+			return nil, &ValidationError{Name: "serial", err: fmt.Errorf("ent: validator failed for field \"serial\": %w", err)}
+		}
+	}
+	if v, ok := muo.mutation.Brand(); ok {
+		if err := medicine.BrandValidator(v); err != nil {
+			return nil, &ValidationError{Name: "brand", err: fmt.Errorf("ent: validator failed for field \"brand\": %w", err)}
+		}
+	}
+	if v, ok := muo.mutation.Amount(); ok {
+		if err := medicine.AmountValidator(v); err != nil {
+			return nil, &ValidationError{Name: "amount", err: fmt.Errorf("ent: validator failed for field \"amount\": %w", err)}
+		}
+	}
+	if v, ok := muo.mutation.Price(); ok {
+		if err := medicine.PriceValidator(v); err != nil {
+			return nil, &ValidationError{Name: "price", err: fmt.Errorf("ent: validator failed for field \"price\": %w", err)}
+		}
+	}
+	if v, ok := muo.mutation.Howtouse(); ok {
+		if err := medicine.HowtouseValidator(v); err != nil {
+			return nil, &ValidationError{Name: "howtouse", err: fmt.Errorf("ent: validator failed for field \"howtouse\": %w", err)}
+		}
+	}
 
 	var (
 		err  error
@@ -1143,10 +1203,10 @@ func (muo *MedicineUpdateOne) sqlSave(ctx context.Context) (m *Medicine, err err
 	}
 	if nodes := muo.mutation.RemovedOrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   medicine.OrderTable,
-			Columns: medicine.OrderPrimaryKey,
+			Columns: []string{medicine.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -1162,10 +1222,10 @@ func (muo *MedicineUpdateOne) sqlSave(ctx context.Context) (m *Medicine, err err
 	}
 	if nodes := muo.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   medicine.OrderTable,
-			Columns: medicine.OrderPrimaryKey,
+			Columns: []string{medicine.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

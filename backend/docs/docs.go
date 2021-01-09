@@ -889,49 +889,6 @@ var doc = `{
                         }
                     }
                 }
-            },
-            "delete": {
-                "description": "get Prescription by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Delete a Prescription entity by ID",
-                "operationId": "delete-Prescription",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Prescription ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
             }
         },
         "/UnitOfMedicine": {
@@ -2340,7 +2297,7 @@ var doc = `{
                     "type": "integer"
                 },
                 "value": {
-                    "type": "string"
+                    "type": "integer"
                 }
             }
         },
@@ -2899,6 +2856,10 @@ var doc = `{
         "ent.Prescription": {
             "type": "object",
             "properties": {
+                "Status_Queue": {
+                    "description": "StatusQueue holds the value of the \"Status_Queue\" field.",
+                    "type": "string"
+                },
                 "Value": {
                     "description": "Value holds the value of the \"Value\" field.",
                     "type": "integer"

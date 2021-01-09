@@ -98,6 +98,13 @@ func Value(v int) predicate.Prescription {
 	})
 }
 
+// StatusQueue applies equality check predicate on the "Status_Queue" field. It's identical to StatusQueueEQ.
+func StatusQueue(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldStatusQueue), v))
+	})
+}
+
 // ValueEQ applies the EQ predicate on the "Value" field.
 func ValueEQ(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
@@ -171,6 +178,117 @@ func ValueLT(v int) predicate.Prescription {
 func ValueLTE(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldValue), v))
+	})
+}
+
+// StatusQueueEQ applies the EQ predicate on the "Status_Queue" field.
+func StatusQueueEQ(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldStatusQueue), v))
+	})
+}
+
+// StatusQueueNEQ applies the NEQ predicate on the "Status_Queue" field.
+func StatusQueueNEQ(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldStatusQueue), v))
+	})
+}
+
+// StatusQueueIn applies the In predicate on the "Status_Queue" field.
+func StatusQueueIn(vs ...string) predicate.Prescription {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Prescription(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldStatusQueue), v...))
+	})
+}
+
+// StatusQueueNotIn applies the NotIn predicate on the "Status_Queue" field.
+func StatusQueueNotIn(vs ...string) predicate.Prescription {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Prescription(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldStatusQueue), v...))
+	})
+}
+
+// StatusQueueGT applies the GT predicate on the "Status_Queue" field.
+func StatusQueueGT(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldStatusQueue), v))
+	})
+}
+
+// StatusQueueGTE applies the GTE predicate on the "Status_Queue" field.
+func StatusQueueGTE(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldStatusQueue), v))
+	})
+}
+
+// StatusQueueLT applies the LT predicate on the "Status_Queue" field.
+func StatusQueueLT(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldStatusQueue), v))
+	})
+}
+
+// StatusQueueLTE applies the LTE predicate on the "Status_Queue" field.
+func StatusQueueLTE(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldStatusQueue), v))
+	})
+}
+
+// StatusQueueContains applies the Contains predicate on the "Status_Queue" field.
+func StatusQueueContains(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldStatusQueue), v))
+	})
+}
+
+// StatusQueueHasPrefix applies the HasPrefix predicate on the "Status_Queue" field.
+func StatusQueueHasPrefix(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldStatusQueue), v))
+	})
+}
+
+// StatusQueueHasSuffix applies the HasSuffix predicate on the "Status_Queue" field.
+func StatusQueueHasSuffix(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldStatusQueue), v))
+	})
+}
+
+// StatusQueueEqualFold applies the EqualFold predicate on the "Status_Queue" field.
+func StatusQueueEqualFold(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldStatusQueue), v))
+	})
+}
+
+// StatusQueueContainsFold applies the ContainsFold predicate on the "Status_Queue" field.
+func StatusQueueContainsFold(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldStatusQueue), v))
 	})
 }
 

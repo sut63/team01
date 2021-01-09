@@ -7055,6 +7055,7 @@ type PrescriptionMutation struct {
 	id                          *int
 	_Value                      *int
 	add_Value                   *int
+	_Status_Queue               *string
 	clearedFields               map[string]struct{}
 	prescriptionpatient         *int
 	clearedprescriptionpatient  bool
@@ -7202,6 +7203,43 @@ func (m *PrescriptionMutation) AddedValue() (r int, exists bool) {
 func (m *PrescriptionMutation) ResetValue() {
 	m._Value = nil
 	m.add_Value = nil
+}
+
+// SetStatusQueue sets the Status_Queue field.
+func (m *PrescriptionMutation) SetStatusQueue(s string) {
+	m._Status_Queue = &s
+}
+
+// StatusQueue returns the Status_Queue value in the mutation.
+func (m *PrescriptionMutation) StatusQueue() (r string, exists bool) {
+	v := m._Status_Queue
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatusQueue returns the old Status_Queue value of the Prescription.
+// If the Prescription object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *PrescriptionMutation) OldStatusQueue(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldStatusQueue is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldStatusQueue requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatusQueue: %w", err)
+	}
+	return oldValue.StatusQueue, nil
+}
+
+// ResetStatusQueue reset all changes of the "Status_Queue" field.
+func (m *PrescriptionMutation) ResetStatusQueue() {
+	m._Status_Queue = nil
 }
 
 // SetPrescriptionpatientID sets the prescriptionpatient edge to PatientInfo by id.
@@ -7374,9 +7412,12 @@ func (m *PrescriptionMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *PrescriptionMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m._Value != nil {
 		fields = append(fields, prescription.FieldValue)
+	}
+	if m._Status_Queue != nil {
+		fields = append(fields, prescription.FieldStatusQueue)
 	}
 	return fields
 }
@@ -7388,6 +7429,8 @@ func (m *PrescriptionMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case prescription.FieldValue:
 		return m.Value()
+	case prescription.FieldStatusQueue:
+		return m.StatusQueue()
 	}
 	return nil, false
 }
@@ -7399,6 +7442,8 @@ func (m *PrescriptionMutation) OldField(ctx context.Context, name string) (ent.V
 	switch name {
 	case prescription.FieldValue:
 		return m.OldValue(ctx)
+	case prescription.FieldStatusQueue:
+		return m.OldStatusQueue(ctx)
 	}
 	return nil, fmt.Errorf("unknown Prescription field %s", name)
 }
@@ -7414,6 +7459,13 @@ func (m *PrescriptionMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetValue(v)
+		return nil
+	case prescription.FieldStatusQueue:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatusQueue(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Prescription field %s", name)
@@ -7482,6 +7534,9 @@ func (m *PrescriptionMutation) ResetField(name string) error {
 	switch name {
 	case prescription.FieldValue:
 		m.ResetValue()
+		return nil
+	case prescription.FieldStatusQueue:
+		m.ResetStatusQueue()
 		return nil
 	}
 	return fmt.Errorf("unknown Prescription field %s", name)

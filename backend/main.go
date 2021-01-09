@@ -11,37 +11,10 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"github.com/sut63/team01/controllers"
-	_ "github.com/sut63/team01/docs" //ไม่ต้องลบมันจะหายแดงหลังจาก swag
+	_ "github.com/sut63/team01/docs"
 	"github.com/sut63/team01/ent"
 )
 
-/*type Users struct {
-	User []User
-}
-
-type User struct {
-	Name  string
-	Email string
-}
-
-type Playlists struct {
-	Playlist []Playlist
-}
-
-type Playlist struct {
-	Title string
-	Owner int
-}
-
-type Videos struct {
-	Video []Video
-}
-
-type Video struct {
-	Name  string
-	Url   string
-	Owner int
-}*/
 
 //PatientInfos Structure
 type PatientInfos struct {
@@ -76,19 +49,6 @@ type Pharmacist struct {
 	Email    string
 	Password string
 	Name     string
-}
-
-//DispenseMedicines Structure
-type DispenseMedicines struct {
-	DispenseMedicine []DispenseMedicine
-}
-
-//DispenseMedicine Structure
-type DispenseMedicine struct {
-	Datetime     string
-	Prescription int
-	Annotation   int
-	Pharmacist   int
 }
 
 //Doctors Structure
@@ -160,11 +120,7 @@ func main() {
 
 	v1 := router.Group("/api/v1")
 
-	/*controllers.NewUserController(v1, client)
-	controllers.NewVideoController(v1, client)
-	controllers.NewResolutionController(v1, client)
-	controllers.NewPlaylistController(v1, client)
-	controllers.NewPlaylistVideoController(v1, client)*/
+	
 
 	controllers.NewAnnotationController(v1, client)
 	controllers.NewPharmacistController(v1, client)

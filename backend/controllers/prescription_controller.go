@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -24,7 +23,7 @@ type Prescription struct {
 	DoctorID      int
 	PatientInfoID int
 	MedicineID    int
-	Value         string
+	Value         int
 }
 
 // CreatePrescription handles POST requests for adding Prescription entities
@@ -78,14 +77,11 @@ func (ctl *PrescriptionController) CreatePrescription(c *gin.Context) {
 		})
 		return
 	}
-	var r int
-	if v, err := strconv.ParseInt(obj.Value, 10, 32); err == nil {
-		r = int(v)
-	}
 
 	pr, err := ctl.client.Prescription.
 		Create().
-		SetValue(r).
+		SetValue(int(obj.Value)).
+		SetStatusQueue("No").
 		SetPrescriptiondoctor(D).
 		SetPrescriptionmedicine(M).
 		SetPrescriptionpatient(P).
@@ -174,37 +170,6 @@ func (ctl *PrescriptionController) ListPrescription(c *gin.Context) {
 	c.JSON(200, Prescription)
 }
 
-// DeletePrescription handles DELETE requests to delete a Prescription entity
-// @Summary Delete a Prescription entity by ID
-// @Description get Prescription by ID
-// @ID delete-Prescription
-// @Produce  json
-// @Param id path int true "Prescription ID"
-// @Success 200 {object} gin.H
-// @Failure 400 {object} gin.H
-// @Failure 404 {object} gin.H
-// @Failure 500 {object} gin.H
-// @Router /Prescription/{id} [delete]
-func (ctl *PrescriptionController) DeletePrescription(c *gin.Context) {
-	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-	if err != nil {
-		c.JSON(400, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-	err = ctl.client.Prescription.
-		DeleteOneID(int(id)).
-		Exec(context.Background())
-	if err != nil {
-		c.JSON(404, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-	c.JSON(200, gin.H{"result": fmt.Sprintf("ok deleted %v", id)})
-}
-
 /*
 // UpdatePrescription handles PUT requests to update a Prescription entity
 // @Summary Update a Prescription entity by ID
@@ -263,7 +228,7 @@ func (ctl *PrescriptionController) register() {
 
 	// CRUD
 	Prescription.POST("", ctl.CreatePrescription)
-	Prescription.GET(":id", ctl.GetPrescription)
+	//Prescription.GET(":id", ctl.GetPrescription)
 	//Prescription.PUT(":id", ctl.UpdatePrescription)
-	Prescription.DELETE(":id", ctl.DeletePrescription)
+
 }

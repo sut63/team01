@@ -875,7 +875,7 @@ func HasOrder() predicate.Medicine {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.To(OrderTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, OrderTable, OrderPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, OrderTable, OrderColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
@@ -887,7 +887,7 @@ func HasOrderWith(preds ...predicate.Order) predicate.Medicine {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.To(OrderInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, OrderTable, OrderPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, OrderTable, OrderColumn),
 		)
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

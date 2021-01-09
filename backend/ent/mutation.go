@@ -999,7 +999,7 @@ type CompanyMutation struct {
 	op            Op
 	typ           string
 	id            *int
-	companyname   *string
+	name          *string
 	clearedFields map[string]struct{}
 	order         map[int]struct{}
 	removedorder  map[int]struct{}
@@ -1086,41 +1086,41 @@ func (m *CompanyMutation) ID() (id int, exists bool) {
 	return *m.id, true
 }
 
-// SetCompanyname sets the companyname field.
-func (m *CompanyMutation) SetCompanyname(s string) {
-	m.companyname = &s
+// SetName sets the name field.
+func (m *CompanyMutation) SetName(s string) {
+	m.name = &s
 }
 
-// Companyname returns the companyname value in the mutation.
-func (m *CompanyMutation) Companyname() (r string, exists bool) {
-	v := m.companyname
+// Name returns the name value in the mutation.
+func (m *CompanyMutation) Name() (r string, exists bool) {
+	v := m.name
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldCompanyname returns the old companyname value of the Company.
+// OldName returns the old name value of the Company.
 // If the Company object wasn't provided to the builder, the object is fetched
 // from the database.
 // An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *CompanyMutation) OldCompanyname(ctx context.Context) (v string, err error) {
+func (m *CompanyMutation) OldName(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldCompanyname is allowed only on UpdateOne operations")
+		return v, fmt.Errorf("OldName is allowed only on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldCompanyname requires an ID field in the mutation")
+		return v, fmt.Errorf("OldName requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCompanyname: %w", err)
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
 	}
-	return oldValue.Companyname, nil
+	return oldValue.Name, nil
 }
 
-// ResetCompanyname reset all changes of the "companyname" field.
-func (m *CompanyMutation) ResetCompanyname() {
-	m.companyname = nil
+// ResetName reset all changes of the "name" field.
+func (m *CompanyMutation) ResetName() {
+	m.name = nil
 }
 
 // AddOrderIDs adds the order edge to Order by ids.
@@ -1180,8 +1180,8 @@ func (m *CompanyMutation) Type() string {
 // fields that were in/decremented, call AddedFields().
 func (m *CompanyMutation) Fields() []string {
 	fields := make([]string, 0, 1)
-	if m.companyname != nil {
-		fields = append(fields, company.FieldCompanyname)
+	if m.name != nil {
+		fields = append(fields, company.FieldName)
 	}
 	return fields
 }
@@ -1191,8 +1191,8 @@ func (m *CompanyMutation) Fields() []string {
 // not set, or was not define in the schema.
 func (m *CompanyMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case company.FieldCompanyname:
-		return m.Companyname()
+	case company.FieldName:
+		return m.Name()
 	}
 	return nil, false
 }
@@ -1202,8 +1202,8 @@ func (m *CompanyMutation) Field(name string) (ent.Value, bool) {
 // or the query to the database was failed.
 func (m *CompanyMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case company.FieldCompanyname:
-		return m.OldCompanyname(ctx)
+	case company.FieldName:
+		return m.OldName(ctx)
 	}
 	return nil, fmt.Errorf("unknown Company field %s", name)
 }
@@ -1213,12 +1213,12 @@ func (m *CompanyMutation) OldField(ctx context.Context, name string) (ent.Value,
 // type mismatch the field type.
 func (m *CompanyMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case company.FieldCompanyname:
+	case company.FieldName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetCompanyname(v)
+		m.SetName(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Company field %s", name)
@@ -1270,8 +1270,8 @@ func (m *CompanyMutation) ClearField(name string) error {
 // defined in the schema.
 func (m *CompanyMutation) ResetField(name string) error {
 	switch name {
-	case company.FieldCompanyname:
-		m.ResetCompanyname()
+	case company.FieldName:
+		m.ResetName()
 		return nil
 	}
 	return fmt.Errorf("unknown Company field %s", name)
@@ -4629,10 +4629,10 @@ type OrderMutation struct {
 	clearedFields     map[string]struct{}
 	pharmacist        *int
 	clearedpharmacist bool
-	company           map[int]struct{}
-	removedcompany    map[int]struct{}
-	medicine          map[int]struct{}
-	removedmedicine   map[int]struct{}
+	medicine          *int
+	clearedmedicine   bool
+	company           *int
+	clearedcompany    bool
 	done              bool
 	oldValue          func(context.Context) (*Order, error)
 }
@@ -4963,80 +4963,35 @@ func (m *OrderMutation) ResetPharmacist() {
 	m.clearedpharmacist = false
 }
 
-// AddCompanyIDs adds the company edge to Company by ids.
-func (m *OrderMutation) AddCompanyIDs(ids ...int) {
-	if m.company == nil {
-		m.company = make(map[int]struct{})
-	}
-	for i := range ids {
-		m.company[ids[i]] = struct{}{}
-	}
+// SetMedicineID sets the medicine edge to Medicine by id.
+func (m *OrderMutation) SetMedicineID(id int) {
+	m.medicine = &id
 }
 
-// RemoveCompanyIDs removes the company edge to Company by ids.
-func (m *OrderMutation) RemoveCompanyIDs(ids ...int) {
-	if m.removedcompany == nil {
-		m.removedcompany = make(map[int]struct{})
-	}
-	for i := range ids {
-		m.removedcompany[ids[i]] = struct{}{}
-	}
+// ClearMedicine clears the medicine edge to Medicine.
+func (m *OrderMutation) ClearMedicine() {
+	m.clearedmedicine = true
 }
 
-// RemovedCompany returns the removed ids of company.
-func (m *OrderMutation) RemovedCompanyIDs() (ids []int) {
-	for id := range m.removedcompany {
-		ids = append(ids, id)
-	}
-	return
+// MedicineCleared returns if the edge medicine was cleared.
+func (m *OrderMutation) MedicineCleared() bool {
+	return m.clearedmedicine
 }
 
-// CompanyIDs returns the company ids in the mutation.
-func (m *OrderMutation) CompanyIDs() (ids []int) {
-	for id := range m.company {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetCompany reset all changes of the "company" edge.
-func (m *OrderMutation) ResetCompany() {
-	m.company = nil
-	m.removedcompany = nil
-}
-
-// AddMedicineIDs adds the medicine edge to Medicine by ids.
-func (m *OrderMutation) AddMedicineIDs(ids ...int) {
-	if m.medicine == nil {
-		m.medicine = make(map[int]struct{})
-	}
-	for i := range ids {
-		m.medicine[ids[i]] = struct{}{}
-	}
-}
-
-// RemoveMedicineIDs removes the medicine edge to Medicine by ids.
-func (m *OrderMutation) RemoveMedicineIDs(ids ...int) {
-	if m.removedmedicine == nil {
-		m.removedmedicine = make(map[int]struct{})
-	}
-	for i := range ids {
-		m.removedmedicine[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedMedicine returns the removed ids of medicine.
-func (m *OrderMutation) RemovedMedicineIDs() (ids []int) {
-	for id := range m.removedmedicine {
-		ids = append(ids, id)
+// MedicineID returns the medicine id in the mutation.
+func (m *OrderMutation) MedicineID() (id int, exists bool) {
+	if m.medicine != nil {
+		return *m.medicine, true
 	}
 	return
 }
 
 // MedicineIDs returns the medicine ids in the mutation.
+// Note that ids always returns len(ids) <= 1 for unique edges, and you should use
+// MedicineID instead. It exists only for internal usage by the builders.
 func (m *OrderMutation) MedicineIDs() (ids []int) {
-	for id := range m.medicine {
-		ids = append(ids, id)
+	if id := m.medicine; id != nil {
+		ids = append(ids, *id)
 	}
 	return
 }
@@ -5044,7 +4999,46 @@ func (m *OrderMutation) MedicineIDs() (ids []int) {
 // ResetMedicine reset all changes of the "medicine" edge.
 func (m *OrderMutation) ResetMedicine() {
 	m.medicine = nil
-	m.removedmedicine = nil
+	m.clearedmedicine = false
+}
+
+// SetCompanyID sets the company edge to Company by id.
+func (m *OrderMutation) SetCompanyID(id int) {
+	m.company = &id
+}
+
+// ClearCompany clears the company edge to Company.
+func (m *OrderMutation) ClearCompany() {
+	m.clearedcompany = true
+}
+
+// CompanyCleared returns if the edge company was cleared.
+func (m *OrderMutation) CompanyCleared() bool {
+	return m.clearedcompany
+}
+
+// CompanyID returns the company id in the mutation.
+func (m *OrderMutation) CompanyID() (id int, exists bool) {
+	if m.company != nil {
+		return *m.company, true
+	}
+	return
+}
+
+// CompanyIDs returns the company ids in the mutation.
+// Note that ids always returns len(ids) <= 1 for unique edges, and you should use
+// CompanyID instead. It exists only for internal usage by the builders.
+func (m *OrderMutation) CompanyIDs() (ids []int) {
+	if id := m.company; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetCompany reset all changes of the "company" edge.
+func (m *OrderMutation) ResetCompany() {
+	m.company = nil
+	m.clearedcompany = false
 }
 
 // Op returns the operation name.
@@ -5256,11 +5250,11 @@ func (m *OrderMutation) AddedEdges() []string {
 	if m.pharmacist != nil {
 		edges = append(edges, order.EdgePharmacist)
 	}
-	if m.company != nil {
-		edges = append(edges, order.EdgeCompany)
-	}
 	if m.medicine != nil {
 		edges = append(edges, order.EdgeMedicine)
+	}
+	if m.company != nil {
+		edges = append(edges, order.EdgeCompany)
 	}
 	return edges
 }
@@ -5273,18 +5267,14 @@ func (m *OrderMutation) AddedIDs(name string) []ent.Value {
 		if id := m.pharmacist; id != nil {
 			return []ent.Value{*id}
 		}
-	case order.EdgeCompany:
-		ids := make([]ent.Value, 0, len(m.company))
-		for id := range m.company {
-			ids = append(ids, id)
-		}
-		return ids
 	case order.EdgeMedicine:
-		ids := make([]ent.Value, 0, len(m.medicine))
-		for id := range m.medicine {
-			ids = append(ids, id)
+		if id := m.medicine; id != nil {
+			return []ent.Value{*id}
 		}
-		return ids
+	case order.EdgeCompany:
+		if id := m.company; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
@@ -5293,12 +5283,6 @@ func (m *OrderMutation) AddedIDs(name string) []ent.Value {
 // mutation.
 func (m *OrderMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 3)
-	if m.removedcompany != nil {
-		edges = append(edges, order.EdgeCompany)
-	}
-	if m.removedmedicine != nil {
-		edges = append(edges, order.EdgeMedicine)
-	}
 	return edges
 }
 
@@ -5306,18 +5290,6 @@ func (m *OrderMutation) RemovedEdges() []string {
 // the given edge name.
 func (m *OrderMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case order.EdgeCompany:
-		ids := make([]ent.Value, 0, len(m.removedcompany))
-		for id := range m.removedcompany {
-			ids = append(ids, id)
-		}
-		return ids
-	case order.EdgeMedicine:
-		ids := make([]ent.Value, 0, len(m.removedmedicine))
-		for id := range m.removedmedicine {
-			ids = append(ids, id)
-		}
-		return ids
 	}
 	return nil
 }
@@ -5329,6 +5301,12 @@ func (m *OrderMutation) ClearedEdges() []string {
 	if m.clearedpharmacist {
 		edges = append(edges, order.EdgePharmacist)
 	}
+	if m.clearedmedicine {
+		edges = append(edges, order.EdgeMedicine)
+	}
+	if m.clearedcompany {
+		edges = append(edges, order.EdgeCompany)
+	}
 	return edges
 }
 
@@ -5338,6 +5316,10 @@ func (m *OrderMutation) EdgeCleared(name string) bool {
 	switch name {
 	case order.EdgePharmacist:
 		return m.clearedpharmacist
+	case order.EdgeMedicine:
+		return m.clearedmedicine
+	case order.EdgeCompany:
+		return m.clearedcompany
 	}
 	return false
 }
@@ -5348,6 +5330,12 @@ func (m *OrderMutation) ClearEdge(name string) error {
 	switch name {
 	case order.EdgePharmacist:
 		m.ClearPharmacist()
+		return nil
+	case order.EdgeMedicine:
+		m.ClearMedicine()
+		return nil
+	case order.EdgeCompany:
+		m.ClearCompany()
 		return nil
 	}
 	return fmt.Errorf("unknown Order unique edge %s", name)
@@ -5361,11 +5349,11 @@ func (m *OrderMutation) ResetEdge(name string) error {
 	case order.EdgePharmacist:
 		m.ResetPharmacist()
 		return nil
-	case order.EdgeCompany:
-		m.ResetCompany()
-		return nil
 	case order.EdgeMedicine:
 		m.ResetMedicine()
+		return nil
+	case order.EdgeCompany:
+		m.ResetCompany()
 		return nil
 	}
 	return fmt.Errorf("unknown Order edge %s", name)

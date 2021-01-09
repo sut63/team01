@@ -14,12 +14,12 @@ type Medicine struct {
 // Fields of the Medicine.
 func (Medicine) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("name"),
-		field.String("serial"),
-		field.String("brand"),
-		field.Int("amount"),
-		field.Float("price"),
-		field.String("howtouse"),
+		field.String("name").NotEmpty(),
+		field.String("serial").NotEmpty(),
+		field.String("brand").NotEmpty(),
+		field.Int("amount").Positive(),
+		field.Float("price").Positive(),
+		field.String("howtouse").NotEmpty(),
 	}
 }
 

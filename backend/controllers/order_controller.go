@@ -8,8 +8,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sut63/team01/ent"
-	"github.com/sut63/team01/ent/medicine"
 	"github.com/sut63/team01/ent/company"
+	"github.com/sut63/team01/ent/medicine"
 	"github.com/sut63/team01/ent/pharmacist"
 )
 
@@ -22,7 +22,7 @@ type OrderController struct {
 // Order defines the struct for the order
 type Order struct {
 	Company    int
-	Medicine      int
+	Medicine   int
 	Pharmacist int
 	amount     int
 	price      float64
@@ -50,7 +50,7 @@ func (ctl *OrderController) CreateOrder(c *gin.Context) {
 		return
 	}
 
-	m, err := ctl.client.Meedicine.
+	m, err := ctl.client.Medicine.
 		Query().
 		Where(medicine.IDEQ(int(obj.Medicine))).
 		Only(context.Background())
@@ -84,7 +84,6 @@ func (ctl *OrderController) CreateOrder(c *gin.Context) {
 		return
 	}
 	time, err := time.Parse(time.RFC3339, obj.Datetime)
-
 
 	or, err := ctl.client.Order.
 		Create().

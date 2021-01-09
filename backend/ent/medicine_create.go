@@ -173,20 +173,50 @@ func (mc *MedicineCreate) Save(ctx context.Context) (*Medicine, error) {
 	if _, ok := mc.mutation.Name(); !ok {
 		return nil, &ValidationError{Name: "name", err: errors.New("ent: missing required field \"name\"")}
 	}
+	if v, ok := mc.mutation.Name(); ok {
+		if err := medicine.NameValidator(v); err != nil {
+			return nil, &ValidationError{Name: "name", err: fmt.Errorf("ent: validator failed for field \"name\": %w", err)}
+		}
+	}
 	if _, ok := mc.mutation.Serial(); !ok {
 		return nil, &ValidationError{Name: "serial", err: errors.New("ent: missing required field \"serial\"")}
+	}
+	if v, ok := mc.mutation.Serial(); ok {
+		if err := medicine.SerialValidator(v); err != nil {
+			return nil, &ValidationError{Name: "serial", err: fmt.Errorf("ent: validator failed for field \"serial\": %w", err)}
+		}
 	}
 	if _, ok := mc.mutation.Brand(); !ok {
 		return nil, &ValidationError{Name: "brand", err: errors.New("ent: missing required field \"brand\"")}
 	}
+	if v, ok := mc.mutation.Brand(); ok {
+		if err := medicine.BrandValidator(v); err != nil {
+			return nil, &ValidationError{Name: "brand", err: fmt.Errorf("ent: validator failed for field \"brand\": %w", err)}
+		}
+	}
 	if _, ok := mc.mutation.Amount(); !ok {
 		return nil, &ValidationError{Name: "amount", err: errors.New("ent: missing required field \"amount\"")}
+	}
+	if v, ok := mc.mutation.Amount(); ok {
+		if err := medicine.AmountValidator(v); err != nil {
+			return nil, &ValidationError{Name: "amount", err: fmt.Errorf("ent: validator failed for field \"amount\": %w", err)}
+		}
 	}
 	if _, ok := mc.mutation.Price(); !ok {
 		return nil, &ValidationError{Name: "price", err: errors.New("ent: missing required field \"price\"")}
 	}
+	if v, ok := mc.mutation.Price(); ok {
+		if err := medicine.PriceValidator(v); err != nil {
+			return nil, &ValidationError{Name: "price", err: fmt.Errorf("ent: validator failed for field \"price\": %w", err)}
+		}
+	}
 	if _, ok := mc.mutation.Howtouse(); !ok {
 		return nil, &ValidationError{Name: "howtouse", err: errors.New("ent: missing required field \"howtouse\"")}
+	}
+	if v, ok := mc.mutation.Howtouse(); ok {
+		if err := medicine.HowtouseValidator(v); err != nil {
+			return nil, &ValidationError{Name: "howtouse", err: fmt.Errorf("ent: validator failed for field \"howtouse\": %w", err)}
+		}
 	}
 	var (
 		err  error
@@ -393,10 +423,10 @@ func (mc *MedicineCreate) createSpec() (*Medicine, *sqlgraph.CreateSpec) {
 	}
 	if nodes := mc.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   medicine.OrderTable,
-			Columns: medicine.OrderPrimaryKey,
+			Columns: []string{medicine.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

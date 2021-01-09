@@ -20,9 +20,9 @@ type CompanyCreate struct {
 	hooks    []Hook
 }
 
-// SetCompanyname sets the companyname field.
-func (cc *CompanyCreate) SetCompanyname(s string) *CompanyCreate {
-	cc.mutation.SetCompanyname(s)
+// SetName sets the name field.
+func (cc *CompanyCreate) SetName(s string) *CompanyCreate {
+	cc.mutation.SetName(s)
 	return cc
 }
 
@@ -48,12 +48,12 @@ func (cc *CompanyCreate) Mutation() *CompanyMutation {
 
 // Save creates the Company in the database.
 func (cc *CompanyCreate) Save(ctx context.Context) (*Company, error) {
-	if _, ok := cc.mutation.Companyname(); !ok {
-		return nil, &ValidationError{Name: "companyname", err: errors.New("ent: missing required field \"companyname\"")}
+	if _, ok := cc.mutation.Name(); !ok {
+		return nil, &ValidationError{Name: "name", err: errors.New("ent: missing required field \"name\"")}
 	}
-	if v, ok := cc.mutation.Companyname(); ok {
-		if err := company.CompanynameValidator(v); err != nil {
-			return nil, &ValidationError{Name: "companyname", err: fmt.Errorf("ent: validator failed for field \"companyname\": %w", err)}
+	if v, ok := cc.mutation.Name(); ok {
+		if err := company.NameValidator(v); err != nil {
+			return nil, &ValidationError{Name: "name", err: fmt.Errorf("ent: validator failed for field \"name\": %w", err)}
 		}
 	}
 	var (
@@ -116,20 +116,20 @@ func (cc *CompanyCreate) createSpec() (*Company, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
-	if value, ok := cc.mutation.Companyname(); ok {
+	if value, ok := cc.mutation.Name(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: company.FieldCompanyname,
+			Column: company.FieldName,
 		})
-		c.Companyname = value
+		c.Name = value
 	}
 	if nodes := cc.mutation.OrderIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   company.OrderTable,
-			Columns: company.OrderPrimaryKey,
+			Columns: []string{company.OrderColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

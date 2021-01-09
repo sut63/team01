@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -29,8 +28,8 @@ type OrderQuery struct {
 	predicates []predicate.Order
 	// eager-loading edges.
 	withPharmacist *PharmacistQuery
-	withCompany    *CompanyQuery
 	withMedicine   *MedicineQuery
+	withCompany    *CompanyQuery
 	withFKs        bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -79,24 +78,6 @@ func (oq *OrderQuery) QueryPharmacist() *PharmacistQuery {
 	return query
 }
 
-// QueryCompany chains the current query on the company edge.
-func (oq *OrderQuery) QueryCompany() *CompanyQuery {
-	query := &CompanyQuery{config: oq.config}
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := oq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(order.Table, order.FieldID, oq.sqlQuery()),
-			sqlgraph.To(company.Table, company.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, order.CompanyTable, order.CompanyPrimaryKey...),
-		)
-		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QueryMedicine chains the current query on the medicine edge.
 func (oq *OrderQuery) QueryMedicine() *MedicineQuery {
 	query := &MedicineQuery{config: oq.config}
@@ -107,7 +88,25 @@ func (oq *OrderQuery) QueryMedicine() *MedicineQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(order.Table, order.FieldID, oq.sqlQuery()),
 			sqlgraph.To(medicine.Table, medicine.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, order.MedicineTable, order.MedicinePrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2O, true, order.MedicineTable, order.MedicineColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCompany chains the current query on the company edge.
+func (oq *OrderQuery) QueryCompany() *CompanyQuery {
+	query := &CompanyQuery{config: oq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(order.Table, order.FieldID, oq.sqlQuery()),
+			sqlgraph.To(company.Table, company.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, order.CompanyTable, order.CompanyColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
@@ -305,17 +304,6 @@ func (oq *OrderQuery) WithPharmacist(opts ...func(*PharmacistQuery)) *OrderQuery
 	return oq
 }
 
-//  WithCompany tells the query-builder to eager-loads the nodes that are connected to
-// the "company" edge. The optional arguments used to configure the query builder of the edge.
-func (oq *OrderQuery) WithCompany(opts ...func(*CompanyQuery)) *OrderQuery {
-	query := &CompanyQuery{config: oq.config}
-	for _, opt := range opts {
-		opt(query)
-	}
-	oq.withCompany = query
-	return oq
-}
-
 //  WithMedicine tells the query-builder to eager-loads the nodes that are connected to
 // the "medicine" edge. The optional arguments used to configure the query builder of the edge.
 func (oq *OrderQuery) WithMedicine(opts ...func(*MedicineQuery)) *OrderQuery {
@@ -324,6 +312,17 @@ func (oq *OrderQuery) WithMedicine(opts ...func(*MedicineQuery)) *OrderQuery {
 		opt(query)
 	}
 	oq.withMedicine = query
+	return oq
+}
+
+//  WithCompany tells the query-builder to eager-loads the nodes that are connected to
+// the "company" edge. The optional arguments used to configure the query builder of the edge.
+func (oq *OrderQuery) WithCompany(opts ...func(*CompanyQuery)) *OrderQuery {
+	query := &CompanyQuery{config: oq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withCompany = query
 	return oq
 }
 
@@ -396,11 +395,11 @@ func (oq *OrderQuery) sqlAll(ctx context.Context) ([]*Order, error) {
 		_spec       = oq.querySpec()
 		loadedTypes = [3]bool{
 			oq.withPharmacist != nil,
-			oq.withCompany != nil,
 			oq.withMedicine != nil,
+			oq.withCompany != nil,
 		}
 	)
-	if oq.withPharmacist != nil {
+	if oq.withPharmacist != nil || oq.withMedicine != nil || oq.withCompany != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -455,128 +454,52 @@ func (oq *OrderQuery) sqlAll(ctx context.Context) ([]*Order, error) {
 		}
 	}
 
-	if query := oq.withCompany; query != nil {
-		fks := make([]driver.Value, 0, len(nodes))
-		ids := make(map[int]*Order, len(nodes))
-		for _, node := range nodes {
-			ids[node.ID] = node
-			fks = append(fks, node.ID)
+	if query := oq.withMedicine; query != nil {
+		ids := make([]int, 0, len(nodes))
+		nodeids := make(map[int][]*Order)
+		for i := range nodes {
+			if fk := nodes[i].medicine_id; fk != nil {
+				ids = append(ids, *fk)
+				nodeids[*fk] = append(nodeids[*fk], nodes[i])
+			}
 		}
-		var (
-			edgeids []int
-			edges   = make(map[int][]*Order)
-		)
-		_spec := &sqlgraph.EdgeQuerySpec{
-			Edge: &sqlgraph.EdgeSpec{
-				Inverse: true,
-				Table:   order.CompanyTable,
-				Columns: order.CompanyPrimaryKey,
-			},
-			Predicate: func(s *sql.Selector) {
-				s.Where(sql.InValues(order.CompanyPrimaryKey[1], fks...))
-			},
-
-			ScanValues: func() [2]interface{} {
-				return [2]interface{}{&sql.NullInt64{}, &sql.NullInt64{}}
-			},
-			Assign: func(out, in interface{}) error {
-				eout, ok := out.(*sql.NullInt64)
-				if !ok || eout == nil {
-					return fmt.Errorf("unexpected id value for edge-out")
-				}
-				ein, ok := in.(*sql.NullInt64)
-				if !ok || ein == nil {
-					return fmt.Errorf("unexpected id value for edge-in")
-				}
-				outValue := int(eout.Int64)
-				inValue := int(ein.Int64)
-				node, ok := ids[outValue]
-				if !ok {
-					return fmt.Errorf("unexpected node id in edges: %v", outValue)
-				}
-				edgeids = append(edgeids, inValue)
-				edges[inValue] = append(edges[inValue], node)
-				return nil
-			},
-		}
-		if err := sqlgraph.QueryEdges(ctx, oq.driver, _spec); err != nil {
-			return nil, fmt.Errorf(`query edges "company": %v`, err)
-		}
-		query.Where(company.IDIn(edgeids...))
+		query.Where(medicine.IDIn(ids...))
 		neighbors, err := query.All(ctx)
 		if err != nil {
 			return nil, err
 		}
 		for _, n := range neighbors {
-			nodes, ok := edges[n.ID]
+			nodes, ok := nodeids[n.ID]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected "company" node returned %v`, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "medicine_id" returned %v`, n.ID)
 			}
 			for i := range nodes {
-				nodes[i].Edges.Company = append(nodes[i].Edges.Company, n)
+				nodes[i].Edges.Medicine = n
 			}
 		}
 	}
 
-	if query := oq.withMedicine; query != nil {
-		fks := make([]driver.Value, 0, len(nodes))
-		ids := make(map[int]*Order, len(nodes))
-		for _, node := range nodes {
-			ids[node.ID] = node
-			fks = append(fks, node.ID)
+	if query := oq.withCompany; query != nil {
+		ids := make([]int, 0, len(nodes))
+		nodeids := make(map[int][]*Order)
+		for i := range nodes {
+			if fk := nodes[i].company_id; fk != nil {
+				ids = append(ids, *fk)
+				nodeids[*fk] = append(nodeids[*fk], nodes[i])
+			}
 		}
-		var (
-			edgeids []int
-			edges   = make(map[int][]*Order)
-		)
-		_spec := &sqlgraph.EdgeQuerySpec{
-			Edge: &sqlgraph.EdgeSpec{
-				Inverse: true,
-				Table:   order.MedicineTable,
-				Columns: order.MedicinePrimaryKey,
-			},
-			Predicate: func(s *sql.Selector) {
-				s.Where(sql.InValues(order.MedicinePrimaryKey[1], fks...))
-			},
-
-			ScanValues: func() [2]interface{} {
-				return [2]interface{}{&sql.NullInt64{}, &sql.NullInt64{}}
-			},
-			Assign: func(out, in interface{}) error {
-				eout, ok := out.(*sql.NullInt64)
-				if !ok || eout == nil {
-					return fmt.Errorf("unexpected id value for edge-out")
-				}
-				ein, ok := in.(*sql.NullInt64)
-				if !ok || ein == nil {
-					return fmt.Errorf("unexpected id value for edge-in")
-				}
-				outValue := int(eout.Int64)
-				inValue := int(ein.Int64)
-				node, ok := ids[outValue]
-				if !ok {
-					return fmt.Errorf("unexpected node id in edges: %v", outValue)
-				}
-				edgeids = append(edgeids, inValue)
-				edges[inValue] = append(edges[inValue], node)
-				return nil
-			},
-		}
-		if err := sqlgraph.QueryEdges(ctx, oq.driver, _spec); err != nil {
-			return nil, fmt.Errorf(`query edges "medicine": %v`, err)
-		}
-		query.Where(medicine.IDIn(edgeids...))
+		query.Where(company.IDIn(ids...))
 		neighbors, err := query.All(ctx)
 		if err != nil {
 			return nil, err
 		}
 		for _, n := range neighbors {
-			nodes, ok := edges[n.ID]
+			nodes, ok := nodeids[n.ID]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected "medicine" node returned %v`, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "company_id" returned %v`, n.ID)
 			}
 			for i := range nodes {
-				nodes[i].Edges.Medicine = append(nodes[i].Edges.Medicine, n)
+				nodes[i].Edges.Company = n
 			}
 		}
 	}

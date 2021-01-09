@@ -7,6 +7,7 @@ import (
 	"github.com/sut63/team01/ent/bill"
 	"github.com/sut63/team01/ent/company"
 	"github.com/sut63/team01/ent/doctor"
+	"github.com/sut63/team01/ent/medicine"
 	"github.com/sut63/team01/ent/order"
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/pharmacist"
@@ -31,10 +32,10 @@ func init() {
 	bill.AmountValidator = billDescAmount.Validators[0].(func(int) error)
 	companyFields := schema.Company{}.Fields()
 	_ = companyFields
-	// companyDescCompanyname is the schema descriptor for companyname field.
-	companyDescCompanyname := companyFields[0].Descriptor()
-	// company.CompanynameValidator is a validator for the "companyname" field. It is called by the builders before save.
-	company.CompanynameValidator = companyDescCompanyname.Validators[0].(func(string) error)
+	// companyDescName is the schema descriptor for name field.
+	companyDescName := companyFields[0].Descriptor()
+	// company.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	company.NameValidator = companyDescName.Validators[0].(func(string) error)
 	doctorFields := schema.Doctor{}.Fields()
 	_ = doctorFields
 	// doctorDescEmail is the schema descriptor for email field.
@@ -49,6 +50,32 @@ func init() {
 	doctorDescName := doctorFields[2].Descriptor()
 	// doctor.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	doctor.NameValidator = doctorDescName.Validators[0].(func(string) error)
+	medicineFields := schema.Medicine{}.Fields()
+	_ = medicineFields
+	// medicineDescName is the schema descriptor for name field.
+	medicineDescName := medicineFields[0].Descriptor()
+	// medicine.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	medicine.NameValidator = medicineDescName.Validators[0].(func(string) error)
+	// medicineDescSerial is the schema descriptor for serial field.
+	medicineDescSerial := medicineFields[1].Descriptor()
+	// medicine.SerialValidator is a validator for the "serial" field. It is called by the builders before save.
+	medicine.SerialValidator = medicineDescSerial.Validators[0].(func(string) error)
+	// medicineDescBrand is the schema descriptor for brand field.
+	medicineDescBrand := medicineFields[2].Descriptor()
+	// medicine.BrandValidator is a validator for the "brand" field. It is called by the builders before save.
+	medicine.BrandValidator = medicineDescBrand.Validators[0].(func(string) error)
+	// medicineDescAmount is the schema descriptor for amount field.
+	medicineDescAmount := medicineFields[3].Descriptor()
+	// medicine.AmountValidator is a validator for the "amount" field. It is called by the builders before save.
+	medicine.AmountValidator = medicineDescAmount.Validators[0].(func(int) error)
+	// medicineDescPrice is the schema descriptor for price field.
+	medicineDescPrice := medicineFields[4].Descriptor()
+	// medicine.PriceValidator is a validator for the "price" field. It is called by the builders before save.
+	medicine.PriceValidator = medicineDescPrice.Validators[0].(func(float64) error)
+	// medicineDescHowtouse is the schema descriptor for howtouse field.
+	medicineDescHowtouse := medicineFields[5].Descriptor()
+	// medicine.HowtouseValidator is a validator for the "howtouse" field. It is called by the builders before save.
+	medicine.HowtouseValidator = medicineDescHowtouse.Validators[0].(func(string) error)
 	orderFields := schema.Order{}.Fields()
 	_ = orderFields
 	// orderDescAmount is the schema descriptor for amount field.

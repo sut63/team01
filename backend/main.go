@@ -92,6 +92,24 @@ type LevelOfDangerous struct {
 	Name string
 }
 
+//Medicines Structure
+type Medicines struct {
+	Medicine []Medicine
+}
+
+//Medicine Structure
+type Medicine struct {
+	Name             string
+	Serial           string
+	Brand            string
+	Amount           int
+	Price            float64
+	Howtouse         string
+	LevelOfDangerous int
+	MedicineType     int
+	UnitOfMedicine   int
+}
+
 // @title SUT SA Example API Playlist Vidoe
 // @version 1.0
 // @description This is a sample server for SUT SE 2563
@@ -282,6 +300,29 @@ func main() {
 		client.LevelOfDangerous.
 			Create().
 			SetName(l.Name).
+			Save(context.Background())
+	}
+
+	// Set Medicines Data
+	Medicines := Medicines{
+		Medicine: []Medicine{
+			Medicine{"TestMedicine", "T000", "AGC Inc.", 200000, 300, "Use to create another medicine", 2, 3, 2},
+			Medicine{"PainKiller", "P001", "AGC Inc.", 150000, 20, "Use to cure your pain", 1, 1, 3},
+		},
+	}
+
+	for _, m := range Medicines.Medicine {
+		client.Medicine.
+			Create().
+			SetName(m.Name).
+			SetSerial(m.Serial).
+			SetBrand(m.Brand).
+			SetAmount(m.Amount).
+			SetPrice(m.Price).
+			SetHowtouse(m.Howtouse).
+			SetLevelOfDangerousID(m.LevelOfDangerous).
+			SetMedicineTypeID(m.MedicineType).
+			SetUnitOfMedicineID(m.UnitOfMedicine).
 			Save(context.Background())
 	}
 

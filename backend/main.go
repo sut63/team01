@@ -17,6 +17,9 @@ import (
 	"github.com/sut63/team01/ent"
 	"github.com/sut63/team01/ent/annotation"
 	"github.com/sut63/team01/ent/dispensemedicine"
+	"github.com/sut63/team01/ent/doctor"
+	"github.com/sut63/team01/ent/medicine"
+	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/payment"
 	"github.com/sut63/team01/ent/pharmacist"
 	"github.com/sut63/team01/ent/prescription"
@@ -78,6 +81,20 @@ type DispenseMedicine struct {
 	Prescription int
 	Annotation   int
 	Pharmacist   int
+}
+
+//Prescriptions Strucre
+type Prescriptions struct {
+	Prescription []Prescription
+}
+
+//Prescription Strucre
+type Prescription struct {
+	DoctorID      int
+	PatientInfoID int
+	MedicineID    int
+	Value         int
+	StatusQueue   string
 }
 
 //Doctors Structure
@@ -386,6 +403,52 @@ func main() {
 			Save(context.Background())
 	}
 
+	//Set Prescription Data
+	Pres := Prescriptions{
+		Prescription: []Prescription{
+			Prescription{1, 1, 1, 15, "No"},
+		},
+	}
+
+	for _, pci := range Pres.Prescription {
+
+		pif, err := client.PatientInfo.
+			Query().
+			Where(patientinfo.IDEQ(int(pci.PatientInfoID))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		dtr, err := client.Doctor.
+			Query().
+			Where(doctor.IDEQ(int(pci.DoctorID))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		mdc, err := client.Medicine.
+			Query().
+			Where(medicine.IDEQ(int(pci.MedicineID))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		client.Prescription.
+			Create().
+			SetValue(pci.Value).
+			SetStatusQueue(pci.StatusQueue).
+			SetPrescriptionpatient(pif).
+			SetPrescriptiondoctor(dtr).
+			SetPrescriptionmedicine(mdc).
+			Save(context.Background())
+	}
+
 	//Set DispenseMedicine Data
 	DisMedic := DispenseMedicines{
 		DispenseMedicine: []DispenseMedicine{
@@ -437,7 +500,6 @@ func main() {
 	Bills := Bills{
 		Bill: []Bill{
 			Bill{"-", 100, 1, 1, 1},
-			Bill{"ใช้บัตรทอง", 4000, 3, 2, 2},
 		},
 	}
 

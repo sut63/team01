@@ -3098,6 +3098,9 @@ var doc = `{
                 "patientInfoID": {
                     "type": "integer"
                 },
+                "statusQueue": {
+                    "type": "string"
+                },
                 "value": {
                     "type": "integer"
                 }

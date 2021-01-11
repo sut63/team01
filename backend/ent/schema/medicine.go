@@ -18,7 +18,7 @@ func (Medicine) Fields() []ent.Field {
 		field.String("serial").NotEmpty(),
 		field.String("brand").NotEmpty(),
 		field.Int("amount").Positive(),
-		field.Float("price").Positive(),
+		field.Int("price").Positive(),
 		field.String("howtouse").NotEmpty(),
 	}
 }

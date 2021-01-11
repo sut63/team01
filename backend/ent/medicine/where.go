@@ -120,7 +120,7 @@ func Amount(v int) predicate.Medicine {
 }
 
 // Price applies equality check predicate on the "price" field. It's identical to PriceEQ.
-func Price(v float64) predicate.Medicine {
+func Price(v int) predicate.Medicine {
 	return predicate.Medicine(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldPrice), v))
 	})
@@ -543,21 +543,21 @@ func AmountLTE(v int) predicate.Medicine {
 }
 
 // PriceEQ applies the EQ predicate on the "price" field.
-func PriceEQ(v float64) predicate.Medicine {
+func PriceEQ(v int) predicate.Medicine {
 	return predicate.Medicine(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldPrice), v))
 	})
 }
 
 // PriceNEQ applies the NEQ predicate on the "price" field.
-func PriceNEQ(v float64) predicate.Medicine {
+func PriceNEQ(v int) predicate.Medicine {
 	return predicate.Medicine(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldPrice), v))
 	})
 }
 
 // PriceIn applies the In predicate on the "price" field.
-func PriceIn(vs ...float64) predicate.Medicine {
+func PriceIn(vs ...int) predicate.Medicine {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -574,7 +574,7 @@ func PriceIn(vs ...float64) predicate.Medicine {
 }
 
 // PriceNotIn applies the NotIn predicate on the "price" field.
-func PriceNotIn(vs ...float64) predicate.Medicine {
+func PriceNotIn(vs ...int) predicate.Medicine {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -591,28 +591,28 @@ func PriceNotIn(vs ...float64) predicate.Medicine {
 }
 
 // PriceGT applies the GT predicate on the "price" field.
-func PriceGT(v float64) predicate.Medicine {
+func PriceGT(v int) predicate.Medicine {
 	return predicate.Medicine(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldPrice), v))
 	})
 }
 
 // PriceGTE applies the GTE predicate on the "price" field.
-func PriceGTE(v float64) predicate.Medicine {
+func PriceGTE(v int) predicate.Medicine {
 	return predicate.Medicine(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldPrice), v))
 	})
 }
 
 // PriceLT applies the LT predicate on the "price" field.
-func PriceLT(v float64) predicate.Medicine {
+func PriceLT(v int) predicate.Medicine {
 	return predicate.Medicine(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldPrice), v))
 	})
 }
 
 // PriceLTE applies the LTE predicate on the "price" field.
-func PriceLTE(v float64) predicate.Medicine {
+func PriceLTE(v int) predicate.Medicine {
 	return predicate.Medicine(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldPrice), v))
 	})

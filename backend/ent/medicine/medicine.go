@@ -107,7 +107,7 @@ var (
 	// AmountValidator is a validator for the "amount" field. It is called by the builders before save.
 	AmountValidator func(int) error
 	// PriceValidator is a validator for the "price" field. It is called by the builders before save.
-	PriceValidator func(float64) error
+	PriceValidator func(int) error
 	// HowtouseValidator is a validator for the "howtouse" field. It is called by the builders before save.
 	HowtouseValidator func(string) error
 )

@@ -71,7 +71,7 @@ func init() {
 	// medicineDescPrice is the schema descriptor for price field.
 	medicineDescPrice := medicineFields[4].Descriptor()
 	// medicine.PriceValidator is a validator for the "price" field. It is called by the builders before save.
-	medicine.PriceValidator = medicineDescPrice.Validators[0].(func(float64) error)
+	medicine.PriceValidator = medicineDescPrice.Validators[0].(func(int) error)
 	// medicineDescHowtouse is the schema descriptor for howtouse field.
 	medicineDescHowtouse := medicineFields[5].Descriptor()
 	// medicine.HowtouseValidator is a validator for the "howtouse" field. It is called by the builders before save.

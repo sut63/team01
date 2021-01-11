@@ -177,7 +177,7 @@ var (
 		{Name: "serial", Type: field.TypeString},
 		{Name: "brand", Type: field.TypeString},
 		{Name: "amount", Type: field.TypeInt},
-		{Name: "price", Type: field.TypeFloat64},
+		{Name: "price", Type: field.TypeInt},
 		{Name: "howtouse", Type: field.TypeString},
 		{Name: "level_of_dangerous_medicine", Type: field.TypeInt, Nullable: true},
 		{Name: "medicine_type_medicine", Type: field.TypeInt, Nullable: true},

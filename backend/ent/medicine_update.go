@@ -65,15 +65,15 @@ func (mu *MedicineUpdate) AddAmount(i int) *MedicineUpdate {
 }
 
 // SetPrice sets the price field.
-func (mu *MedicineUpdate) SetPrice(f float64) *MedicineUpdate {
+func (mu *MedicineUpdate) SetPrice(i int) *MedicineUpdate {
 	mu.mutation.ResetPrice()
-	mu.mutation.SetPrice(f)
+	mu.mutation.SetPrice(i)
 	return mu
 }
 
-// AddPrice adds f to price.
-func (mu *MedicineUpdate) AddPrice(f float64) *MedicineUpdate {
-	mu.mutation.AddPrice(f)
+// AddPrice adds i to price.
+func (mu *MedicineUpdate) AddPrice(i int) *MedicineUpdate {
+	mu.mutation.AddPrice(i)
 	return mu
 }
 
@@ -390,14 +390,14 @@ func (mu *MedicineUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := mu.mutation.Price(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeInt,
 			Value:  value,
 			Column: medicine.FieldPrice,
 		})
 	}
 	if value, ok := mu.mutation.AddedPrice(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeInt,
 			Value:  value,
 			Column: medicine.FieldPrice,
 		})
@@ -678,15 +678,15 @@ func (muo *MedicineUpdateOne) AddAmount(i int) *MedicineUpdateOne {
 }
 
 // SetPrice sets the price field.
-func (muo *MedicineUpdateOne) SetPrice(f float64) *MedicineUpdateOne {
+func (muo *MedicineUpdateOne) SetPrice(i int) *MedicineUpdateOne {
 	muo.mutation.ResetPrice()
-	muo.mutation.SetPrice(f)
+	muo.mutation.SetPrice(i)
 	return muo
 }
 
-// AddPrice adds f to price.
-func (muo *MedicineUpdateOne) AddPrice(f float64) *MedicineUpdateOne {
-	muo.mutation.AddPrice(f)
+// AddPrice adds i to price.
+func (muo *MedicineUpdateOne) AddPrice(i int) *MedicineUpdateOne {
+	muo.mutation.AddPrice(i)
 	return muo
 }
 
@@ -1001,14 +1001,14 @@ func (muo *MedicineUpdateOne) sqlSave(ctx context.Context) (m *Medicine, err err
 	}
 	if value, ok := muo.mutation.Price(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeInt,
 			Value:  value,
 			Column: medicine.FieldPrice,
 		})
 	}
 	if value, ok := muo.mutation.AddedPrice(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeInt,
 			Value:  value,
 			Column: medicine.FieldPrice,
 		})

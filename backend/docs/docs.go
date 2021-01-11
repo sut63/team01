@@ -3384,7 +3384,7 @@ var doc = `{
                 },
                 "price": {
                     "description": "Price holds the value of the \"price\" field.",
-                    "type": "number"
+                    "type": "integer"
                 },
                 "serial": {
                     "description": "Serial holds the value of the \"serial\" field.",

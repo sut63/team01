@@ -21,12 +21,18 @@ import {
     ControllersMedicine,
     ControllersMedicineFromJSON,
     ControllersMedicineToJSON,
+    ControllersOrder,
+    ControllersOrderFromJSON,
+    ControllersOrderToJSON,
     ControllersPrescription,
     ControllersPrescriptionFromJSON,
     ControllersPrescriptionToJSON,
     EntAnnotation,
     EntAnnotationFromJSON,
     EntAnnotationToJSON,
+    EntCompany,
+    EntCompanyFromJSON,
+    EntCompanyToJSON,
     EntDispenseMedicine,
     EntDispenseMedicineFromJSON,
     EntDispenseMedicineToJSON,
@@ -45,6 +51,9 @@ import {
     EntMedicineType,
     EntMedicineTypeFromJSON,
     EntMedicineTypeToJSON,
+    EntOrder,
+    EntOrderFromJSON,
+    EntOrderToJSON,
     EntPatientInfo,
     EntPatientInfoFromJSON,
     EntPatientInfoToJSON,
@@ -61,6 +70,10 @@ import {
 
 export interface CreateAnnotationRequest {
     annotation: EntAnnotation;
+}
+
+export interface CreateCompanyRequest {
+    company: EntCompany;
 }
 
 export interface CreateDispensemedicineRequest {
@@ -87,6 +100,10 @@ export interface CreateMedicineTypeRequest {
     medicineType: EntMedicineType;
 }
 
+export interface CreateOrderRequest {
+    order: ControllersOrder;
+}
+
 export interface CreatePharmacistRequest {
     pharmacist: EntPharmacist;
 }
@@ -107,6 +124,10 @@ export interface DeleteAnnotationRequest {
     id: number;
 }
 
+export interface DeleteCompanyRequest {
+    id: number;
+}
+
 export interface DeleteDispensemedicineRequest {
     id: number;
 }
@@ -123,6 +144,10 @@ export interface DeleteMedicineTypeRequest {
     id: number;
 }
 
+export interface DeleteOrderRequest {
+    id: number;
+}
+
 export interface DeletePatientInfoRequest {
     id: number;
 }
@@ -136,6 +161,10 @@ export interface DeleteUnitOfMedicineRequest {
 }
 
 export interface GetAnnotationRequest {
+    id: number;
+}
+
+export interface GetCompanyRequest {
     id: number;
 }
 
@@ -180,6 +209,11 @@ export interface ListAnnotationRequest {
     offset?: number;
 }
 
+export interface ListCompanyRequest {
+    limit?: number;
+    offset?: number;
+}
+
 export interface ListDispensemedicineRequest {
     limit?: number;
     offset?: number;
@@ -206,6 +240,11 @@ export interface ListMedicineRequest {
 }
 
 export interface ListMedicineTypeRequest {
+    limit?: number;
+    offset?: number;
+}
+
+export interface ListOrderRequest {
     limit?: number;
     offset?: number;
 }
@@ -312,6 +351,41 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async createAnnotation(requestParameters: CreateAnnotationRequest): Promise<EntAnnotation> {
         const response = await this.createAnnotationRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * Create company
+     * Create company
+     */
+    async createCompanyRaw(requestParameters: CreateCompanyRequest): Promise<runtime.ApiResponse<EntCompany>> {
+        if (requestParameters.company === null || requestParameters.company === undefined) {
+            throw new runtime.RequiredError('company','Required parameter requestParameters.company was null or undefined when calling createCompany.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/institutions`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EntCompanyToJSON(requestParameters.company),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntCompanyFromJSON(jsonValue));
+    }
+
+    /**
+     * Create company
+     * Create company
+     */
+    async createCompany(requestParameters: CreateCompanyRequest): Promise<EntCompany> {
+        const response = await this.createCompanyRaw(requestParameters);
         return await response.value();
     }
 
@@ -526,6 +600,41 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * Create order
+     * Create order
+     */
+    async createOrderRaw(requestParameters: CreateOrderRequest): Promise<runtime.ApiResponse<EntOrder>> {
+        if (requestParameters.order === null || requestParameters.order === undefined) {
+            throw new runtime.RequiredError('order','Required parameter requestParameters.order was null or undefined when calling createOrder.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/orders`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ControllersOrderToJSON(requestParameters.order),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntOrderFromJSON(jsonValue));
+    }
+
+    /**
+     * Create order
+     * Create order
+     */
+    async createOrder(requestParameters: CreateOrderRequest): Promise<EntOrder> {
+        const response = await this.createOrderRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * Create pharmacist
      * Create pharmacist
      */
@@ -698,6 +807,38 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * get company by ID
+     * Delete a company entity by ID
+     */
+    async deleteCompanyRaw(requestParameters: DeleteCompanyRequest): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteCompany.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/companys/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * get company by ID
+     * Delete a company entity by ID
+     */
+    async deleteCompany(requestParameters: DeleteCompanyRequest): Promise<object> {
+        const response = await this.deleteCompanyRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * get dispensemedicine by ID
      * Delete a dispensemedicine entity by ID
      */
@@ -826,6 +967,38 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * get order by ID
+     * Delete a order entity by ID
+     */
+    async deleteOrderRaw(requestParameters: DeleteOrderRequest): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteOrder.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/orders/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * get order by ID
+     * Delete a order entity by ID
+     */
+    async deleteOrder(requestParameters: DeleteOrderRequest): Promise<object> {
+        const response = await this.deleteOrderRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * get PatientInfo by ID
      * Delete a PatientInfo entity by ID
      */
@@ -950,6 +1123,38 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getAnnotation(requestParameters: GetAnnotationRequest): Promise<EntAnnotation> {
         const response = await this.getAnnotationRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * get company by ID
+     * Get a company entity by ID
+     */
+    async getCompanyRaw(requestParameters: GetCompanyRequest): Promise<runtime.ApiResponse<EntCompany>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getCompany.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/companys/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntCompanyFromJSON(jsonValue));
+    }
+
+    /**
+     * get company by ID
+     * Get a company entity by ID
+     */
+    async getCompany(requestParameters: GetCompanyRequest): Promise<EntCompany> {
+        const response = await this.getCompanyRaw(requestParameters);
         return await response.value();
     }
 
@@ -1278,6 +1483,42 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * list company entities
+     * List company entities
+     */
+    async listCompanyRaw(requestParameters: ListCompanyRequest): Promise<runtime.ApiResponse<Array<EntCompany>>> {
+        const queryParameters: runtime.HTTPQuery = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/companys`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntCompanyFromJSON));
+    }
+
+    /**
+     * list company entities
+     * List company entities
+     */
+    async listCompany(requestParameters: ListCompanyRequest): Promise<Array<EntCompany>> {
+        const response = await this.listCompanyRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * list dispensemedicine entities
      * List dispensemedicine entities
      */
@@ -1490,6 +1731,42 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async listMedicineType(requestParameters: ListMedicineTypeRequest): Promise<Array<EntMedicineType>> {
         const response = await this.listMedicineTypeRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * list order entities
+     * List order entities
+     */
+    async listOrderRaw(requestParameters: ListOrderRequest): Promise<runtime.ApiResponse<Array<EntOrder>>> {
+        const queryParameters: runtime.HTTPQuery = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/orders`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntOrderFromJSON));
+    }
+
+    /**
+     * list order entities
+     * List order entities
+     */
+    async listOrder(requestParameters: ListOrderRequest): Promise<Array<EntOrder>> {
+        const response = await this.listOrderRaw(requestParameters);
         return await response.value();
     }
 

@@ -1,5 +1,6 @@
 export * from './ControllersDispenseMedicine';
 export * from './ControllersMedicine';
+export * from './ControllersOrder';
 export * from './ControllersPrescription';
 export * from './EntAnnotation';
 export * from './EntAnnotationEdges';

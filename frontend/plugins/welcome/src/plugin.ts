@@ -4,6 +4,7 @@ import WatchVideo from './components/WatchVideo'
 import SignIn from './components/SignIn'
 import DrugAllergy from './components/DrugAllergy'
 import create_prescription from './components/create_prescription'
+import Medicine from './components/Medicine'
 
 export const plugin = createPlugin({
   id: 'welcome',
@@ -13,5 +14,6 @@ export const plugin = createPlugin({
     router.registerRoute('/signin', SignIn);
     router.registerRoute('/drug_allergy', DrugAllergy);
     router.registerRoute('/create_prescription', create_prescription);
+    router.registerRoute('/medicine', Medicine);
   },
 });

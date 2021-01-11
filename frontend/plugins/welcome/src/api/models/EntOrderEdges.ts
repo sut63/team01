@@ -35,17 +35,17 @@ import {
  */
 export interface EntOrderEdges {
     /**
-     * Company holds the value of the company edge.
-     * @type {Array<EntCompany>}
+     * 
+     * @type {EntCompany}
      * @memberof EntOrderEdges
      */
-    company?: Array<EntCompany>;
+    company?: EntCompany;
     /**
-     * Medicine holds the value of the medicine edge.
-     * @type {Array<EntMedicine>}
+     * 
+     * @type {EntMedicine}
      * @memberof EntOrderEdges
      */
-    medicine?: Array<EntMedicine>;
+    medicine?: EntMedicine;
     /**
      * 
      * @type {EntPharmacist}
@@ -64,8 +64,8 @@ export function EntOrderEdgesFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
-        'company': !exists(json, 'company') ? undefined : ((json['company'] as Array<any>).map(EntCompanyFromJSON)),
-        'medicine': !exists(json, 'medicine') ? undefined : ((json['medicine'] as Array<any>).map(EntMedicineFromJSON)),
+        'company': !exists(json, 'company') ? undefined : EntCompanyFromJSON(json['company']),
+        'medicine': !exists(json, 'medicine') ? undefined : EntMedicineFromJSON(json['medicine']),
         'pharmacist': !exists(json, 'pharmacist') ? undefined : EntPharmacistFromJSON(json['pharmacist']),
     };
 }
@@ -79,8 +79,8 @@ export function EntOrderEdgesToJSON(value?: EntOrderEdges | null): any {
     }
     return {
         
-        'company': value.company === undefined ? undefined : ((value.company as Array<any>).map(EntCompanyToJSON)),
-        'medicine': value.medicine === undefined ? undefined : ((value.medicine as Array<any>).map(EntMedicineToJSON)),
+        'company': EntCompanyToJSON(value.company),
+        'medicine': EntMedicineToJSON(value.medicine),
         'pharmacist': EntPharmacistToJSON(value.pharmacist),
     };
 }

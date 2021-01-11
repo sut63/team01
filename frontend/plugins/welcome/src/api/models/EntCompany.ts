@@ -27,12 +27,6 @@ import {
  */
 export interface EntCompany {
     /**
-     * Companyname holds the value of the "companyname" field.
-     * @type {string}
-     * @memberof EntCompany
-     */
-    companyname?: string;
-    /**
      * 
      * @type {EntCompanyEdges}
      * @memberof EntCompany
@@ -44,6 +38,12 @@ export interface EntCompany {
      * @memberof EntCompany
      */
     id?: number;
+    /**
+     * Name holds the value of the "name" field.
+     * @type {string}
+     * @memberof EntCompany
+     */
+    name?: string;
 }
 
 export function EntCompanyFromJSON(json: any): EntCompany {
@@ -56,9 +56,9 @@ export function EntCompanyFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'companyname': !exists(json, 'companyname') ? undefined : json['companyname'],
         'edges': !exists(json, 'edges') ? undefined : EntCompanyEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'name': !exists(json, 'name') ? undefined : json['name'],
     };
 }
 
@@ -71,9 +71,9 @@ export function EntCompanyToJSON(value?: EntCompany | null): any {
     }
     return {
         
-        'companyname': value.companyname,
         'edges': EntCompanyEdgesToJSON(value.edges),
         'id': value.id,
+        'name': value.name,
     };
 }
 

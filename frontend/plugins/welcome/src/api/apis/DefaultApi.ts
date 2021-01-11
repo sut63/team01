@@ -15,6 +15,9 @@
 
 import * as runtime from '../runtime';
 import {
+    ControllersBill,
+    ControllersBillFromJSON,
+    ControllersBillToJSON,
     ControllersDispenseMedicine,
     ControllersDispenseMedicineFromJSON,
     ControllersDispenseMedicineToJSON,
@@ -30,6 +33,9 @@ import {
     EntAnnotation,
     EntAnnotationFromJSON,
     EntAnnotationToJSON,
+    EntBill,
+    EntBillFromJSON,
+    EntBillToJSON,
     EntCompany,
     EntCompanyFromJSON,
     EntCompanyToJSON,
@@ -57,6 +63,9 @@ import {
     EntPatientInfo,
     EntPatientInfoFromJSON,
     EntPatientInfoToJSON,
+    EntPayment,
+    EntPaymentFromJSON,
+    EntPaymentToJSON,
     EntPharmacist,
     EntPharmacistFromJSON,
     EntPharmacistToJSON,
@@ -70,6 +79,10 @@ import {
 
 export interface CreateAnnotationRequest {
     annotation: EntAnnotation;
+}
+
+export interface CreateBillRequest {
+    bill: ControllersBill;
 }
 
 export interface CreateCompanyRequest {
@@ -104,6 +117,10 @@ export interface CreateOrderRequest {
     order: ControllersOrder;
 }
 
+export interface CreatePaymentRequest {
+    payment: EntPayment;
+}
+
 export interface CreatePharmacistRequest {
     pharmacist: EntPharmacist;
 }
@@ -121,6 +138,10 @@ export interface CreateUnitOfMedicineRequest {
 }
 
 export interface DeleteAnnotationRequest {
+    id: number;
+}
+
+export interface DeleteBillRequest {
     id: number;
 }
 
@@ -152,6 +173,10 @@ export interface DeletePatientInfoRequest {
     id: number;
 }
 
+export interface DeletePaymentRequest {
+    id: number;
+}
+
 export interface DeletePharmacistRequest {
     id: number;
 }
@@ -161,6 +186,10 @@ export interface DeleteUnitOfMedicineRequest {
 }
 
 export interface GetAnnotationRequest {
+    id: number;
+}
+
+export interface GetBillRequest {
     id: number;
 }
 
@@ -192,6 +221,10 @@ export interface GetPatientInfoRequest {
     id: number;
 }
 
+export interface GetPaymentRequest {
+    id: number;
+}
+
 export interface GetPharmacistRequest {
     id: number;
 }
@@ -205,6 +238,11 @@ export interface GetUnitOfMedicineRequest {
 }
 
 export interface ListAnnotationRequest {
+    limit?: number;
+    offset?: number;
+}
+
+export interface ListBillRequest {
     limit?: number;
     offset?: number;
 }
@@ -254,6 +292,11 @@ export interface ListPatientInfoRequest {
     offset?: number;
 }
 
+export interface ListPaymentRequest {
+    limit?: number;
+    offset?: number;
+}
+
 export interface ListPharmacistRequest {
     limit?: number;
     offset?: number;
@@ -272,6 +315,11 @@ export interface ListUnitOfMedicineRequest {
 export interface UpdateAnnotationRequest {
     id: number;
     annotation: EntAnnotation;
+}
+
+export interface UpdateBillRequest {
+    id: number;
+    bill: EntBill;
 }
 
 export interface UpdateDispensemedicineRequest {
@@ -302,6 +350,11 @@ export interface UpdateMedicineTypeRequest {
 export interface UpdatePatientInfoRequest {
     id: number;
     patientInfo: EntPatientInfo;
+}
+
+export interface UpdatePaymentRequest {
+    id: number;
+    payment: EntPayment;
 }
 
 export interface UpdatePharmacistRequest {
@@ -351,6 +404,41 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async createAnnotation(requestParameters: CreateAnnotationRequest): Promise<EntAnnotation> {
         const response = await this.createAnnotationRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * Create bill
+     * Create bill
+     */
+    async createBillRaw(requestParameters: CreateBillRequest): Promise<runtime.ApiResponse<EntBill>> {
+        if (requestParameters.bill === null || requestParameters.bill === undefined) {
+            throw new runtime.RequiredError('bill','Required parameter requestParameters.bill was null or undefined when calling createBill.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/bills`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ControllersBillToJSON(requestParameters.bill),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntBillFromJSON(jsonValue));
+    }
+
+    /**
+     * Create bill
+     * Create bill
+     */
+    async createBill(requestParameters: CreateBillRequest): Promise<EntBill> {
+        const response = await this.createBillRaw(requestParameters);
         return await response.value();
     }
 
@@ -635,6 +723,41 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * Create payment
+     * Create payment
+     */
+    async createPaymentRaw(requestParameters: CreatePaymentRequest): Promise<runtime.ApiResponse<EntPayment>> {
+        if (requestParameters.payment === null || requestParameters.payment === undefined) {
+            throw new runtime.RequiredError('payment','Required parameter requestParameters.payment was null or undefined when calling createPayment.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/payments`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EntPaymentToJSON(requestParameters.payment),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntPaymentFromJSON(jsonValue));
+    }
+
+    /**
+     * Create payment
+     * Create payment
+     */
+    async createPayment(requestParameters: CreatePaymentRequest): Promise<EntPayment> {
+        const response = await this.createPaymentRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * Create pharmacist
      * Create pharmacist
      */
@@ -803,6 +926,38 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async deleteAnnotation(requestParameters: DeleteAnnotationRequest): Promise<object> {
         const response = await this.deleteAnnotationRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * get bill by ID
+     * Delete a bill entity by ID
+     */
+    async deleteBillRaw(requestParameters: DeleteBillRequest): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteBill.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/bills/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * get bill by ID
+     * Delete a bill entity by ID
+     */
+    async deleteBill(requestParameters: DeleteBillRequest): Promise<object> {
+        const response = await this.deleteBillRaw(requestParameters);
         return await response.value();
     }
 
@@ -1031,6 +1186,38 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * get payment by ID
+     * Delete a payment entity by ID
+     */
+    async deletePaymentRaw(requestParameters: DeletePaymentRequest): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deletePayment.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/payments/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * get payment by ID
+     * Delete a payment entity by ID
+     */
+    async deletePayment(requestParameters: DeletePaymentRequest): Promise<object> {
+        const response = await this.deletePaymentRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * get pharmacist by ID
      * Delete a pharmacist entity by ID
      */
@@ -1123,6 +1310,38 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getAnnotation(requestParameters: GetAnnotationRequest): Promise<EntAnnotation> {
         const response = await this.getAnnotationRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * get bill by ID
+     * Get a bill entity by ID
+     */
+    async getBillRaw(requestParameters: GetBillRequest): Promise<runtime.ApiResponse<EntBill>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getBill.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/bills/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntBillFromJSON(jsonValue));
+    }
+
+    /**
+     * get bill by ID
+     * Get a bill entity by ID
+     */
+    async getBill(requestParameters: GetBillRequest): Promise<EntBill> {
+        const response = await this.getBillRaw(requestParameters);
         return await response.value();
     }
 
@@ -1351,6 +1570,38 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * get payment by ID
+     * Get a payment entity by ID
+     */
+    async getPaymentRaw(requestParameters: GetPaymentRequest): Promise<runtime.ApiResponse<EntPayment>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getPayment.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/payments/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntPaymentFromJSON(jsonValue));
+    }
+
+    /**
+     * get payment by ID
+     * Get a payment entity by ID
+     */
+    async getPayment(requestParameters: GetPaymentRequest): Promise<EntPayment> {
+        const response = await this.getPaymentRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * get pharmacist by ID
      * Get a pharmacist entity by ID
      */
@@ -1479,6 +1730,42 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async listAnnotation(requestParameters: ListAnnotationRequest): Promise<Array<EntAnnotation>> {
         const response = await this.listAnnotationRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * list bill entities
+     * List bill entities
+     */
+    async listBillRaw(requestParameters: ListBillRequest): Promise<runtime.ApiResponse<Array<EntBill>>> {
+        const queryParameters: runtime.HTTPQuery = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/bills`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntBillFromJSON));
+    }
+
+    /**
+     * list bill entities
+     * List bill entities
+     */
+    async listBill(requestParameters: ListBillRequest): Promise<Array<EntBill>> {
+        const response = await this.listBillRaw(requestParameters);
         return await response.value();
     }
 
@@ -1807,6 +2094,42 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * list payment entities
+     * List payment entities
+     */
+    async listPaymentRaw(requestParameters: ListPaymentRequest): Promise<runtime.ApiResponse<Array<EntPayment>>> {
+        const queryParameters: runtime.HTTPQuery = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/payments`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntPaymentFromJSON));
+    }
+
+    /**
+     * list payment entities
+     * List payment entities
+     */
+    async listPayment(requestParameters: ListPaymentRequest): Promise<Array<EntPayment>> {
+        const response = await this.listPaymentRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * list pharmacist entities
      * List pharmacist entities
      */
@@ -1950,6 +2273,45 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async updateAnnotation(requestParameters: UpdateAnnotationRequest): Promise<EntAnnotation> {
         const response = await this.updateAnnotationRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * update bill by ID
+     * Update a bill entity by ID
+     */
+    async updateBillRaw(requestParameters: UpdateBillRequest): Promise<runtime.ApiResponse<EntBill>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateBill.');
+        }
+
+        if (requestParameters.bill === null || requestParameters.bill === undefined) {
+            throw new runtime.RequiredError('bill','Required parameter requestParameters.bill was null or undefined when calling updateBill.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/bills/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EntBillToJSON(requestParameters.bill),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntBillFromJSON(jsonValue));
+    }
+
+    /**
+     * update bill by ID
+     * Update a bill entity by ID
+     */
+    async updateBill(requestParameters: UpdateBillRequest): Promise<EntBill> {
+        const response = await this.updateBillRaw(requestParameters);
         return await response.value();
     }
 
@@ -2184,6 +2546,45 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async updatePatientInfo(requestParameters: UpdatePatientInfoRequest): Promise<EntPatientInfo> {
         const response = await this.updatePatientInfoRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * update payment by ID
+     * Update a payment entity by ID
+     */
+    async updatePaymentRaw(requestParameters: UpdatePaymentRequest): Promise<runtime.ApiResponse<EntPayment>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updatePayment.');
+        }
+
+        if (requestParameters.payment === null || requestParameters.payment === undefined) {
+            throw new runtime.RequiredError('payment','Required parameter requestParameters.payment was null or undefined when calling updatePayment.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/payments/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EntPaymentToJSON(requestParameters.payment),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntPaymentFromJSON(jsonValue));
+    }
+
+    /**
+     * update payment by ID
+     * Update a payment entity by ID
+     */
+    async updatePayment(requestParameters: UpdatePaymentRequest): Promise<EntPayment> {
+        const response = await this.updatePaymentRaw(requestParameters);
         return await response.value();
     }
 

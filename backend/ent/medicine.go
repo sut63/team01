@@ -27,7 +27,7 @@ type Medicine struct {
 	// Amount holds the value of the "amount" field.
 	Amount int `json:"amount,omitempty"`
 	// Price holds the value of the "price" field.
-	Price float64 `json:"price,omitempty"`
+	Price int `json:"price,omitempty"`
 	// Howtouse holds the value of the "howtouse" field.
 	Howtouse string `json:"howtouse,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -129,13 +129,13 @@ func (e MedicineEdges) OrderOrErr() ([]*Order, error) {
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Medicine) scanValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{},   // id
-		&sql.NullString{},  // name
-		&sql.NullString{},  // serial
-		&sql.NullString{},  // brand
-		&sql.NullInt64{},   // amount
-		&sql.NullFloat64{}, // price
-		&sql.NullString{},  // howtouse
+		&sql.NullInt64{},  // id
+		&sql.NullString{}, // name
+		&sql.NullString{}, // serial
+		&sql.NullString{}, // brand
+		&sql.NullInt64{},  // amount
+		&sql.NullInt64{},  // price
+		&sql.NullString{}, // howtouse
 	}
 }
 
@@ -180,10 +180,10 @@ func (m *Medicine) assignValues(values ...interface{}) error {
 	} else if value.Valid {
 		m.Amount = int(value.Int64)
 	}
-	if value, ok := values[4].(*sql.NullFloat64); !ok {
+	if value, ok := values[4].(*sql.NullInt64); !ok {
 		return fmt.Errorf("unexpected type %T for field price", values[4])
 	} else if value.Valid {
-		m.Price = value.Float64
+		m.Price = int(value.Int64)
 	}
 	if value, ok := values[5].(*sql.NullString); !ok {
 		return fmt.Errorf("unexpected type %T for field howtouse", values[5])

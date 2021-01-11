@@ -50,8 +50,8 @@ func (mc *MedicineCreate) SetAmount(i int) *MedicineCreate {
 }
 
 // SetPrice sets the price field.
-func (mc *MedicineCreate) SetPrice(f float64) *MedicineCreate {
-	mc.mutation.SetPrice(f)
+func (mc *MedicineCreate) SetPrice(i int) *MedicineCreate {
+	mc.mutation.SetPrice(i)
 	return mc
 }
 
@@ -312,7 +312,7 @@ func (mc *MedicineCreate) createSpec() (*Medicine, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := mc.mutation.Price(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
+			Type:   field.TypeInt,
 			Value:  value,
 			Column: medicine.FieldPrice,
 		})

@@ -131,7 +131,7 @@ type Medicine struct {
 	Serial           string
 	Brand            string
 	Amount           int
-	Price            float64
+	Price            int
 	Howtouse         string
 	LevelOfDangerous int
 	MedicineType     int

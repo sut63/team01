@@ -3237,8 +3237,8 @@ type MedicineMutation struct {
 	brand                      *string
 	amount                     *int
 	addamount                  *int
-	price                      *float64
-	addprice                   *float64
+	price                      *int
+	addprice                   *int
 	howtouse                   *string
 	clearedFields              map[string]struct{}
 	_LevelOfDangerous          *int
@@ -3505,13 +3505,13 @@ func (m *MedicineMutation) ResetAmount() {
 }
 
 // SetPrice sets the price field.
-func (m *MedicineMutation) SetPrice(f float64) {
-	m.price = &f
+func (m *MedicineMutation) SetPrice(i int) {
+	m.price = &i
 	m.addprice = nil
 }
 
 // Price returns the price value in the mutation.
-func (m *MedicineMutation) Price() (r float64, exists bool) {
+func (m *MedicineMutation) Price() (r int, exists bool) {
 	v := m.price
 	if v == nil {
 		return
@@ -3523,7 +3523,7 @@ func (m *MedicineMutation) Price() (r float64, exists bool) {
 // If the Medicine object wasn't provided to the builder, the object is fetched
 // from the database.
 // An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *MedicineMutation) OldPrice(ctx context.Context) (v float64, err error) {
+func (m *MedicineMutation) OldPrice(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldPrice is allowed only on UpdateOne operations")
 	}
@@ -3537,17 +3537,17 @@ func (m *MedicineMutation) OldPrice(ctx context.Context) (v float64, err error) 
 	return oldValue.Price, nil
 }
 
-// AddPrice adds f to price.
-func (m *MedicineMutation) AddPrice(f float64) {
+// AddPrice adds i to price.
+func (m *MedicineMutation) AddPrice(i int) {
 	if m.addprice != nil {
-		*m.addprice += f
+		*m.addprice += i
 	} else {
-		m.addprice = &f
+		m.addprice = &i
 	}
 }
 
 // AddedPrice returns the value that was added to the price field in this mutation.
-func (m *MedicineMutation) AddedPrice() (r float64, exists bool) {
+func (m *MedicineMutation) AddedPrice() (r int, exists bool) {
 	v := m.addprice
 	if v == nil {
 		return
@@ -3953,7 +3953,7 @@ func (m *MedicineMutation) SetField(name string, value ent.Value) error {
 		m.SetAmount(v)
 		return nil
 	case medicine.FieldPrice:
-		v, ok := value.(float64)
+		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4009,7 +4009,7 @@ func (m *MedicineMutation) AddField(name string, value ent.Value) error {
 		m.AddAmount(v)
 		return nil
 	case medicine.FieldPrice:
-		v, ok := value.(float64)
+		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

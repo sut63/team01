@@ -24,6 +24,7 @@ type Prescription struct {
 	PatientInfoID int
 	MedicineID    int
 	Value         int
+	StatusQueue  string
 }
 
 // CreatePrescription handles POST requests for adding Prescription entities

@@ -52,6 +52,8 @@ definitions:
         type: integer
       patientInfoID:
         type: integer
+      statusQueue:
+        type: string
       value:
         type: integer
     type: object

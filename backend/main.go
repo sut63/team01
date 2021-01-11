@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -14,9 +15,11 @@ import (
 	"github.com/sut63/team01/controllers"
 	_ "github.com/sut63/team01/docs"
 	"github.com/sut63/team01/ent"
+	"github.com/sut63/team01/ent/annotation"
 	"github.com/sut63/team01/ent/dispensemedicine"
 	"github.com/sut63/team01/ent/payment"
 	"github.com/sut63/team01/ent/pharmacist"
+	"github.com/sut63/team01/ent/prescription"
 )
 
 //PatientInfos Structure
@@ -64,6 +67,19 @@ type Pharmacist struct {
 	Name     string
 }
 
+//DispenseMedicines Structure
+type DispenseMedicines struct {
+	DispenseMedicine []DispenseMedicine
+}
+
+//DispenseMedicine Structure
+type DispenseMedicine struct {
+	Datetime     string
+	Prescription int
+	Annotation   int
+	Pharmacist   int
+}
+
 //Doctors Structure
 type Doctors struct {
 	Doctor []Doctor
@@ -96,13 +112,13 @@ type UnitOfMedicine struct {
 	Name string
 }
 
-// LevelOfDangerouss structer input data
-type LevelOfDangerouss struct {
-	LevelOfDangerous []LevelOfDangerous
+// LevelOfDangeropress structer input data
+type LevelOfDangeropress struct {
+	LevelOfDangeropres []LevelOfDangeropres
 }
 
-// LevelOfDangerous structer input data
-type LevelOfDangerous struct {
+// LevelOfDangeropres structer input data
+type LevelOfDangeropres struct {
 	Name string
 }
 
@@ -127,15 +143,15 @@ type Medicines struct {
 
 //Medicine Structure
 type Medicine struct {
-	Name             string
-	Serial           string
-	Brand            string
-	Amount           int
-	Price            int
-	Howtouse         string
-	LevelOfDangerous int
-	MedicineType     int
-	UnitOfMedicine   int
+	Name               string
+	Serial             string
+	Brand              string
+	Amount             int
+	Price              int
+	Howtoprese         string
+	LevelOfDangeropres int
+	MedicineType       int
+	UnitOfMedicine     int
 }
 
 // @title SUT SA Example API Playlist Vidoe
@@ -207,6 +223,7 @@ func main() {
 	controllers.NewLevelOfDangerousController(v1, client)
 	controllers.NewMedicineController(v1, client)
 	controllers.NewPaymentController(v1, client)
+
 	//Set PatientInfos Data
 	Patient := PatientInfos{
 		PatientInfo: []PatientInfo{
@@ -330,19 +347,89 @@ func main() {
 			Save(context.Background())
 	}
 
-	// Set LevelOfDangerouss Data
-	LevelOfDangerouss := LevelOfDangerouss{
-		LevelOfDangerous: []LevelOfDangerous{
-			LevelOfDangerous{"Safe"},
-			LevelOfDangerous{"Caution"},
-			LevelOfDangerous{"Danger"},
+	// Set LevelOfDangeropress Data
+	LevelOfDangeropress := LevelOfDangeropress{
+		LevelOfDangeropres: []LevelOfDangeropres{
+			LevelOfDangeropres{"Safe"},
+			LevelOfDangeropres{"Caution"},
+			LevelOfDangeropres{"Danger"},
 		},
 	}
 
-	for _, l := range LevelOfDangerouss.LevelOfDangerous {
+	for _, l := range LevelOfDangeropress.LevelOfDangeropres {
 		client.LevelOfDangerous.
 			Create().
 			SetName(l.Name).
+			Save(context.Background())
+	}
+
+	// Set Medicines Data
+	Medicines := Medicines{
+		Medicine: []Medicine{
+			Medicine{"TestMedicine", "T000", "AGC Inc.", 200000, 300, "prese to create another medicine", 2, 3, 2},
+			Medicine{"PainKiller", "P001", "AGC Inc.", 150000, 20, "prese to cure your pain", 1, 1, 3},
+		},
+	}
+
+	for _, m := range Medicines.Medicine {
+		client.Medicine.
+			Create().
+			SetName(m.Name).
+			SetSerial(m.Serial).
+			SetBrand(m.Brand).
+			SetAmount(m.Amount).
+			SetPrice(m.Price).
+			SetHowtouse(m.Howtoprese).
+			SetLevelOfDangerousID(m.LevelOfDangeropres).
+			SetMedicineTypeID(m.MedicineType).
+			SetUnitOfMedicineID(m.UnitOfMedicine).
+			Save(context.Background())
+	}
+
+	//Set DispenseMedicine Data
+	DisMedic := DispenseMedicines{
+		DispenseMedicine: []DispenseMedicine{
+			DispenseMedicine{"2021-01-12T01:27:50.52+07:00", 1, 1, 1},
+		},
+	}
+
+	for _, dim := range DisMedic.DispenseMedicine {
+
+		pres, err := client.Prescription.
+			Query().
+			Where(prescription.IDEQ(int(dim.Prescription))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		Annota, err := client.Annotation.
+			Query().
+			Where(annotation.IDEQ(int(dim.Annotation))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		pml, err := client.Pharmacist.
+			Query().
+			Where(pharmacist.IDEQ(int(dim.Pharmacist))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		datetim, err := time.Parse(time.RFC3339, dim.Datetime)
+
+		client.DispenseMedicine.
+			Create().
+			SetDatetime(datetim).
+			SetPrescription(pres).
+			SetAnnotation(Annota).
+			SetPharmacist(pml).
 			Save(context.Background())
 	}
 
@@ -390,29 +477,6 @@ func main() {
 			SetPayments(py).
 			SetAnnotation(b.Annotation).
 			SetPharmacists(ph).
-			Save(context.Background())
-	}
-
-	// Set Medicines Data
-	Medicines := Medicines{
-		Medicine: []Medicine{
-			Medicine{"TestMedicine", "T000", "AGC Inc.", 200000, 300, "Use to create another medicine", 2, 3, 2},
-			Medicine{"PainKiller", "P001", "AGC Inc.", 150000, 20, "Use to cure your pain", 1, 1, 3},
-		},
-	}
-
-	for _, m := range Medicines.Medicine {
-		client.Medicine.
-			Create().
-			SetName(m.Name).
-			SetSerial(m.Serial).
-			SetBrand(m.Brand).
-			SetAmount(m.Amount).
-			SetPrice(m.Price).
-			SetHowtouse(m.Howtouse).
-			SetLevelOfDangerousID(m.LevelOfDangerous).
-			SetMedicineTypeID(m.MedicineType).
-			SetUnitOfMedicineID(m.UnitOfMedicine).
 			Save(context.Background())
 	}
 

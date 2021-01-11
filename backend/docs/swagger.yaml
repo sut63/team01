@@ -1,5 +1,18 @@
 basePath: /api/v1
 definitions:
+  controllers.Bill:
+    properties:
+      amount:
+        type: integer
+      annotation:
+        type: string
+      dispenseMedicine:
+        type: integer
+      payments:
+        type: integer
+      pharmacists:
+        type: integer
+    type: object
   controllers.DispenseMedicine:
     properties:
       annotation:
@@ -1420,6 +1433,157 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Update a annotation entity by ID
+  /bills:
+    get:
+      description: list bill entities
+      operationId: list-bill
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Bill'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List bill entities
+    post:
+      consumes:
+      - application/json
+      description: Create bill
+      operationId: create-bill
+      parameters:
+      - description: Bill entity
+        in: body
+        name: bill
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.Bill'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Bill'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create bill
+  /bills/{id}:
+    delete:
+      description: get bill by ID
+      operationId: delete-bill
+      parameters:
+      - description: Bill ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Delete a bill entity by ID
+    get:
+      description: get bill by ID
+      operationId: get-bill
+      parameters:
+      - description: Bill ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Bill'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a bill entity by ID
+    put:
+      consumes:
+      - application/json
+      description: update bill by ID
+      operationId: update-bill
+      parameters:
+      - description: Bill ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Bill entity
+        in: body
+        name: bill
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Bill'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Bill'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Update a bill entity by ID
   /companys:
     get:
       description: list company entities
@@ -2083,6 +2247,157 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Update a PatientInfo entity by ID
+  /payments:
+    get:
+      description: list payment entities
+      operationId: list-payment
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Payment'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List payment entities
+    post:
+      consumes:
+      - application/json
+      description: Create payment
+      operationId: create-payment
+      parameters:
+      - description: Payment entity
+        in: body
+        name: payment
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Payment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Payment'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create payment
+  /payments/{id}:
+    delete:
+      description: get payment by ID
+      operationId: delete-payment
+      parameters:
+      - description: Payment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Delete a payment entity by ID
+    get:
+      description: get payment by ID
+      operationId: get-payment
+      parameters:
+      - description: Payment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Payment'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a payment entity by ID
+    put:
+      consumes:
+      - application/json
+      description: update payment by ID
+      operationId: update-payment
+      parameters:
+      - description: Payment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Payment entity
+        in: body
+        name: payment
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Payment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Payment'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Update a payment entity by ID
   /pharmacists:
     get:
       description: list pharmacist entities

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/gin-contrib/cors"
@@ -13,6 +14,9 @@ import (
 	"github.com/sut63/team01/controllers"
 	_ "github.com/sut63/team01/docs"
 	"github.com/sut63/team01/ent"
+	"github.com/sut63/team01/ent/dispensemedicine"
+	"github.com/sut63/team01/ent/payment"
+	"github.com/sut63/team01/ent/pharmacist"
 )
 
 //PatientInfos Structure
@@ -36,6 +40,16 @@ type Annotations struct {
 //Annotation Structure
 type Annotation struct {
 	Messages string
+}
+
+//Payments Structure
+type Payments struct {
+	Payment []Payment
+}
+
+//Payment Structure
+type Payment struct {
+	Pay string
 }
 
 //Pharmacists Structure
@@ -90,6 +104,20 @@ type LevelOfDangerouss struct {
 // LevelOfDangerous structer input data
 type LevelOfDangerous struct {
 	Name string
+}
+
+//Bills Structure
+type Bills struct {
+	Bill []Bill
+}
+
+//Bill Structure
+type Bill struct {
+	Annotation       string
+	Amount           int
+	Payments         int
+	DispenseMedicine int
+	Pharmacists      int
 }
 
 //Medicines Structure
@@ -178,7 +206,7 @@ func main() {
 	controllers.NewUnitOfMedicineController(v1, client)
 	controllers.NewLevelOfDangerousController(v1, client)
 	controllers.NewMedicineController(v1, client)
-
+	controllers.NewPaymentController(v1, client)
 	//Set PatientInfos Data
 	Patient := PatientInfos{
 		PatientInfo: []PatientInfo{
@@ -212,6 +240,21 @@ func main() {
 		client.Annotation.
 			Create().
 			SetMessages(anno.Messages).
+			Save(context.Background())
+	}
+
+	//Set Payments Data
+	Paym := Payments{
+		Payment: []Payment{
+			Payment{"การชำระผ่านธนาคารออนไลน์"},
+			Payment{"การชำระผ่านบัตรเครดิต"},
+			Payment{"การชำระผ่านเงินสด"},
+		},
+	}
+	for _, Paym := range Paym.Payment {
+		client.Payment.
+			Create().
+			SetPay(Paym.Pay).
 			Save(context.Background())
 	}
 
@@ -300,6 +343,53 @@ func main() {
 		client.LevelOfDangerous.
 			Create().
 			SetName(l.Name).
+			Save(context.Background())
+	}
+
+	// Set Bills Data
+	Bills := Bills{
+		Bill: []Bill{
+			Bill{"-", 100, 1, 1, 1},
+			Bill{"ใช้บัตรทอง", 4000, 3, 2, 2},
+		},
+	}
+
+	for _, b := range Bills.Bill {
+
+		py, err := client.Payment.
+			Query().
+			Where(payment.IDEQ(int(b.Payments))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		dis, err := client.DispenseMedicine.
+			Query().
+			Where(dispensemedicine.IDEQ(int(b.DispenseMedicine))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		ph, err := client.Pharmacist.
+			Query().
+			Where(pharmacist.IDEQ(int(b.Pharmacists))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		client.Bill.
+			Create().
+			SetAmount(b.Amount).
+			SetDispenseMedicines(dis).
+			SetPayments(py).
+			SetAnnotation(b.Annotation).
+			SetPharmacists(ph).
 			Save(context.Background())
 	}
 

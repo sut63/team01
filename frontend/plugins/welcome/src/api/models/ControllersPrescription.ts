@@ -45,10 +45,10 @@ export interface ControllersPrescription {
     statusQueue?: string;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof ControllersPrescription
      */
-    value?: number;
+    value?: string;
 }
 
 export function ControllersPrescriptionFromJSON(json: any): ControllersPrescription {

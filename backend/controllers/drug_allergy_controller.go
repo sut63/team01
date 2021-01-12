@@ -83,7 +83,25 @@ func (ctl *DrugAllergyController) CreateDrugAllergy(c *gin.Context) {
 		return
 	}
 
-	time, err := time.Parse(time.RFC3339, obj.DateTime)
+	now := time.Now()
+	var hour, minute string
+
+	if now.Hour() <= 9 {
+		hour = "0" + strconv.Itoa(now.Hour())
+	} else {
+		hour = strconv.Itoa(now.Hour())
+	}
+
+	if now.Minute() <= 9 {
+		minute = "0" + strconv.Itoa(now.Minute())
+	} else {
+		minute = strconv.Itoa(now.Minute())
+	}
+
+	datetime := obj.DateTime + "T" + hour + ":" + minute + ":00+07:00"
+	fmt.Println(datetime)
+
+	time, err := time.Parse(time.RFC3339, datetime)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"error": "datetime not found",

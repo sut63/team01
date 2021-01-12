@@ -84,6 +84,12 @@ func (ctl *DrugAllergyController) CreateDrugAllergy(c *gin.Context) {
 	}
 
 	time, err := time.Parse(time.RFC3339, obj.DateTime)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "datetime not found",
+		})
+		return
+	}
 
 	da, err := ctl.client.DrugAllergy.
 		Create().
@@ -99,7 +105,10 @@ func (ctl *DrugAllergyController) CreateDrugAllergy(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, da)
+	c.JSON(200, gin.H{
+		"status": true,
+		"data": da,
+	})
 }
 
 // GetDrugAllergy handles GET requests to retrieve a DrugAllergy entity

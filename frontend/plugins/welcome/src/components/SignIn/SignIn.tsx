@@ -1,45 +1,55 @@
-import React, { FC } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
+import React, { FC, useState, useEffect } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import {
+  Content,
+  Header,
+  Page,
+  pageTheme,
+  ContentHeader,
+} from '@backstage/core';
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Avatar,
+  Card,
+  CardContent,
+  CssBaseline,
+} from '@material-ui/core';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined';
+import { Alert } from '@material-ui/lab'; // alert
+import { DefaultApi } from '../../api/apis';
+import { EntPharmacist } from '../../api/models/EntPharmacist';
+import { EntDoctor } from '../../api/models/EntDoctor';
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
+    width: theme.spacing(7),
+    height: theme.spacing(7),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
+  },
+  cardBox: {
+    marginTop: theme.spacing(7),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -48,70 +58,154 @@ const useStyles = makeStyles(theme => ({
 
 const SignIn: FC<{}> = () => {
   const classes = useStyles();
+  const profile = { givenName: 'ยินดีต้อนรับ' };
+  const [status, setStatus] = useState(false);
+  const [alert, setAlert] = useState(Boolean);
+
+  const api = new DefaultApi();
+  const [pharmacists, setPharmacist] = useState<EntPharmacist[]>([]);
+  const [doctors, setDoctor] = useState<EntDoctor[]>([]);
+
+  const [emails, setEmail] = React.useState(String);
+  const [password, setPassword] = React.useState(String);
+
+  const emailHandleChange = (event: any) => {
+    setEmail(event.target.value as string);
+  };
+  const passwordHandleChange = (event: any) => {
+    setPassword(event.target.value as string);
+  };
+
+  const getPharmacist = async () => {
+    const res: any = await api.listPharmacist({ limit: 0, offset: 0 });
+    setPharmacist(res);
+  };
+
+  const getDoctor = async () => {
+    const res: any = await api.listDoctor({ limit: 0, offset: 0 });
+    setDoctor(res);
+  };
+
+  const resetData = async () => {
+    localStorage.clear();
+  };
+
+  useEffect(() => {
+    getPharmacist();
+    getDoctor();
+    resetData();
+  }, []);
+
+  const SigninCheck = async () => {
+    var checkPharmacist = false;
+
+    pharmacists.map((item: any) => {
+      console.log(item.email);
+      if (item.email == emails && item.password == password) {
+        setAlert(true);
+        checkPharmacist = true;
+        localStorage.setItem('pharmacist-id', JSON.stringify(item.id));
+        localStorage.setItem('pharmacist-name', JSON.stringify(item.name));
+        localStorage.setItem('positiondata', JSON.stringify('pharmacist'));
+        history.pushState('', '', '/drug_allergy'); /////////มาแก้ที่หลังไปยังหน้ารวมเภสัชกร
+        window.location.reload(false);
+      }
+    });
+
+    if (checkPharmacist == false){
+      doctors.map((item: any) => {
+        console.log(item.email);
+        if (item.email == emails && item.password == password) {
+          setAlert(true);
+          localStorage.setItem('doctor-id', JSON.stringify(item.id));
+          localStorage.setItem('doctor-name', JSON.stringify(item.name));
+          localStorage.setItem('positiondata', JSON.stringify('doctor'));
+          history.pushState('', '', '/create_prescription');
+          window.location.reload(false);
+        }
+      });
+    }
+    
+    setStatus(true);
+    const timer = setTimeout(() => {
+      setStatus(false);
+    }, 1000);
+  };
+
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-    </Container>
+    <Page theme={pageTheme.service}>
+      <Header title={`${profile.givenName || 'to Backstage'}`}></Header>
+      <Content>
+        <ContentHeader title="ระบบห้องยา">
+          {status ? (
+            <div>
+              {alert ? (
+                <Alert severity="success">เข้าสู่ระบบสำเร็จ</Alert>
+              ) : (
+                <Alert severity="warning" style={{ marginTop: 20 }}>
+                  ไม่พบข้อมูลในระบบ
+                </Alert>
+              )}
+            </div>
+          ) : null}
+        </ContentHeader>
+        <div className={classes.root}>
+          <Card className={classes.cardBox}>
+            <CardContent>
+              <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <div className={classes.paper}>
+                  <Avatar className={classes.avatar}>
+                    <VpnKeyOutlinedIcon />
+                    <LockOutlinedIcon />
+                  </Avatar>
+                  <Typography component="h1" variant="h5">
+                    Sign in
+                  </Typography>
+                  <form className={classes.form} noValidate>
+                    <TextField
+                      variant="outlined"
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="email"
+                      label="Email Address"
+                      name="email"
+                      autoComplete="email"
+                      onChange={emailHandleChange}
+                      autoFocus
+                    />
+
+                    <TextField
+                      variant="outlined"
+                      margin="normal"
+                      required
+                      fullWidth
+                      name="password"
+                      label="Password"
+                      type="password"
+                      id="password"
+                      onChange={passwordHandleChange}
+                      autoComplete="current-password"
+                    />
+
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      className={classes.submit}
+                      onClick={SigninCheck}
+                    >
+                      Sign In
+                    </Button>
+                  </form>
+                </div>
+              </Container>
+            </CardContent>
+          </Card>
+        </div>
+      </Content>
+    </Page>
   );
 };
 

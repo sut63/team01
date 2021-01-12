@@ -12,7 +12,6 @@ import { EntPatientInfo } from '../../api/models/EntPatientInfo'
 import { EntMedicine } from '../../api/models/EntMedicine'
 
 import {
-    Container,
     Grid,
     Select,
     InputLabel,
@@ -21,10 +20,7 @@ import {
     Avatar,
     Button,
     Card,
-    CardActions,
     CardContent,
-    CardHeader,
-    IconButton,
 } from '@material-ui/core';
 
 
@@ -54,17 +50,30 @@ interface DrugAllergy {
     patient: number;
     medicine: number;
     pharmacist: number;
-    dateTime: Date;
+    dateTime: string;
 }
 
 const DrugAllergy: FC<{}> = () => {
     const classes = useStyles();
     const api = new DefaultApi();
+    const date = new Date();
     const [drugAllergy, setDrugAllergy] = React.useState<Partial<DrugAllergy>>({});
     const [patients, setPatients] = React.useState<EntPatientInfo[]>([]);
     const [medicine, setMedicine] = React.useState<EntMedicine[]>([]);
     const [loading, setLoading] = React.useState(true);
-    
+
+    // alert setting
+    const Toast = Swal.mixin({
+        //toast: true,
+        position: 'center',
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+        didOpen: toast => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+        },
+    });
 
     const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
         const name = event.target.name as keyof typeof DrugAllergy;
@@ -85,15 +94,55 @@ const DrugAllergy: FC<{}> = () => {
         setMedicine(res);
     };
 
-    const save = async () => {
-        console.log(drugAllergy);
-    };
+    // function save data
+    function save() {
+        const drugallergy = {
+            patient: drugAllergy.patient,
+            medicine: drugAllergy.medicine,
+            pharmacist: drugAllergy.pharmacist,
+            dateTime: drugAllergy.dateTime + ":00+07:00",
+        };
+        const api = 'http://localhost:8080/api/v1/drugallergys';
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(drugallergy),
+        };
+        fetch(api, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if (data.status === true) {
+                    console.log(data.data)
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'บันทึกข้อมูลสำเร็จ',
+                    });
+                    clear();
+                } else {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'บันทึกข้อมูลไม่สำเร็จ',
+                    });
+                }
+            });
+    }
 
+    const clear = async () => {
+        setDrugAllergy({});
+        const timer = setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+
+    }
 
     // Lifecycle Hooks
     useEffect(() => {
         getPatient();
         getMedicine();
+
+        //test set pharmacist = 1
+        setDrugAllergy({ ...drugAllergy, pharmacist: 1 });
     }, []);
 
     return (
@@ -183,7 +232,7 @@ const DrugAllergy: FC<{}> = () => {
                             size="large"
                             startIcon={<SaveIcon />}
                             style={{ width: 150 }}
-                            onClick={ save }
+                            onClick={save}
                         >
                             บันทึก
                         </Button>

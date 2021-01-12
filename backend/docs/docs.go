@@ -3058,11 +3058,29 @@ var doc = `{
         "controllers.Medicine": {
             "type": "object",
             "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "brand": {
+                    "type": "string"
+                },
+                "howtouse": {
+                    "type": "string"
+                },
                 "levelOfDangerousID": {
                     "type": "integer"
                 },
                 "medicineTypeID": {
                     "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "serial": {
+                    "type": "string"
                 },
                 "unitOfMedicineID": {
                     "type": "integer"
@@ -3097,6 +3115,9 @@ var doc = `{
                 },
                 "patientInfoID": {
                     "type": "integer"
+                },
+                "statusQueue": {
+                    "type": "string"
                 },
                 "value": {
                     "type": "integer"

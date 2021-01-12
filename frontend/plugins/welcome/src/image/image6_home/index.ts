@@ -1,0 +1,1 @@
+export { Image6Base64Function } from './image6';

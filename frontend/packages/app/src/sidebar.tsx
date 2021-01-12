@@ -37,6 +37,11 @@ export const AppSidebar = () => (
       to="create_prescription"
       text="สั่งจ่ายยา"
     />
+    <SidebarItem
+      icon={CreateComponentIcon}
+      to="drug_allergy"
+      text="ประวัติการเเพ้ยา"
+    />
 
 
 

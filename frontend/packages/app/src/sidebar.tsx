@@ -32,6 +32,13 @@ export const AppSidebar = () => (
       to="watch_video"
       text="Watch Video"
     />
+    <SidebarItem
+      icon={CreateComponentIcon}
+      to="create_prescription"
+      text="สั่งจ่ายยา"
+    />
+
+
 
     {/* End global nav */}
     <SidebarDivider />

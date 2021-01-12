@@ -3087,7 +3087,7 @@
                     "type": "string"
                 },
                 "value": {
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         },

@@ -1,0 +1,1 @@
+export { Image3Base64Function } from './Image3';

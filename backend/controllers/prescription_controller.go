@@ -23,7 +23,7 @@ type Prescription struct {
 	DoctorID      int
 	PatientInfoID int
 	MedicineID    int
-	Value         int
+	Value         string
 	StatusQueue  string
 }
 
@@ -78,10 +78,14 @@ func (ctl *PrescriptionController) CreatePrescription(c *gin.Context) {
 		})
 		return
 	}
+		var Value int
+	if v , err := strconv.ParseInt (obj.Value,10,64);err == nil{
+		Value = int(v)
+	}
 
 	pr, err := ctl.client.Prescription.
 		Create().
-		SetValue(int(obj.Value)).
+		SetValue(int(Value)).
 		SetStatusQueue("No").
 		SetPrescriptiondoctor(D).
 		SetPrescriptionmedicine(M).

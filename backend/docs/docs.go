@@ -3120,7 +3120,7 @@ var doc = `{
                     "type": "string"
                 },
                 "value": {
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         },

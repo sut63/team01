@@ -67,7 +67,7 @@ definitions:
       statusQueue:
         type: string
       value:
-        type: integer
+        type: string
     type: object
   ent.Annotation:
     properties:

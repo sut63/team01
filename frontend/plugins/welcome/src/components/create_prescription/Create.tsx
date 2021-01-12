@@ -17,6 +17,7 @@ import Timer from '../Timer';
 import { DefaultApi } from '../../api/apis'; // Api Gennerate From Command
 
 import { EntPatientInfo } from '../../api/models/EntPatientInfo';
+import { ControllersPrescription } from '../../api/models/ControllersPrescription';
 import { EntDoctor } from '../../api/models/EntDoctor';
 import { EntMedicine } from '../../api/models/EntMedicine';
 import { Alert } from '@material-ui/lab';
@@ -63,40 +64,14 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-interface Prescription_Type {
-  /**
-   * 
-   * @type {number}
-   * @memberof ControllersPrescription
-   */
-  doctorID?: number;
-  /**
-   * 
-   * @type {number}
-   * @memberof ControllersPrescription
-   */
-  medicineID?: number;
-  /**
-   * 
-   * @type {number}
-   * @memberof ControllersPrescription
-   */
-  patientInfoID?: number;
-  /**
-   * 
-   * @type {string}
-   * @memberof ControllersPrescription
-   */
-  value?: string;
-}
 
 
 const NewPatientright: FC<{}> = () => {
   const classes = useStyles();
-  const profile = { givenName: 'สิทธ์' };
+  const profile = { givenName: ' ' };
   const http = new DefaultApi();
 
-  const [Prescription, setPrescription] = React.useState<Partial<Prescription_Type>>({});
+  const [Prescription, setPrescription] = React.useState<Partial<ControllersPrescription>>({});
 
   
   const [PatientInfo, setPatientInfo] = React.useState<EntPatientInfo[]>([]);
@@ -173,7 +148,7 @@ const NewPatientright: FC<{}> = () => {
   return (
     <Page theme={pageTheme.home}>
       <Header
-        title={`ลงทะเบียน ${profile.givenName || 'to Backstage'}`}
+        title={`ระบบสั่งจ่ายยา ${profile.givenName || 'to Backstage'}`}
         subtitle="Some quick intro and links."
       >
         <Timer />
@@ -197,10 +172,7 @@ const NewPatientright: FC<{}> = () => {
           ) : null}
         </ContentHeader>
 
-        <div>
-          <br /><p>json {JSON.stringify(Prescription)} </p>
-        </div>
-
+        
 
         <div className={classes.root}>
 
@@ -250,6 +222,14 @@ const NewPatientright: FC<{}> = () => {
               </Select>
             </FormControl>
 
+          </form>
+        </div>
+
+        <div className={classes.root}>
+          <form noValidate autoComplete="off">
+
+            
+
 
 
 
@@ -271,9 +251,7 @@ const NewPatientright: FC<{}> = () => {
             </FormControl>
           </form>
         </div>
-
-        <ContentHeader title="พนักงาน" />
-
+        
 
 
 
@@ -284,7 +262,7 @@ const NewPatientright: FC<{}> = () => {
           <FormControl variant="filled" className={classes.formControl}>
                                 <TextField
                                     name="value"
-                                    label="Hight(cm)"
+                                    label="Value"
                                     variant="outlined"
                                     type="number"
                                     size="medium"

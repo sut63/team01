@@ -100,7 +100,7 @@ const DrugAllergy: FC<{}> = () => {
             patient: drugAllergy.patient,
             medicine: drugAllergy.medicine,
             pharmacist: drugAllergy.pharmacist,
-            dateTime: drugAllergy.dateTime + ":00+07:00",
+            dateTime: drugAllergy.dateTime,
         };
         const api = 'http://localhost:8080/api/v1/drugallergys';
         const requestOptions = {
@@ -130,9 +130,10 @@ const DrugAllergy: FC<{}> = () => {
 
     const clear = async () => {
         setDrugAllergy({});
-        const timer = setTimeout(() => {
-            window.location.reload();
-        }, 1000);
+        setDrugAllergy({ ...drugAllergy, pharmacist: 1 });
+        //const timer = setTimeout(() => {
+        //    window.location.reload();
+        //}, 1500);
 
     }
 
@@ -212,7 +213,7 @@ const DrugAllergy: FC<{}> = () => {
                                         <TextField
                                             label="เลือกวันที่"
                                             name="dateTime"
-                                            type="datetime-local"
+                                            type="date"
                                             variant='outlined'
                                             InputLabelProps={{
                                                 shrink: true,

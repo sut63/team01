@@ -20,12 +20,13 @@ import {
   CardContent,
 } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
-import Swal from 'sweetalert2'; // alert
+import { Alert } from '@material-ui/lab'; //alert
 
 import { DefaultApi } from '../../api/apis/'; // Api Gennerate From Command
 import { EntMedicineType } from '../../api/models/EntMedicineType'; // import interface MedicineType
 import { EntLevelOfDangerous } from '../../api/models/EntLevelOfDangerous'; // import interface LevelOfDangerous
 import { EntUnitOfMedicine } from '../../api/models/EntUnitOfMedicine'; // import interface UnitOfMedicine
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -68,8 +69,8 @@ const useStyles = makeStyles((theme: Theme) =>
 const Medicine: FC<{}> = () => {
   const classes = useStyles();
   const api = new DefaultApi();
-  const profile = { givenName: 'ระบบบันทึกข้อมูลยา' };
   const [status, setStatus] = React.useState(false);
+  const [alert, setAlert] = useState(true);
   
 
   const [medicinetype, setMedicineType] = React.useState<EntMedicineType[]>([]);
@@ -167,52 +168,27 @@ const Medicine: FC<{}> = () => {
     getUnitOfMedicine();
   }, []);
 
-  // alert setting
-  const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    didOpen: toast => {
-      toast.addEventListener('mouseenter', Swal.stopTimer);
-      toast.addEventListener('mouseleave', Swal.resumeTimer);
-    },
-  });
-
   const CreateMedicine = async () => {
     const smedicine = {
       levelOfDangerousID: sMLevelOfDangerous,
       medicineTypeID: sMMedicineType,
       unitOfMedicineID: sMUnitOfMedicine,
-      Name: sMName,
-      Serial: sMSerial,
-      Brand: sMBrand,
-      Amount: Number(sMAmount),
-      Price: Number(sMPrice),
-      Howtouse: sMHowtouse,
+      name: sMName,
+      serial: sMSerial,
+      brand: sMBrand,
+      amount: Number(sMAmount),
+      price: Number(sMPrice),
+      howtouse: sMHowtouse,
     };
     console.log(smedicine);
+    
     const res: any = await api.createMedicine({ medicine: smedicine });
     setStatus(true);
-    if (res.id != '' || res.id == undefined) {
-      Toast.fire({
-        icon: 'success',
-        title: 'บันทึกข้อมูลสำเร็จ',
-      });
-    } else {
-      Toast.fire({
-        icon: 'error',
-        title: 'บันทึกข้อมูลไม่สำเร็จ',
-      });
+    if (res.id != '') {
+      setAlert(true);
+      window.location.reload(false);
     }
-
-    const timer = setTimeout(() => {
-      setStatus(false);
-    }, 1000);
   };
-
-  
 
   return (
     <Page theme={pageTheme.service}>
@@ -221,6 +197,19 @@ const Medicine: FC<{}> = () => {
       </Header>
 
       <Content>
+      <ContentHeader title="">
+          {status ? (
+            <div>
+              {alert ? (
+                <Alert severity="success">บันทึกเรียบร้อย!</Alert>
+              ) : (
+                <Alert severity="warning" style={{ marginTop: 20 }}>
+                  บันทึกไม่สำเร็จ!
+                </Alert>
+              )}
+            </div>
+          ) : null}
+        </ContentHeader>
         <div className={classes.root}>
           <Card className={classes.cardBox}>
             <CardContent>

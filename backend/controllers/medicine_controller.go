@@ -19,12 +19,12 @@ type MedicineController struct {
 
 // Medicine defines the struct for the Medicine
 type Medicine struct {
-	name               string
-	serial             string
-	brand              string
-	amount             int
-	price              int
-	howtouse           string
+	Name               string
+	Serial             string
+	Brand              string
+	Amount             int
+	Price              int
+	Howtouse           string
 	MedicineTypeID     int
 	LevelOfDangerousID int
 	UnitOfMedicineID   int
@@ -85,12 +85,12 @@ func (ctl *MedicineController) CreateMedicine(c *gin.Context) {
 
 	m, err := ctl.client.Medicine.
 		Create().
-		SetName(obj.name).
-		SetSerial(obj.serial).
-		SetBrand(obj.brand).
-		SetAmount(obj.amount).
-		SetPrice(obj.price).
-		SetHowtouse(obj.howtouse).
+		SetName(obj.Name).
+		SetSerial(obj.Serial).
+		SetBrand(obj.Brand).
+		SetAmount(obj.Amount).
+		SetPrice(obj.Price).
+		SetHowtouse(obj.Howtouse).
 		SetMedicineType(T).
 		SetLevelOfDangerous(L).
 		SetUnitOfMedicine(U).

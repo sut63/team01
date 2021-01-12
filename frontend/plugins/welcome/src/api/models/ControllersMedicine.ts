@@ -24,6 +24,24 @@ export interface ControllersMedicine {
      * @type {number}
      * @memberof ControllersMedicine
      */
+    amount?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControllersMedicine
+     */
+    brand?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControllersMedicine
+     */
+    howtouse?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ControllersMedicine
+     */
     levelOfDangerousID?: number;
     /**
      * 
@@ -31,6 +49,24 @@ export interface ControllersMedicine {
      * @memberof ControllersMedicine
      */
     medicineTypeID?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControllersMedicine
+     */
+    name?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ControllersMedicine
+     */
+    price?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControllersMedicine
+     */
+    serial?: string;
     /**
      * 
      * @type {number}
@@ -49,8 +85,14 @@ export function ControllersMedicineFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
+        'amount': !exists(json, 'amount') ? undefined : json['amount'],
+        'brand': !exists(json, 'brand') ? undefined : json['brand'],
+        'howtouse': !exists(json, 'howtouse') ? undefined : json['howtouse'],
         'levelOfDangerousID': !exists(json, 'levelOfDangerousID') ? undefined : json['levelOfDangerousID'],
         'medicineTypeID': !exists(json, 'medicineTypeID') ? undefined : json['medicineTypeID'],
+        'name': !exists(json, 'name') ? undefined : json['name'],
+        'price': !exists(json, 'price') ? undefined : json['price'],
+        'serial': !exists(json, 'serial') ? undefined : json['serial'],
         'unitOfMedicineID': !exists(json, 'unitOfMedicineID') ? undefined : json['unitOfMedicineID'],
     };
 }
@@ -64,8 +106,14 @@ export function ControllersMedicineToJSON(value?: ControllersMedicine | null): a
     }
     return {
         
+        'amount': value.amount,
+        'brand': value.brand,
+        'howtouse': value.howtouse,
         'levelOfDangerousID': value.levelOfDangerousID,
         'medicineTypeID': value.medicineTypeID,
+        'name': value.name,
+        'price': value.price,
+        'serial': value.serial,
         'unitOfMedicineID': value.unitOfMedicineID,
     };
 }

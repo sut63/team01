@@ -42,12 +42,6 @@ export interface ControllersPrescription {
      * @type {string}
      * @memberof ControllersPrescription
      */
-    statusQueue?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ControllersPrescription
-     */
     value?: string;
 }
 
@@ -64,7 +58,6 @@ export function ControllersPrescriptionFromJSONTyped(json: any, ignoreDiscrimina
         'doctorID': !exists(json, 'doctorID') ? undefined : json['doctorID'],
         'medicineID': !exists(json, 'medicineID') ? undefined : json['medicineID'],
         'patientInfoID': !exists(json, 'patientInfoID') ? undefined : json['patientInfoID'],
-        'statusQueue': !exists(json, 'statusQueue') ? undefined : json['statusQueue'],
         'value': !exists(json, 'value') ? undefined : json['value'],
     };
 }
@@ -81,7 +74,6 @@ export function ControllersPrescriptionToJSON(value?: ControllersPrescription | 
         'doctorID': value.doctorID,
         'medicineID': value.medicineID,
         'patientInfoID': value.patientInfoID,
-        'statusQueue': value.statusQueue,
         'value': value.value,
     };
 }

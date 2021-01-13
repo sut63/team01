@@ -27,12 +27,6 @@ import {
  */
 export interface EntPrescription {
     /**
-     * StatusQueue holds the value of the "Status_Queue" field.
-     * @type {string}
-     * @memberof EntPrescription
-     */
-    statusQueue?: string;
-    /**
      * Value holds the value of the "Value" field.
      * @type {number}
      * @memberof EntPrescription
@@ -62,7 +56,6 @@ export function EntPrescriptionFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'statusQueue': !exists(json, 'Status_Queue') ? undefined : json['Status_Queue'],
         'value': !exists(json, 'Value') ? undefined : json['Value'],
         'edges': !exists(json, 'edges') ? undefined : EntPrescriptionEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
@@ -78,7 +71,6 @@ export function EntPrescriptionToJSON(value?: EntPrescription | null): any {
     }
     return {
         
-        'Status_Queue': value.statusQueue,
         'Value': value.value,
         'edges': EntPrescriptionEdgesToJSON(value.edges),
         'id': value.id,

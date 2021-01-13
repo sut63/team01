@@ -71,11 +71,11 @@ export interface EntMedicineEdges {
      */
     medicinepresciption?: Array<EntPrescription>;
     /**
-     * Order holds the value of the order edge.
+     * Ordermedicine holds the value of the ordermedicine edge.
      * @type {Array<EntOrder>}
      * @memberof EntMedicineEdges
      */
-    order?: Array<EntOrder>;
+    ordermedicine?: Array<EntOrder>;
     /**
      * 
      * @type {EntUnitOfMedicine}
@@ -94,12 +94,12 @@ export function EntMedicineEdgesFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'drugallergys': !exists(json, 'drugallergys') ? undefined : ((json['drugallergys'] as Array<any>).map(EntDrugAllergyFromJSON)),
-        'levelOfDangerous': !exists(json, 'levelOfDangerous') ? undefined : EntLevelOfDangerousFromJSON(json['levelOfDangerous']),
-        'medicineType': !exists(json, 'medicineType') ? undefined : EntMedicineTypeFromJSON(json['medicineType']),
-        'medicinepresciption': !exists(json, 'medicinepresciption') ? undefined : ((json['medicinepresciption'] as Array<any>).map(EntPrescriptionFromJSON)),
-        'order': !exists(json, 'order') ? undefined : ((json['order'] as Array<any>).map(EntOrderFromJSON)),
-        'unitOfMedicine': !exists(json, 'unitOfMedicine') ? undefined : EntUnitOfMedicineFromJSON(json['unitOfMedicine']),
+        'drugallergys': !exists(json, 'Drugallergys') ? undefined : ((json['Drugallergys'] as Array<any>).map(EntDrugAllergyFromJSON)),
+        'levelOfDangerous': !exists(json, 'LevelOfDangerous') ? undefined : EntLevelOfDangerousFromJSON(json['LevelOfDangerous']),
+        'medicineType': !exists(json, 'MedicineType') ? undefined : EntMedicineTypeFromJSON(json['MedicineType']),
+        'medicinepresciption': !exists(json, 'Medicinepresciption') ? undefined : ((json['Medicinepresciption'] as Array<any>).map(EntPrescriptionFromJSON)),
+        'ordermedicine': !exists(json, 'Ordermedicine') ? undefined : ((json['Ordermedicine'] as Array<any>).map(EntOrderFromJSON)),
+        'unitOfMedicine': !exists(json, 'UnitOfMedicine') ? undefined : EntUnitOfMedicineFromJSON(json['UnitOfMedicine']),
     };
 }
 
@@ -116,7 +116,7 @@ export function EntMedicineEdgesToJSON(value?: EntMedicineEdges | null): any {
         'levelOfDangerous': EntLevelOfDangerousToJSON(value.levelOfDangerous),
         'medicineType': EntMedicineTypeToJSON(value.medicineType),
         'medicinepresciption': value.medicinepresciption === undefined ? undefined : ((value.medicinepresciption as Array<any>).map(EntPrescriptionToJSON)),
-        'order': value.order === undefined ? undefined : ((value.order as Array<any>).map(EntOrderToJSON)),
+        'ordermedicine': value.ordermedicine === undefined ? undefined : ((value.ordermedicine as Array<any>).map(EntOrderToJSON)),
         'unitOfMedicine': EntUnitOfMedicineToJSON(value.unitOfMedicine),
     };
 }

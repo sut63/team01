@@ -26,7 +26,7 @@ type CompanyQuery struct {
 	unique     []string
 	predicates []predicate.Company
 	// eager-loading edges.
-	withOrder *OrderQuery
+	withOrdercompany *OrderQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -56,8 +56,8 @@ func (cq *CompanyQuery) Order(o ...OrderFunc) *CompanyQuery {
 	return cq
 }
 
-// QueryOrder chains the current query on the order edge.
-func (cq *CompanyQuery) QueryOrder() *OrderQuery {
+// QueryOrdercompany chains the current query on the ordercompany edge.
+func (cq *CompanyQuery) QueryOrdercompany() *OrderQuery {
 	query := &OrderQuery{config: cq.config}
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := cq.prepareQuery(ctx); err != nil {
@@ -66,7 +66,7 @@ func (cq *CompanyQuery) QueryOrder() *OrderQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(company.Table, company.FieldID, cq.sqlQuery()),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, company.OrderTable, company.OrderColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, company.OrdercompanyTable, company.OrdercompanyColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -253,14 +253,14 @@ func (cq *CompanyQuery) Clone() *CompanyQuery {
 	}
 }
 
-//  WithOrder tells the query-builder to eager-loads the nodes that are connected to
-// the "order" edge. The optional arguments used to configure the query builder of the edge.
-func (cq *CompanyQuery) WithOrder(opts ...func(*OrderQuery)) *CompanyQuery {
+//  WithOrdercompany tells the query-builder to eager-loads the nodes that are connected to
+// the "ordercompany" edge. The optional arguments used to configure the query builder of the edge.
+func (cq *CompanyQuery) WithOrdercompany(opts ...func(*OrderQuery)) *CompanyQuery {
 	query := &OrderQuery{config: cq.config}
 	for _, opt := range opts {
 		opt(query)
 	}
-	cq.withOrder = query
+	cq.withOrdercompany = query
 	return cq
 }
 
@@ -270,7 +270,7 @@ func (cq *CompanyQuery) WithOrder(opts ...func(*OrderQuery)) *CompanyQuery {
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		Name string `json:"Name,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -296,7 +296,7 @@ func (cq *CompanyQuery) GroupBy(field string, fields ...string) *CompanyGroupBy 
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		Name string `json:"Name,omitempty"`
 //	}
 //
 //	client.Company.Query().
@@ -331,7 +331,7 @@ func (cq *CompanyQuery) sqlAll(ctx context.Context) ([]*Company, error) {
 		nodes       = []*Company{}
 		_spec       = cq.querySpec()
 		loadedTypes = [1]bool{
-			cq.withOrder != nil,
+			cq.withOrdercompany != nil,
 		}
 	)
 	_spec.ScanValues = func() []interface{} {
@@ -355,7 +355,7 @@ func (cq *CompanyQuery) sqlAll(ctx context.Context) ([]*Company, error) {
 		return nodes, nil
 	}
 
-	if query := cq.withOrder; query != nil {
+	if query := cq.withOrdercompany; query != nil {
 		fks := make([]driver.Value, 0, len(nodes))
 		nodeids := make(map[int]*Company)
 		for i := range nodes {
@@ -364,22 +364,22 @@ func (cq *CompanyQuery) sqlAll(ctx context.Context) ([]*Company, error) {
 		}
 		query.withFKs = true
 		query.Where(predicate.Order(func(s *sql.Selector) {
-			s.Where(sql.InValues(company.OrderColumn, fks...))
+			s.Where(sql.InValues(company.OrdercompanyColumn, fks...))
 		}))
 		neighbors, err := query.All(ctx)
 		if err != nil {
 			return nil, err
 		}
 		for _, n := range neighbors {
-			fk := n.company_id
+			fk := n.company_ordercompany
 			if fk == nil {
-				return nil, fmt.Errorf(`foreign-key "company_id" is nil for node %v`, n.ID)
+				return nil, fmt.Errorf(`foreign-key "company_ordercompany" is nil for node %v`, n.ID)
 			}
 			node, ok := nodeids[*fk]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "company_id" returned %v for node %v`, *fk, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "company_ordercompany" returned %v for node %v`, *fk, n.ID)
 			}
-			node.Edges.Order = append(node.Edges.Order, n)
+			node.Edges.Ordercompany = append(node.Edges.Ordercompany, n)
 		}
 	}
 

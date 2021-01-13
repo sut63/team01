@@ -18,8 +18,8 @@ const (
 	EdgeDispensemedicine = "dispensemedicine"
 	// EdgeDrugallergys holds the string denoting the drugallergys edge name in mutations.
 	EdgeDrugallergys = "drugallergys"
-	// EdgeOrder holds the string denoting the order edge name in mutations.
-	EdgeOrder = "order"
+	// EdgeOrderpharmacist holds the string denoting the orderpharmacist edge name in mutations.
+	EdgeOrderpharmacist = "orderpharmacist"
 	// EdgeBills holds the string denoting the bills edge name in mutations.
 	EdgeBills = "Bills"
 
@@ -39,13 +39,13 @@ const (
 	DrugallergysInverseTable = "drug_allergies"
 	// DrugallergysColumn is the table column denoting the drugallergys relation/edge.
 	DrugallergysColumn = "pharmacist_id"
-	// OrderTable is the table the holds the order relation/edge.
-	OrderTable = "orders"
-	// OrderInverseTable is the table name for the Order entity.
+	// OrderpharmacistTable is the table the holds the orderpharmacist relation/edge.
+	OrderpharmacistTable = "orders"
+	// OrderpharmacistInverseTable is the table name for the Order entity.
 	// It exists in this package in order to avoid circular dependency with the "order" package.
-	OrderInverseTable = "orders"
-	// OrderColumn is the table column denoting the order relation/edge.
-	OrderColumn = "pharmacist_id"
+	OrderpharmacistInverseTable = "orders"
+	// OrderpharmacistColumn is the table column denoting the orderpharmacist relation/edge.
+	OrderpharmacistColumn = "pharmacist_orderpharmacist"
 	// BillsTable is the table the holds the Bills relation/edge.
 	BillsTable = "bills"
 	// BillsInverseTable is the table name for the Bill entity.

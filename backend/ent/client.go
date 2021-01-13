@@ -523,15 +523,15 @@ func (c *CompanyClient) GetX(ctx context.Context, id int) *Company {
 	return co
 }
 
-// QueryOrder queries the order edge of a Company.
-func (c *CompanyClient) QueryOrder(co *Company) *OrderQuery {
+// QueryOrdercompany queries the ordercompany edge of a Company.
+func (c *CompanyClient) QueryOrdercompany(co *Company) *OrderQuery {
 	query := &OrderQuery{config: c.config}
 	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(company.Table, company.FieldID, id),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, company.OrderTable, company.OrderColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, company.OrdercompanyTable, company.OrdercompanyColumn),
 		)
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
@@ -1178,15 +1178,15 @@ func (c *MedicineClient) QueryMedicinepresciption(m *Medicine) *PrescriptionQuer
 	return query
 }
 
-// QueryOrder queries the order edge of a Medicine.
-func (c *MedicineClient) QueryOrder(m *Medicine) *OrderQuery {
+// QueryOrdermedicine queries the ordermedicine edge of a Medicine.
+func (c *MedicineClient) QueryOrdermedicine(m *Medicine) *OrderQuery {
 	query := &OrderQuery{config: c.config}
 	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
 		id := m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(medicine.Table, medicine.FieldID, id),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, medicine.OrderTable, medicine.OrderColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, medicine.OrdermedicineTable, medicine.OrdermedicineColumn),
 		)
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
@@ -1376,22 +1376,6 @@ func (c *OrderClient) GetX(ctx context.Context, id int) *Order {
 	return o
 }
 
-// QueryPharmacist queries the pharmacist edge of a Order.
-func (c *OrderClient) QueryPharmacist(o *Order) *PharmacistQuery {
-	query := &PharmacistQuery{config: c.config}
-	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
-		id := o.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(order.Table, order.FieldID, id),
-			sqlgraph.To(pharmacist.Table, pharmacist.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, order.PharmacistTable, order.PharmacistColumn),
-		)
-		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryMedicine queries the medicine edge of a Order.
 func (c *OrderClient) QueryMedicine(o *Order) *MedicineQuery {
 	query := &MedicineQuery{config: c.config}
@@ -1417,6 +1401,22 @@ func (c *OrderClient) QueryCompany(o *Order) *CompanyQuery {
 			sqlgraph.From(order.Table, order.FieldID, id),
 			sqlgraph.To(company.Table, company.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, order.CompanyTable, order.CompanyColumn),
+		)
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPharmacist queries the pharmacist edge of a Order.
+func (c *OrderClient) QueryPharmacist(o *Order) *PharmacistQuery {
+	query := &PharmacistQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(order.Table, order.FieldID, id),
+			sqlgraph.To(pharmacist.Table, pharmacist.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, order.PharmacistTable, order.PharmacistColumn),
 		)
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
@@ -1753,15 +1753,15 @@ func (c *PharmacistClient) QueryDrugallergys(ph *Pharmacist) *DrugAllergyQuery {
 	return query
 }
 
-// QueryOrder queries the order edge of a Pharmacist.
-func (c *PharmacistClient) QueryOrder(ph *Pharmacist) *OrderQuery {
+// QueryOrderpharmacist queries the orderpharmacist edge of a Pharmacist.
+func (c *PharmacistClient) QueryOrderpharmacist(ph *Pharmacist) *OrderQuery {
 	query := &OrderQuery{config: c.config}
 	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
 		id := ph.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(pharmacist.Table, pharmacist.FieldID, id),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, pharmacist.OrderTable, pharmacist.OrderColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, pharmacist.OrderpharmacistTable, pharmacist.OrderpharmacistColumn),
 		)
 		fromV = sqlgraph.Neighbors(ph.driver.Dialect(), step)
 		return fromV, nil

@@ -32,8 +32,8 @@ type PharmacistEdges struct {
 	Dispensemedicine []*DispenseMedicine
 	// Drugallergys holds the value of the drugallergys edge.
 	Drugallergys []*DrugAllergy
-	// Order holds the value of the order edge.
-	Order []*Order
+	// Orderpharmacist holds the value of the orderpharmacist edge.
+	Orderpharmacist []*Order
 	// Bills holds the value of the Bills edge.
 	Bills []*Bill
 	// loadedTypes holds the information for reporting if a
@@ -59,13 +59,13 @@ func (e PharmacistEdges) DrugallergysOrErr() ([]*DrugAllergy, error) {
 	return nil, &NotLoadedError{edge: "drugallergys"}
 }
 
-// OrderOrErr returns the Order value or an error if the edge
+// OrderpharmacistOrErr returns the Orderpharmacist value or an error if the edge
 // was not loaded in eager-loading.
-func (e PharmacistEdges) OrderOrErr() ([]*Order, error) {
+func (e PharmacistEdges) OrderpharmacistOrErr() ([]*Order, error) {
 	if e.loadedTypes[2] {
-		return e.Order, nil
+		return e.Orderpharmacist, nil
 	}
-	return nil, &NotLoadedError{edge: "order"}
+	return nil, &NotLoadedError{edge: "orderpharmacist"}
 }
 
 // BillsOrErr returns the Bills value or an error if the edge
@@ -127,9 +127,9 @@ func (ph *Pharmacist) QueryDrugallergys() *DrugAllergyQuery {
 	return (&PharmacistClient{config: ph.config}).QueryDrugallergys(ph)
 }
 
-// QueryOrder queries the order edge of the Pharmacist.
-func (ph *Pharmacist) QueryOrder() *OrderQuery {
-	return (&PharmacistClient{config: ph.config}).QueryOrder(ph)
+// QueryOrderpharmacist queries the orderpharmacist edge of the Pharmacist.
+func (ph *Pharmacist) QueryOrderpharmacist() *OrderQuery {
+	return (&PharmacistClient{config: ph.config}).QueryOrderpharmacist(ph)
 }
 
 // QueryBills queries the Bills edge of the Pharmacist.

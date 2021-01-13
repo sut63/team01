@@ -31,6 +31,25 @@ func (ou *OrderUpdate) Where(ps ...predicate.Order) *OrderUpdate {
 	return ou
 }
 
+// SetAddedtime sets the addedtime field.
+func (ou *OrderUpdate) SetAddedtime(t time.Time) *OrderUpdate {
+	ou.mutation.SetAddedtime(t)
+	return ou
+}
+
+// SetPrice sets the price field.
+func (ou *OrderUpdate) SetPrice(i int) *OrderUpdate {
+	ou.mutation.ResetPrice()
+	ou.mutation.SetPrice(i)
+	return ou
+}
+
+// AddPrice adds i to price.
+func (ou *OrderUpdate) AddPrice(i int) *OrderUpdate {
+	ou.mutation.AddPrice(i)
+	return ou
+}
+
 // SetAmount sets the amount field.
 func (ou *OrderUpdate) SetAmount(i int) *OrderUpdate {
 	ou.mutation.ResetAmount()
@@ -42,57 +61,6 @@ func (ou *OrderUpdate) SetAmount(i int) *OrderUpdate {
 func (ou *OrderUpdate) AddAmount(i int) *OrderUpdate {
 	ou.mutation.AddAmount(i)
 	return ou
-}
-
-// SetPrice sets the price field.
-func (ou *OrderUpdate) SetPrice(f float64) *OrderUpdate {
-	ou.mutation.ResetPrice()
-	ou.mutation.SetPrice(f)
-	return ou
-}
-
-// AddPrice adds f to price.
-func (ou *OrderUpdate) AddPrice(f float64) *OrderUpdate {
-	ou.mutation.AddPrice(f)
-	return ou
-}
-
-// SetTotal sets the total field.
-func (ou *OrderUpdate) SetTotal(f float64) *OrderUpdate {
-	ou.mutation.ResetTotal()
-	ou.mutation.SetTotal(f)
-	return ou
-}
-
-// AddTotal adds f to total.
-func (ou *OrderUpdate) AddTotal(f float64) *OrderUpdate {
-	ou.mutation.AddTotal(f)
-	return ou
-}
-
-// SetDatetime sets the datetime field.
-func (ou *OrderUpdate) SetDatetime(t time.Time) *OrderUpdate {
-	ou.mutation.SetDatetime(t)
-	return ou
-}
-
-// SetPharmacistID sets the pharmacist edge to Pharmacist by id.
-func (ou *OrderUpdate) SetPharmacistID(id int) *OrderUpdate {
-	ou.mutation.SetPharmacistID(id)
-	return ou
-}
-
-// SetNillablePharmacistID sets the pharmacist edge to Pharmacist by id if the given value is not nil.
-func (ou *OrderUpdate) SetNillablePharmacistID(id *int) *OrderUpdate {
-	if id != nil {
-		ou = ou.SetPharmacistID(*id)
-	}
-	return ou
-}
-
-// SetPharmacist sets the pharmacist edge to Pharmacist.
-func (ou *OrderUpdate) SetPharmacist(p *Pharmacist) *OrderUpdate {
-	return ou.SetPharmacistID(p.ID)
 }
 
 // SetMedicineID sets the medicine edge to Medicine by id.
@@ -133,15 +101,28 @@ func (ou *OrderUpdate) SetCompany(c *Company) *OrderUpdate {
 	return ou.SetCompanyID(c.ID)
 }
 
+// SetPharmacistID sets the pharmacist edge to Pharmacist by id.
+func (ou *OrderUpdate) SetPharmacistID(id int) *OrderUpdate {
+	ou.mutation.SetPharmacistID(id)
+	return ou
+}
+
+// SetNillablePharmacistID sets the pharmacist edge to Pharmacist by id if the given value is not nil.
+func (ou *OrderUpdate) SetNillablePharmacistID(id *int) *OrderUpdate {
+	if id != nil {
+		ou = ou.SetPharmacistID(*id)
+	}
+	return ou
+}
+
+// SetPharmacist sets the pharmacist edge to Pharmacist.
+func (ou *OrderUpdate) SetPharmacist(p *Pharmacist) *OrderUpdate {
+	return ou.SetPharmacistID(p.ID)
+}
+
 // Mutation returns the OrderMutation object of the builder.
 func (ou *OrderUpdate) Mutation() *OrderMutation {
 	return ou.mutation
-}
-
-// ClearPharmacist clears the pharmacist edge to Pharmacist.
-func (ou *OrderUpdate) ClearPharmacist() *OrderUpdate {
-	ou.mutation.ClearPharmacist()
-	return ou
 }
 
 // ClearMedicine clears the medicine edge to Medicine.
@@ -156,13 +137,14 @@ func (ou *OrderUpdate) ClearCompany() *OrderUpdate {
 	return ou
 }
 
+// ClearPharmacist clears the pharmacist edge to Pharmacist.
+func (ou *OrderUpdate) ClearPharmacist() *OrderUpdate {
+	ou.mutation.ClearPharmacist()
+	return ou
+}
+
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (ou *OrderUpdate) Save(ctx context.Context) (int, error) {
-	if v, ok := ou.mutation.Amount(); ok {
-		if err := order.AmountValidator(v); err != nil {
-			return 0, &ValidationError{Name: "amount", err: fmt.Errorf("ent: validator failed for field \"amount\": %w", err)}
-		}
-	}
 
 	var (
 		err      error
@@ -231,6 +213,27 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := ou.mutation.Addedtime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: order.FieldAddedtime,
+		})
+	}
+	if value, ok := ou.mutation.Price(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: order.FieldPrice,
+		})
+	}
+	if value, ok := ou.mutation.AddedPrice(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: order.FieldPrice,
+		})
+	}
 	if value, ok := ou.mutation.Amount(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt,
@@ -244,76 +247,6 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Value:  value,
 			Column: order.FieldAmount,
 		})
-	}
-	if value, ok := ou.mutation.Price(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: order.FieldPrice,
-		})
-	}
-	if value, ok := ou.mutation.AddedPrice(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: order.FieldPrice,
-		})
-	}
-	if value, ok := ou.mutation.Total(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: order.FieldTotal,
-		})
-	}
-	if value, ok := ou.mutation.AddedTotal(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: order.FieldTotal,
-		})
-	}
-	if value, ok := ou.mutation.Datetime(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: order.FieldDatetime,
-		})
-	}
-	if ou.mutation.PharmacistCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   order.PharmacistTable,
-			Columns: []string{order.PharmacistColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pharmacist.FieldID,
-				},
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ou.mutation.PharmacistIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   order.PharmacistTable,
-			Columns: []string{order.PharmacistColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pharmacist.FieldID,
-				},
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ou.mutation.MedicineCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -385,6 +318,41 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.PharmacistCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.PharmacistTable,
+			Columns: []string{order.PharmacistColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: pharmacist.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.PharmacistIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.PharmacistTable,
+			Columns: []string{order.PharmacistColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: pharmacist.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ou.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{order.Label}
@@ -403,6 +371,25 @@ type OrderUpdateOne struct {
 	mutation *OrderMutation
 }
 
+// SetAddedtime sets the addedtime field.
+func (ouo *OrderUpdateOne) SetAddedtime(t time.Time) *OrderUpdateOne {
+	ouo.mutation.SetAddedtime(t)
+	return ouo
+}
+
+// SetPrice sets the price field.
+func (ouo *OrderUpdateOne) SetPrice(i int) *OrderUpdateOne {
+	ouo.mutation.ResetPrice()
+	ouo.mutation.SetPrice(i)
+	return ouo
+}
+
+// AddPrice adds i to price.
+func (ouo *OrderUpdateOne) AddPrice(i int) *OrderUpdateOne {
+	ouo.mutation.AddPrice(i)
+	return ouo
+}
+
 // SetAmount sets the amount field.
 func (ouo *OrderUpdateOne) SetAmount(i int) *OrderUpdateOne {
 	ouo.mutation.ResetAmount()
@@ -414,57 +401,6 @@ func (ouo *OrderUpdateOne) SetAmount(i int) *OrderUpdateOne {
 func (ouo *OrderUpdateOne) AddAmount(i int) *OrderUpdateOne {
 	ouo.mutation.AddAmount(i)
 	return ouo
-}
-
-// SetPrice sets the price field.
-func (ouo *OrderUpdateOne) SetPrice(f float64) *OrderUpdateOne {
-	ouo.mutation.ResetPrice()
-	ouo.mutation.SetPrice(f)
-	return ouo
-}
-
-// AddPrice adds f to price.
-func (ouo *OrderUpdateOne) AddPrice(f float64) *OrderUpdateOne {
-	ouo.mutation.AddPrice(f)
-	return ouo
-}
-
-// SetTotal sets the total field.
-func (ouo *OrderUpdateOne) SetTotal(f float64) *OrderUpdateOne {
-	ouo.mutation.ResetTotal()
-	ouo.mutation.SetTotal(f)
-	return ouo
-}
-
-// AddTotal adds f to total.
-func (ouo *OrderUpdateOne) AddTotal(f float64) *OrderUpdateOne {
-	ouo.mutation.AddTotal(f)
-	return ouo
-}
-
-// SetDatetime sets the datetime field.
-func (ouo *OrderUpdateOne) SetDatetime(t time.Time) *OrderUpdateOne {
-	ouo.mutation.SetDatetime(t)
-	return ouo
-}
-
-// SetPharmacistID sets the pharmacist edge to Pharmacist by id.
-func (ouo *OrderUpdateOne) SetPharmacistID(id int) *OrderUpdateOne {
-	ouo.mutation.SetPharmacistID(id)
-	return ouo
-}
-
-// SetNillablePharmacistID sets the pharmacist edge to Pharmacist by id if the given value is not nil.
-func (ouo *OrderUpdateOne) SetNillablePharmacistID(id *int) *OrderUpdateOne {
-	if id != nil {
-		ouo = ouo.SetPharmacistID(*id)
-	}
-	return ouo
-}
-
-// SetPharmacist sets the pharmacist edge to Pharmacist.
-func (ouo *OrderUpdateOne) SetPharmacist(p *Pharmacist) *OrderUpdateOne {
-	return ouo.SetPharmacistID(p.ID)
 }
 
 // SetMedicineID sets the medicine edge to Medicine by id.
@@ -505,15 +441,28 @@ func (ouo *OrderUpdateOne) SetCompany(c *Company) *OrderUpdateOne {
 	return ouo.SetCompanyID(c.ID)
 }
 
+// SetPharmacistID sets the pharmacist edge to Pharmacist by id.
+func (ouo *OrderUpdateOne) SetPharmacistID(id int) *OrderUpdateOne {
+	ouo.mutation.SetPharmacistID(id)
+	return ouo
+}
+
+// SetNillablePharmacistID sets the pharmacist edge to Pharmacist by id if the given value is not nil.
+func (ouo *OrderUpdateOne) SetNillablePharmacistID(id *int) *OrderUpdateOne {
+	if id != nil {
+		ouo = ouo.SetPharmacistID(*id)
+	}
+	return ouo
+}
+
+// SetPharmacist sets the pharmacist edge to Pharmacist.
+func (ouo *OrderUpdateOne) SetPharmacist(p *Pharmacist) *OrderUpdateOne {
+	return ouo.SetPharmacistID(p.ID)
+}
+
 // Mutation returns the OrderMutation object of the builder.
 func (ouo *OrderUpdateOne) Mutation() *OrderMutation {
 	return ouo.mutation
-}
-
-// ClearPharmacist clears the pharmacist edge to Pharmacist.
-func (ouo *OrderUpdateOne) ClearPharmacist() *OrderUpdateOne {
-	ouo.mutation.ClearPharmacist()
-	return ouo
 }
 
 // ClearMedicine clears the medicine edge to Medicine.
@@ -528,13 +477,14 @@ func (ouo *OrderUpdateOne) ClearCompany() *OrderUpdateOne {
 	return ouo
 }
 
+// ClearPharmacist clears the pharmacist edge to Pharmacist.
+func (ouo *OrderUpdateOne) ClearPharmacist() *OrderUpdateOne {
+	ouo.mutation.ClearPharmacist()
+	return ouo
+}
+
 // Save executes the query and returns the updated entity.
 func (ouo *OrderUpdateOne) Save(ctx context.Context) (*Order, error) {
-	if v, ok := ouo.mutation.Amount(); ok {
-		if err := order.AmountValidator(v); err != nil {
-			return nil, &ValidationError{Name: "amount", err: fmt.Errorf("ent: validator failed for field \"amount\": %w", err)}
-		}
-	}
 
 	var (
 		err  error
@@ -601,6 +551,27 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (o *Order, err error) {
 		return nil, &ValidationError{Name: "ID", err: fmt.Errorf("missing Order.ID for update")}
 	}
 	_spec.Node.ID.Value = id
+	if value, ok := ouo.mutation.Addedtime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: order.FieldAddedtime,
+		})
+	}
+	if value, ok := ouo.mutation.Price(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: order.FieldPrice,
+		})
+	}
+	if value, ok := ouo.mutation.AddedPrice(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: order.FieldPrice,
+		})
+	}
 	if value, ok := ouo.mutation.Amount(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt,
@@ -614,76 +585,6 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (o *Order, err error) {
 			Value:  value,
 			Column: order.FieldAmount,
 		})
-	}
-	if value, ok := ouo.mutation.Price(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: order.FieldPrice,
-		})
-	}
-	if value, ok := ouo.mutation.AddedPrice(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: order.FieldPrice,
-		})
-	}
-	if value, ok := ouo.mutation.Total(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: order.FieldTotal,
-		})
-	}
-	if value, ok := ouo.mutation.AddedTotal(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: order.FieldTotal,
-		})
-	}
-	if value, ok := ouo.mutation.Datetime(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: order.FieldDatetime,
-		})
-	}
-	if ouo.mutation.PharmacistCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   order.PharmacistTable,
-			Columns: []string{order.PharmacistColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pharmacist.FieldID,
-				},
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ouo.mutation.PharmacistIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   order.PharmacistTable,
-			Columns: []string{order.PharmacistColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pharmacist.FieldID,
-				},
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ouo.mutation.MedicineCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -747,6 +648,41 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (o *Order, err error) {
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
 					Column: company.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.PharmacistCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.PharmacistTable,
+			Columns: []string{order.PharmacistColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: pharmacist.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.PharmacistIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.PharmacistTable,
+			Columns: []string{order.PharmacistColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: pharmacist.FieldID,
 				},
 			},
 		}

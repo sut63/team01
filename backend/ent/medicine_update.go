@@ -170,19 +170,19 @@ func (mu *MedicineUpdate) AddMedicinepresciption(p ...*Prescription) *MedicineUp
 	return mu.AddMedicinepresciptionIDs(ids...)
 }
 
-// AddOrderIDs adds the order edge to Order by ids.
-func (mu *MedicineUpdate) AddOrderIDs(ids ...int) *MedicineUpdate {
-	mu.mutation.AddOrderIDs(ids...)
+// AddOrdermedicineIDs adds the ordermedicine edge to Order by ids.
+func (mu *MedicineUpdate) AddOrdermedicineIDs(ids ...int) *MedicineUpdate {
+	mu.mutation.AddOrdermedicineIDs(ids...)
 	return mu
 }
 
-// AddOrder adds the order edges to Order.
-func (mu *MedicineUpdate) AddOrder(o ...*Order) *MedicineUpdate {
+// AddOrdermedicine adds the ordermedicine edges to Order.
+func (mu *MedicineUpdate) AddOrdermedicine(o ...*Order) *MedicineUpdate {
 	ids := make([]int, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return mu.AddOrderIDs(ids...)
+	return mu.AddOrdermedicineIDs(ids...)
 }
 
 // Mutation returns the MedicineMutation object of the builder.
@@ -238,19 +238,19 @@ func (mu *MedicineUpdate) RemoveMedicinepresciption(p ...*Prescription) *Medicin
 	return mu.RemoveMedicinepresciptionIDs(ids...)
 }
 
-// RemoveOrderIDs removes the order edge to Order by ids.
-func (mu *MedicineUpdate) RemoveOrderIDs(ids ...int) *MedicineUpdate {
-	mu.mutation.RemoveOrderIDs(ids...)
+// RemoveOrdermedicineIDs removes the ordermedicine edge to Order by ids.
+func (mu *MedicineUpdate) RemoveOrdermedicineIDs(ids ...int) *MedicineUpdate {
+	mu.mutation.RemoveOrdermedicineIDs(ids...)
 	return mu
 }
 
-// RemoveOrder removes order edges to Order.
-func (mu *MedicineUpdate) RemoveOrder(o ...*Order) *MedicineUpdate {
+// RemoveOrdermedicine removes ordermedicine edges to Order.
+func (mu *MedicineUpdate) RemoveOrdermedicine(o ...*Order) *MedicineUpdate {
 	ids := make([]int, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return mu.RemoveOrderIDs(ids...)
+	return mu.RemoveOrdermedicineIDs(ids...)
 }
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
@@ -590,12 +590,12 @@ func (mu *MedicineUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nodes := mu.mutation.RemovedOrderIDs(); len(nodes) > 0 {
+	if nodes := mu.mutation.RemovedOrdermedicineIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   medicine.OrderTable,
-			Columns: []string{medicine.OrderColumn},
+			Table:   medicine.OrdermedicineTable,
+			Columns: []string{medicine.OrdermedicineColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -609,12 +609,12 @@ func (mu *MedicineUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mu.mutation.OrderIDs(); len(nodes) > 0 {
+	if nodes := mu.mutation.OrdermedicineIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   medicine.OrderTable,
-			Columns: []string{medicine.OrderColumn},
+			Table:   medicine.OrdermedicineTable,
+			Columns: []string{medicine.OrdermedicineColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -783,19 +783,19 @@ func (muo *MedicineUpdateOne) AddMedicinepresciption(p ...*Prescription) *Medici
 	return muo.AddMedicinepresciptionIDs(ids...)
 }
 
-// AddOrderIDs adds the order edge to Order by ids.
-func (muo *MedicineUpdateOne) AddOrderIDs(ids ...int) *MedicineUpdateOne {
-	muo.mutation.AddOrderIDs(ids...)
+// AddOrdermedicineIDs adds the ordermedicine edge to Order by ids.
+func (muo *MedicineUpdateOne) AddOrdermedicineIDs(ids ...int) *MedicineUpdateOne {
+	muo.mutation.AddOrdermedicineIDs(ids...)
 	return muo
 }
 
-// AddOrder adds the order edges to Order.
-func (muo *MedicineUpdateOne) AddOrder(o ...*Order) *MedicineUpdateOne {
+// AddOrdermedicine adds the ordermedicine edges to Order.
+func (muo *MedicineUpdateOne) AddOrdermedicine(o ...*Order) *MedicineUpdateOne {
 	ids := make([]int, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return muo.AddOrderIDs(ids...)
+	return muo.AddOrdermedicineIDs(ids...)
 }
 
 // Mutation returns the MedicineMutation object of the builder.
@@ -851,19 +851,19 @@ func (muo *MedicineUpdateOne) RemoveMedicinepresciption(p ...*Prescription) *Med
 	return muo.RemoveMedicinepresciptionIDs(ids...)
 }
 
-// RemoveOrderIDs removes the order edge to Order by ids.
-func (muo *MedicineUpdateOne) RemoveOrderIDs(ids ...int) *MedicineUpdateOne {
-	muo.mutation.RemoveOrderIDs(ids...)
+// RemoveOrdermedicineIDs removes the ordermedicine edge to Order by ids.
+func (muo *MedicineUpdateOne) RemoveOrdermedicineIDs(ids ...int) *MedicineUpdateOne {
+	muo.mutation.RemoveOrdermedicineIDs(ids...)
 	return muo
 }
 
-// RemoveOrder removes order edges to Order.
-func (muo *MedicineUpdateOne) RemoveOrder(o ...*Order) *MedicineUpdateOne {
+// RemoveOrdermedicine removes ordermedicine edges to Order.
+func (muo *MedicineUpdateOne) RemoveOrdermedicine(o ...*Order) *MedicineUpdateOne {
 	ids := make([]int, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return muo.RemoveOrderIDs(ids...)
+	return muo.RemoveOrdermedicineIDs(ids...)
 }
 
 // Save executes the query and returns the updated entity.
@@ -1201,12 +1201,12 @@ func (muo *MedicineUpdateOne) sqlSave(ctx context.Context) (m *Medicine, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nodes := muo.mutation.RemovedOrderIDs(); len(nodes) > 0 {
+	if nodes := muo.mutation.RemovedOrdermedicineIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   medicine.OrderTable,
-			Columns: []string{medicine.OrderColumn},
+			Table:   medicine.OrdermedicineTable,
+			Columns: []string{medicine.OrdermedicineColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -1220,12 +1220,12 @@ func (muo *MedicineUpdateOne) sqlSave(ctx context.Context) (m *Medicine, err err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := muo.mutation.OrderIDs(); len(nodes) > 0 {
+	if nodes := muo.mutation.OrdermedicineIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   medicine.OrderTable,
-			Columns: []string{medicine.OrderColumn},
+			Table:   medicine.OrdermedicineTable,
+			Columns: []string{medicine.OrdermedicineColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

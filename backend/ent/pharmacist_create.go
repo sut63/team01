@@ -71,19 +71,19 @@ func (pc *PharmacistCreate) AddDrugallergys(d ...*DrugAllergy) *PharmacistCreate
 	return pc.AddDrugallergyIDs(ids...)
 }
 
-// AddOrderIDs adds the order edge to Order by ids.
-func (pc *PharmacistCreate) AddOrderIDs(ids ...int) *PharmacistCreate {
-	pc.mutation.AddOrderIDs(ids...)
+// AddOrderpharmacistIDs adds the orderpharmacist edge to Order by ids.
+func (pc *PharmacistCreate) AddOrderpharmacistIDs(ids ...int) *PharmacistCreate {
+	pc.mutation.AddOrderpharmacistIDs(ids...)
 	return pc
 }
 
-// AddOrder adds the order edges to Order.
-func (pc *PharmacistCreate) AddOrder(o ...*Order) *PharmacistCreate {
+// AddOrderpharmacist adds the orderpharmacist edges to Order.
+func (pc *PharmacistCreate) AddOrderpharmacist(o ...*Order) *PharmacistCreate {
 	ids := make([]int, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return pc.AddOrderIDs(ids...)
+	return pc.AddOrderpharmacistIDs(ids...)
 }
 
 // AddBillIDs adds the Bills edge to Bill by ids.
@@ -254,12 +254,12 @@ func (pc *PharmacistCreate) createSpec() (*Pharmacist, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.OrderIDs(); len(nodes) > 0 {
+	if nodes := pc.mutation.OrderpharmacistIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   pharmacist.OrderTable,
-			Columns: []string{pharmacist.OrderColumn},
+			Table:   pharmacist.OrderpharmacistTable,
+			Columns: []string{pharmacist.OrderpharmacistColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

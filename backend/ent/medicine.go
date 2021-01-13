@@ -50,8 +50,8 @@ type MedicineEdges struct {
 	Drugallergys []*DrugAllergy
 	// Medicinepresciption holds the value of the medicinepresciption edge.
 	Medicinepresciption []*Prescription
-	// Order holds the value of the order edge.
-	Order []*Order
+	// Ordermedicine holds the value of the ordermedicine edge.
+	Ordermedicine []*Order
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [6]bool
@@ -117,13 +117,13 @@ func (e MedicineEdges) MedicinepresciptionOrErr() ([]*Prescription, error) {
 	return nil, &NotLoadedError{edge: "medicinepresciption"}
 }
 
-// OrderOrErr returns the Order value or an error if the edge
+// OrdermedicineOrErr returns the Ordermedicine value or an error if the edge
 // was not loaded in eager-loading.
-func (e MedicineEdges) OrderOrErr() ([]*Order, error) {
+func (e MedicineEdges) OrdermedicineOrErr() ([]*Order, error) {
 	if e.loadedTypes[5] {
-		return e.Order, nil
+		return e.Ordermedicine, nil
 	}
-	return nil, &NotLoadedError{edge: "order"}
+	return nil, &NotLoadedError{edge: "ordermedicine"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -239,9 +239,9 @@ func (m *Medicine) QueryMedicinepresciption() *PrescriptionQuery {
 	return (&MedicineClient{config: m.config}).QueryMedicinepresciption(m)
 }
 
-// QueryOrder queries the order edge of the Medicine.
-func (m *Medicine) QueryOrder() *OrderQuery {
-	return (&MedicineClient{config: m.config}).QueryOrder(m)
+// QueryOrdermedicine queries the ordermedicine edge of the Medicine.
+func (m *Medicine) QueryOrdermedicine() *OrderQuery {
+	return (&MedicineClient{config: m.config}).QueryOrdermedicine(m)
 }
 
 // Update returns a builder for updating this Medicine.

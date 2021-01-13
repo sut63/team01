@@ -87,7 +87,11 @@ const SignIn: FC<{}> = () => {
   };
 
   const resetData = async () => {
-    localStorage.clear();
+    localStorage.setItem("pharmacist-id",JSON.stringify(null));
+    localStorage.setItem("pharmacist-name",JSON.stringify(null));
+    localStorage.setItem("positiondata",JSON.stringify(null));
+    localStorage.setItem("doctor-id",JSON.stringify(null));
+    localStorage.setItem("doctor-name",JSON.stringify(null));
   };
 
   useEffect(() => {

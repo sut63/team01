@@ -9,8 +9,6 @@ const (
 	FieldID = "id"
 	// FieldValue holds the string denoting the value field in the database.
 	FieldValue = "value"
-	// FieldStatusQueue holds the string denoting the status_queue field in the database.
-	FieldStatusQueue = "status_queue"
 
 	// EdgePrescriptionpatient holds the string denoting the prescriptionpatient edge name in mutations.
 	EdgePrescriptionpatient = "prescriptionpatient"
@@ -57,7 +55,6 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldValue,
-	FieldStatusQueue,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Prescription type.

@@ -23,47 +23,22 @@ type OrderCreate struct {
 	hooks    []Hook
 }
 
-// SetAmount sets the amount field.
-func (oc *OrderCreate) SetAmount(i int) *OrderCreate {
-	oc.mutation.SetAmount(i)
+// SetAddedtime sets the addedtime field.
+func (oc *OrderCreate) SetAddedtime(t time.Time) *OrderCreate {
+	oc.mutation.SetAddedtime(t)
 	return oc
 }
 
 // SetPrice sets the price field.
-func (oc *OrderCreate) SetPrice(f float64) *OrderCreate {
-	oc.mutation.SetPrice(f)
+func (oc *OrderCreate) SetPrice(i int) *OrderCreate {
+	oc.mutation.SetPrice(i)
 	return oc
 }
 
-// SetTotal sets the total field.
-func (oc *OrderCreate) SetTotal(f float64) *OrderCreate {
-	oc.mutation.SetTotal(f)
+// SetAmount sets the amount field.
+func (oc *OrderCreate) SetAmount(i int) *OrderCreate {
+	oc.mutation.SetAmount(i)
 	return oc
-}
-
-// SetDatetime sets the datetime field.
-func (oc *OrderCreate) SetDatetime(t time.Time) *OrderCreate {
-	oc.mutation.SetDatetime(t)
-	return oc
-}
-
-// SetPharmacistID sets the pharmacist edge to Pharmacist by id.
-func (oc *OrderCreate) SetPharmacistID(id int) *OrderCreate {
-	oc.mutation.SetPharmacistID(id)
-	return oc
-}
-
-// SetNillablePharmacistID sets the pharmacist edge to Pharmacist by id if the given value is not nil.
-func (oc *OrderCreate) SetNillablePharmacistID(id *int) *OrderCreate {
-	if id != nil {
-		oc = oc.SetPharmacistID(*id)
-	}
-	return oc
-}
-
-// SetPharmacist sets the pharmacist edge to Pharmacist.
-func (oc *OrderCreate) SetPharmacist(p *Pharmacist) *OrderCreate {
-	return oc.SetPharmacistID(p.ID)
 }
 
 // SetMedicineID sets the medicine edge to Medicine by id.
@@ -104,6 +79,25 @@ func (oc *OrderCreate) SetCompany(c *Company) *OrderCreate {
 	return oc.SetCompanyID(c.ID)
 }
 
+// SetPharmacistID sets the pharmacist edge to Pharmacist by id.
+func (oc *OrderCreate) SetPharmacistID(id int) *OrderCreate {
+	oc.mutation.SetPharmacistID(id)
+	return oc
+}
+
+// SetNillablePharmacistID sets the pharmacist edge to Pharmacist by id if the given value is not nil.
+func (oc *OrderCreate) SetNillablePharmacistID(id *int) *OrderCreate {
+	if id != nil {
+		oc = oc.SetPharmacistID(*id)
+	}
+	return oc
+}
+
+// SetPharmacist sets the pharmacist edge to Pharmacist.
+func (oc *OrderCreate) SetPharmacist(p *Pharmacist) *OrderCreate {
+	return oc.SetPharmacistID(p.ID)
+}
+
 // Mutation returns the OrderMutation object of the builder.
 func (oc *OrderCreate) Mutation() *OrderMutation {
 	return oc.mutation
@@ -111,22 +105,14 @@ func (oc *OrderCreate) Mutation() *OrderMutation {
 
 // Save creates the Order in the database.
 func (oc *OrderCreate) Save(ctx context.Context) (*Order, error) {
-	if _, ok := oc.mutation.Amount(); !ok {
-		return nil, &ValidationError{Name: "amount", err: errors.New("ent: missing required field \"amount\"")}
-	}
-	if v, ok := oc.mutation.Amount(); ok {
-		if err := order.AmountValidator(v); err != nil {
-			return nil, &ValidationError{Name: "amount", err: fmt.Errorf("ent: validator failed for field \"amount\": %w", err)}
-		}
+	if _, ok := oc.mutation.Addedtime(); !ok {
+		return nil, &ValidationError{Name: "addedtime", err: errors.New("ent: missing required field \"addedtime\"")}
 	}
 	if _, ok := oc.mutation.Price(); !ok {
 		return nil, &ValidationError{Name: "price", err: errors.New("ent: missing required field \"price\"")}
 	}
-	if _, ok := oc.mutation.Total(); !ok {
-		return nil, &ValidationError{Name: "total", err: errors.New("ent: missing required field \"total\"")}
-	}
-	if _, ok := oc.mutation.Datetime(); !ok {
-		return nil, &ValidationError{Name: "datetime", err: errors.New("ent: missing required field \"datetime\"")}
+	if _, ok := oc.mutation.Amount(); !ok {
+		return nil, &ValidationError{Name: "amount", err: errors.New("ent: missing required field \"amount\"")}
 	}
 	var (
 		err  error
@@ -188,6 +174,22 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
+	if value, ok := oc.mutation.Addedtime(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: order.FieldAddedtime,
+		})
+		o.Addedtime = value
+	}
+	if value, ok := oc.mutation.Price(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: order.FieldPrice,
+		})
+		o.Price = value
+	}
 	if value, ok := oc.mutation.Amount(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt,
@@ -195,49 +197,6 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 			Column: order.FieldAmount,
 		})
 		o.Amount = value
-	}
-	if value, ok := oc.mutation.Price(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: order.FieldPrice,
-		})
-		o.Price = value
-	}
-	if value, ok := oc.mutation.Total(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: order.FieldTotal,
-		})
-		o.Total = value
-	}
-	if value, ok := oc.mutation.Datetime(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: order.FieldDatetime,
-		})
-		o.Datetime = value
-	}
-	if nodes := oc.mutation.PharmacistIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   order.PharmacistTable,
-			Columns: []string{order.PharmacistColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pharmacist.FieldID,
-				},
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := oc.mutation.MedicineIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -269,6 +228,25 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
 					Column: company.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.PharmacistIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.PharmacistTable,
+			Columns: []string{order.PharmacistColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: pharmacist.FieldID,
 				},
 			},
 		}

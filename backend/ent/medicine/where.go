@@ -869,25 +869,25 @@ func HasMedicinepresciptionWith(preds ...predicate.Prescription) predicate.Medic
 	})
 }
 
-// HasOrder applies the HasEdge predicate on the "order" edge.
-func HasOrder() predicate.Medicine {
+// HasOrdermedicine applies the HasEdge predicate on the "ordermedicine" edge.
+func HasOrdermedicine() predicate.Medicine {
 	return predicate.Medicine(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(OrderTable, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, OrderTable, OrderColumn),
+			sqlgraph.To(OrdermedicineTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, OrdermedicineTable, OrdermedicineColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasOrderWith applies the HasEdge predicate on the "order" edge with a given conditions (other predicates).
-func HasOrderWith(preds ...predicate.Order) predicate.Medicine {
+// HasOrdermedicineWith applies the HasEdge predicate on the "ordermedicine" edge with a given conditions (other predicates).
+func HasOrdermedicineWith(preds ...predicate.Order) predicate.Medicine {
 	return predicate.Medicine(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(OrderInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, OrderTable, OrderColumn),
+			sqlgraph.To(OrdermedicineInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, OrdermedicineTable, OrdermedicineColumn),
 		)
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

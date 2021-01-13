@@ -94,7 +94,6 @@ type Prescription struct {
 	PatientInfoID int
 	MedicineID    int
 	Value         int
-	StatusQueue   string
 }
 
 //Doctors Structure
@@ -416,7 +415,7 @@ func main() {
 	//Set Prescription Data
 	Pres := Prescriptions{
 		Prescription: []Prescription{
-			Prescription{1, 1, 1, 15, "No"},
+			Prescription{1, 1, 1, 15},
 		},
 	}
 
@@ -452,7 +451,6 @@ func main() {
 		client.Prescription.
 			Create().
 			SetValue(pci.Value).
-			SetStatusQueue(pci.StatusQueue).
 			SetPrescriptionpatient(pif).
 			SetPrescriptiondoctor(dtr).
 			SetPrescriptionmedicine(mdc).

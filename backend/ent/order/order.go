@@ -7,64 +7,56 @@ const (
 	Label = "order"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldAmount holds the string denoting the amount field in the database.
-	FieldAmount = "amount"
+	// FieldAddedtime holds the string denoting the addedtime field in the database.
+	FieldAddedtime = "addedtime"
 	// FieldPrice holds the string denoting the price field in the database.
 	FieldPrice = "price"
-	// FieldTotal holds the string denoting the total field in the database.
-	FieldTotal = "total"
-	// FieldDatetime holds the string denoting the datetime field in the database.
-	FieldDatetime = "datetime"
+	// FieldAmount holds the string denoting the amount field in the database.
+	FieldAmount = "amount"
 
-	// EdgePharmacist holds the string denoting the pharmacist edge name in mutations.
-	EdgePharmacist = "pharmacist"
 	// EdgeMedicine holds the string denoting the medicine edge name in mutations.
 	EdgeMedicine = "medicine"
 	// EdgeCompany holds the string denoting the company edge name in mutations.
 	EdgeCompany = "company"
+	// EdgePharmacist holds the string denoting the pharmacist edge name in mutations.
+	EdgePharmacist = "pharmacist"
 
 	// Table holds the table name of the order in the database.
 	Table = "orders"
-	// PharmacistTable is the table the holds the pharmacist relation/edge.
-	PharmacistTable = "orders"
-	// PharmacistInverseTable is the table name for the Pharmacist entity.
-	// It exists in this package in order to avoid circular dependency with the "pharmacist" package.
-	PharmacistInverseTable = "pharmacists"
-	// PharmacistColumn is the table column denoting the pharmacist relation/edge.
-	PharmacistColumn = "pharmacist_id"
 	// MedicineTable is the table the holds the medicine relation/edge.
 	MedicineTable = "orders"
 	// MedicineInverseTable is the table name for the Medicine entity.
 	// It exists in this package in order to avoid circular dependency with the "medicine" package.
 	MedicineInverseTable = "medicines"
 	// MedicineColumn is the table column denoting the medicine relation/edge.
-	MedicineColumn = "medicine_id"
+	MedicineColumn = "medicine_ordermedicine"
 	// CompanyTable is the table the holds the company relation/edge.
 	CompanyTable = "orders"
 	// CompanyInverseTable is the table name for the Company entity.
 	// It exists in this package in order to avoid circular dependency with the "company" package.
 	CompanyInverseTable = "companies"
 	// CompanyColumn is the table column denoting the company relation/edge.
-	CompanyColumn = "company_id"
+	CompanyColumn = "company_ordercompany"
+	// PharmacistTable is the table the holds the pharmacist relation/edge.
+	PharmacistTable = "orders"
+	// PharmacistInverseTable is the table name for the Pharmacist entity.
+	// It exists in this package in order to avoid circular dependency with the "pharmacist" package.
+	PharmacistInverseTable = "pharmacists"
+	// PharmacistColumn is the table column denoting the pharmacist relation/edge.
+	PharmacistColumn = "pharmacist_orderpharmacist"
 )
 
 // Columns holds all SQL columns for order fields.
 var Columns = []string{
 	FieldID,
-	FieldAmount,
+	FieldAddedtime,
 	FieldPrice,
-	FieldTotal,
-	FieldDatetime,
+	FieldAmount,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Order type.
 var ForeignKeys = []string{
-	"company_id",
-	"medicine_id",
-	"pharmacist_id",
+	"company_ordercompany",
+	"medicine_ordermedicine",
+	"pharmacist_orderpharmacist",
 }
-
-var (
-	// AmountValidator is a validator for the "amount" field. It is called by the builders before save.
-	AmountValidator func(int) error
-)

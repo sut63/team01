@@ -79,19 +79,19 @@ func (pu *PharmacistUpdate) AddDrugallergys(d ...*DrugAllergy) *PharmacistUpdate
 	return pu.AddDrugallergyIDs(ids...)
 }
 
-// AddOrderIDs adds the order edge to Order by ids.
-func (pu *PharmacistUpdate) AddOrderIDs(ids ...int) *PharmacistUpdate {
-	pu.mutation.AddOrderIDs(ids...)
+// AddOrderpharmacistIDs adds the orderpharmacist edge to Order by ids.
+func (pu *PharmacistUpdate) AddOrderpharmacistIDs(ids ...int) *PharmacistUpdate {
+	pu.mutation.AddOrderpharmacistIDs(ids...)
 	return pu
 }
 
-// AddOrder adds the order edges to Order.
-func (pu *PharmacistUpdate) AddOrder(o ...*Order) *PharmacistUpdate {
+// AddOrderpharmacist adds the orderpharmacist edges to Order.
+func (pu *PharmacistUpdate) AddOrderpharmacist(o ...*Order) *PharmacistUpdate {
 	ids := make([]int, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return pu.AddOrderIDs(ids...)
+	return pu.AddOrderpharmacistIDs(ids...)
 }
 
 // AddBillIDs adds the Bills edge to Bill by ids.
@@ -144,19 +144,19 @@ func (pu *PharmacistUpdate) RemoveDrugallergys(d ...*DrugAllergy) *PharmacistUpd
 	return pu.RemoveDrugallergyIDs(ids...)
 }
 
-// RemoveOrderIDs removes the order edge to Order by ids.
-func (pu *PharmacistUpdate) RemoveOrderIDs(ids ...int) *PharmacistUpdate {
-	pu.mutation.RemoveOrderIDs(ids...)
+// RemoveOrderpharmacistIDs removes the orderpharmacist edge to Order by ids.
+func (pu *PharmacistUpdate) RemoveOrderpharmacistIDs(ids ...int) *PharmacistUpdate {
+	pu.mutation.RemoveOrderpharmacistIDs(ids...)
 	return pu
 }
 
-// RemoveOrder removes order edges to Order.
-func (pu *PharmacistUpdate) RemoveOrder(o ...*Order) *PharmacistUpdate {
+// RemoveOrderpharmacist removes orderpharmacist edges to Order.
+func (pu *PharmacistUpdate) RemoveOrderpharmacist(o ...*Order) *PharmacistUpdate {
 	ids := make([]int, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return pu.RemoveOrderIDs(ids...)
+	return pu.RemoveOrderpharmacistIDs(ids...)
 }
 
 // RemoveBillIDs removes the Bills edge to Bill by ids.
@@ -356,12 +356,12 @@ func (pu *PharmacistUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nodes := pu.mutation.RemovedOrderIDs(); len(nodes) > 0 {
+	if nodes := pu.mutation.RemovedOrderpharmacistIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   pharmacist.OrderTable,
-			Columns: []string{pharmacist.OrderColumn},
+			Table:   pharmacist.OrderpharmacistTable,
+			Columns: []string{pharmacist.OrderpharmacistColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -375,12 +375,12 @@ func (pu *PharmacistUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.OrderIDs(); len(nodes) > 0 {
+	if nodes := pu.mutation.OrderpharmacistIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   pharmacist.OrderTable,
-			Columns: []string{pharmacist.OrderColumn},
+			Table:   pharmacist.OrderpharmacistTable,
+			Columns: []string{pharmacist.OrderpharmacistColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -498,19 +498,19 @@ func (puo *PharmacistUpdateOne) AddDrugallergys(d ...*DrugAllergy) *PharmacistUp
 	return puo.AddDrugallergyIDs(ids...)
 }
 
-// AddOrderIDs adds the order edge to Order by ids.
-func (puo *PharmacistUpdateOne) AddOrderIDs(ids ...int) *PharmacistUpdateOne {
-	puo.mutation.AddOrderIDs(ids...)
+// AddOrderpharmacistIDs adds the orderpharmacist edge to Order by ids.
+func (puo *PharmacistUpdateOne) AddOrderpharmacistIDs(ids ...int) *PharmacistUpdateOne {
+	puo.mutation.AddOrderpharmacistIDs(ids...)
 	return puo
 }
 
-// AddOrder adds the order edges to Order.
-func (puo *PharmacistUpdateOne) AddOrder(o ...*Order) *PharmacistUpdateOne {
+// AddOrderpharmacist adds the orderpharmacist edges to Order.
+func (puo *PharmacistUpdateOne) AddOrderpharmacist(o ...*Order) *PharmacistUpdateOne {
 	ids := make([]int, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return puo.AddOrderIDs(ids...)
+	return puo.AddOrderpharmacistIDs(ids...)
 }
 
 // AddBillIDs adds the Bills edge to Bill by ids.
@@ -563,19 +563,19 @@ func (puo *PharmacistUpdateOne) RemoveDrugallergys(d ...*DrugAllergy) *Pharmacis
 	return puo.RemoveDrugallergyIDs(ids...)
 }
 
-// RemoveOrderIDs removes the order edge to Order by ids.
-func (puo *PharmacistUpdateOne) RemoveOrderIDs(ids ...int) *PharmacistUpdateOne {
-	puo.mutation.RemoveOrderIDs(ids...)
+// RemoveOrderpharmacistIDs removes the orderpharmacist edge to Order by ids.
+func (puo *PharmacistUpdateOne) RemoveOrderpharmacistIDs(ids ...int) *PharmacistUpdateOne {
+	puo.mutation.RemoveOrderpharmacistIDs(ids...)
 	return puo
 }
 
-// RemoveOrder removes order edges to Order.
-func (puo *PharmacistUpdateOne) RemoveOrder(o ...*Order) *PharmacistUpdateOne {
+// RemoveOrderpharmacist removes orderpharmacist edges to Order.
+func (puo *PharmacistUpdateOne) RemoveOrderpharmacist(o ...*Order) *PharmacistUpdateOne {
 	ids := make([]int, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return puo.RemoveOrderIDs(ids...)
+	return puo.RemoveOrderpharmacistIDs(ids...)
 }
 
 // RemoveBillIDs removes the Bills edge to Bill by ids.
@@ -773,12 +773,12 @@ func (puo *PharmacistUpdateOne) sqlSave(ctx context.Context) (ph *Pharmacist, er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nodes := puo.mutation.RemovedOrderIDs(); len(nodes) > 0 {
+	if nodes := puo.mutation.RemovedOrderpharmacistIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   pharmacist.OrderTable,
-			Columns: []string{pharmacist.OrderColumn},
+			Table:   pharmacist.OrderpharmacistTable,
+			Columns: []string{pharmacist.OrderpharmacistColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -792,12 +792,12 @@ func (puo *PharmacistUpdateOne) sqlSave(ctx context.Context) (ph *Pharmacist, er
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.OrderIDs(); len(nodes) > 0 {
+	if nodes := puo.mutation.OrderpharmacistIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   pharmacist.OrderTable,
-			Columns: []string{pharmacist.OrderColumn},
+			Table:   pharmacist.OrderpharmacistTable,
+			Columns: []string{pharmacist.OrderpharmacistColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

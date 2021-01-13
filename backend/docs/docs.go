@@ -1614,6 +1614,48 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "description": "Create company",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create company",
+                "operationId": "create-company",
+                "parameters": [
+                    {
+                        "description": "Company entity",
+                        "name": "company",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.Company"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Company"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
             }
         },
         "/companys/{id}": {
@@ -1638,49 +1680,6 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/ent.Company"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "get company by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Delete a company entity by ID",
-                "operationId": "delete-company",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Company ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
                         }
                     },
                     "400": {
@@ -2158,50 +2157,6 @@ var doc = `{
                 }
             }
         },
-        "/institutions": {
-            "post": {
-                "description": "Create company",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Create company",
-                "operationId": "create-company",
-                "parameters": [
-                    {
-                        "description": "Company entity",
-                        "name": "company",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/ent.Company"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ent.Company"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            }
-        },
         "/orders": {
             "get": {
                 "description": "list order entities",
@@ -2273,7 +2228,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ent.Order"
+                            "$ref": "#/definitions/controllers.Order"
                         }
                     },
                     "400": {
@@ -2292,6 +2247,49 @@ var doc = `{
             }
         },
         "/orders/{id}": {
+            "get": {
+                "description": "get order by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a order entity by ID",
+                "operationId": "get-order",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Order ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Order"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "description": "get order by ID",
                 "produces": [
@@ -3090,16 +3088,22 @@ var doc = `{
         "controllers.Order": {
             "type": "object",
             "properties": {
-                "company": {
-                    "type": "integer"
-                },
-                "datetime": {
+                "addedtime": {
                     "type": "string"
                 },
-                "medicine": {
+                "amount": {
                     "type": "integer"
                 },
-                "pharmacist": {
+                "companyid": {
+                    "type": "integer"
+                },
+                "medicineid": {
+                    "type": "integer"
+                },
+                "pharmacistid": {
+                    "type": "integer"
+                },
+                "price": {
                     "type": "integer"
                 }
             }
@@ -3115,9 +3119,6 @@ var doc = `{
                 },
                 "patientInfoID": {
                     "type": "integer"
-                },
-                "statusQueue": {
-                    "type": "string"
                 },
                 "value": {
                     "type": "string"
@@ -3199,6 +3200,10 @@ var doc = `{
         "ent.Company": {
             "type": "object",
             "properties": {
+                "Name": {
+                    "description": "Name holds the value of the \"Name\" field.",
+                    "type": "string"
+                },
                 "edges": {
                     "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the CompanyQuery when eager-loading is set.",
                     "type": "object",
@@ -3207,18 +3212,14 @@ var doc = `{
                 "id": {
                     "description": "ID of the ent.",
                     "type": "integer"
-                },
-                "name": {
-                    "description": "Name holds the value of the \"name\" field.",
-                    "type": "string"
                 }
             }
         },
         "ent.CompanyEdges": {
             "type": "object",
             "properties": {
-                "order": {
-                    "description": "Order holds the value of the order edge.",
+                "ordercompany": {
+                    "description": "Ordercompany holds the value of the ordercompany edge.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/ent.Order"
@@ -3440,8 +3441,8 @@ var doc = `{
                         "$ref": "#/definitions/ent.Prescription"
                     }
                 },
-                "order": {
-                    "description": "Order holds the value of the order edge.",
+                "ordermedicine": {
+                    "description": "Ordermedicine holds the value of the ordermedicine edge.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/ent.Order"
@@ -3487,13 +3488,13 @@ var doc = `{
         "ent.Order": {
             "type": "object",
             "properties": {
+                "addedtime": {
+                    "description": "Addedtime holds the value of the \"addedtime\" field.",
+                    "type": "string"
+                },
                 "amount": {
                     "description": "Amount holds the value of the \"amount\" field.",
                     "type": "integer"
-                },
-                "datetime": {
-                    "description": "Datetime holds the value of the \"datetime\" field.",
-                    "type": "string"
                 },
                 "edges": {
                     "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the OrderQuery when eager-loading is set.",
@@ -3506,11 +3507,7 @@ var doc = `{
                 },
                 "price": {
                     "description": "Price holds the value of the \"price\" field.",
-                    "type": "number"
-                },
-                "total": {
-                    "description": "Total holds the value of the \"total\" field.",
-                    "type": "number"
+                    "type": "integer"
                 }
             }
         },
@@ -3663,8 +3660,8 @@ var doc = `{
                         "$ref": "#/definitions/ent.DrugAllergy"
                     }
                 },
-                "order": {
-                    "description": "Order holds the value of the order edge.",
+                "orderpharmacist": {
+                    "description": "Orderpharmacist holds the value of the orderpharmacist edge.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/ent.Order"
@@ -3675,10 +3672,6 @@ var doc = `{
         "ent.Prescription": {
             "type": "object",
             "properties": {
-                "Status_Queue": {
-                    "description": "StatusQueue holds the value of the \"Status_Queue\" field.",
-                    "type": "string"
-                },
                 "Value": {
                     "description": "Value holds the value of the \"Value\" field.",
                     "type": "integer"

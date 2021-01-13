@@ -36,7 +36,7 @@ type MedicineQuery struct {
 	withUnitOfMedicine      *UnitOfMedicineQuery
 	withDrugallergys        *DrugAllergyQuery
 	withMedicinepresciption *PrescriptionQuery
-	withOrder               *OrderQuery
+	withOrdermedicine       *OrderQuery
 	withFKs                 bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -157,8 +157,8 @@ func (mq *MedicineQuery) QueryMedicinepresciption() *PrescriptionQuery {
 	return query
 }
 
-// QueryOrder chains the current query on the order edge.
-func (mq *MedicineQuery) QueryOrder() *OrderQuery {
+// QueryOrdermedicine chains the current query on the ordermedicine edge.
+func (mq *MedicineQuery) QueryOrdermedicine() *OrderQuery {
 	query := &OrderQuery{config: mq.config}
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := mq.prepareQuery(ctx); err != nil {
@@ -167,7 +167,7 @@ func (mq *MedicineQuery) QueryOrder() *OrderQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(medicine.Table, medicine.FieldID, mq.sqlQuery()),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, medicine.OrderTable, medicine.OrderColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, medicine.OrdermedicineTable, medicine.OrdermedicineColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
@@ -409,14 +409,14 @@ func (mq *MedicineQuery) WithMedicinepresciption(opts ...func(*PrescriptionQuery
 	return mq
 }
 
-//  WithOrder tells the query-builder to eager-loads the nodes that are connected to
-// the "order" edge. The optional arguments used to configure the query builder of the edge.
-func (mq *MedicineQuery) WithOrder(opts ...func(*OrderQuery)) *MedicineQuery {
+//  WithOrdermedicine tells the query-builder to eager-loads the nodes that are connected to
+// the "ordermedicine" edge. The optional arguments used to configure the query builder of the edge.
+func (mq *MedicineQuery) WithOrdermedicine(opts ...func(*OrderQuery)) *MedicineQuery {
 	query := &OrderQuery{config: mq.config}
 	for _, opt := range opts {
 		opt(query)
 	}
-	mq.withOrder = query
+	mq.withOrdermedicine = query
 	return mq
 }
 
@@ -493,7 +493,7 @@ func (mq *MedicineQuery) sqlAll(ctx context.Context) ([]*Medicine, error) {
 			mq.withUnitOfMedicine != nil,
 			mq.withDrugallergys != nil,
 			mq.withMedicinepresciption != nil,
-			mq.withOrder != nil,
+			mq.withOrdermedicine != nil,
 		}
 	)
 	if mq.withLevelOfDangerous != nil || mq.withMedicineType != nil || mq.withUnitOfMedicine != nil {
@@ -657,7 +657,7 @@ func (mq *MedicineQuery) sqlAll(ctx context.Context) ([]*Medicine, error) {
 		}
 	}
 
-	if query := mq.withOrder; query != nil {
+	if query := mq.withOrdermedicine; query != nil {
 		fks := make([]driver.Value, 0, len(nodes))
 		nodeids := make(map[int]*Medicine)
 		for i := range nodes {
@@ -666,22 +666,22 @@ func (mq *MedicineQuery) sqlAll(ctx context.Context) ([]*Medicine, error) {
 		}
 		query.withFKs = true
 		query.Where(predicate.Order(func(s *sql.Selector) {
-			s.Where(sql.InValues(medicine.OrderColumn, fks...))
+			s.Where(sql.InValues(medicine.OrdermedicineColumn, fks...))
 		}))
 		neighbors, err := query.All(ctx)
 		if err != nil {
 			return nil, err
 		}
 		for _, n := range neighbors {
-			fk := n.medicine_id
+			fk := n.medicine_ordermedicine
 			if fk == nil {
-				return nil, fmt.Errorf(`foreign-key "medicine_id" is nil for node %v`, n.ID)
+				return nil, fmt.Errorf(`foreign-key "medicine_ordermedicine" is nil for node %v`, n.ID)
 			}
 			node, ok := nodeids[*fk]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "medicine_id" returned %v for node %v`, *fk, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "medicine_ordermedicine" returned %v for node %v`, *fk, n.ID)
 			}
-			node.Edges.Order = append(node.Edges.Order, n)
+			node.Edges.Ordermedicine = append(node.Edges.Ordermedicine, n)
 		}
 	}
 

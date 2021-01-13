@@ -27,9 +27,9 @@ type OrderQuery struct {
 	unique     []string
 	predicates []predicate.Order
 	// eager-loading edges.
-	withPharmacist *PharmacistQuery
 	withMedicine   *MedicineQuery
 	withCompany    *CompanyQuery
+	withPharmacist *PharmacistQuery
 	withFKs        bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -58,24 +58,6 @@ func (oq *OrderQuery) Offset(offset int) *OrderQuery {
 func (oq *OrderQuery) Order(o ...OrderFunc) *OrderQuery {
 	oq.order = append(oq.order, o...)
 	return oq
-}
-
-// QueryPharmacist chains the current query on the pharmacist edge.
-func (oq *OrderQuery) QueryPharmacist() *PharmacistQuery {
-	query := &PharmacistQuery{config: oq.config}
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := oq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(order.Table, order.FieldID, oq.sqlQuery()),
-			sqlgraph.To(pharmacist.Table, pharmacist.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, order.PharmacistTable, order.PharmacistColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
 }
 
 // QueryMedicine chains the current query on the medicine edge.
@@ -107,6 +89,24 @@ func (oq *OrderQuery) QueryCompany() *CompanyQuery {
 			sqlgraph.From(order.Table, order.FieldID, oq.sqlQuery()),
 			sqlgraph.To(company.Table, company.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, order.CompanyTable, order.CompanyColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPharmacist chains the current query on the pharmacist edge.
+func (oq *OrderQuery) QueryPharmacist() *PharmacistQuery {
+	query := &PharmacistQuery{config: oq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(order.Table, order.FieldID, oq.sqlQuery()),
+			sqlgraph.To(pharmacist.Table, pharmacist.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, order.PharmacistTable, order.PharmacistColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
 		return fromU, nil
@@ -293,17 +293,6 @@ func (oq *OrderQuery) Clone() *OrderQuery {
 	}
 }
 
-//  WithPharmacist tells the query-builder to eager-loads the nodes that are connected to
-// the "pharmacist" edge. The optional arguments used to configure the query builder of the edge.
-func (oq *OrderQuery) WithPharmacist(opts ...func(*PharmacistQuery)) *OrderQuery {
-	query := &PharmacistQuery{config: oq.config}
-	for _, opt := range opts {
-		opt(query)
-	}
-	oq.withPharmacist = query
-	return oq
-}
-
 //  WithMedicine tells the query-builder to eager-loads the nodes that are connected to
 // the "medicine" edge. The optional arguments used to configure the query builder of the edge.
 func (oq *OrderQuery) WithMedicine(opts ...func(*MedicineQuery)) *OrderQuery {
@@ -326,18 +315,29 @@ func (oq *OrderQuery) WithCompany(opts ...func(*CompanyQuery)) *OrderQuery {
 	return oq
 }
 
+//  WithPharmacist tells the query-builder to eager-loads the nodes that are connected to
+// the "pharmacist" edge. The optional arguments used to configure the query builder of the edge.
+func (oq *OrderQuery) WithPharmacist(opts ...func(*PharmacistQuery)) *OrderQuery {
+	query := &PharmacistQuery{config: oq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withPharmacist = query
+	return oq
+}
+
 // GroupBy used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
 // Example:
 //
 //	var v []struct {
-//		Amount int `json:"amount,omitempty"`
+//		Addedtime time.Time `json:"addedtime,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Order.Query().
-//		GroupBy(order.FieldAmount).
+//		GroupBy(order.FieldAddedtime).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -358,11 +358,11 @@ func (oq *OrderQuery) GroupBy(field string, fields ...string) *OrderGroupBy {
 // Example:
 //
 //	var v []struct {
-//		Amount int `json:"amount,omitempty"`
+//		Addedtime time.Time `json:"addedtime,omitempty"`
 //	}
 //
 //	client.Order.Query().
-//		Select(order.FieldAmount).
+//		Select(order.FieldAddedtime).
 //		Scan(ctx, &v)
 //
 func (oq *OrderQuery) Select(field string, fields ...string) *OrderSelect {
@@ -394,12 +394,12 @@ func (oq *OrderQuery) sqlAll(ctx context.Context) ([]*Order, error) {
 		withFKs     = oq.withFKs
 		_spec       = oq.querySpec()
 		loadedTypes = [3]bool{
-			oq.withPharmacist != nil,
 			oq.withMedicine != nil,
 			oq.withCompany != nil,
+			oq.withPharmacist != nil,
 		}
 	)
-	if oq.withPharmacist != nil || oq.withMedicine != nil || oq.withCompany != nil {
+	if oq.withMedicine != nil || oq.withCompany != nil || oq.withPharmacist != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -429,36 +429,11 @@ func (oq *OrderQuery) sqlAll(ctx context.Context) ([]*Order, error) {
 		return nodes, nil
 	}
 
-	if query := oq.withPharmacist; query != nil {
-		ids := make([]int, 0, len(nodes))
-		nodeids := make(map[int][]*Order)
-		for i := range nodes {
-			if fk := nodes[i].pharmacist_id; fk != nil {
-				ids = append(ids, *fk)
-				nodeids[*fk] = append(nodeids[*fk], nodes[i])
-			}
-		}
-		query.Where(pharmacist.IDIn(ids...))
-		neighbors, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, n := range neighbors {
-			nodes, ok := nodeids[n.ID]
-			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "pharmacist_id" returned %v`, n.ID)
-			}
-			for i := range nodes {
-				nodes[i].Edges.Pharmacist = n
-			}
-		}
-	}
-
 	if query := oq.withMedicine; query != nil {
 		ids := make([]int, 0, len(nodes))
 		nodeids := make(map[int][]*Order)
 		for i := range nodes {
-			if fk := nodes[i].medicine_id; fk != nil {
+			if fk := nodes[i].medicine_ordermedicine; fk != nil {
 				ids = append(ids, *fk)
 				nodeids[*fk] = append(nodeids[*fk], nodes[i])
 			}
@@ -471,7 +446,7 @@ func (oq *OrderQuery) sqlAll(ctx context.Context) ([]*Order, error) {
 		for _, n := range neighbors {
 			nodes, ok := nodeids[n.ID]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "medicine_id" returned %v`, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "medicine_ordermedicine" returned %v`, n.ID)
 			}
 			for i := range nodes {
 				nodes[i].Edges.Medicine = n
@@ -483,7 +458,7 @@ func (oq *OrderQuery) sqlAll(ctx context.Context) ([]*Order, error) {
 		ids := make([]int, 0, len(nodes))
 		nodeids := make(map[int][]*Order)
 		for i := range nodes {
-			if fk := nodes[i].company_id; fk != nil {
+			if fk := nodes[i].company_ordercompany; fk != nil {
 				ids = append(ids, *fk)
 				nodeids[*fk] = append(nodeids[*fk], nodes[i])
 			}
@@ -496,10 +471,35 @@ func (oq *OrderQuery) sqlAll(ctx context.Context) ([]*Order, error) {
 		for _, n := range neighbors {
 			nodes, ok := nodeids[n.ID]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "company_id" returned %v`, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "company_ordercompany" returned %v`, n.ID)
 			}
 			for i := range nodes {
 				nodes[i].Edges.Company = n
+			}
+		}
+	}
+
+	if query := oq.withPharmacist; query != nil {
+		ids := make([]int, 0, len(nodes))
+		nodeids := make(map[int][]*Order)
+		for i := range nodes {
+			if fk := nodes[i].pharmacist_orderpharmacist; fk != nil {
+				ids = append(ids, *fk)
+				nodeids[*fk] = append(nodeids[*fk], nodes[i])
+			}
+		}
+		query.Where(pharmacist.IDIn(ids...))
+		neighbors, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, n := range neighbors {
+			nodes, ok := nodeids[n.ID]
+			if !ok {
+				return nil, fmt.Errorf(`unexpected foreign-key "pharmacist_orderpharmacist" returned %v`, n.ID)
+			}
+			for i := range nodes {
+				nodes[i].Edges.Pharmacist = n
 			}
 		}
 	}

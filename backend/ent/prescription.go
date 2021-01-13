@@ -21,8 +21,6 @@ type Prescription struct {
 	ID int `json:"id,omitempty"`
 	// Value holds the value of the "Value" field.
 	Value int `json:"Value,omitempty"`
-	// StatusQueue holds the value of the "Status_Queue" field.
-	StatusQueue string `json:"Status_Queue,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PrescriptionQuery when eager-loading is set.
 	Edges       PrescriptionEdges `json:"edges"`
@@ -105,9 +103,8 @@ func (e PrescriptionEdges) DispensemedicineOrErr() (*DispenseMedicine, error) {
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Prescription) scanValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{},  // id
-		&sql.NullInt64{},  // Value
-		&sql.NullString{}, // Status_Queue
+		&sql.NullInt64{}, // id
+		&sql.NullInt64{}, // Value
 	}
 }
 
@@ -137,12 +134,7 @@ func (pr *Prescription) assignValues(values ...interface{}) error {
 	} else if value.Valid {
 		pr.Value = int(value.Int64)
 	}
-	if value, ok := values[1].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field Status_Queue", values[1])
-	} else if value.Valid {
-		pr.StatusQueue = value.String
-	}
-	values = values[2:]
+	values = values[1:]
 	if len(values) == len(prescription.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field doctor_id", value)
@@ -211,8 +203,6 @@ func (pr *Prescription) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", pr.ID))
 	builder.WriteString(", Value=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Value))
-	builder.WriteString(", Status_Queue=")
-	builder.WriteString(pr.StatusQueue)
 	builder.WriteByte(')')
 	return builder.String()
 }

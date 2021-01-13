@@ -93,6 +93,20 @@ func IDLTE(id int) predicate.Order {
 	})
 }
 
+// Addedtime applies equality check predicate on the "addedtime" field. It's identical to AddedtimeEQ.
+func Addedtime(v time.Time) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAddedtime), v))
+	})
+}
+
+// Price applies equality check predicate on the "price" field. It's identical to PriceEQ.
+func Price(v int) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPrice), v))
+	})
+}
+
 // Amount applies equality check predicate on the "amount" field. It's identical to AmountEQ.
 func Amount(v int) predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
@@ -100,24 +114,155 @@ func Amount(v int) predicate.Order {
 	})
 }
 
-// Price applies equality check predicate on the "price" field. It's identical to PriceEQ.
-func Price(v float64) predicate.Order {
+// AddedtimeEQ applies the EQ predicate on the "addedtime" field.
+func AddedtimeEQ(v time.Time) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAddedtime), v))
+	})
+}
+
+// AddedtimeNEQ applies the NEQ predicate on the "addedtime" field.
+func AddedtimeNEQ(v time.Time) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldAddedtime), v))
+	})
+}
+
+// AddedtimeIn applies the In predicate on the "addedtime" field.
+func AddedtimeIn(vs ...time.Time) predicate.Order {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Order(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldAddedtime), v...))
+	})
+}
+
+// AddedtimeNotIn applies the NotIn predicate on the "addedtime" field.
+func AddedtimeNotIn(vs ...time.Time) predicate.Order {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Order(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldAddedtime), v...))
+	})
+}
+
+// AddedtimeGT applies the GT predicate on the "addedtime" field.
+func AddedtimeGT(v time.Time) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldAddedtime), v))
+	})
+}
+
+// AddedtimeGTE applies the GTE predicate on the "addedtime" field.
+func AddedtimeGTE(v time.Time) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldAddedtime), v))
+	})
+}
+
+// AddedtimeLT applies the LT predicate on the "addedtime" field.
+func AddedtimeLT(v time.Time) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldAddedtime), v))
+	})
+}
+
+// AddedtimeLTE applies the LTE predicate on the "addedtime" field.
+func AddedtimeLTE(v time.Time) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldAddedtime), v))
+	})
+}
+
+// PriceEQ applies the EQ predicate on the "price" field.
+func PriceEQ(v int) predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldPrice), v))
 	})
 }
 
-// Total applies equality check predicate on the "total" field. It's identical to TotalEQ.
-func Total(v float64) predicate.Order {
+// PriceNEQ applies the NEQ predicate on the "price" field.
+func PriceNEQ(v int) predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldTotal), v))
+		s.Where(sql.NEQ(s.C(FieldPrice), v))
 	})
 }
 
-// Datetime applies equality check predicate on the "datetime" field. It's identical to DatetimeEQ.
-func Datetime(v time.Time) predicate.Order {
+// PriceIn applies the In predicate on the "price" field.
+func PriceIn(vs ...int) predicate.Order {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
 	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDatetime), v))
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldPrice), v...))
+	})
+}
+
+// PriceNotIn applies the NotIn predicate on the "price" field.
+func PriceNotIn(vs ...int) predicate.Order {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Order(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldPrice), v...))
+	})
+}
+
+// PriceGT applies the GT predicate on the "price" field.
+func PriceGT(v int) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldPrice), v))
+	})
+}
+
+// PriceGTE applies the GTE predicate on the "price" field.
+func PriceGTE(v int) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldPrice), v))
+	})
+}
+
+// PriceLT applies the LT predicate on the "price" field.
+func PriceLT(v int) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldPrice), v))
+	})
+}
+
+// PriceLTE applies the LTE predicate on the "price" field.
+func PriceLTE(v int) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldPrice), v))
 	})
 }
 
@@ -197,262 +342,6 @@ func AmountLTE(v int) predicate.Order {
 	})
 }
 
-// PriceEQ applies the EQ predicate on the "price" field.
-func PriceEQ(v float64) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPrice), v))
-	})
-}
-
-// PriceNEQ applies the NEQ predicate on the "price" field.
-func PriceNEQ(v float64) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldPrice), v))
-	})
-}
-
-// PriceIn applies the In predicate on the "price" field.
-func PriceIn(vs ...float64) predicate.Order {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Order(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.In(s.C(FieldPrice), v...))
-	})
-}
-
-// PriceNotIn applies the NotIn predicate on the "price" field.
-func PriceNotIn(vs ...float64) predicate.Order {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Order(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.NotIn(s.C(FieldPrice), v...))
-	})
-}
-
-// PriceGT applies the GT predicate on the "price" field.
-func PriceGT(v float64) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldPrice), v))
-	})
-}
-
-// PriceGTE applies the GTE predicate on the "price" field.
-func PriceGTE(v float64) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldPrice), v))
-	})
-}
-
-// PriceLT applies the LT predicate on the "price" field.
-func PriceLT(v float64) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldPrice), v))
-	})
-}
-
-// PriceLTE applies the LTE predicate on the "price" field.
-func PriceLTE(v float64) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldPrice), v))
-	})
-}
-
-// TotalEQ applies the EQ predicate on the "total" field.
-func TotalEQ(v float64) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldTotal), v))
-	})
-}
-
-// TotalNEQ applies the NEQ predicate on the "total" field.
-func TotalNEQ(v float64) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldTotal), v))
-	})
-}
-
-// TotalIn applies the In predicate on the "total" field.
-func TotalIn(vs ...float64) predicate.Order {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Order(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.In(s.C(FieldTotal), v...))
-	})
-}
-
-// TotalNotIn applies the NotIn predicate on the "total" field.
-func TotalNotIn(vs ...float64) predicate.Order {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Order(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.NotIn(s.C(FieldTotal), v...))
-	})
-}
-
-// TotalGT applies the GT predicate on the "total" field.
-func TotalGT(v float64) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldTotal), v))
-	})
-}
-
-// TotalGTE applies the GTE predicate on the "total" field.
-func TotalGTE(v float64) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldTotal), v))
-	})
-}
-
-// TotalLT applies the LT predicate on the "total" field.
-func TotalLT(v float64) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldTotal), v))
-	})
-}
-
-// TotalLTE applies the LTE predicate on the "total" field.
-func TotalLTE(v float64) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldTotal), v))
-	})
-}
-
-// DatetimeEQ applies the EQ predicate on the "datetime" field.
-func DatetimeEQ(v time.Time) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDatetime), v))
-	})
-}
-
-// DatetimeNEQ applies the NEQ predicate on the "datetime" field.
-func DatetimeNEQ(v time.Time) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldDatetime), v))
-	})
-}
-
-// DatetimeIn applies the In predicate on the "datetime" field.
-func DatetimeIn(vs ...time.Time) predicate.Order {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Order(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.In(s.C(FieldDatetime), v...))
-	})
-}
-
-// DatetimeNotIn applies the NotIn predicate on the "datetime" field.
-func DatetimeNotIn(vs ...time.Time) predicate.Order {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Order(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.NotIn(s.C(FieldDatetime), v...))
-	})
-}
-
-// DatetimeGT applies the GT predicate on the "datetime" field.
-func DatetimeGT(v time.Time) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldDatetime), v))
-	})
-}
-
-// DatetimeGTE applies the GTE predicate on the "datetime" field.
-func DatetimeGTE(v time.Time) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldDatetime), v))
-	})
-}
-
-// DatetimeLT applies the LT predicate on the "datetime" field.
-func DatetimeLT(v time.Time) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldDatetime), v))
-	})
-}
-
-// DatetimeLTE applies the LTE predicate on the "datetime" field.
-func DatetimeLTE(v time.Time) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldDatetime), v))
-	})
-}
-
-// HasPharmacist applies the HasEdge predicate on the "pharmacist" edge.
-func HasPharmacist() predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(PharmacistTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, PharmacistTable, PharmacistColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasPharmacistWith applies the HasEdge predicate on the "pharmacist" edge with a given conditions (other predicates).
-func HasPharmacistWith(preds ...predicate.Pharmacist) predicate.Order {
-	return predicate.Order(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(PharmacistInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, PharmacistTable, PharmacistColumn),
-		)
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasMedicine applies the HasEdge predicate on the "medicine" edge.
 func HasMedicine() predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
@@ -500,6 +389,34 @@ func HasCompanyWith(preds ...predicate.Company) predicate.Order {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.To(CompanyInverseTable, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, CompanyTable, CompanyColumn),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPharmacist applies the HasEdge predicate on the "pharmacist" edge.
+func HasPharmacist() predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(PharmacistTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, PharmacistTable, PharmacistColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPharmacistWith applies the HasEdge predicate on the "pharmacist" edge with a given conditions (other predicates).
+func HasPharmacistWith(preds ...predicate.Pharmacist) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(PharmacistInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, PharmacistTable, PharmacistColumn),
 		)
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

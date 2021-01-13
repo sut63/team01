@@ -19,53 +19,37 @@ type Order struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// Addedtime holds the value of the "addedtime" field.
+	Addedtime time.Time `json:"addedtime,omitempty"`
+	// Price holds the value of the "price" field.
+	Price int `json:"price,omitempty"`
 	// Amount holds the value of the "amount" field.
 	Amount int `json:"amount,omitempty"`
-	// Price holds the value of the "price" field.
-	Price float64 `json:"price,omitempty"`
-	// Total holds the value of the "total" field.
-	Total float64 `json:"total,omitempty"`
-	// Datetime holds the value of the "datetime" field.
-	Datetime time.Time `json:"datetime,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrderQuery when eager-loading is set.
-	Edges         OrderEdges `json:"edges"`
-	company_id    *int
-	medicine_id   *int
-	pharmacist_id *int
+	Edges                      OrderEdges `json:"edges"`
+	company_ordercompany       *int
+	medicine_ordermedicine     *int
+	pharmacist_orderpharmacist *int
 }
 
 // OrderEdges holds the relations/edges for other nodes in the graph.
 type OrderEdges struct {
-	// Pharmacist holds the value of the pharmacist edge.
-	Pharmacist *Pharmacist
 	// Medicine holds the value of the medicine edge.
 	Medicine *Medicine
 	// Company holds the value of the company edge.
 	Company *Company
+	// Pharmacist holds the value of the pharmacist edge.
+	Pharmacist *Pharmacist
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [3]bool
 }
 
-// PharmacistOrErr returns the Pharmacist value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e OrderEdges) PharmacistOrErr() (*Pharmacist, error) {
-	if e.loadedTypes[0] {
-		if e.Pharmacist == nil {
-			// The edge pharmacist was loaded in eager-loading,
-			// but was not found.
-			return nil, &NotFoundError{label: pharmacist.Label}
-		}
-		return e.Pharmacist, nil
-	}
-	return nil, &NotLoadedError{edge: "pharmacist"}
-}
-
 // MedicineOrErr returns the Medicine value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e OrderEdges) MedicineOrErr() (*Medicine, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[0] {
 		if e.Medicine == nil {
 			// The edge medicine was loaded in eager-loading,
 			// but was not found.
@@ -79,7 +63,7 @@ func (e OrderEdges) MedicineOrErr() (*Medicine, error) {
 // CompanyOrErr returns the Company value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e OrderEdges) CompanyOrErr() (*Company, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[1] {
 		if e.Company == nil {
 			// The edge company was loaded in eager-loading,
 			// but was not found.
@@ -90,23 +74,36 @@ func (e OrderEdges) CompanyOrErr() (*Company, error) {
 	return nil, &NotLoadedError{edge: "company"}
 }
 
+// PharmacistOrErr returns the Pharmacist value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e OrderEdges) PharmacistOrErr() (*Pharmacist, error) {
+	if e.loadedTypes[2] {
+		if e.Pharmacist == nil {
+			// The edge pharmacist was loaded in eager-loading,
+			// but was not found.
+			return nil, &NotFoundError{label: pharmacist.Label}
+		}
+		return e.Pharmacist, nil
+	}
+	return nil, &NotLoadedError{edge: "pharmacist"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Order) scanValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{},   // id
-		&sql.NullInt64{},   // amount
-		&sql.NullFloat64{}, // price
-		&sql.NullFloat64{}, // total
-		&sql.NullTime{},    // datetime
+		&sql.NullInt64{}, // id
+		&sql.NullTime{},  // addedtime
+		&sql.NullInt64{}, // price
+		&sql.NullInt64{}, // amount
 	}
 }
 
 // fkValues returns the types for scanning foreign-keys values from sql.Rows.
 func (*Order) fkValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{}, // company_id
-		&sql.NullInt64{}, // medicine_id
-		&sql.NullInt64{}, // pharmacist_id
+		&sql.NullInt64{}, // company_ordercompany
+		&sql.NullInt64{}, // medicine_ordermedicine
+		&sql.NullInt64{}, // pharmacist_orderpharmacist
 	}
 }
 
@@ -122,53 +119,43 @@ func (o *Order) assignValues(values ...interface{}) error {
 	}
 	o.ID = int(value.Int64)
 	values = values[1:]
-	if value, ok := values[0].(*sql.NullInt64); !ok {
-		return fmt.Errorf("unexpected type %T for field amount", values[0])
+	if value, ok := values[0].(*sql.NullTime); !ok {
+		return fmt.Errorf("unexpected type %T for field addedtime", values[0])
+	} else if value.Valid {
+		o.Addedtime = value.Time
+	}
+	if value, ok := values[1].(*sql.NullInt64); !ok {
+		return fmt.Errorf("unexpected type %T for field price", values[1])
+	} else if value.Valid {
+		o.Price = int(value.Int64)
+	}
+	if value, ok := values[2].(*sql.NullInt64); !ok {
+		return fmt.Errorf("unexpected type %T for field amount", values[2])
 	} else if value.Valid {
 		o.Amount = int(value.Int64)
 	}
-	if value, ok := values[1].(*sql.NullFloat64); !ok {
-		return fmt.Errorf("unexpected type %T for field price", values[1])
-	} else if value.Valid {
-		o.Price = value.Float64
-	}
-	if value, ok := values[2].(*sql.NullFloat64); !ok {
-		return fmt.Errorf("unexpected type %T for field total", values[2])
-	} else if value.Valid {
-		o.Total = value.Float64
-	}
-	if value, ok := values[3].(*sql.NullTime); !ok {
-		return fmt.Errorf("unexpected type %T for field datetime", values[3])
-	} else if value.Valid {
-		o.Datetime = value.Time
-	}
-	values = values[4:]
+	values = values[3:]
 	if len(values) == len(order.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
-			return fmt.Errorf("unexpected type %T for edge-field company_id", value)
+			return fmt.Errorf("unexpected type %T for edge-field company_ordercompany", value)
 		} else if value.Valid {
-			o.company_id = new(int)
-			*o.company_id = int(value.Int64)
+			o.company_ordercompany = new(int)
+			*o.company_ordercompany = int(value.Int64)
 		}
 		if value, ok := values[1].(*sql.NullInt64); !ok {
-			return fmt.Errorf("unexpected type %T for edge-field medicine_id", value)
+			return fmt.Errorf("unexpected type %T for edge-field medicine_ordermedicine", value)
 		} else if value.Valid {
-			o.medicine_id = new(int)
-			*o.medicine_id = int(value.Int64)
+			o.medicine_ordermedicine = new(int)
+			*o.medicine_ordermedicine = int(value.Int64)
 		}
 		if value, ok := values[2].(*sql.NullInt64); !ok {
-			return fmt.Errorf("unexpected type %T for edge-field pharmacist_id", value)
+			return fmt.Errorf("unexpected type %T for edge-field pharmacist_orderpharmacist", value)
 		} else if value.Valid {
-			o.pharmacist_id = new(int)
-			*o.pharmacist_id = int(value.Int64)
+			o.pharmacist_orderpharmacist = new(int)
+			*o.pharmacist_orderpharmacist = int(value.Int64)
 		}
 	}
 	return nil
-}
-
-// QueryPharmacist queries the pharmacist edge of the Order.
-func (o *Order) QueryPharmacist() *PharmacistQuery {
-	return (&OrderClient{config: o.config}).QueryPharmacist(o)
 }
 
 // QueryMedicine queries the medicine edge of the Order.
@@ -179,6 +166,11 @@ func (o *Order) QueryMedicine() *MedicineQuery {
 // QueryCompany queries the company edge of the Order.
 func (o *Order) QueryCompany() *CompanyQuery {
 	return (&OrderClient{config: o.config}).QueryCompany(o)
+}
+
+// QueryPharmacist queries the pharmacist edge of the Order.
+func (o *Order) QueryPharmacist() *PharmacistQuery {
+	return (&OrderClient{config: o.config}).QueryPharmacist(o)
 }
 
 // Update returns a builder for updating this Order.
@@ -204,14 +196,12 @@ func (o *Order) String() string {
 	var builder strings.Builder
 	builder.WriteString("Order(")
 	builder.WriteString(fmt.Sprintf("id=%v", o.ID))
-	builder.WriteString(", amount=")
-	builder.WriteString(fmt.Sprintf("%v", o.Amount))
+	builder.WriteString(", addedtime=")
+	builder.WriteString(o.Addedtime.Format(time.ANSIC))
 	builder.WriteString(", price=")
 	builder.WriteString(fmt.Sprintf("%v", o.Price))
-	builder.WriteString(", total=")
-	builder.WriteString(fmt.Sprintf("%v", o.Total))
-	builder.WriteString(", datetime=")
-	builder.WriteString(o.Datetime.Format(time.ANSIC))
+	builder.WriteString(", amount=")
+	builder.WriteString(fmt.Sprintf("%v", o.Amount))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -227,13 +227,12 @@ var (
 	// OrdersColumns holds the columns for the "orders" table.
 	OrdersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "addedtime", Type: field.TypeTime},
+		{Name: "price", Type: field.TypeInt},
 		{Name: "amount", Type: field.TypeInt},
-		{Name: "price", Type: field.TypeFloat64},
-		{Name: "total", Type: field.TypeFloat64},
-		{Name: "datetime", Type: field.TypeTime},
-		{Name: "company_id", Type: field.TypeInt, Nullable: true},
-		{Name: "medicine_id", Type: field.TypeInt, Nullable: true},
-		{Name: "pharmacist_id", Type: field.TypeInt, Nullable: true},
+		{Name: "company_ordercompany", Type: field.TypeInt, Nullable: true},
+		{Name: "medicine_ordermedicine", Type: field.TypeInt, Nullable: true},
+		{Name: "pharmacist_orderpharmacist", Type: field.TypeInt, Nullable: true},
 	}
 	// OrdersTable holds the schema information for the "orders" table.
 	OrdersTable = &schema.Table{
@@ -242,22 +241,22 @@ var (
 		PrimaryKey: []*schema.Column{OrdersColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:  "orders_companies_order",
-				Columns: []*schema.Column{OrdersColumns[5]},
+				Symbol:  "orders_companies_ordercompany",
+				Columns: []*schema.Column{OrdersColumns[4]},
 
 				RefColumns: []*schema.Column{CompaniesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:  "orders_medicines_order",
-				Columns: []*schema.Column{OrdersColumns[6]},
+				Symbol:  "orders_medicines_ordermedicine",
+				Columns: []*schema.Column{OrdersColumns[5]},
 
 				RefColumns: []*schema.Column{MedicinesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:  "orders_pharmacists_order",
-				Columns: []*schema.Column{OrdersColumns[7]},
+				Symbol:  "orders_pharmacists_orderpharmacist",
+				Columns: []*schema.Column{OrdersColumns[6]},
 
 				RefColumns: []*schema.Column{PharmacistsColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -309,7 +308,6 @@ var (
 	PrescriptionsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "value", Type: field.TypeInt},
-		{Name: "status_queue", Type: field.TypeString},
 		{Name: "doctor_id", Type: field.TypeInt, Nullable: true},
 		{Name: "medicine_id", Type: field.TypeInt, Nullable: true},
 		{Name: "patient_id", Type: field.TypeInt, Nullable: true},
@@ -322,21 +320,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "prescriptions_doctors_doctorprescription",
-				Columns: []*schema.Column{PrescriptionsColumns[3]},
+				Columns: []*schema.Column{PrescriptionsColumns[2]},
 
 				RefColumns: []*schema.Column{DoctorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "prescriptions_medicines_medicinepresciption",
-				Columns: []*schema.Column{PrescriptionsColumns[4]},
+				Columns: []*schema.Column{PrescriptionsColumns[3]},
 
 				RefColumns: []*schema.Column{MedicinesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "prescriptions_patient_infos_patientprescription",
-				Columns: []*schema.Column{PrescriptionsColumns[5]},
+				Columns: []*schema.Column{PrescriptionsColumns[4]},
 
 				RefColumns: []*schema.Column{PatientInfosColumns[0]},
 				OnDelete:   schema.SetNull,

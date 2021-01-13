@@ -20,25 +20,25 @@ type CompanyCreate struct {
 	hooks    []Hook
 }
 
-// SetName sets the name field.
+// SetName sets the Name field.
 func (cc *CompanyCreate) SetName(s string) *CompanyCreate {
 	cc.mutation.SetName(s)
 	return cc
 }
 
-// AddOrderIDs adds the order edge to Order by ids.
-func (cc *CompanyCreate) AddOrderIDs(ids ...int) *CompanyCreate {
-	cc.mutation.AddOrderIDs(ids...)
+// AddOrdercompanyIDs adds the ordercompany edge to Order by ids.
+func (cc *CompanyCreate) AddOrdercompanyIDs(ids ...int) *CompanyCreate {
+	cc.mutation.AddOrdercompanyIDs(ids...)
 	return cc
 }
 
-// AddOrder adds the order edges to Order.
-func (cc *CompanyCreate) AddOrder(o ...*Order) *CompanyCreate {
+// AddOrdercompany adds the ordercompany edges to Order.
+func (cc *CompanyCreate) AddOrdercompany(o ...*Order) *CompanyCreate {
 	ids := make([]int, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return cc.AddOrderIDs(ids...)
+	return cc.AddOrdercompanyIDs(ids...)
 }
 
 // Mutation returns the CompanyMutation object of the builder.
@@ -49,11 +49,11 @@ func (cc *CompanyCreate) Mutation() *CompanyMutation {
 // Save creates the Company in the database.
 func (cc *CompanyCreate) Save(ctx context.Context) (*Company, error) {
 	if _, ok := cc.mutation.Name(); !ok {
-		return nil, &ValidationError{Name: "name", err: errors.New("ent: missing required field \"name\"")}
+		return nil, &ValidationError{Name: "Name", err: errors.New("ent: missing required field \"Name\"")}
 	}
 	if v, ok := cc.mutation.Name(); ok {
 		if err := company.NameValidator(v); err != nil {
-			return nil, &ValidationError{Name: "name", err: fmt.Errorf("ent: validator failed for field \"name\": %w", err)}
+			return nil, &ValidationError{Name: "Name", err: fmt.Errorf("ent: validator failed for field \"Name\": %w", err)}
 		}
 	}
 	var (
@@ -124,12 +124,12 @@ func (cc *CompanyCreate) createSpec() (*Company, *sqlgraph.CreateSpec) {
 		})
 		c.Name = value
 	}
-	if nodes := cc.mutation.OrderIDs(); len(nodes) > 0 {
+	if nodes := cc.mutation.OrdercompanyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   company.OrderTable,
-			Columns: []string{company.OrderColumn},
+			Table:   company.OrdercompanyTable,
+			Columns: []string{company.OrdercompanyColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

@@ -15,7 +15,6 @@ type Prescription struct {
 func (Prescription) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int("Value"),
-		field.String("Status_Queue"),
 	}
 }
 

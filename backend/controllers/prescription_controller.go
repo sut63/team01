@@ -24,7 +24,6 @@ type Prescription struct {
 	PatientInfoID int
 	MedicineID    int
 	Value         string
-	StatusQueue  string
 }
 
 // CreatePrescription handles POST requests for adding Prescription entities
@@ -78,15 +77,14 @@ func (ctl *PrescriptionController) CreatePrescription(c *gin.Context) {
 		})
 		return
 	}
-		var Value int
-	if v , err := strconv.ParseInt (obj.Value,10,64);err == nil{
+	var Value int
+	if v, err := strconv.ParseInt(obj.Value, 10, 64); err == nil {
 		Value = int(v)
 	}
 
 	pr, err := ctl.client.Prescription.
 		Create().
 		SetValue(int(Value)).
-		SetStatusQueue("No").
 		SetPrescriptiondoctor(D).
 		SetPrescriptionmedicine(M).
 		SetPrescriptionpatient(P).

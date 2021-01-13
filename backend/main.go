@@ -171,6 +171,16 @@ type Medicine struct {
 	UnitOfMedicine     int
 }
 
+//Companys Structure
+type Companys struct {
+	Company []Company
+}
+
+//Company Structure
+type Company struct {
+	name string
+}
+
 // @title SUT SA Example API Playlist Vidoe
 // @version 1.0
 // @description This is a sample server for SUT SE 2563
@@ -539,6 +549,22 @@ func main() {
 			SetPayments(py).
 			SetAnnotation(b.Annotation).
 			SetPharmacists(ph).
+			Save(context.Background())
+	}
+
+	companys := Companys{
+		Company: []Company{
+			Company{"MedicCompany"},
+			Company{"BandageCompany"},
+			Company{"ABCompany"},
+			Company{"Team1Company"},
+		},
+	}
+
+	for _, pay := range companys.Company {
+		client.Company.
+			Create().
+			SetName(pay.name).
 			Save(context.Background())
 	}
 

@@ -100,7 +100,7 @@ const DrugAllergy: FC<{}> = () => {
             patient: drugAllergy.patient,
             medicine: drugAllergy.medicine,
             pharmacist: drugAllergy.pharmacist,
-            dateTime: drugAllergy.dateTime,
+            dateTime: drugAllergy.dateTime + ":00+07:00",
         };
         const api = 'http://localhost:8080/api/v1/drugallergys';
         const requestOptions = {
@@ -123,6 +123,7 @@ const DrugAllergy: FC<{}> = () => {
                     Toast.fire({
                         icon: 'error',
                         title: 'บันทึกข้อมูลไม่สำเร็จ',
+                        text: data.error,
                     });
                 }
             });
@@ -131,10 +132,9 @@ const DrugAllergy: FC<{}> = () => {
     const clear = async () => {
         setDrugAllergy({});
         setDrugAllergy({ ...drugAllergy, pharmacist: 1 });
-        //const timer = setTimeout(() => {
-        //    window.location.reload();
-        //}, 1500);
-
+        const timer = setTimeout(() => {
+            window.location.reload();
+        }, 1500);
     }
 
     // Lifecycle Hooks
@@ -213,7 +213,7 @@ const DrugAllergy: FC<{}> = () => {
                                         <TextField
                                             label="เลือกวันที่"
                                             name="dateTime"
-                                            type="date"
+                                            type="datetime-local"
                                             variant='outlined'
                                             InputLabelProps={{
                                                 shrink: true,

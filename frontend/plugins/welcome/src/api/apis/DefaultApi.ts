@@ -145,6 +145,10 @@ export interface DeleteBillRequest {
     id: number;
 }
 
+export interface DeleteCompanyRequest {
+    id: number;
+}
+
 export interface DeleteDispensemedicineRequest {
     id: number;
 }
@@ -210,10 +214,6 @@ export interface GetLevelOfDangerousRequest {
 }
 
 export interface GetMedicineTypeRequest {
-    id: number;
-}
-
-export interface GetOrderRequest {
     id: number;
 }
 
@@ -458,7 +458,7 @@ export class DefaultApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/companys`,
+            path: `/institutions`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -691,7 +691,7 @@ export class DefaultApi extends runtime.BaseAPI {
      * Create order
      * Create order
      */
-    async createOrderRaw(requestParameters: CreateOrderRequest): Promise<runtime.ApiResponse<ControllersOrder>> {
+    async createOrderRaw(requestParameters: CreateOrderRequest): Promise<runtime.ApiResponse<EntOrder>> {
         if (requestParameters.order === null || requestParameters.order === undefined) {
             throw new runtime.RequiredError('order','Required parameter requestParameters.order was null or undefined when calling createOrder.');
         }
@@ -710,14 +710,14 @@ export class DefaultApi extends runtime.BaseAPI {
             body: ControllersOrderToJSON(requestParameters.order),
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ControllersOrderFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntOrderFromJSON(jsonValue));
     }
 
     /**
      * Create order
      * Create order
      */
-    async createOrder(requestParameters: CreateOrderRequest): Promise<ControllersOrder> {
+    async createOrder(requestParameters: CreateOrderRequest): Promise<EntOrder> {
         const response = await this.createOrderRaw(requestParameters);
         return await response.value();
     }
@@ -958,6 +958,38 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async deleteBill(requestParameters: DeleteBillRequest): Promise<object> {
         const response = await this.deleteBillRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * get company by ID
+     * Delete a company entity by ID
+     */
+    async deleteCompanyRaw(requestParameters: DeleteCompanyRequest): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteCompany.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/companys/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * get company by ID
+     * Delete a company entity by ID
+     */
+    async deleteCompany(requestParameters: DeleteCompanyRequest): Promise<object> {
+        const response = await this.deleteCompanyRaw(requestParameters);
         return await response.value();
     }
 
@@ -1502,38 +1534,6 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getMedicineType(requestParameters: GetMedicineTypeRequest): Promise<EntMedicineType> {
         const response = await this.getMedicineTypeRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     * get order by ID
-     * Get a order entity by ID
-     */
-    async getOrderRaw(requestParameters: GetOrderRequest): Promise<runtime.ApiResponse<EntOrder>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getOrder.');
-        }
-
-        const queryParameters: runtime.HTTPQuery = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/orders/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => EntOrderFromJSON(jsonValue));
-    }
-
-    /**
-     * get order by ID
-     * Get a order entity by ID
-     */
-    async getOrder(requestParameters: GetOrderRequest): Promise<EntOrder> {
-        const response = await this.getOrderRaw(requestParameters);
         return await response.value();
     }
 

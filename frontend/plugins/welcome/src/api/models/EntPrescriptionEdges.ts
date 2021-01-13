@@ -74,10 +74,10 @@ export function EntPrescriptionEdgesFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
-        'dispensemedicine': !exists(json, 'Dispensemedicine') ? undefined : EntDispenseMedicineFromJSON(json['Dispensemedicine']),
-        'prescriptiondoctor': !exists(json, 'Prescriptiondoctor') ? undefined : EntDoctorFromJSON(json['Prescriptiondoctor']),
-        'prescriptionmedicine': !exists(json, 'Prescriptionmedicine') ? undefined : EntMedicineFromJSON(json['Prescriptionmedicine']),
-        'prescriptionpatient': !exists(json, 'Prescriptionpatient') ? undefined : EntPatientInfoFromJSON(json['Prescriptionpatient']),
+        'dispensemedicine': !exists(json, 'dispensemedicine') ? undefined : EntDispenseMedicineFromJSON(json['dispensemedicine']),
+        'prescriptiondoctor': !exists(json, 'prescriptiondoctor') ? undefined : EntDoctorFromJSON(json['prescriptiondoctor']),
+        'prescriptionmedicine': !exists(json, 'prescriptionmedicine') ? undefined : EntMedicineFromJSON(json['prescriptionmedicine']),
+        'prescriptionpatient': !exists(json, 'prescriptionpatient') ? undefined : EntPatientInfoFromJSON(json['prescriptionpatient']),
     };
 }
 

@@ -245,7 +245,7 @@ export default function Order() {
                   style={{ width: 300 }}
                 >
                   {medicines.map((item: EntMedicine) =>
-                    <MenuItem value={item.id}>{item.nameProduct}</MenuItem>)}
+                    <MenuItem value={item.id}>{item.name}</MenuItem>)}
                 </Select>
               </FormControl>
 
@@ -265,7 +265,7 @@ export default function Order() {
                   style={{ width: 300 }}
                 >
                   {companys.map((item: EntCompany) =>
-                    <MenuItem value={item.id}>{item.bank}</MenuItem>)}
+                    <MenuItem value={item.id}>{item.name}</MenuItem>)}
                 </Select>
               </FormControl>
 

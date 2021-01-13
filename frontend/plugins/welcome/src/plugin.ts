@@ -6,6 +6,7 @@ import DrugAllergy from './components/DrugAllergy'
 import create_prescription from './components/create_prescription'
 import Medicine from './components/Medicine'
 import DispenseMedicine from './components/DispenseMedicine'
+import Order from './components/Order'
 
 export const plugin = createPlugin({
   id: 'welcome',
@@ -17,5 +18,6 @@ export const plugin = createPlugin({
     router.registerRoute('/create_prescription', create_prescription);
     router.registerRoute('/medicine', Medicine);
     router.registerRoute('/dispense_medicine', DispenseMedicine);
+    router.registerRoute('/order', Order);
   },
 });

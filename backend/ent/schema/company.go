@@ -14,14 +14,14 @@ type Company struct {
 // Fields of the Company.
 func (Company) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("name").NotEmpty(),
+		field.String("Name").NotEmpty(),
 	}
 }
 
 // Edges of the Company.
 func (Company) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("order", Order.Type).StorageKey(edge.Column("company_id")),
+		edge.To("ordercompany", Order.Type),
 		
 	}
 }

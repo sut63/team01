@@ -1,10 +1,17 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { Content, Header, Page, pageTheme } from '@backstage/core';
+import {
+  Content,
+  Header,
+  Page,
+  pageTheme,
+  ContentHeader,
+} from '@backstage/core';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 import {
+  Container,
   FormControl,
   MenuItem,
   TextField,
@@ -24,13 +31,11 @@ import {
 } from '@material-ui/core';
 
 import SaveIcon from '@material-ui/icons/Save';
-import DeleteIcon from '@material-ui/icons/Delete';
 import { Alert } from '@material-ui/lab'; //alert
 
 import { DefaultApi } from '../../api/apis'; // Api Gennerate From Command
 import {
   EntAnnotation,
-  EntDispenseMedicine,
   EntPrescription,
 } from '../../api/models';
 
@@ -42,13 +47,6 @@ const useStyles = makeStyles((theme: Theme) =>
       flexWrap: 'wrap',
       flexDirection: 'row',
       justifyContent: 'center',
-    },
-
-    flexRowNoCen: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
     },
 
     headLabel: {
@@ -74,22 +72,9 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
       width: 110,
-      height: 50,
-    },
-
-    AlertMargin: {
-      marginBottom: theme.spacing(5),
-      width: 300,
     },
   }),
 );
-
-//structure data change
-interface DispenseMedicine {
-  annotation: number;
-  datetime: string;
-  prescription: number;
-}
 
 const DispenseMedicine: FC<{}> = () => {
   const classes = useStyles();
@@ -101,19 +86,15 @@ const DispenseMedicine: FC<{}> = () => {
   const [alert, setAlert] = useState(true);
 
   //structure receive data from api
-  const [sDispensemedicine, setDispenseMedicine] = React.useState<
-    Partial<DispenseMedicine>
-  >({});
-  const [apiannotations, setApiAnnotation] = useState<EntAnnotation[]>([]);
-  const [apiprescriptions, setApiPrescription] = useState<EntPrescription[]>(
-    [],
-  );
-  const [apidispensemedicine, setApiDispenseMedicine] = useState<
-    EntDispenseMedicine[]
-  >([]);
+  const [annotations, setAnnotation] = useState<EntAnnotation[]>([]);
+  const [prescriptions, setPrescription] = useState<EntPrescription[]>([]);
 
-  //structure show data
-  const [sPharmacistID, setPharmacistID] = useState(Number);
+  //structure data change
+  const [sAnnotation, setAnnotationID] = useState(Number);
+  const [sDateTime, setDateTime] = useState(String);
+  const [sPharmacist, setPharmacistID] = useState(Number);
+  const [sPrescription, setPrescriptionID] = useState(Number);
+
   const [sPharmacistName, setPharmacistName] = useState(String);
   const [sNamePatient, setNamePatient] = useState(String);
   const [sNameDoctor, setNameDoctor] = useState(String);
@@ -122,22 +103,17 @@ const DispenseMedicine: FC<{}> = () => {
   const getAnnotation = async () => {
     const res = await api.listAnnotation({ limit: 0, offset: 0 });
     setLoading(false);
-    setApiAnnotation(res);
-  };
-
-  const getDispenseMedicine = async () => {
-    const res = await api.listDispensemedicine({ limit: 0, offset: 0 });
-    setLoading(false);
-    setApiDispenseMedicine(res);
+    setAnnotation(res);
+    console.log(res); ////////////////////
   };
 
   const getPrescription = async () => {
-    const res = await api.listPrescription({ limit: 8, offset: 0 });
+    const res = await api.listPrescription({ limit: 10, offset: 0 });
     setLoading(false);
-    setApiPrescription(res);
+    setPrescription(res);
+    console.log(res); ////////////////////
   };
 
-  //function check data from localStroage ////////////////////////////////////////////////////////////////////////////////
   const checkPosition = async () => {
     const PositionName = JSON.parse(
       String(localStorage.getItem('positiondata')),
@@ -145,9 +121,7 @@ const DispenseMedicine: FC<{}> = () => {
     setLoading(false);
 
     if (PositionName != 'pharmacist') {
-      localStorage.setItem('pharmacist-id', JSON.stringify(null));
-      localStorage.setItem('pharmacist-name', JSON.stringify(null));
-      localStorage.setItem('positiondata', JSON.stringify(null));
+      localStorage.clear();
       history.pushState('', '', './');
       window.location.reload(false);
     } else {
@@ -159,110 +133,94 @@ const DispenseMedicine: FC<{}> = () => {
   // Lifecycle Hooks
   useEffect(() => {
     getAnnotation();
-    getDispenseMedicine();
     getPrescription();
     checkPosition();
   }, [loading]);
 
-  // handleChange
-  const handleChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>,
+  const annotation_handleChange = (
+    event: React.ChangeEvent<{ value: unknown }>,
   ) => {
-    const name = event.target.name as keyof typeof DispenseMedicine;
-    const { value } = event.target;
-    setDispenseMedicine({ ...sDispensemedicine, [name]: value });
+    setAnnotationID(event.target.value as number);
   };
 
-  //map apiprescriptions for filter data have in apidispensemedicine
-  const prescriptionMap = apiprescriptions.filter(
-    presc =>
-      !apidispensemedicine.some(
-        dispe => dispe.edges?.prescription?.id === presc.id,
-      ),
-  );
+  const datetime_handleChange = (event: any) => {
+    setDateTime(event.target.value as string);
+  };
 
-  //function SetData selectPrescriptions
-  function selectPrescriptions(id: any, namePatient: any, nameDoctor: any) {
-    setDispenseMedicine({ ...sDispensemedicine, prescription: Number(id) });
-    setNamePatient(String(namePatient));
-    setNameDoctor(String(nameDoctor));
-  }
-
-  // clear input form
-  function clear() {
-    setDispenseMedicine({});
-    setNamePatient('');
-    setNameDoctor('');
-  }
-
-  // function CreateDispenseMedicines data
   const CreateDispenseMedicines = async () => {
     if (
-      sDispensemedicine.annotation != undefined &&
-      sDispensemedicine.datetime != undefined &&
-      sDispensemedicine.datetime != ':00+07:00' &&
-      sPharmacistID != 0 &&
-      sDispensemedicine.prescription != undefined
+      sAnnotation != null &&
+      sDateTime != null &&
+      sPrescription != null &&
+      sPharmacist != null
     ) {
       const dispensemedicines = {
-        annotation: sDispensemedicine.annotation,
-        datetime: sDispensemedicine.datetime + ':00+07:00',
-        pharmacist: sPharmacistID,
-        prescription: sDispensemedicine.prescription,
+        annotation: sAnnotation,
+        datetime: sDateTime + ':00+07:00',
+        pharmacist: sPharmacist,
+        prescription: sPrescription,
       };
+      console.log(dispensemedicines); ////////////////////
 
       const res: any = await api.createDispensemedicine({
         dispensemedicine: dispensemedicines,
       });
-
       setStatus(true);
       if (res.id != '') {
         setAlert(true);
-        setLoading(true);
-        clear();
-      } else {
-        setAlert(false);
+        window.location.reload(false);
       }
     } else {
       setStatus(true);
       setAlert(false);
     }
-    setTimeout(() => {
-      setStatus(false);
-    }, 1500);
   };
 
+  function selectPrescriptions(id: any, namePatient: any, nameDoctor: any) {
+    setPrescriptionID(Number(id));
+    setNamePatient(String(namePatient));
+    setNameDoctor(String(nameDoctor));
+  }
+
   return (
-    <Page theme={pageTheme.website}>
+    <Page theme={pageTheme.service}>
       <Header title={`${profile.givenName}`}>
         <Avatar src="/broken-image.jpg" />
-        <div style={{ marginLeft: 10, color: 'white' }}>
-          <Typography variant="h6">{sPharmacistName}</Typography>
-        </div>
+        <div style={{ marginLeft: 10, color: 'white' }}>{sPharmacistName}</div>
       </Header>
 
       <Content>
+        <ContentHeader title="">
+          {status ? (
+            <div>
+              {alert ? (
+                <Alert severity="success">บันทึกเรียบร้อย!</Alert>
+              ) : (
+                <Alert severity="warning" style={{ marginTop: 20 }}>
+                  บันทึกไม่สำเร็จ!
+                </Alert>
+              )}
+            </div>
+          ) : null}
+        </ContentHeader>
         <Grid
           container
           direction="row"
           justify="space-evenly"
-          alignItems="flex-start"
+          alignItems="stretch"
         >
           <Grid item xs>
-            <Typography variant="h5" style={{ marginBottom: 25 }}>
-              ตารางข้อมูลคิว
-            </Typography>
             <TableContainer component={Paper}>
               <Table aria-label="simple table">
                 <TableHead>
                   <TableRow>
                     <TableCell align="center">No.</TableCell>
-                    <TableCell align="center">รายชื่อคนไข้</TableCell>
-                    <TableCell align="center">เลือกคิว</TableCell>
+                    <TableCell align="center">คนไข้</TableCell>
+                    <TableCell align="center">เลือก</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {prescriptionMap.map((item: any) => (
+                  {prescriptions.map((item: any) => (
                     <TableRow key={item.id}>
                       <TableCell align="center">{item.id}</TableCell>
                       <TableCell align="center">
@@ -281,7 +239,7 @@ const DispenseMedicine: FC<{}> = () => {
                           variant="contained"
                           color="primary"
                         >
-                          เลือก
+                          Select
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -298,32 +256,6 @@ const DispenseMedicine: FC<{}> = () => {
               minWidth: 400,
             }}
           >
-            <Grid className={classes.flexRowNoCen}>
-              <Typography variant="h5" style={{ marginBottom: 25 }}>
-                ข้อมูลใบสั่งยา
-              </Typography>
-              {status ? (
-                <div>
-                  {alert ? (
-                    <Alert
-                      variant="filled"
-                      severity="success"
-                      style={{ fontSize: 16 }}
-                    >
-                      บันทึกข้อมูลสำเร็จ!
-                    </Alert>
-                  ) : (
-                    <Alert
-                      variant="filled"
-                      severity="warning"
-                      style={{ fontSize: 16 }}
-                    >
-                      บันทึกข้อมูลไม่สำเร็จ!
-                    </Alert>
-                  )}
-                </div>
-              ) : null}
-            </Grid>
             <Card className={classes.cardMargin}>
               <CardContent>
                 <Grid className={classes.flexRow}>
@@ -342,22 +274,7 @@ const DispenseMedicine: FC<{}> = () => {
                       label="เลขคิว"
                       name="queue"
                       variant="outlined"
-                      value={sDispensemedicine.prescription || ''} // (undefined || '') = ''
-                      inputProps={{ readOnly: true }}
-                    ></TextField>
-                  </FormControl>
-
-                  <FormControl
-                    variant="outlined"
-                    className={classes.formControl}
-                    fullWidth
-                  >
-                    <Typography className={classes.headLabel}>คนไข้</Typography>
-                    <TextField
-                      label="ชื่อ-นามสกุล"
-                      name="name"
-                      variant="outlined"
-                      value={sNamePatient || ''} // (undefined || '') = ''
+                      value={sPrescription}
                       inputProps={{ readOnly: true }}
                     ></TextField>
                   </FormControl>
@@ -368,13 +285,30 @@ const DispenseMedicine: FC<{}> = () => {
                     fullWidth
                   >
                     <Typography className={classes.headLabel}>
-                      แพทย์ผู้ตรวจ
+                      ชื่อคนไข้
+                    </Typography>
+                    <TextField
+                      label="ชื่อ-นามสกุล"
+                      name="name"
+                      variant="outlined"
+                      value={sNamePatient}
+                      inputProps={{ readOnly: true }}
+                    ></TextField>
+                  </FormControl>
+
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                    fullWidth
+                  >
+                    <Typography className={classes.headLabel}>
+                      ชื่อแพทย์ผู้ตรวจ
                     </Typography>
                     <TextField
                       label="ชื่อ-นามสกุล"
                       name="physician"
                       variant="outlined"
-                      value={sNameDoctor || ''} // (undefined || '') = ''
+                      value={sNameDoctor}
                       inputProps={{ readOnly: true }}
                     ></TextField>
                   </FormControl>
@@ -393,41 +327,28 @@ const DispenseMedicine: FC<{}> = () => {
                       <TableHead>
                         <TableRow>
                           <TableCell align="center">No.</TableCell>
-                          <TableCell align="center">ชื่อยา</TableCell>
-                          <TableCell align="center">หมายเลข</TableCell>
-                          <TableCell align="center">แบนด์</TableCell>
-                          <TableCell align="center">จำนวน</TableCell>
-                          <TableCell align="center">
-                            จำนวนที่เหลือในคลัง
-                          </TableCell>
+                          <TableCell align="center">Name</TableCell>
+                          <TableCell align="center">Brand</TableCell>
+                          <TableCell align="center">Value</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {apiprescriptions
-                          .filter(
-                            item => item.id === sDispensemedicine.prescription,
-                          )
-                          .map((item: any) => (
-                            <TableRow key={item.id}>
-                              <TableCell align="center">
-                                {item.edges?.prescriptionmedicine?.id}
-                              </TableCell>
-                              <TableCell align="center">
-                                {item.edges?.prescriptionmedicine?.name}
-                              </TableCell>
-                              <TableCell align="center">
-                                {item.edges?.prescriptionmedicine?.serial}
-                              </TableCell>
-                              <TableCell align="center">
-                                {item.edges?.prescriptionmedicine?.brand}
-                              </TableCell>
-                              <TableCell align="center">{item.value}</TableCell>
-                              <TableCell align="center">
-                                {item.edges?.prescriptionmedicine?.amount -
-                                  item.value}
-                              </TableCell>
-                            </TableRow>
-                          ))}
+                        {prescriptions.map((item: any) => (
+                          <TableRow key={item.id}>
+                            <TableCell align="center">
+                              {item.edges?.prescriptionmedicine?.id}
+                            </TableCell>
+                            <TableCell align="center">
+                              {item.edges?.prescriptionmedicine?.name}
+                            </TableCell>
+                            <TableCell align="center">
+                              {item.edges?.prescriptionmedicine?.brand}
+                            </TableCell>
+                            <TableCell align="center">
+                              {item.edges?.prescriptionmedicine?.amount}
+                            </TableCell>
+                          </TableRow>
+                        ))}
                       </TableBody>
                     </Table>
                   </TableContainer>
@@ -446,11 +367,11 @@ const DispenseMedicine: FC<{}> = () => {
                       วันที่
                     </Typography>
                     <TextField
+                      id="date"
                       label="วันที่"
-                      name="datetime"
                       type="datetime-local"
-                      value={sDispensemedicine.datetime || ''} // (undefined || '') = ''
-                      onChange={handleChange}
+                      value={sDateTime}
+                      onChange={datetime_handleChange}
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -469,11 +390,11 @@ const DispenseMedicine: FC<{}> = () => {
                       select
                       label="เลือกหมายเหตุ"
                       name="annotation"
-                      value={sDispensemedicine.annotation || ''} // (undefined || '') = ''
-                      onChange={handleChange}
+                      value={sAnnotation}
+                      onChange={annotation_handleChange}
                       variant="outlined"
                     >
-                      {apiannotations.map(option => (
+                      {annotations.map(option => (
                         <MenuItem key={option.id} value={option.id}>
                           {option.messages}
                         </MenuItem>
@@ -481,34 +402,17 @@ const DispenseMedicine: FC<{}> = () => {
                     </TextField>
                   </FormControl>
 
-                  <FormControl
-                    variant="outlined"
-                    className={classes.flexRow}
-                    fullWidth
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    startIcon={<SaveIcon />}
+                    onClick={() => {
+                      CreateDispenseMedicines();
+                    }}
                   >
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      className={classes.button}
-                      startIcon={<SaveIcon />}
-                      onClick={() => {
-                        CreateDispenseMedicines();
-                      }}
-                    >
-                      <Typography variant="button">บันทึก</Typography>
-                    </Button>
-
-                    <Button
-                      variant="contained"
-                      className={classes.button}
-                      startIcon={<DeleteIcon />}
-                      onClick={() => {
-                        clear();
-                      }}
-                    >
-                      <Typography variant="button">ล้างค่า</Typography>
-                    </Button>
-                  </FormControl>
+                    <Typography variant="button">บันทึก</Typography>
+                  </Button>
                 </Grid>
               </CardContent>
             </Card>

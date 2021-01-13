@@ -21,40 +21,28 @@ import { exists, mapValues } from '../runtime';
 export interface ControllersOrder {
     /**
      * 
+     * @type {number}
+     * @memberof ControllersOrder
+     */
+    company?: number;
+    /**
+     * 
      * @type {string}
      * @memberof ControllersOrder
      */
-    addedtime?: string;
+    datetime?: string;
     /**
      * 
      * @type {number}
      * @memberof ControllersOrder
      */
-    amount?: number;
+    medicine?: number;
     /**
      * 
      * @type {number}
      * @memberof ControllersOrder
      */
-    companyid?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ControllersOrder
-     */
-    medicineid?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ControllersOrder
-     */
-    pharmacistid?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ControllersOrder
-     */
-    price?: number;
+    pharmacist?: number;
 }
 
 export function ControllersOrderFromJSON(json: any): ControllersOrder {
@@ -67,12 +55,10 @@ export function ControllersOrderFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'addedtime': !exists(json, 'addedtime') ? undefined : json['addedtime'],
-        'amount': !exists(json, 'amount') ? undefined : json['amount'],
-        'companyid': !exists(json, 'companyid') ? undefined : json['companyid'],
-        'medicineid': !exists(json, 'medicineid') ? undefined : json['medicineid'],
-        'pharmacistid': !exists(json, 'pharmacistid') ? undefined : json['pharmacistid'],
-        'price': !exists(json, 'price') ? undefined : json['price'],
+        'company': !exists(json, 'company') ? undefined : json['company'],
+        'datetime': !exists(json, 'datetime') ? undefined : json['datetime'],
+        'medicine': !exists(json, 'medicine') ? undefined : json['medicine'],
+        'pharmacist': !exists(json, 'pharmacist') ? undefined : json['pharmacist'],
     };
 }
 
@@ -85,12 +71,10 @@ export function ControllersOrderToJSON(value?: ControllersOrder | null): any {
     }
     return {
         
-        'addedtime': value.addedtime,
-        'amount': value.amount,
-        'companyid': value.companyid,
-        'medicineid': value.medicineid,
-        'pharmacistid': value.pharmacistid,
-        'price': value.price,
+        'company': value.company,
+        'datetime': value.datetime,
+        'medicine': value.medicine,
+        'pharmacist': value.pharmacist,
     };
 }
 

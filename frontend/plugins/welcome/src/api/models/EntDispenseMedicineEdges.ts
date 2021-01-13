@@ -74,10 +74,10 @@ export function EntDispenseMedicineEdgesFromJSONTyped(json: any, ignoreDiscrimin
     }
     return {
         
-        'annotation': !exists(json, 'Annotation') ? undefined : EntAnnotationFromJSON(json['Annotation']),
-        'bills': !exists(json, 'Bills') ? undefined : EntBillFromJSON(json['Bills']),
-        'pharmacist': !exists(json, 'Pharmacist') ? undefined : EntPharmacistFromJSON(json['Pharmacist']),
-        'prescription': !exists(json, 'Prescription') ? undefined : EntPrescriptionFromJSON(json['Prescription']),
+        'annotation': !exists(json, 'annotation') ? undefined : EntAnnotationFromJSON(json['annotation']),
+        'bills': !exists(json, 'bills') ? undefined : EntBillFromJSON(json['bills']),
+        'pharmacist': !exists(json, 'pharmacist') ? undefined : EntPharmacistFromJSON(json['pharmacist']),
+        'prescription': !exists(json, 'prescription') ? undefined : EntPrescriptionFromJSON(json['prescription']),
     };
 }
 

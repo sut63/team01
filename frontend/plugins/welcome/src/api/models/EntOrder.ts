@@ -27,17 +27,17 @@ import {
  */
 export interface EntOrder {
     /**
-     * Addedtime holds the value of the "addedtime" field.
-     * @type {string}
-     * @memberof EntOrder
-     */
-    addedtime?: string;
-    /**
      * Amount holds the value of the "amount" field.
      * @type {number}
      * @memberof EntOrder
      */
     amount?: number;
+    /**
+     * Datetime holds the value of the "datetime" field.
+     * @type {string}
+     * @memberof EntOrder
+     */
+    datetime?: string;
     /**
      * 
      * @type {EntOrderEdges}
@@ -56,6 +56,12 @@ export interface EntOrder {
      * @memberof EntOrder
      */
     price?: number;
+    /**
+     * Total holds the value of the "total" field.
+     * @type {number}
+     * @memberof EntOrder
+     */
+    total?: number;
 }
 
 export function EntOrderFromJSON(json: any): EntOrder {
@@ -68,11 +74,12 @@ export function EntOrderFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'addedtime': !exists(json, 'addedtime') ? undefined : json['addedtime'],
         'amount': !exists(json, 'amount') ? undefined : json['amount'],
+        'datetime': !exists(json, 'datetime') ? undefined : json['datetime'],
         'edges': !exists(json, 'edges') ? undefined : EntOrderEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
         'price': !exists(json, 'price') ? undefined : json['price'],
+        'total': !exists(json, 'total') ? undefined : json['total'],
     };
 }
 
@@ -85,11 +92,12 @@ export function EntOrderToJSON(value?: EntOrder | null): any {
     }
     return {
         
-        'addedtime': value.addedtime,
         'amount': value.amount,
+        'datetime': value.datetime,
         'edges': EntOrderEdgesToJSON(value.edges),
         'id': value.id,
         'price': value.price,
+        'total': value.total,
     };
 }
 

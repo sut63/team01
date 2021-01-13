@@ -27,11 +27,11 @@ import {
  */
 export interface EntCompanyEdges {
     /**
-     * Order holds the value of the order edge.
+     * Ordercompany holds the value of the ordercompany edge.
      * @type {Array<EntOrder>}
      * @memberof EntCompanyEdges
      */
-    order?: Array<EntOrder>;
+    ordercompany?: Array<EntOrder>;
 }
 
 export function EntCompanyEdgesFromJSON(json: any): EntCompanyEdges {
@@ -44,7 +44,7 @@ export function EntCompanyEdgesFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'order': !exists(json, 'order') ? undefined : ((json['order'] as Array<any>).map(EntOrderFromJSON)),
+        'ordercompany': !exists(json, 'Ordercompany') ? undefined : ((json['Ordercompany'] as Array<any>).map(EntOrderFromJSON)),
     };
 }
 
@@ -57,7 +57,7 @@ export function EntCompanyEdgesToJSON(value?: EntCompanyEdges | null): any {
     }
     return {
         
-        'order': value.order === undefined ? undefined : ((value.order as Array<any>).map(EntOrderToJSON)),
+        'ordercompany': value.ordercompany === undefined ? undefined : ((value.ordercompany as Array<any>).map(EntOrderToJSON)),
     };
 }
 

@@ -228,66 +228,61 @@ export default function Order() {
 
 
 
-              <FormControl
-                fullWidth
-                className={classes.margin}
-                variant="outlined"
-                style={{ marginLeft: 560, width: 600 }}
+            <FormControl variant='outlined' style={{ marginLeft: 700, width: 302 }}>
+                         <InputLabel id="pharmacist">เภสัชกร</InputLabel>
+                                        <Select
+                                            labelId="pharmacist"
+                                            name="pharmacist"
+                                            onChange={Pharmacist_id_handleChange}
+                                            label='เภสัชกร'
+                                        >
+                                            {pharmacists.map(item => {
+                                                return (
+                                                    <MenuItem key={item.id} value={item.id}>
+                                                        {item.name}
+                                                    </MenuItem>
+                                                );
+                                            })}
+                                        </Select>
+                                    </FormControl>
 
-              >
-                <InputLabel id="medicine_id-label">Medicine</InputLabel>
-                <Select
-                  labelId="medicine_id-label"
-                  label="Medicine"
-                  id="medicine_id"
-                  value={medicineID || ''}
-                  onChange={Medicine_id_handleChange}
-                  style={{ width: 300 }}
-                >
-                  {medicines.map((item: EntMedicine) =>
-                    <MenuItem value={item.id}>{item.name}</MenuItem>)}
-                </Select>
-              </FormControl>
+                                     <FormControl variant='outlined' style={{ marginTop: 20 , marginLeft: 700, width: 302 }}>
+                                        <InputLabel id="medicine">ยา</InputLabel>
+                                        <Select
+                                            labelId="medicine"
+                                            name="medicine"
+                                            onChange={Medicine_id_handleChange}
+                                            label='ยา'
+                                        >
+                                            {medicines.map(item => {
+                                                return (
+                                                    <MenuItem key={item.id} value={item.id}>
+                                                        {item.name}
+                                                    </MenuItem>
+                                                );
+                                            })}
+                                        </Select>
+                                    </FormControl>
+                                    
 
-              <FormControl
-                fullWidth
-                className={classes.margin}
-                variant="outlined"
-                style={{ marginLeft: 560, width: 600 }}
-              >
-                <InputLabel id="company_id-label">Company</InputLabel>
-                <Select
-                  labelId="company_id-label"
-                  label="Company"
-                  id="company_id"
-                  value={companyID || ''}
-                  onChange={Company_id_handleChange}
-                  style={{ width: 300 }}
-                >
-                  {companys.map((item: EntCompany) =>
-                    <MenuItem value={item.id}>{item.name}</MenuItem>)}
-                </Select>
-              </FormControl>
+                                    <FormControl variant='outlined' style={{ marginTop: 20 , marginLeft: 700, width: 302 }}>
+                                        <InputLabel id="company">บริษัท</InputLabel>
+                                        <Select
+                                            labelId="company"
+                                            name="company"
+                                            onChange={Company_id_handleChange}
+                                            label='บริษัท'
+                                        >
+                                            {companys.map(item => {
+                                                return (
+                                                    <MenuItem key={item.id} value={item.id}>
+                                                        {item.name}
+                                                    </MenuItem>
+                                                );
+                                            })}
+                                        </Select>
+                                    </FormControl>
 
-              <FormControl
-                fullWidth
-                className={classes.margin}
-                variant="outlined"
-                style={{ marginLeft: 560, width: 600 }}
-              >
-                <InputLabel id="pharmacist_id-label">Pharmacist</InputLabel>
-                <Select
-                  labelId="pharmacist_id-label"
-                  label="Pharmacist"
-                  id="pharmacist_id"
-                  value={pharmacistID || ''}
-                  onChange={Pharmacist_id_handleChange}
-                  style={{ width: 300 }}
-                >
-                  {pharmacists.map((item: EntPharmacist) =>
-                    <MenuItem value={item.id}>{item.name}</MenuItem>)}
-                </Select>
-              </FormControl>
 
 
               
@@ -295,7 +290,7 @@ export default function Order() {
                 fullWidth
                 className={classes.margin}
                 variant="outlined"
-                style={{ marginLeft: 560, width: 302 }}
+                style={{marginTop: 20 , marginLeft: 700, width: 302 }}
               >
                 <TextField id="outlined-number" type='number' InputLabelProps={{
                   shrink: true,
@@ -305,22 +300,14 @@ export default function Order() {
                 />
               </FormControl>
 
-              <FormControl
-                fullWidth
-                className={classes.margin}
-                variant="outlined"
-                style={{ marginLeft: 560, width: 302 }}
-              >
-         
-                
-              </FormControl>
+ 
               
 
               <FormControl
                 fullWidth
                 className={classes.margin}
                 variant="outlined"
-                style={{ marginLeft: 560, width: 302 }}
+                style={{ marginTop: 20 ,marginLeft: 700, width: 302 }}
               >
                 <TextField id="outlined-number" type='number' InputLabelProps={{
                   shrink: true,
@@ -337,7 +324,7 @@ export default function Order() {
                 fullWidth
                 className={classes.margin}
                 variant="outlined"
-                style={{ marginLeft: 560, width: 600 }}
+                style={{marginTop: 20 , marginLeft: 750, width: 600 }}
               >
                 <TextField
                   id="date"

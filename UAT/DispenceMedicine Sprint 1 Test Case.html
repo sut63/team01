@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+	<title>Sprint 1 Test Case</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Success Test Case</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/DispenseMedicine<datalist><option>http://localhost:3000/DispenseMedicine</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div/div/table/tbody/tr/td[3]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div/div/table/tbody/tr/td[3]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>name=datetime<datalist><option>name=datetime</option><option>//input[@name='datetime']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[4]/div/div/div/div/div/input</option><option>//div[4]/div/div/div/div/div/input</option><option>css=input[name="datetime"]</option></datalist></td><td></td>
+</tr>
+<tr><td>setText</td><td>name=datetime<datalist><option>name=datetime</option><option>//input[@name='datetime']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[4]/div/div/div/div/div/input</option><option>//div[4]/div/div/div/div/div/input</option><option>css=input[name="datetime"]</option></datalist></td><td>2021-01-14T20:36</td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-annotation<datalist><option>//div[@id='menu-annotation']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button</option><option>id=mui-component-select-annotation</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-annotation']/div[3]/ul/li[1]<datalist><option>//div[@id='menu-annotation']/div[3]/ul/li[2]</option><option>//li[2]</option><option>//div[@id='menu-annotation']/div[3]/ul/li[1]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>css=span.MuiButton-startIcon.MuiButton-iconSizeMedium &gt; svg.MuiSvgIcon-root<datalist><option>css=span.MuiButton-startIcon.MuiButton-iconSizeMedium &gt; svg.MuiSvgIcon-root</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyText</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div/div[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div/div[2]</option><option>//div[2]/div/div/div/div[2]</option><option>css=div.MuiAlert-message</option></datalist></td><td>บันทึกข้อมูลสำเร็จ!</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Failure Test Case</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/DispenseMedicine<datalist><option>http://localhost:3000/DispenseMedicine</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div/div/table/tbody/tr/td[3]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div/div/table/tbody/tr/td[3]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>name=datetime<datalist><option>name=datetime</option><option>//input[@name='datetime']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[4]/div/div/div/div/div/input</option><option>//div[4]/div/div/div/div/div/input</option><option>css=input[name="datetime"]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=datetime<datalist><option>name=datetime</option><option>//input[@name='datetime']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[4]/div/div/div/div/div/input</option><option>//div[4]/div/div/div/div/div/input</option><option>css=input[name="datetime"]</option></datalist></td><td>2021-01-14T20:38</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/div[4]/div/div/div[3]/button/span/span[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[4]/div/div/div[3]/button/span/span[2]</option><option>//span/span[2]</option><option>css=span.MuiTypography-root.MuiTypography-button</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyText</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div/div[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div/div[2]</option><option>//div[2]/div/div/div/div[2]</option><option>css=div.MuiAlert-message</option></datalist></td><td>บันทึกข้อมูลไม่สำเร็จ!</td>
+</tr>
+</tbody></table>
+</body>
+</html>

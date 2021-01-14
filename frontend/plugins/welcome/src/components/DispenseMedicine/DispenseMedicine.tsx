@@ -21,6 +21,7 @@ import {
   TableRow,
   Paper,
   Avatar,
+  Select,
 } from '@material-ui/core';
 
 import SaveIcon from '@material-ui/icons/Save';
@@ -453,20 +454,20 @@ const DispenseMedicine: FC<{}> = () => {
                     <Typography className={classes.headLabel}>
                       หมายเหตุ
                     </Typography>
-                    <TextField
-                      select
+
+                    <Select
+                      labelId="annotation"
                       label="เลือกหมายเหตุ"
                       name="annotation"
                       value={sDispensemedicine.annotation || ''} // (undefined || '') = ''
                       onChange={handleChange}
-                      variant="outlined"
                     >
                       {apiannotations.map(option => (
                         <MenuItem key={option.id} value={option.id}>
                           {option.messages}
                         </MenuItem>
                       ))}
-                    </TextField>
+                    </Select>
                   </FormControl>
 
                   <FormControl

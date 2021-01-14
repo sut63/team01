@@ -3,10 +3,9 @@ import { makeStyles, ThemeProvider, Theme } from '@material-ui/core/styles';
 import { Content, Header, Page, pageTheme } from '@backstage/core';
 import SaveIcon from '@material-ui/icons/Save'; // icon save
 import Swal from 'sweetalert2'; // alert
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import SearchIcon from '@material-ui/icons/Search';
 import FormControl from '@material-ui/core/FormControl';
 import { DefaultApi } from '../../api/apis';
+import { Cookies } from 'react-cookie/cjs'; //cookie
 
 import { EntPatientInfo } from '../../api/models/EntPatientInfo'
 import { EntMedicine } from '../../api/models/EntMedicine'
@@ -56,11 +55,12 @@ interface DrugAllergy {
 const DrugAllergy: FC<{}> = () => {
     const classes = useStyles();
     const api = new DefaultApi();
-    const date = new Date();
+    const cookies = new Cookies();
     const [drugAllergy, setDrugAllergy] = React.useState<Partial<DrugAllergy>>({});
     const [patients, setPatients] = React.useState<EntPatientInfo[]>([]);
     const [medicine, setMedicine] = React.useState<EntMedicine[]>([]);
     const [loading, setLoading] = React.useState(true);
+    const [PhaName, setPhaName] = React.useState(String);
 
     // alert setting
     const Toast = Swal.mixin({
@@ -99,7 +99,7 @@ const DrugAllergy: FC<{}> = () => {
         const drugallergy = {
             patient: drugAllergy.patient,
             medicine: drugAllergy.medicine,
-            pharmacist: drugAllergy.pharmacist,
+            pharmacist: Number(drugAllergy.pharmacist),
             dateTime: drugAllergy.dateTime + ":00+07:00",
         };
         const api = 'http://localhost:8080/api/v1/drugallergys';
@@ -131,23 +131,22 @@ const DrugAllergy: FC<{}> = () => {
 
     const clear = async () => {
         setDrugAllergy({});
-        setDrugAllergy({ pharmacist: 1 });
+        setDrugAllergy({ pharmacist: Number(cookies.get('ID')) });
     }
 
     // Lifecycle Hooks
     useEffect(() => {
         getPatient();
         getMedicine();
-
-        //test set pharmacist = 1
-        setDrugAllergy({ pharmacist: 1 });
+        setPhaName(cookies.get('Name'));
+        setDrugAllergy({ pharmacist: Number(cookies.get('ID')) });
     }, []);
 
     return (
         <Page theme={pageTheme.service}>
             <Header style={HeaderCustom} title={'บันทึกประวัติการเเพ้ยา'}>
                 <Avatar src="/broken-image.jpg" />
-                <div style={{ marginLeft: 10 }}>Name Surname</div>
+                <div style={{ marginLeft: 10 }}>{PhaName}</div>
             </Header>
             <Content>
                 <Grid
@@ -165,7 +164,7 @@ const DrugAllergy: FC<{}> = () => {
                                             style={{ width: 520 }}
                                             name="pharmacist"
                                             label="เภสัชกร"
-                                            defaultValue="Name Surname"
+                                            value={PhaName}
                                             InputProps={{
                                                 readOnly: true,
                                             }}
@@ -236,15 +235,6 @@ const DrugAllergy: FC<{}> = () => {
                             onClick={save}
                         >
                             บันทึก
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            size="large"
-                            startIcon={<ArrowBackIcon fontSize="small" />}
-                            style={{ marginLeft: 20, width: 150 }}
-                        >
-                            ย้อนกลับ
                         </Button>
                     </div>
                 </Grid>

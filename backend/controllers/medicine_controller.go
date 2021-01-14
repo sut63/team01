@@ -101,7 +101,10 @@ func (ctl *MedicineController) CreateMedicine(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(200, m)
+	c.JSON(200, gin.H{
+		"status": true,
+		"data":   m,
+	})
 }
 
 // ListMedicine handles request to get a list of Medicine entities

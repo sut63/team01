@@ -115,6 +115,11 @@ func (pc *PrescriptionCreate) Save(ctx context.Context) (*Prescription, error) {
 	if _, ok := pc.mutation.Value(); !ok {
 		return nil, &ValidationError{Name: "Value", err: errors.New("ent: missing required field \"Value\"")}
 	}
+	if v, ok := pc.mutation.Value(); ok {
+		if err := prescription.ValueValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Value", err: fmt.Errorf("ent: validator failed for field \"Value\": %w", err)}
+		}
+	}
 	var (
 		err  error
 		node *Prescription

@@ -63,3 +63,8 @@ var ForeignKeys = []string{
 	"medicine_id",
 	"patient_id",
 }
+
+var (
+	// ValueValidator is a validator for the "Value" field. It is called by the builders before save.
+	ValueValidator func(int) error
+)

@@ -11,7 +11,7 @@ var (
 	// AnnotationsColumns holds the columns for the "annotations" table.
 	AnnotationsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "messages", Type: field.TypeString},
+		{Name: "messages", Type: field.TypeString, Unique: true},
 	}
 	// AnnotationsTable holds the schema information for the "annotations" table.
 	AnnotationsTable = &schema.Table{
@@ -161,7 +161,7 @@ var (
 	// LevelOfDangerousColumns holds the columns for the "level_of_dangerous" table.
 	LevelOfDangerousColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString, Unique: true},
 	}
 	// LevelOfDangerousTable holds the schema information for the "level_of_dangerous" table.
 	LevelOfDangerousTable = &schema.Table{
@@ -215,7 +215,7 @@ var (
 	// MedicineTypesColumns holds the columns for the "medicine_types" table.
 	MedicineTypesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString, Unique: true},
 	}
 	// MedicineTypesTable holds the schema information for the "medicine_types" table.
 	MedicineTypesTable = &schema.Table{
@@ -281,7 +281,7 @@ var (
 	// PaymentsColumns holds the columns for the "payments" table.
 	PaymentsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "pay", Type: field.TypeString},
+		{Name: "pay", Type: field.TypeString, Unique: true},
 	}
 	// PaymentsTable holds the schema information for the "payments" table.
 	PaymentsTable = &schema.Table{
@@ -344,7 +344,7 @@ var (
 	// UnitOfMedicinesColumns holds the columns for the "unit_of_medicines" table.
 	UnitOfMedicinesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString, Unique: true},
 	}
 	// UnitOfMedicinesTable holds the schema information for the "unit_of_medicines" table.
 	UnitOfMedicinesTable = &schema.Table{

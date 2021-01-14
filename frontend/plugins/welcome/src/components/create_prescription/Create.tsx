@@ -1,34 +1,34 @@
 import React, { FC, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Content, Header, Page, pageTheme, ContentHeader, } from '@backstage/core';
+import {
+  Content,
+  Header,
+  Page,
+  pageTheme,
+  ContentHeader,
+} from '@backstage/core';
 
 import {
-
   FormControl,
   Select,
   InputLabel,
   MenuItem,
   TextField,
-
   Link,
   Button,
 } from '@material-ui/core';
 import Timer from '../Timer';
 import { DefaultApi } from '../../api/apis'; // Api Gennerate From Command
-
 import { EntPatientInfo } from '../../api/models/EntPatientInfo';
 import { ControllersPrescription } from '../../api/models/ControllersPrescription';
 import { EntDoctor } from '../../api/models/EntDoctor';
 import { EntMedicine } from '../../api/models/EntMedicine';
 import { Alert } from '@material-ui/lab';
-
-
-
-
 import { Link as RouterLink } from 'react-router-dom';
 import { EntPrescription } from '../../api';
+import { Cookies } from 'react-cookie/cjs'; //cookie
 
-// css style 
+// css style
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -54,34 +54,30 @@ const useStyles = makeStyles(theme => ({
     width: '25ch',
   },
 
-
   margin: {
     margin: theme.spacing(3),
   },
   input: {
     display: 'none',
   },
-
 }));
-
-
 
 const NewPatientright: FC<{}> = () => {
   const classes = useStyles();
   const profile = { givenName: ' ' };
+  const cookies = new Cookies();
   const http = new DefaultApi();
 
-  const [Prescription, setPrescription] = React.useState<Partial<ControllersPrescription>>({});
-
-  
+  const [Prescription, setPrescription] = React.useState<
+    Partial<ControllersPrescription>
+  >({});
   const [PatientInfo, setPatientInfo] = React.useState<EntPatientInfo[]>([]);
-
   const [Doctor, setDoctor] = React.useState<EntDoctor[]>([]);
   const [Medicine, setMedicine] = React.useState<EntMedicine[]>([]);
-
   const [status, setStatus] = React.useState(false);
   const [alert, setAlert] = React.useState(true);
-
+  const [name, setName] = React.useState(String);
+  const [id, setID] = React.useState(Number);
 
   const getMedicine = async () => {
     const res = await http.listMedicine({ limit: 10, offset: 0 });
@@ -103,11 +99,13 @@ const NewPatientright: FC<{}> = () => {
     getMedicine();
     getPatientInfo();
     getDoctor();
+    setName(cookies.get('Name'));
+
+    setPrescription({ doctorID: Number(cookies.get('ID')) });
   }, []);
 
   // set data to object Patientright
   const handleChange = (
-
     event: React.ChangeEvent<{ name?: string; value: unknown }>,
   ) => {
     const name = event.target.name as keyof typeof NewPatientright;
@@ -115,72 +113,59 @@ const NewPatientright: FC<{}> = () => {
     setPrescription({ ...Prescription, [name]: value });
   };
 
-
-
-
-
   const CreatePatientright = async () => {
+    if (
+      Prescription.patientInfoID != null &&
+      Prescription.doctorID != null &&
+      Prescription.medicineID != null &&
+      Prescription.value != null
+    ) {
+      const res: any = await http.createPrescription({
+        prescription: Prescription,
+      });
+      console.log(Prescription);
 
-    const res: any = await http.createPrescription({
-      prescription: Prescription
-
-
-    });
-    console.log(Prescription);
-    setStatus(true);
-
-
-    if (res.id != '') {
-      setAlert(true);
+      if (res.id != '') {
+        setStatus(true);
+        setAlert(true);
+        setTimeout(() => {
+          setStatus(false);
+        }, 4000);
+      }
     } else {
+      setStatus(true);
       setAlert(false);
+      setTimeout(() => {
+        setStatus(false);
+      }, 4000);
     }
-
-    const timer = setTimeout(() => {
-      setStatus(false);
-    }, 1000);
-
-
   };
-
-
 
   return (
     <Page theme={pageTheme.home}>
       <Header
         title={`ระบบสั่งจ่ายยา ${profile.givenName || 'to Backstage'}`}
-        subtitle="Some quick intro and links."
+       
       >
         <Timer />
-
       </Header>
       <Content>
         <ContentHeader title="ข้อมูล">
-
           {status ? (
             <div>
               {alert ? (
-                <Alert severity="success">
-                  บันทึกสำเร็จ
-                </Alert>
+                <Alert severity="success">บันทึกข้อมูลสำเร็จ</Alert>
               ) : (
-                  <Alert severity="warning" style={{ marginTop: 20 }}>
-                    This is a warning alert — check it out!
-                  </Alert>
-                )}
+                <Alert severity="warning" style={{ marginTop: 20 }}>
+                  บันทึกข้อมูลไม่สำเร็จ
+                </Alert>
+              )}
             </div>
           ) : null}
         </ContentHeader>
 
-        
-
         <div className={classes.root}>
-
-
           <form noValidate autoComplete="off">
-
-
-
             <FormControl variant="outlined" className={classes.formControl}>
               <InputLabel>PatientInfo</InputLabel>
               <Select
@@ -197,42 +182,27 @@ const NewPatientright: FC<{}> = () => {
                 })}
               </Select>
             </FormControl>
-
-
           </form>
         </div>
 
         <div className={classes.root}>
           <form noValidate autoComplete="off">
-
             <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel>Doctor</InputLabel>
-              <Select
-                name="doctorID"
-                value={Prescription.doctorID}
-                onChange={handleChange}
-              >
-                {Doctor.map(item => {
-                  return (
-                    <MenuItem key={item.id} value={item.id}>
-                      {item.name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
+              <TextField
+                name="doctor"
+                label="doctor"
+                value={name}
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="outlined"
+              />
             </FormControl>
-
           </form>
         </div>
 
         <div className={classes.root}>
           <form noValidate autoComplete="off">
-
-            
-
-
-
-
             <FormControl variant="outlined" className={classes.formControl}>
               <InputLabel>Medicine</InputLabel>
               <Select
@@ -251,51 +221,25 @@ const NewPatientright: FC<{}> = () => {
             </FormControl>
           </form>
         </div>
-        
-
-
-
 
         <div className={classes.root}>
           <form noValidate autoComplete="off">
-
-          <FormControl variant="filled" className={classes.formControl}>
-                                <TextField
-                                    name="value"
-                                    label="Value"
-                                    variant="outlined"
-                                    type="number"
-                                    size="medium"
-                                        
-                                    value={Prescription.value}
-                                    onChange={handleChange}
-                                />
-                            </FormControl>
-
-
-
-
-
-
-
+            <FormControl variant="filled" className={classes.formControl}>
+              <TextField
+                name="value"
+                label="Value"
+                variant="outlined"
+                type="number"
+                size="medium"
+                value={Prescription.value}
+                onChange={handleChange}
+              />
+            </FormControl>
           </form>
-
         </div>
 
-
-
-
-
-
-
-
-
-
-
         <div className={classes.root}>
           <form noValidate autoComplete="off">
-
-
             <div className={classes.margin}>
               <Button
                 onClick={() => {
@@ -305,18 +249,16 @@ const NewPatientright: FC<{}> = () => {
                 color="primary"
               >
                 Submit
-             </Button>
+              </Button>
 
               <Link component={RouterLink} to="/">
                 <Button variant="contained" color="primary">
                   กลับสู่หน้าหลัก
-           </Button>
+                </Button>
               </Link>
-
             </div>
           </form>
         </div>
-
       </Content>
     </Page>
   );

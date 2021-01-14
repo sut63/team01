@@ -151,6 +151,11 @@ func (pu *PrescriptionUpdate) ClearDispensemedicine() *PrescriptionUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (pu *PrescriptionUpdate) Save(ctx context.Context) (int, error) {
+	if v, ok := pu.mutation.Value(); ok {
+		if err := prescription.ValueValidator(v); err != nil {
+			return 0, &ValidationError{Name: "Value", err: fmt.Errorf("ent: validator failed for field \"Value\": %w", err)}
+		}
+	}
 
 	var (
 		err      error
@@ -511,6 +516,11 @@ func (puo *PrescriptionUpdateOne) ClearDispensemedicine() *PrescriptionUpdateOne
 
 // Save executes the query and returns the updated entity.
 func (puo *PrescriptionUpdateOne) Save(ctx context.Context) (*Prescription, error) {
+	if v, ok := puo.mutation.Value(); ok {
+		if err := prescription.ValueValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Value", err: fmt.Errorf("ent: validator failed for field \"Value\": %w", err)}
+		}
+	}
 
 	var (
 		err  error

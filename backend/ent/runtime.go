@@ -10,6 +10,7 @@ import (
 	"github.com/sut63/team01/ent/medicine"
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/pharmacist"
+	"github.com/sut63/team01/ent/prescription"
 	"github.com/sut63/team01/ent/schema"
 )
 
@@ -107,4 +108,10 @@ func init() {
 	pharmacistDescName := pharmacistFields[2].Descriptor()
 	// pharmacist.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	pharmacist.NameValidator = pharmacistDescName.Validators[0].(func(string) error)
+	prescriptionFields := schema.Prescription{}.Fields()
+	_ = prescriptionFields
+	// prescriptionDescValue is the schema descriptor for Value field.
+	prescriptionDescValue := prescriptionFields[0].Descriptor()
+	// prescription.ValueValidator is a validator for the "Value" field. It is called by the builders before save.
+	prescription.ValueValidator = prescriptionDescValue.Validators[0].(func(int) error)
 }

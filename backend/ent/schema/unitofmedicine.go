@@ -14,7 +14,7 @@ type UnitOfMedicine struct {
 // Fields of the UnitOfMedicine.
 func (UnitOfMedicine) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("name"),
+		field.String("name").Unique(),
 	}
 }
 

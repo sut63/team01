@@ -44,7 +44,7 @@ export function EntCompanyEdgesFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'ordercompany': !exists(json, 'Ordercompany') ? undefined : ((json['Ordercompany'] as Array<any>).map(EntOrderFromJSON)),
+        'ordercompany': !exists(json, 'ordercompany') ? undefined : ((json['ordercompany'] as Array<any>).map(EntOrderFromJSON)),
     };
 }
 

@@ -21,6 +21,7 @@ import {
 } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 import { Alert } from '@material-ui/lab'; //alert
+import Swal from 'sweetalert2'; // alert
 
 import { DefaultApi } from '../../api/apis/'; // Api Gennerate From Command
 import { EntMedicineType } from '../../api/models/EntMedicineType'; // import interface MedicineType
@@ -70,7 +71,7 @@ const Medicine: FC<{}> = () => {
   const classes = useStyles();
   const api = new DefaultApi();
   const [status, setStatus] = React.useState(false);
-  const [alert, setAlert] = useState(true);
+  const [alert, setAlert] = React.useState(true);
   
 
   const [medicinetype, setMedicineType] = React.useState<EntMedicineType[]>([]);
@@ -168,6 +169,20 @@ const Medicine: FC<{}> = () => {
     getUnitOfMedicine();
   }, []);
 
+   // alert setting
+   const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: toast => {
+      toast.addEventListener('mouseenter', Swal.stopTimer);
+      toast.addEventListener('mouseleave', Swal.resumeTimer);
+    },
+  });
+
+
   const CreateMedicine = async () => {
     const smedicine = {
       levelOfDangerousID: sMLevelOfDangerous,
@@ -180,15 +195,30 @@ const Medicine: FC<{}> = () => {
       price: Number(sMPrice),
       howtouse: sMHowtouse,
     };
-    console.log(smedicine);
-    
-    const res: any = await api.createMedicine({ medicine: smedicine });
-    setStatus(true);
-    if (res.id != '') {
-      setAlert(true);
-      window.location.reload(false);
+    const api = 'http://localhost:8080/api/v1/Medicine';
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(smedicine),
+        };
+        fetch(api, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if (data.status === true) {
+                    //console.log(data.data)
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'บันทึกข้อมูลสำเร็จ',
+                    });
+                } else {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'บันทึกข้อมูลไม่สำเร็จ',
+                    });
+                }
+            });
     }
-  };
 
   return (
     <Page theme={pageTheme.service}>
@@ -198,17 +228,7 @@ const Medicine: FC<{}> = () => {
 
       <Content>
       <ContentHeader title="">
-          {status ? (
-            <div>
-              {alert ? (
-                <Alert severity="success">บันทึกเรียบร้อย!</Alert>
-              ) : (
-                <Alert severity="warning" style={{ marginTop: 20 }}>
-                  บันทึกไม่สำเร็จ!
-                </Alert>
-              )}
-            </div>
-          ) : null}
+          
         </ContentHeader>
         <div className={classes.root}>
           <Card className={classes.cardBox}>
@@ -217,6 +237,7 @@ const Medicine: FC<{}> = () => {
                 <div style={{ textAlign: 'center' }}>
                   <ContentHeader title="การบันทึกข้อมูลยาในฐานระบบห้องยา"></ContentHeader>
                 </div>
+                
                 <Grid container spacing={3}>
                   <Grid item xs={12}></Grid>
                   <Grid item xs={3}>

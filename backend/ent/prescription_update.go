@@ -44,12 +44,6 @@ func (pu *PrescriptionUpdate) AddValue(i int) *PrescriptionUpdate {
 	return pu
 }
 
-// SetStatusQueue sets the Status_Queue field.
-func (pu *PrescriptionUpdate) SetStatusQueue(s string) *PrescriptionUpdate {
-	pu.mutation.SetStatusQueue(s)
-	return pu
-}
-
 // SetPrescriptionpatientID sets the prescriptionpatient edge to PatientInfo by id.
 func (pu *PrescriptionUpdate) SetPrescriptionpatientID(id int) *PrescriptionUpdate {
 	pu.mutation.SetPrescriptionpatientID(id)
@@ -239,13 +233,6 @@ func (pu *PrescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: prescription.FieldValue,
 		})
 	}
-	if value, ok := pu.mutation.StatusQueue(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: prescription.FieldStatusQueue,
-		})
-	}
 	if pu.mutation.PrescriptionpatientCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -414,12 +401,6 @@ func (puo *PrescriptionUpdateOne) SetValue(i int) *PrescriptionUpdateOne {
 // AddValue adds i to Value.
 func (puo *PrescriptionUpdateOne) AddValue(i int) *PrescriptionUpdateOne {
 	puo.mutation.AddValue(i)
-	return puo
-}
-
-// SetStatusQueue sets the Status_Queue field.
-func (puo *PrescriptionUpdateOne) SetStatusQueue(s string) *PrescriptionUpdateOne {
-	puo.mutation.SetStatusQueue(s)
 	return puo
 }
 
@@ -608,13 +589,6 @@ func (puo *PrescriptionUpdateOne) sqlSave(ctx context.Context) (pr *Prescription
 			Type:   field.TypeInt,
 			Value:  value,
 			Column: prescription.FieldValue,
-		})
-	}
-	if value, ok := puo.mutation.StatusQueue(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: prescription.FieldStatusQueue,
 		})
 	}
 	if puo.mutation.PrescriptionpatientCleared() {

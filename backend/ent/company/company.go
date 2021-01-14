@@ -10,18 +10,18 @@ const (
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 
-	// EdgeOrder holds the string denoting the order edge name in mutations.
-	EdgeOrder = "order"
+	// EdgeOrdercompany holds the string denoting the ordercompany edge name in mutations.
+	EdgeOrdercompany = "ordercompany"
 
 	// Table holds the table name of the company in the database.
 	Table = "companies"
-	// OrderTable is the table the holds the order relation/edge.
-	OrderTable = "orders"
-	// OrderInverseTable is the table name for the Order entity.
+	// OrdercompanyTable is the table the holds the ordercompany relation/edge.
+	OrdercompanyTable = "orders"
+	// OrdercompanyInverseTable is the table name for the Order entity.
 	// It exists in this package in order to avoid circular dependency with the "order" package.
-	OrderInverseTable = "orders"
-	// OrderColumn is the table column denoting the order relation/edge.
-	OrderColumn = "company_id"
+	OrdercompanyInverseTable = "orders"
+	// OrdercompanyColumn is the table column denoting the ordercompany relation/edge.
+	OrdercompanyColumn = "company_ordercompany"
 )
 
 // Columns holds all SQL columns for company fields.
@@ -31,6 +31,6 @@ var Columns = []string{
 }
 
 var (
-	// NameValidator is a validator for the "name" field. It is called by the builders before save.
+	// NameValidator is a validator for the "Name" field. It is called by the builders before save.
 	NameValidator func(string) error
 )

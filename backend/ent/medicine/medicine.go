@@ -30,8 +30,8 @@ const (
 	EdgeDrugallergys = "drugallergys"
 	// EdgeMedicinepresciption holds the string denoting the medicinepresciption edge name in mutations.
 	EdgeMedicinepresciption = "medicinepresciption"
-	// EdgeOrder holds the string denoting the order edge name in mutations.
-	EdgeOrder = "order"
+	// EdgeOrdermedicine holds the string denoting the ordermedicine edge name in mutations.
+	EdgeOrdermedicine = "ordermedicine"
 
 	// Table holds the table name of the medicine in the database.
 	Table = "medicines"
@@ -70,13 +70,13 @@ const (
 	MedicinepresciptionInverseTable = "prescriptions"
 	// MedicinepresciptionColumn is the table column denoting the medicinepresciption relation/edge.
 	MedicinepresciptionColumn = "medicine_id"
-	// OrderTable is the table the holds the order relation/edge.
-	OrderTable = "orders"
-	// OrderInverseTable is the table name for the Order entity.
+	// OrdermedicineTable is the table the holds the ordermedicine relation/edge.
+	OrdermedicineTable = "orders"
+	// OrdermedicineInverseTable is the table name for the Order entity.
 	// It exists in this package in order to avoid circular dependency with the "order" package.
-	OrderInverseTable = "orders"
-	// OrderColumn is the table column denoting the order relation/edge.
-	OrderColumn = "medicine_id"
+	OrdermedicineInverseTable = "orders"
+	// OrdermedicineColumn is the table column denoting the ordermedicine relation/edge.
+	OrdermedicineColumn = "medicine_ordermedicine"
 )
 
 // Columns holds all SQL columns for medicine fields.

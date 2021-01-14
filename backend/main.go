@@ -94,7 +94,6 @@ type Prescription struct {
 	PatientInfoID int
 	MedicineID    int
 	Value         int
-	StatusQueue   string
 }
 
 //Doctors Structure
@@ -169,6 +168,16 @@ type Medicine struct {
 	LevelOfDangeropres int
 	MedicineType       int
 	UnitOfMedicine     int
+}
+
+//Companys Structure
+type Companys struct {
+	Company []Company
+}
+
+//Company Structure
+type Company struct {
+	name string
 }
 
 // @title SUT SA Example API Playlist Vidoe
@@ -406,7 +415,7 @@ func main() {
 	//Set Prescription Data
 	Pres := Prescriptions{
 		Prescription: []Prescription{
-			Prescription{1, 1, 1, 15, "No"},
+			Prescription{1, 1, 1, 15},
 		},
 	}
 
@@ -442,7 +451,6 @@ func main() {
 		client.Prescription.
 			Create().
 			SetValue(pci.Value).
-			SetStatusQueue(pci.StatusQueue).
 			SetPrescriptionpatient(pif).
 			SetPrescriptiondoctor(dtr).
 			SetPrescriptionmedicine(mdc).
@@ -539,6 +547,22 @@ func main() {
 			SetPayments(py).
 			SetAnnotation(b.Annotation).
 			SetPharmacists(ph).
+			Save(context.Background())
+	}
+
+	companys := Companys{
+		Company: []Company{
+			Company{"MedicCompany"},
+			Company{"BandageCompany"},
+			Company{"ABCompany"},
+			Company{"Team1Company"},
+		},
+	}
+
+	for _, pay := range companys.Company {
+		client.Company.
+			Create().
+			SetName(pay.name).
 			Save(context.Background())
 	}
 

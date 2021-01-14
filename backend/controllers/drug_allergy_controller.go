@@ -82,7 +82,7 @@ func (ctl *DrugAllergyController) CreateDrugAllergy(c *gin.Context) {
 		})
 		return
 	}
-
+	
 	time, err := time.Parse(time.RFC3339, obj.DateTime)
 	if err != nil {
 		c.JSON(400, gin.H{

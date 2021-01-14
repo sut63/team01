@@ -44,7 +44,7 @@ export function EntDoctorEdgesFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'doctorprescription': !exists(json, 'doctorprescription') ? undefined : ((json['doctorprescription'] as Array<any>).map(EntPrescriptionFromJSON)),
+        'doctorprescription': !exists(json, 'Doctorprescription') ? undefined : ((json['Doctorprescription'] as Array<any>).map(EntPrescriptionFromJSON)),
     };
 }
 

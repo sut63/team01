@@ -15,8 +15,8 @@ type Company struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// Name holds the value of the "name" field.
-	Name string `json:"name,omitempty"`
+	// Name holds the value of the "Name" field.
+	Name string `json:"Name,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CompanyQuery when eager-loading is set.
 	Edges CompanyEdges `json:"edges"`
@@ -24,27 +24,27 @@ type Company struct {
 
 // CompanyEdges holds the relations/edges for other nodes in the graph.
 type CompanyEdges struct {
-	// Order holds the value of the order edge.
-	Order []*Order
+	// Ordercompany holds the value of the ordercompany edge.
+	Ordercompany []*Order
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
-// OrderOrErr returns the Order value or an error if the edge
+// OrdercompanyOrErr returns the Ordercompany value or an error if the edge
 // was not loaded in eager-loading.
-func (e CompanyEdges) OrderOrErr() ([]*Order, error) {
+func (e CompanyEdges) OrdercompanyOrErr() ([]*Order, error) {
 	if e.loadedTypes[0] {
-		return e.Order, nil
+		return e.Ordercompany, nil
 	}
-	return nil, &NotLoadedError{edge: "order"}
+	return nil, &NotLoadedError{edge: "ordercompany"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Company) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{},  // id
-		&sql.NullString{}, // name
+		&sql.NullString{}, // Name
 	}
 }
 
@@ -61,16 +61,16 @@ func (c *Company) assignValues(values ...interface{}) error {
 	c.ID = int(value.Int64)
 	values = values[1:]
 	if value, ok := values[0].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field name", values[0])
+		return fmt.Errorf("unexpected type %T for field Name", values[0])
 	} else if value.Valid {
 		c.Name = value.String
 	}
 	return nil
 }
 
-// QueryOrder queries the order edge of the Company.
-func (c *Company) QueryOrder() *OrderQuery {
-	return (&CompanyClient{config: c.config}).QueryOrder(c)
+// QueryOrdercompany queries the ordercompany edge of the Company.
+func (c *Company) QueryOrdercompany() *OrderQuery {
+	return (&CompanyClient{config: c.config}).QueryOrdercompany(c)
 }
 
 // Update returns a builder for updating this Company.
@@ -96,7 +96,7 @@ func (c *Company) String() string {
 	var builder strings.Builder
 	builder.WriteString("Company(")
 	builder.WriteString(fmt.Sprintf("id=%v", c.ID))
-	builder.WriteString(", name=")
+	builder.WriteString(", Name=")
 	builder.WriteString(c.Name)
 	builder.WriteByte(')')
 	return builder.String()

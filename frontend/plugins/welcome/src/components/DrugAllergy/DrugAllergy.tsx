@@ -79,7 +79,7 @@ const DrugAllergy: FC<{}> = () => {
         const name = event.target.name as keyof typeof DrugAllergy;
         const { value } = event.target;
         setDrugAllergy({ ...drugAllergy, [name]: value });
-        console.log(drugAllergy);
+        //console.log(drugAllergy);
     };
 
     const getPatient = async () => {
@@ -113,7 +113,7 @@ const DrugAllergy: FC<{}> = () => {
             .then(data => {
                 console.log(data)
                 if (data.status === true) {
-                    console.log(data.data)
+                    //console.log(data.data)
                     Toast.fire({
                         icon: 'success',
                         title: 'บันทึกข้อมูลสำเร็จ',
@@ -123,6 +123,7 @@ const DrugAllergy: FC<{}> = () => {
                     Toast.fire({
                         icon: 'error',
                         title: 'บันทึกข้อมูลไม่สำเร็จ',
+                        text: data.error,
                     });
                 }
             });
@@ -130,10 +131,7 @@ const DrugAllergy: FC<{}> = () => {
 
     const clear = async () => {
         setDrugAllergy({});
-        const timer = setTimeout(() => {
-            window.location.reload();
-        }, 1000);
-
+        setDrugAllergy({ pharmacist: 1 });
     }
 
     // Lifecycle Hooks
@@ -142,7 +140,7 @@ const DrugAllergy: FC<{}> = () => {
         getMedicine();
 
         //test set pharmacist = 1
-        setDrugAllergy({ ...drugAllergy, pharmacist: 1 });
+        setDrugAllergy({ pharmacist: 1 });
     }, []);
 
     return (
@@ -181,6 +179,7 @@ const DrugAllergy: FC<{}> = () => {
                                             name="patient"
                                             onChange={handleChange}
                                             label='ผู้ป่วย'
+                                            value={drugAllergy.patient || ''}
                                         >
                                             {patients.map(item => {
                                                 return (
@@ -198,6 +197,7 @@ const DrugAllergy: FC<{}> = () => {
                                             name="medicine"
                                             onChange={handleChange}
                                             label='ยา'
+                                            value={drugAllergy.medicine || ''}
                                         >
                                             {medicine.map(item => {
                                                 return (
@@ -214,6 +214,7 @@ const DrugAllergy: FC<{}> = () => {
                                             name="dateTime"
                                             type="datetime-local"
                                             variant='outlined'
+                                            value={drugAllergy.dateTime || ''}
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}

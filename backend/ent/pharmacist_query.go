@@ -31,7 +31,7 @@ type PharmacistQuery struct {
 	// eager-loading edges.
 	withDispensemedicine *DispenseMedicineQuery
 	withDrugallergys     *DrugAllergyQuery
-	withOrder            *OrderQuery
+	withOrderpharmacist  *OrderQuery
 	withBills            *BillQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -98,8 +98,8 @@ func (pq *PharmacistQuery) QueryDrugallergys() *DrugAllergyQuery {
 	return query
 }
 
-// QueryOrder chains the current query on the order edge.
-func (pq *PharmacistQuery) QueryOrder() *OrderQuery {
+// QueryOrderpharmacist chains the current query on the orderpharmacist edge.
+func (pq *PharmacistQuery) QueryOrderpharmacist() *OrderQuery {
 	query := &OrderQuery{config: pq.config}
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
@@ -108,7 +108,7 @@ func (pq *PharmacistQuery) QueryOrder() *OrderQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(pharmacist.Table, pharmacist.FieldID, pq.sqlQuery()),
 			sqlgraph.To(order.Table, order.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, pharmacist.OrderTable, pharmacist.OrderColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, pharmacist.OrderpharmacistTable, pharmacist.OrderpharmacistColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -335,14 +335,14 @@ func (pq *PharmacistQuery) WithDrugallergys(opts ...func(*DrugAllergyQuery)) *Ph
 	return pq
 }
 
-//  WithOrder tells the query-builder to eager-loads the nodes that are connected to
-// the "order" edge. The optional arguments used to configure the query builder of the edge.
-func (pq *PharmacistQuery) WithOrder(opts ...func(*OrderQuery)) *PharmacistQuery {
+//  WithOrderpharmacist tells the query-builder to eager-loads the nodes that are connected to
+// the "orderpharmacist" edge. The optional arguments used to configure the query builder of the edge.
+func (pq *PharmacistQuery) WithOrderpharmacist(opts ...func(*OrderQuery)) *PharmacistQuery {
 	query := &OrderQuery{config: pq.config}
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withOrder = query
+	pq.withOrderpharmacist = query
 	return pq
 }
 
@@ -426,7 +426,7 @@ func (pq *PharmacistQuery) sqlAll(ctx context.Context) ([]*Pharmacist, error) {
 		loadedTypes = [4]bool{
 			pq.withDispensemedicine != nil,
 			pq.withDrugallergys != nil,
-			pq.withOrder != nil,
+			pq.withOrderpharmacist != nil,
 			pq.withBills != nil,
 		}
 	)
@@ -507,7 +507,7 @@ func (pq *PharmacistQuery) sqlAll(ctx context.Context) ([]*Pharmacist, error) {
 		}
 	}
 
-	if query := pq.withOrder; query != nil {
+	if query := pq.withOrderpharmacist; query != nil {
 		fks := make([]driver.Value, 0, len(nodes))
 		nodeids := make(map[int]*Pharmacist)
 		for i := range nodes {
@@ -516,22 +516,22 @@ func (pq *PharmacistQuery) sqlAll(ctx context.Context) ([]*Pharmacist, error) {
 		}
 		query.withFKs = true
 		query.Where(predicate.Order(func(s *sql.Selector) {
-			s.Where(sql.InValues(pharmacist.OrderColumn, fks...))
+			s.Where(sql.InValues(pharmacist.OrderpharmacistColumn, fks...))
 		}))
 		neighbors, err := query.All(ctx)
 		if err != nil {
 			return nil, err
 		}
 		for _, n := range neighbors {
-			fk := n.pharmacist_id
+			fk := n.pharmacist_orderpharmacist
 			if fk == nil {
-				return nil, fmt.Errorf(`foreign-key "pharmacist_id" is nil for node %v`, n.ID)
+				return nil, fmt.Errorf(`foreign-key "pharmacist_orderpharmacist" is nil for node %v`, n.ID)
 			}
 			node, ok := nodeids[*fk]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "pharmacist_id" returned %v for node %v`, *fk, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "pharmacist_orderpharmacist" returned %v for node %v`, *fk, n.ID)
 			}
-			node.Edges.Order = append(node.Edges.Order, n)
+			node.Edges.Orderpharmacist = append(node.Edges.Orderpharmacist, n)
 		}
 	}
 

@@ -29,12 +29,6 @@ func (pc *PrescriptionCreate) SetValue(i int) *PrescriptionCreate {
 	return pc
 }
 
-// SetStatusQueue sets the Status_Queue field.
-func (pc *PrescriptionCreate) SetStatusQueue(s string) *PrescriptionCreate {
-	pc.mutation.SetStatusQueue(s)
-	return pc
-}
-
 // SetPrescriptionpatientID sets the prescriptionpatient edge to PatientInfo by id.
 func (pc *PrescriptionCreate) SetPrescriptionpatientID(id int) *PrescriptionCreate {
 	pc.mutation.SetPrescriptionpatientID(id)
@@ -121,9 +115,6 @@ func (pc *PrescriptionCreate) Save(ctx context.Context) (*Prescription, error) {
 	if _, ok := pc.mutation.Value(); !ok {
 		return nil, &ValidationError{Name: "Value", err: errors.New("ent: missing required field \"Value\"")}
 	}
-	if _, ok := pc.mutation.StatusQueue(); !ok {
-		return nil, &ValidationError{Name: "Status_Queue", err: errors.New("ent: missing required field \"Status_Queue\"")}
-	}
 	var (
 		err  error
 		node *Prescription
@@ -191,14 +182,6 @@ func (pc *PrescriptionCreate) createSpec() (*Prescription, *sqlgraph.CreateSpec)
 			Column: prescription.FieldValue,
 		})
 		pr.Value = value
-	}
-	if value, ok := pc.mutation.StatusQueue(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: prescription.FieldStatusQueue,
-		})
-		pr.StatusQueue = value
 	}
 	if nodes := pc.mutation.PrescriptionpatientIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

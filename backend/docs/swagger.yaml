@@ -47,13 +47,17 @@ definitions:
     type: object
   controllers.Order:
     properties:
-      company:
-        type: integer
-      datetime:
+      addedtime:
         type: string
-      medicine:
+      amount:
         type: integer
-      pharmacist:
+      companyid:
+        type: integer
+      medicineid:
+        type: integer
+      pharmacistid:
+        type: integer
+      price:
         type: integer
     type: object
   controllers.Prescription:
@@ -64,10 +68,8 @@ definitions:
         type: integer
       patientInfoID:
         type: integer
-      statusQueue:
-        type: string
       value:
-        type: integer
+        type: string
     type: object
   ent.Annotation:
     properties:
@@ -127,6 +129,9 @@ definitions:
     type: object
   ent.Company:
     properties:
+      Name:
+        description: Name holds the value of the "Name" field.
+        type: string
       edges:
         $ref: '#/definitions/ent.CompanyEdges'
         description: |-
@@ -136,14 +141,11 @@ definitions:
       id:
         description: ID of the ent.
         type: integer
-      name:
-        description: Name holds the value of the "name" field.
-        type: string
     type: object
   ent.CompanyEdges:
     properties:
-      order:
-        description: Order holds the value of the order edge.
+      ordercompany:
+        description: Ordercompany holds the value of the ordercompany edge.
         items:
           $ref: '#/definitions/ent.Order'
         type: array
@@ -316,8 +318,8 @@ definitions:
         items:
           $ref: '#/definitions/ent.Prescription'
         type: array
-      order:
-        description: Order holds the value of the order edge.
+      ordermedicine:
+        description: Ordermedicine holds the value of the ordermedicine edge.
         items:
           $ref: '#/definitions/ent.Order'
         type: array
@@ -351,12 +353,12 @@ definitions:
     type: object
   ent.Order:
     properties:
+      addedtime:
+        description: Addedtime holds the value of the "addedtime" field.
+        type: string
       amount:
         description: Amount holds the value of the "amount" field.
         type: integer
-      datetime:
-        description: Datetime holds the value of the "datetime" field.
-        type: string
       edges:
         $ref: '#/definitions/ent.OrderEdges'
         description: |-
@@ -368,10 +370,7 @@ definitions:
         type: integer
       price:
         description: Price holds the value of the "price" field.
-        type: number
-      total:
-        description: Total holds the value of the "total" field.
-        type: number
+        type: integer
     type: object
   ent.OrderEdges:
     properties:
@@ -487,17 +486,14 @@ definitions:
         items:
           $ref: '#/definitions/ent.DrugAllergy'
         type: array
-      order:
-        description: Order holds the value of the order edge.
+      orderpharmacist:
+        description: Orderpharmacist holds the value of the orderpharmacist edge.
         items:
           $ref: '#/definitions/ent.Order'
         type: array
     type: object
   ent.Prescription:
     properties:
-      Status_Queue:
-        description: StatusQueue holds the value of the "Status_Queue" field.
-        type: string
       Value:
         description: Value holds the value of the "Value" field.
         type: integer
@@ -1629,36 +1625,35 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: List company entities
-  /companys/{id}:
-    delete:
-      description: get company by ID
-      operationId: delete-company
+    post:
+      consumes:
+      - application/json
+      description: Create company
+      operationId: create-company
       parameters:
-      - description: Company ID
-        in: path
-        name: id
+      - description: Company entity
+        in: body
+        name: company
         required: true
-        type: integer
+        schema:
+          $ref: '#/definitions/ent.Company'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/gin.H'
+            $ref: '#/definitions/ent.Company'
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "404":
-          description: Not Found
           schema:
             $ref: '#/definitions/gin.H'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: Delete a company entity by ID
+      summary: Create company
+  /companys/{id}:
     get:
       description: get company by ID
       operationId: get-company
@@ -1991,35 +1986,6 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Update a DrugAllergy entity by ID
-  /institutions:
-    post:
-      consumes:
-      - application/json
-      description: Create company
-      operationId: create-company
-      parameters:
-      - description: Company entity
-        in: body
-        name: company
-        required: true
-        schema:
-          $ref: '#/definitions/ent.Company'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/ent.Company'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Create company
   /orders:
     get:
       description: list order entities
@@ -2069,7 +2035,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/ent.Order'
+            $ref: '#/definitions/controllers.Order'
         "400":
           description: Bad Request
           schema:
@@ -2109,6 +2075,35 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Delete a order entity by ID
+    get:
+      description: get order by ID
+      operationId: get-order
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Order'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a order entity by ID
   /patientinfos:
     get:
       description: list PatientInfo entities

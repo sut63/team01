@@ -8,7 +8,6 @@ import (
 	"github.com/sut63/team01/ent/company"
 	"github.com/sut63/team01/ent/doctor"
 	"github.com/sut63/team01/ent/medicine"
-	"github.com/sut63/team01/ent/order"
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/pharmacist"
 	"github.com/sut63/team01/ent/schema"
@@ -32,9 +31,9 @@ func init() {
 	bill.AmountValidator = billDescAmount.Validators[0].(func(int) error)
 	companyFields := schema.Company{}.Fields()
 	_ = companyFields
-	// companyDescName is the schema descriptor for name field.
+	// companyDescName is the schema descriptor for Name field.
 	companyDescName := companyFields[0].Descriptor()
-	// company.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	// company.NameValidator is a validator for the "Name" field. It is called by the builders before save.
 	company.NameValidator = companyDescName.Validators[0].(func(string) error)
 	doctorFields := schema.Doctor{}.Fields()
 	_ = doctorFields
@@ -76,12 +75,6 @@ func init() {
 	medicineDescHowtouse := medicineFields[5].Descriptor()
 	// medicine.HowtouseValidator is a validator for the "howtouse" field. It is called by the builders before save.
 	medicine.HowtouseValidator = medicineDescHowtouse.Validators[0].(func(string) error)
-	orderFields := schema.Order{}.Fields()
-	_ = orderFields
-	// orderDescAmount is the schema descriptor for amount field.
-	orderDescAmount := orderFields[0].Descriptor()
-	// order.AmountValidator is a validator for the "amount" field. It is called by the builders before save.
-	order.AmountValidator = orderDescAmount.Validators[0].(func(int) error)
 	patientinfoFields := schema.PatientInfo{}.Fields()
 	_ = patientinfoFields
 	// patientinfoDescCardNumber is the schema descriptor for cardNumber field.

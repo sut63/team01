@@ -28,25 +28,25 @@ func (cu *CompanyUpdate) Where(ps ...predicate.Company) *CompanyUpdate {
 	return cu
 }
 
-// SetName sets the name field.
+// SetName sets the Name field.
 func (cu *CompanyUpdate) SetName(s string) *CompanyUpdate {
 	cu.mutation.SetName(s)
 	return cu
 }
 
-// AddOrderIDs adds the order edge to Order by ids.
-func (cu *CompanyUpdate) AddOrderIDs(ids ...int) *CompanyUpdate {
-	cu.mutation.AddOrderIDs(ids...)
+// AddOrdercompanyIDs adds the ordercompany edge to Order by ids.
+func (cu *CompanyUpdate) AddOrdercompanyIDs(ids ...int) *CompanyUpdate {
+	cu.mutation.AddOrdercompanyIDs(ids...)
 	return cu
 }
 
-// AddOrder adds the order edges to Order.
-func (cu *CompanyUpdate) AddOrder(o ...*Order) *CompanyUpdate {
+// AddOrdercompany adds the ordercompany edges to Order.
+func (cu *CompanyUpdate) AddOrdercompany(o ...*Order) *CompanyUpdate {
 	ids := make([]int, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return cu.AddOrderIDs(ids...)
+	return cu.AddOrdercompanyIDs(ids...)
 }
 
 // Mutation returns the CompanyMutation object of the builder.
@@ -54,26 +54,26 @@ func (cu *CompanyUpdate) Mutation() *CompanyMutation {
 	return cu.mutation
 }
 
-// RemoveOrderIDs removes the order edge to Order by ids.
-func (cu *CompanyUpdate) RemoveOrderIDs(ids ...int) *CompanyUpdate {
-	cu.mutation.RemoveOrderIDs(ids...)
+// RemoveOrdercompanyIDs removes the ordercompany edge to Order by ids.
+func (cu *CompanyUpdate) RemoveOrdercompanyIDs(ids ...int) *CompanyUpdate {
+	cu.mutation.RemoveOrdercompanyIDs(ids...)
 	return cu
 }
 
-// RemoveOrder removes order edges to Order.
-func (cu *CompanyUpdate) RemoveOrder(o ...*Order) *CompanyUpdate {
+// RemoveOrdercompany removes ordercompany edges to Order.
+func (cu *CompanyUpdate) RemoveOrdercompany(o ...*Order) *CompanyUpdate {
 	ids := make([]int, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return cu.RemoveOrderIDs(ids...)
+	return cu.RemoveOrdercompanyIDs(ids...)
 }
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (cu *CompanyUpdate) Save(ctx context.Context) (int, error) {
 	if v, ok := cu.mutation.Name(); ok {
 		if err := company.NameValidator(v); err != nil {
-			return 0, &ValidationError{Name: "name", err: fmt.Errorf("ent: validator failed for field \"name\": %w", err)}
+			return 0, &ValidationError{Name: "Name", err: fmt.Errorf("ent: validator failed for field \"Name\": %w", err)}
 		}
 	}
 
@@ -151,12 +151,12 @@ func (cu *CompanyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: company.FieldName,
 		})
 	}
-	if nodes := cu.mutation.RemovedOrderIDs(); len(nodes) > 0 {
+	if nodes := cu.mutation.RemovedOrdercompanyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   company.OrderTable,
-			Columns: []string{company.OrderColumn},
+			Table:   company.OrdercompanyTable,
+			Columns: []string{company.OrdercompanyColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -170,12 +170,12 @@ func (cu *CompanyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.OrderIDs(); len(nodes) > 0 {
+	if nodes := cu.mutation.OrdercompanyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   company.OrderTable,
-			Columns: []string{company.OrderColumn},
+			Table:   company.OrdercompanyTable,
+			Columns: []string{company.OrdercompanyColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -207,25 +207,25 @@ type CompanyUpdateOne struct {
 	mutation *CompanyMutation
 }
 
-// SetName sets the name field.
+// SetName sets the Name field.
 func (cuo *CompanyUpdateOne) SetName(s string) *CompanyUpdateOne {
 	cuo.mutation.SetName(s)
 	return cuo
 }
 
-// AddOrderIDs adds the order edge to Order by ids.
-func (cuo *CompanyUpdateOne) AddOrderIDs(ids ...int) *CompanyUpdateOne {
-	cuo.mutation.AddOrderIDs(ids...)
+// AddOrdercompanyIDs adds the ordercompany edge to Order by ids.
+func (cuo *CompanyUpdateOne) AddOrdercompanyIDs(ids ...int) *CompanyUpdateOne {
+	cuo.mutation.AddOrdercompanyIDs(ids...)
 	return cuo
 }
 
-// AddOrder adds the order edges to Order.
-func (cuo *CompanyUpdateOne) AddOrder(o ...*Order) *CompanyUpdateOne {
+// AddOrdercompany adds the ordercompany edges to Order.
+func (cuo *CompanyUpdateOne) AddOrdercompany(o ...*Order) *CompanyUpdateOne {
 	ids := make([]int, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return cuo.AddOrderIDs(ids...)
+	return cuo.AddOrdercompanyIDs(ids...)
 }
 
 // Mutation returns the CompanyMutation object of the builder.
@@ -233,26 +233,26 @@ func (cuo *CompanyUpdateOne) Mutation() *CompanyMutation {
 	return cuo.mutation
 }
 
-// RemoveOrderIDs removes the order edge to Order by ids.
-func (cuo *CompanyUpdateOne) RemoveOrderIDs(ids ...int) *CompanyUpdateOne {
-	cuo.mutation.RemoveOrderIDs(ids...)
+// RemoveOrdercompanyIDs removes the ordercompany edge to Order by ids.
+func (cuo *CompanyUpdateOne) RemoveOrdercompanyIDs(ids ...int) *CompanyUpdateOne {
+	cuo.mutation.RemoveOrdercompanyIDs(ids...)
 	return cuo
 }
 
-// RemoveOrder removes order edges to Order.
-func (cuo *CompanyUpdateOne) RemoveOrder(o ...*Order) *CompanyUpdateOne {
+// RemoveOrdercompany removes ordercompany edges to Order.
+func (cuo *CompanyUpdateOne) RemoveOrdercompany(o ...*Order) *CompanyUpdateOne {
 	ids := make([]int, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return cuo.RemoveOrderIDs(ids...)
+	return cuo.RemoveOrdercompanyIDs(ids...)
 }
 
 // Save executes the query and returns the updated entity.
 func (cuo *CompanyUpdateOne) Save(ctx context.Context) (*Company, error) {
 	if v, ok := cuo.mutation.Name(); ok {
 		if err := company.NameValidator(v); err != nil {
-			return nil, &ValidationError{Name: "name", err: fmt.Errorf("ent: validator failed for field \"name\": %w", err)}
+			return nil, &ValidationError{Name: "Name", err: fmt.Errorf("ent: validator failed for field \"Name\": %w", err)}
 		}
 	}
 
@@ -328,12 +328,12 @@ func (cuo *CompanyUpdateOne) sqlSave(ctx context.Context) (c *Company, err error
 			Column: company.FieldName,
 		})
 	}
-	if nodes := cuo.mutation.RemovedOrderIDs(); len(nodes) > 0 {
+	if nodes := cuo.mutation.RemovedOrdercompanyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   company.OrderTable,
-			Columns: []string{company.OrderColumn},
+			Table:   company.OrdercompanyTable,
+			Columns: []string{company.OrdercompanyColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -347,12 +347,12 @@ func (cuo *CompanyUpdateOne) sqlSave(ctx context.Context) (c *Company, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.OrderIDs(); len(nodes) > 0 {
+	if nodes := cuo.mutation.OrdercompanyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   company.OrderTable,
-			Columns: []string{company.OrderColumn},
+			Table:   company.OrdercompanyTable,
+			Columns: []string{company.OrdercompanyColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

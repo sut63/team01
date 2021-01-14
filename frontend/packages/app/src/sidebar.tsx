@@ -32,6 +32,18 @@ export const AppSidebar = () => (
       to="watch_video"
       text="Watch Video"
     />
+    <SidebarItem
+      icon={CreateComponentIcon}
+      to="create_prescription"
+      text="สั่งจ่ายยา"
+    />
+    <SidebarItem
+      icon={CreateComponentIcon}
+      to="drug_allergy"
+      text="ประวัติการเเพ้ยา"
+    />
+
+
 
     {/* End global nav */}
     <SidebarDivider />

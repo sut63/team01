@@ -34,6 +34,8 @@ import {
   EntPrescription,
 } from '../../api/models';
 
+import { Cookies } from 'react-cookie/cjs'; //cookie
+
 // css style
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -94,7 +96,7 @@ interface DispenseMedicine {
 const DispenseMedicine: FC<{}> = () => {
   const classes = useStyles();
   const profile = { givenName: 'บันทึกการจ่ายยา' };
-
+  const cookies = new Cookies();
   const api = new DefaultApi();
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState(false);
@@ -137,23 +139,9 @@ const DispenseMedicine: FC<{}> = () => {
     setApiPrescription(res);
   };
 
-  //function check data from localStroage ////////////////////////////////////////////////////////////////////////////////
   const checkPosition = async () => {
-    const PositionName = JSON.parse(
-      String(localStorage.getItem('positiondata')),
-    );
-    setLoading(false);
-
-    if (PositionName != 'pharmacist') {
-      localStorage.setItem('pharmacist-id', JSON.stringify(null));
-      localStorage.setItem('pharmacist-name', JSON.stringify(null));
-      localStorage.setItem('positiondata', JSON.stringify(null));
-      history.pushState('', '', './');
-      window.location.reload(false);
-    } else {
-      setPharmacistID(Number(localStorage.getItem('pharmacist-id')));
-      setPharmacistName(String(localStorage.getItem('pharmacist-name')));
-    }
+    setPharmacistID(Number(cookies.get('ID')));
+    setPharmacistName(cookies.get('Name'));
   };
 
   // Lifecycle Hooks
@@ -229,7 +217,7 @@ const DispenseMedicine: FC<{}> = () => {
     }
     setTimeout(() => {
       setStatus(false);
-    }, 1500);
+    }, 2000);
   };
 
   return (

@@ -24,6 +24,7 @@ import { Alert } from '@material-ui/lab'; // alert
 import { DefaultApi } from '../../api/apis';
 import { EntPharmacist } from '../../api/models/EntPharmacist';
 import { EntDoctor } from '../../api/models/EntDoctor';
+import { Cookies } from 'react-cookie/cjs'; //cookie
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -61,8 +62,9 @@ const SignIn: FC<{}> = () => {
   const profile = { givenName: 'ยินดีต้อนรับ' };
   const [status, setStatus] = useState(false);
   const [alert, setAlert] = useState(Boolean);
-
+  const cookies = new Cookies();
   const api = new DefaultApi();
+
   const [pharmacists, setPharmacist] = useState<EntPharmacist[]>([]);
   const [doctors, setDoctor] = useState<EntDoctor[]>([]);
 
@@ -86,32 +88,25 @@ const SignIn: FC<{}> = () => {
     setDoctor(res);
   };
 
-  const resetData = async () => {
-    localStorage.setItem("pharmacist-id",JSON.stringify(null));
-    localStorage.setItem("pharmacist-name",JSON.stringify(null));
-    localStorage.setItem("positiondata",JSON.stringify(null));
-    localStorage.setItem("doctor-id",JSON.stringify(null));
-    localStorage.setItem("doctor-name",JSON.stringify(null));
-  };
-
   useEffect(() => {
     getPharmacist();
     getDoctor();
-    resetData();
   }, []);
 
   const SigninCheck = async () => {
     var checkPharmacist = false;
+    var showAlertFalse = true;
 
     pharmacists.map((item: any) => {
       console.log(item.email);
       if (item.email == emails && item.password == password) {
         setAlert(true);
         checkPharmacist = true;
-        localStorage.setItem('pharmacist-id', JSON.stringify(item.id));
-        localStorage.setItem('pharmacist-name', JSON.stringify(item.name));
-        localStorage.setItem('positiondata', JSON.stringify('pharmacist'));
-        history.pushState('', '', '/drug_allergy'); /////////มาแก้ที่หลังไปยังหน้ารวมเภสัชกร
+        showAlertFalse = false;
+        cookies.set('ID', JSON.stringify(item.id), { path: '/' });
+        cookies.set('Name', JSON.stringify(item.name), { path: '/' });
+        cookies.set('StatusLogin', JSON.stringify('Yes'), { path: '/' });
+        history.pushState('', '', '/' + cookies.get('PositionData'));
         window.location.reload(false);
       }
     });
@@ -121,19 +116,23 @@ const SignIn: FC<{}> = () => {
         console.log(item.email);
         if (item.email == emails && item.password == password) {
           setAlert(true);
-          localStorage.setItem('doctor-id', JSON.stringify(item.id));
-          localStorage.setItem('doctor-name', JSON.stringify(item.name));
-          localStorage.setItem('positiondata', JSON.stringify('doctor'));
-          history.pushState('', '', '/create_prescription');
+          showAlertFalse = false;
+          cookies.set('ID', JSON.stringify(item.id), { path: '/' });
+          cookies.set('Name', JSON.stringify(item.name), { path: '/' });
+          cookies.set('StatusLogin', JSON.stringify('Yes'), { path: '/' });
+          history.pushState('', '', '/' + cookies.get('PositionData'));
           window.location.reload(false);
         }
       });
     }
-    
+
+    if (showAlertFalse === true){
+      setAlert(false);
+    }
     setStatus(true);
     const timer = setTimeout(() => {
       setStatus(false);
-    }, 1000);
+    }, 3000);
   };
 
   return (

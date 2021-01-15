@@ -8,6 +8,7 @@ import create_prescription from './components/create_prescription';
 import Medicine from './components/Medicine';
 import DispenseMedicine from './components/DispenseMedicine';
 import Order from './components/Order';
+import CreateBill from './components/createBill';
 
 const cookies = new Cookies();
 const sPositionData = cookies.get('PositionData');
@@ -35,7 +36,8 @@ export const plugin = createPlugin({
       if (sPositionData == 'DispenseMedicine') {
         router.registerRoute('/DispenseMedicine', DispenseMedicine);
       }
-      if (sPositionData == 'Bill') {
+      if (sPositionData == 'CreateBill') {
+        router.registerRoute('/CreateBill', CreateBill);
       }
     }
   },

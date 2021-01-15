@@ -106,7 +106,7 @@ const DrugAllergy: FC<{}> = () => {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(drugallergy),
+            body: JSON.stringify(drugallergy),git 
         };
         fetch(api, requestOptions)
             .then(response => response.json())
@@ -123,7 +123,6 @@ const DrugAllergy: FC<{}> = () => {
                     Toast.fire({
                         icon: 'error',
                         title: 'บันทึกข้อมูลไม่สำเร็จ',
-                        text: data.error,
                     });
                 }
             });

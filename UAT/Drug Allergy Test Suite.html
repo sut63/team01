@@ -11,11 +11,9 @@
 <tr><td rowspan="1" colspan="3">Create Success Test Case</td></tr>
 </thead>
 <tbody>
-<tr><td>open</td><td>http://localhost:3000/<datalist><option>http://localhost:3000/</option></datalist></td><td></td>
+<tr><td>open</td><td>http://localhost:3000/DrugAllergy<datalist><option>http://localhost:3000/DrugAllergy</option></datalist></td><td></td>
 </tr>
-<tr><td>click</td><td>//div[@id='root']/div/div/div/a/h6<datalist><option>//div[@id='root']/div/div/div/a/h6</option><option>//h6</option><option>css=h6.MuiTypography-root.makeStyles-label-11.MuiTypography-subtitle2</option></datalist></td><td></td>
-</tr>
-<tr><td>click</td><td>link=ประวัติการเเพ้ยา<datalist><option>link=ประวัติการเเพ้ยา</option><option>//div[@id='root']/div/div/div/a[5]</option><option>//a[contains(@href, '/drug_allergy')]</option><option>//a[5]</option></datalist></td><td></td>
+<tr><td>click</td><td>//div[@id='root']/div/div/div/a/h6<datalist><option>//div[@id='root']/div/div/div/a/h6</option><option>//a/h6</option><option>css=a.makeStyles-root-8.makeStyles-open-10.makeStyles-selected-18 &gt; h6.MuiTypography-root.makeStyles-label-11.MuiTypography-subtitle2</option></datalist></td><td></td>
 </tr>
 <tr><td>click</td><td>id=mui-component-select-patient<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-patient</option></datalist></td><td></td>
 </tr>
@@ -27,7 +25,7 @@
 </tr>
 <tr><td>click</td><td>name=dateTime<datalist><option>name=dateTime</option><option>//input[@name='dateTime']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=input[name="dateTime"]</option></datalist></td><td></td>
 </tr>
-<tr><td>setText</td><td>name=dateTime<datalist><option>name=dateTime</option><option>//input[@name='dateTime']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=input[name="dateTime"]</option></datalist></td><td>2021-01-13T13:45</td>
+<tr><td>setText</td><td>name=dateTime<datalist><option>name=dateTime</option><option>//input[@name='dateTime']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=input[name="dateTime"]</option></datalist></td><td>2021-01-15T19:29</td>
 </tr>
 <tr><td>click</td><td>//div[@id='root']/div/div[2]/article<datalist><option>//div[@id='root']/div/div[2]/article</option><option>//article</option><option>css=article.makeStyles-root-36</option></datalist></td><td></td>
 </tr>
@@ -38,62 +36,16 @@
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Create Failure1 Test Case</td></tr>
+<tr><td rowspan="1" colspan="3">Create Failure Test Case</td></tr>
 </thead>
 <tbody>
-<tr><td>open</td><td>http://localhost:3000/drug_allergy<datalist><option>http://localhost:3000/drug_allergy</option></datalist></td><td></td>
+<tr><td>open</td><td>http://localhost:3000/DrugAllergy<datalist><option>http://localhost:3000/DrugAllergy</option></datalist></td><td></td>
 </tr>
-<tr><td>click</td><td>//div[@id='root']/div/div/div/a/h6<datalist><option>//div[@id='root']/div/div/div/a/h6</option><option>//h6</option><option>css=h6.MuiTypography-root.makeStyles-label-11.MuiTypography-subtitle2</option></datalist></td><td></td>
-</tr>
-<tr><td>click</td><td>//div[@id='root']/div/div/div/a[5]/h6<datalist><option>//div[@id='root']/div/div/div/a[5]/h6</option><option>//a[5]/h6</option></datalist></td><td></td>
+<tr><td>click</td><td>//div[@id='root']/div/div/div/a/h6<datalist><option>//div[@id='root']/div/div/div/a/h6</option><option>//a/h6</option><option>css=a.makeStyles-root-8.makeStyles-open-10.makeStyles-selected-18 &gt; h6.MuiTypography-root.makeStyles-label-11.MuiTypography-subtitle2</option></datalist></td><td></td>
 </tr>
 <tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
 </tr>
-<tr><td>assertText</td><td>id=swal2-content<datalist><option>id=swal2-content</option><option>//div[@id='swal2-content']</option><option>//div[2]/div/div[2]/div</option><option>css=#swal2-content</option></datalist></td><td>patient not found</td>
-</tr>
-</tbody></table>
-<table cellpadding="1" cellspacing="1" border="1">
-<thead>
-<tr><td rowspan="1" colspan="3">Create Failure2 Test Case</td></tr>
-</thead>
-<tbody>
-<tr><td>open</td><td>http://localhost:3000/drug_allergy<datalist><option>http://localhost:3000/drug_allergy</option></datalist></td><td></td>
-</tr>
-<tr><td>click</td><td>//div[@id='root']/div/div/div/a/h6<datalist><option>//div[@id='root']/div/div/div/a/h6</option><option>//h6</option><option>css=h6.MuiTypography-root.makeStyles-label-11.MuiTypography-subtitle2</option></datalist></td><td></td>
-</tr>
-<tr><td>click</td><td>//div[@id='root']/div/div/div/a[5]/h6<datalist><option>//div[@id='root']/div/div/div/a[5]/h6</option><option>//a[5]/h6</option></datalist></td><td></td>
-</tr>
-<tr><td>click</td><td>id=mui-component-select-patient<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-patient</option></datalist></td><td></td>
-</tr>
-<tr><td>click</td><td>//div[@id='menu-patient']/div[3]/ul/li<datalist><option>//div[@id='menu-patient']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button</option></datalist></td><td></td>
-</tr>
-<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
-</tr>
-<tr><td>assertText</td><td>id=swal2-content<datalist><option>id=swal2-content</option><option>//div[@id='swal2-content']</option><option>//div[2]/div/div[2]/div</option><option>css=#swal2-content</option></datalist></td><td>medicine not found</td>
-</tr>
-</tbody></table>
-<table cellpadding="1" cellspacing="1" border="1">
-<thead>
-<tr><td rowspan="1" colspan="3">Create Failure3 Test Case</td></tr>
-</thead>
-<tbody>
-<tr><td>open</td><td>http://localhost:3000/drug_allergy<datalist><option>http://localhost:3000/drug_allergy</option></datalist></td><td></td>
-</tr>
-<tr><td>click</td><td>//div[@id='root']/div/div/div/a/h6<datalist><option>//div[@id='root']/div/div/div/a/h6</option><option>//h6</option><option>css=h6.MuiTypography-root.makeStyles-label-11.MuiTypography-subtitle2</option></datalist></td><td></td>
-</tr>
-<tr><td>click</td><td>//div[@id='root']/div/div/div/a[5]/h6<datalist><option>//div[@id='root']/div/div/div/a[5]/h6</option><option>//a[5]/h6</option></datalist></td><td></td>
-</tr>
-<tr><td>click</td><td>id=mui-component-select-patient<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-patient</option></datalist></td><td></td>
-</tr>
-<tr><td>click</td><td>//div[@id='menu-patient']/div[3]/ul/li<datalist><option>//div[@id='menu-patient']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button</option></datalist></td><td></td>
-</tr>
-<tr><td>click</td><td>id=mui-component-select-medicine<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-medicine</option></datalist></td><td></td>
-</tr>
-<tr><td>click</td><td>//div[@id='menu-medicine']/div[3]/ul/li<datalist><option>//div[@id='menu-medicine']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button</option></datalist></td><td></td>
-</tr>
-<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
-</tr>
-<tr><td>assertText</td><td>id=swal2-content<datalist><option>id=swal2-content</option><option>//div[@id='swal2-content']</option><option>//div[2]/div/div[2]/div</option><option>css=#swal2-content</option></datalist></td><td>datetime not found</td>
+<tr><td>assertText</td><td>id=swal2-title<datalist><option>id=swal2-title</option><option>//h2[@id='swal2-title']</option><option>//h2</option><option>css=#swal2-title</option></datalist></td><td>บันทึกข้อมูลไม่สำเร็จ</td>
 </tr>
 </tbody></table>
 </body>

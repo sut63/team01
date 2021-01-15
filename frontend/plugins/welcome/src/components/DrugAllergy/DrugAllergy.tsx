@@ -123,7 +123,6 @@ const DrugAllergy: FC<{}> = () => {
                     Toast.fire({
                         icon: 'error',
                         title: 'บันทึกข้อมูลไม่สำเร็จ',
-                        text: data.error,
                     });
                 }
             });

@@ -106,7 +106,7 @@ const DrugAllergy: FC<{}> = () => {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(drugallergy),git 
+            body: JSON.stringify(drugallergy),
         };
         fetch(api, requestOptions)
             .then(response => response.json())

@@ -79,10 +79,10 @@ export const AppSidebar = () => (
           to="DispenseMedicine"
           text="บันทึกการจ่ายยา"
         />
-      ) : sPositionData == 'Bill' ? (
+      ) : sPositionData == 'CreateBill' ? (
         <SidebarItem
           icon={ReceiptOutlinedIcon}
-          to="" /////มาใส่ลิ้งของ Bill ที่หลัง
+          to="CreateBill"
           text="ชำระค่ายา"
         />
       ) : null

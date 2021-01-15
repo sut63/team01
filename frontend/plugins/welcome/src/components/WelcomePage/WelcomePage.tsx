@@ -92,7 +92,7 @@ const WelcomePage: FC<{}> = () => {
             id={'B6105358'}
             system={'ระบบบันทึกการชำระค่ายา'}
             imgsut={Image1Base64Function}
-            linkto="Bill"
+            linkto="CreateBill"
           ></CardTeam>
 
           <CardTeam

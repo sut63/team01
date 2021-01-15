@@ -64,9 +64,9 @@ export function EntOrderEdgesFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
-        'company': !exists(json, 'company') ? undefined : EntCompanyFromJSON(json['company']),
-        'medicine': !exists(json, 'medicine') ? undefined : EntMedicineFromJSON(json['medicine']),
-        'pharmacist': !exists(json, 'pharmacist') ? undefined : EntPharmacistFromJSON(json['pharmacist']),
+        'company': !exists(json, 'Company') ? undefined : EntCompanyFromJSON(json['Company']),
+        'medicine': !exists(json, 'Medicine') ? undefined : EntMedicineFromJSON(json['Medicine']),
+        'pharmacist': !exists(json, 'Pharmacist') ? undefined : EntPharmacistFromJSON(json['Pharmacist']),
     };
 }
 

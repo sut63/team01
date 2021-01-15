@@ -304,10 +304,10 @@ func main() {
 	//Set Pharmacists Data
 	Pharma := Pharmacists{
 		Pharmacist: []Pharmacist{
-			Pharmacist{"codetib926@hotmail.com", "code926", "Pharm. Nacodetip Hanchai"},
+			Pharmacist{"code@hotmail.com", "code", "Pharm. Nacodetip Hanchai"},
 			Pharmacist{"anna1231@gmail.com", "anna1231", "Pharm. Anna Saithai"},
 			Pharmacist{"manisara@gmail.com", "mani098765", "Pharm. Manisara Insuwan"},
-			Pharmacist{"somchai@hotmail.com", "s096666", "Pharm. Somchai Poonsuk"},
+			Pharmacist{"somchai@hotmail.com", "s1234", "Pharm. Somchai Poonsuk"},
 			Pharmacist{"supanan5009@gmail.com", "Su14520", "Pharm. Supanan Pongsuwan"},
 			Pharmacist{"kuntarit5010@gmail.com", "Kun@0881234", "Pharm. Kuntarit Wannasak"},
 		},

@@ -23,9 +23,9 @@ type BillController struct {
 type Bill struct {
 	Annotation   		 string
 	Amount				 int
-	Payments	  		 int
+	Payment		  		 int
 	DispenseMedicine     int
-	Pharmacists 		 int
+	Pharmacist	 		 int
 }
 
 // CreateBill handles POST requests for adding bill entities
@@ -50,9 +50,9 @@ func (ctl *BillController) CreateBill(c *gin.Context) {
 
 	py, err := ctl.client.Payment.
 		Query().
-		Where(payment.IDEQ(int(obj.Payments))).
+		Where(payment.IDEQ(int(obj.Payment))).
 		Only(context.Background())
-	if err != nil {
+		if err != nil {
 		c.JSON(400, gin.H{
 			"error": "prescription not found",
 		})
@@ -72,7 +72,7 @@ func (ctl *BillController) CreateBill(c *gin.Context) {
 
 	ph, err := ctl.client.Pharmacist.
 		Query().
-		Where(pharmacist.IDEQ(int(obj.Pharmacists))).
+		Where(pharmacist.IDEQ(int(obj.Pharmacist))).
 		Only(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -246,7 +246,7 @@ func (ctl *BillController) UpdateBill(c *gin.Context) {
 
 	py, err := ctl.client.Payment.
 		Query().
-		Where(payment.IDEQ(int(obj.Payments))).
+		Where(payment.IDEQ(int(obj.Payment))).
 		Only(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -268,7 +268,7 @@ func (ctl *BillController) UpdateBill(c *gin.Context) {
 
 	ph, err := ctl.client.Pharmacist.
 		Query().
-		Where(pharmacist.IDEQ(int(obj.Pharmacists))).
+		Where(pharmacist.IDEQ(int(obj.Pharmacist))).
 		Only(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{

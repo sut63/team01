@@ -146,6 +146,7 @@ const Bill: FC<{}> = () => {
   const checkPosition = async () => {
     setPharmacistID(Number(cookies.get('ID')));
     setPharmacistName(cookies.get('Name'));
+    console.log(sPharmacistID);
   };
 
   // Lifecycle Hooks
@@ -163,6 +164,15 @@ const Bill: FC<{}> = () => {
     const name = event.target.name as keyof typeof Bill;
     const { value } = event.target;
     setBill({ ...sBill, [name]: value });
+    console.log(sBill);
+  };
+
+  const handleChange2 = (
+    event: React.ChangeEvent<{ name?: string; value: unknown }>,
+  ) => {
+    const name = event.target.name as keyof typeof Bill;
+    const { value } = event.target;
+    setBill({ ...sBill, [name]: Number(value) });
     console.log(sBill);
   };
 
@@ -197,11 +207,14 @@ const Bill: FC<{}> = () => {
       sBill.amount != 0
     ) {
       const Bills = {
-        annotation: sBill.annotation,
-        pharmacist: sPharmacistID,
-        payment: sBill.payment,
-        dispensemedicine: sBill.dispensemedicine,
         amount: sBill.amount,
+        annotation: sBill.annotation,
+        dispenseMedicine: sBill.dispensemedicine,
+        payment: sBill.payment,
+        pharmacist: sPharmacistID,
+        
+        
+        
       };
 
       const res: any = await api.createBill({
@@ -392,7 +405,7 @@ const Bill: FC<{}> = () => {
                       type="number"
                       value = {sBill.amount}
                       variant="outlined"
-                      onChange={handleChange}
+                      onChange={handleChange2}
                     ></TextField>
                   </FormControl>
 

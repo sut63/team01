@@ -249,6 +249,9 @@ func main() {
 	controllers.NewLevelOfDangerousController(v1, client)
 	controllers.NewMedicineController(v1, client)
 	controllers.NewPaymentController(v1, client)
+	controllers.NewBillController(v1, client)
+	controllers.NewOrderController(v1, client)
+	controllers.NewCompanyController(v1, client)
 
 	//Set PatientInfos Data
 	Patient := PatientInfos{

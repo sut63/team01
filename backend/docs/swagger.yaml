@@ -8,9 +8,9 @@ definitions:
         type: string
       dispenseMedicine:
         type: integer
-      payments:
+      payment:
         type: integer
-      pharmacists:
+      pharmacist:
         type: integer
     type: object
   controllers.DispenseMedicine:

@@ -3028,10 +3028,10 @@ var doc = `{
                 "dispenseMedicine": {
                     "type": "integer"
                 },
-                "payments": {
+                "payment": {
                     "type": "integer"
                 },
-                "pharmacists": {
+                "pharmacist": {
                     "type": "integer"
                 }
             }

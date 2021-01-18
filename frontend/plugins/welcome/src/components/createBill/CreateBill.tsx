@@ -98,7 +98,7 @@ interface Bill {
 
 const Bill: FC<{}> = () => {
   const classes = useStyles();
-  const profile = { givenName: 'บันทึกการจ่ายยา' };
+  const profile = { givenName: 'บันทึกการชำระค่ายา' };
   const cookies = new Cookies();
   const api = new DefaultApi();
   const [loading, setLoading] = useState(true);
@@ -201,12 +201,13 @@ const Bill: FC<{}> = () => {
         pharmacist: sPharmacistID,
         payment: sBill.payment,
         dispensemedicine: sBill.dispensemedicine,
-        amount: sBill.amount
+        amount: sBill.amount,
       };
 
       const res: any = await api.createBill({
         bill: Bills,
       });
+      console.log(sBill);
 
       setStatus(true);
       if (res.id != '') {
@@ -222,7 +223,7 @@ const Bill: FC<{}> = () => {
     }
     setTimeout(() => {
       setStatus(false);
-    }, 2000);
+    }, 5000);
   };
 
   return (
@@ -243,7 +244,7 @@ const Bill: FC<{}> = () => {
         >
           <Grid item xs>
             <Typography variant="h5" style={{ marginBottom: 25 }}>
-              ตารางข้อมูลคิว
+              ตารางข้อมูล
             </Typography>
             <TableContainer component={Paper}>
               <Table aria-label="simple table">
@@ -293,7 +294,7 @@ const Bill: FC<{}> = () => {
           >
             <Grid className={classes.flexRowNoCen}>
               <Typography variant="h5" style={{ marginBottom: 25 }}>
-                ข้อมูลใบสั่งยา
+                ข้อมูลใบจ่ายยา
               </Typography>
               {status ? (
                 <div>
@@ -388,6 +389,7 @@ const Bill: FC<{}> = () => {
                     <TextField
                       label="ราคา"
                       name="amount"
+                      type="number"
                       value = {sBill.amount}
                       variant="outlined"
                       onChange={handleChange}

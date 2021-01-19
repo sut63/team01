@@ -34,6 +34,7 @@ import {
   EntPrescription,
   EntPatientInfo,
   EntPayment,
+  EntBill,
 } from '../../api/models';
 
 import { Cookies } from 'react-cookie/cjs'; //cookie
@@ -111,6 +112,7 @@ const Bill: FC<{}> = () => {
   >({});
 
   const [apipayment, setPayment] = useState<EntPayment[]>([]);
+  const [apibill, setBills] = useState<EntBill[]>([]);
   
   const [apiprescriptions, setApiPrescription] = useState<EntPrescription[]>(
     [],
@@ -177,10 +179,10 @@ const Bill: FC<{}> = () => {
   };
 
   //map apiprescriptions for filter data have in apidispensemedicine
-  const prescriptionMap = apiprescriptions.filter(
+  const DispensemedicineMap = apidispensemedicine.filter(
     presc =>
-      !apidispensemedicine.some(
-        dispe => dispe.edges?.prescription?.id === presc.id,
+      !apibill.some(
+        dispe => dispe.edges?.dispenseMedicines?.id === presc.id,
       ),
   );
 
@@ -270,7 +272,7 @@ const Bill: FC<{}> = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {apidispensemedicine.map(item => (apiprescriptions.filter(t => t.id === item.edges?.prescription?.id).map(item2 => (
+                  {DispensemedicineMap.map(item => (apiprescriptions.filter(t => t.id === item.edges?.prescription?.id).map(item2 => (
                     <TableRow key={item.id}>
                       <TableCell align="center">{item.id}</TableCell>
                       <TableCell align="center">{item.datetime}</TableCell>

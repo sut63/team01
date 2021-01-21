@@ -14,6 +14,9 @@ type DrugAllergy struct {
 // Fields of the DrugAllergy.
 func (DrugAllergy) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("symptom").NotEmpty().MinLen(5),
+		field.String("congenitalDisease").NotEmpty().MinLen(1),
+		field.String("annotation").NotEmpty().MinLen(1),
 		field.Time("dateTime"),
 	}
 }

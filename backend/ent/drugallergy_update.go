@@ -31,6 +31,24 @@ func (dau *DrugAllergyUpdate) Where(ps ...predicate.DrugAllergy) *DrugAllergyUpd
 	return dau
 }
 
+// SetSymptom sets the symptom field.
+func (dau *DrugAllergyUpdate) SetSymptom(s string) *DrugAllergyUpdate {
+	dau.mutation.SetSymptom(s)
+	return dau
+}
+
+// SetCongenitalDisease sets the congenitalDisease field.
+func (dau *DrugAllergyUpdate) SetCongenitalDisease(s string) *DrugAllergyUpdate {
+	dau.mutation.SetCongenitalDisease(s)
+	return dau
+}
+
+// SetAnnotation sets the annotation field.
+func (dau *DrugAllergyUpdate) SetAnnotation(s string) *DrugAllergyUpdate {
+	dau.mutation.SetAnnotation(s)
+	return dau
+}
+
 // SetDateTime sets the dateTime field.
 func (dau *DrugAllergyUpdate) SetDateTime(t time.Time) *DrugAllergyUpdate {
 	dau.mutation.SetDateTime(t)
@@ -119,6 +137,21 @@ func (dau *DrugAllergyUpdate) ClearPharmacist() *DrugAllergyUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (dau *DrugAllergyUpdate) Save(ctx context.Context) (int, error) {
+	if v, ok := dau.mutation.Symptom(); ok {
+		if err := drugallergy.SymptomValidator(v); err != nil {
+			return 0, &ValidationError{Name: "symptom", err: fmt.Errorf("ent: validator failed for field \"symptom\": %w", err)}
+		}
+	}
+	if v, ok := dau.mutation.CongenitalDisease(); ok {
+		if err := drugallergy.CongenitalDiseaseValidator(v); err != nil {
+			return 0, &ValidationError{Name: "congenitalDisease", err: fmt.Errorf("ent: validator failed for field \"congenitalDisease\": %w", err)}
+		}
+	}
+	if v, ok := dau.mutation.Annotation(); ok {
+		if err := drugallergy.AnnotationValidator(v); err != nil {
+			return 0, &ValidationError{Name: "annotation", err: fmt.Errorf("ent: validator failed for field \"annotation\": %w", err)}
+		}
+	}
 
 	var (
 		err      error
@@ -186,6 +219,27 @@ func (dau *DrugAllergyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := dau.mutation.Symptom(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: drugallergy.FieldSymptom,
+		})
+	}
+	if value, ok := dau.mutation.CongenitalDisease(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: drugallergy.FieldCongenitalDisease,
+		})
+	}
+	if value, ok := dau.mutation.Annotation(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: drugallergy.FieldAnnotation,
+		})
 	}
 	if value, ok := dau.mutation.DateTime(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
@@ -317,6 +371,24 @@ type DrugAllergyUpdateOne struct {
 	mutation *DrugAllergyMutation
 }
 
+// SetSymptom sets the symptom field.
+func (dauo *DrugAllergyUpdateOne) SetSymptom(s string) *DrugAllergyUpdateOne {
+	dauo.mutation.SetSymptom(s)
+	return dauo
+}
+
+// SetCongenitalDisease sets the congenitalDisease field.
+func (dauo *DrugAllergyUpdateOne) SetCongenitalDisease(s string) *DrugAllergyUpdateOne {
+	dauo.mutation.SetCongenitalDisease(s)
+	return dauo
+}
+
+// SetAnnotation sets the annotation field.
+func (dauo *DrugAllergyUpdateOne) SetAnnotation(s string) *DrugAllergyUpdateOne {
+	dauo.mutation.SetAnnotation(s)
+	return dauo
+}
+
 // SetDateTime sets the dateTime field.
 func (dauo *DrugAllergyUpdateOne) SetDateTime(t time.Time) *DrugAllergyUpdateOne {
 	dauo.mutation.SetDateTime(t)
@@ -405,6 +477,21 @@ func (dauo *DrugAllergyUpdateOne) ClearPharmacist() *DrugAllergyUpdateOne {
 
 // Save executes the query and returns the updated entity.
 func (dauo *DrugAllergyUpdateOne) Save(ctx context.Context) (*DrugAllergy, error) {
+	if v, ok := dauo.mutation.Symptom(); ok {
+		if err := drugallergy.SymptomValidator(v); err != nil {
+			return nil, &ValidationError{Name: "symptom", err: fmt.Errorf("ent: validator failed for field \"symptom\": %w", err)}
+		}
+	}
+	if v, ok := dauo.mutation.CongenitalDisease(); ok {
+		if err := drugallergy.CongenitalDiseaseValidator(v); err != nil {
+			return nil, &ValidationError{Name: "congenitalDisease", err: fmt.Errorf("ent: validator failed for field \"congenitalDisease\": %w", err)}
+		}
+	}
+	if v, ok := dauo.mutation.Annotation(); ok {
+		if err := drugallergy.AnnotationValidator(v); err != nil {
+			return nil, &ValidationError{Name: "annotation", err: fmt.Errorf("ent: validator failed for field \"annotation\": %w", err)}
+		}
+	}
 
 	var (
 		err  error
@@ -471,6 +558,27 @@ func (dauo *DrugAllergyUpdateOne) sqlSave(ctx context.Context) (da *DrugAllergy,
 		return nil, &ValidationError{Name: "ID", err: fmt.Errorf("missing DrugAllergy.ID for update")}
 	}
 	_spec.Node.ID.Value = id
+	if value, ok := dauo.mutation.Symptom(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: drugallergy.FieldSymptom,
+		})
+	}
+	if value, ok := dauo.mutation.CongenitalDisease(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: drugallergy.FieldCongenitalDisease,
+		})
+	}
+	if value, ok := dauo.mutation.Annotation(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: drugallergy.FieldAnnotation,
+		})
+	}
 	if value, ok := dauo.mutation.DateTime(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,

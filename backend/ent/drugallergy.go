@@ -19,6 +19,12 @@ type DrugAllergy struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// Symptom holds the value of the "symptom" field.
+	Symptom string `json:"symptom,omitempty"`
+	// CongenitalDisease holds the value of the "congenitalDisease" field.
+	CongenitalDisease string `json:"congenitalDisease,omitempty"`
+	// Annotation holds the value of the "annotation" field.
+	Annotation string `json:"annotation,omitempty"`
 	// DateTime holds the value of the "dateTime" field.
 	DateTime time.Time `json:"dateTime,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -87,8 +93,11 @@ func (e DrugAllergyEdges) PharmacistOrErr() (*Pharmacist, error) {
 // scanValues returns the types for scanning values from sql.Rows.
 func (*DrugAllergy) scanValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{}, // id
-		&sql.NullTime{},  // dateTime
+		&sql.NullInt64{},  // id
+		&sql.NullString{}, // symptom
+		&sql.NullString{}, // congenitalDisease
+		&sql.NullString{}, // annotation
+		&sql.NullTime{},   // dateTime
 	}
 }
 
@@ -113,12 +122,27 @@ func (da *DrugAllergy) assignValues(values ...interface{}) error {
 	}
 	da.ID = int(value.Int64)
 	values = values[1:]
-	if value, ok := values[0].(*sql.NullTime); !ok {
-		return fmt.Errorf("unexpected type %T for field dateTime", values[0])
+	if value, ok := values[0].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field symptom", values[0])
+	} else if value.Valid {
+		da.Symptom = value.String
+	}
+	if value, ok := values[1].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field congenitalDisease", values[1])
+	} else if value.Valid {
+		da.CongenitalDisease = value.String
+	}
+	if value, ok := values[2].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field annotation", values[2])
+	} else if value.Valid {
+		da.Annotation = value.String
+	}
+	if value, ok := values[3].(*sql.NullTime); !ok {
+		return fmt.Errorf("unexpected type %T for field dateTime", values[3])
 	} else if value.Valid {
 		da.DateTime = value.Time
 	}
-	values = values[1:]
+	values = values[4:]
 	if len(values) == len(drugallergy.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field medicine_id", value)
@@ -180,6 +204,12 @@ func (da *DrugAllergy) String() string {
 	var builder strings.Builder
 	builder.WriteString("DrugAllergy(")
 	builder.WriteString(fmt.Sprintf("id=%v", da.ID))
+	builder.WriteString(", symptom=")
+	builder.WriteString(da.Symptom)
+	builder.WriteString(", congenitalDisease=")
+	builder.WriteString(da.CongenitalDisease)
+	builder.WriteString(", annotation=")
+	builder.WriteString(da.Annotation)
 	builder.WriteString(", dateTime=")
 	builder.WriteString(da.DateTime.Format(time.ANSIC))
 	builder.WriteByte(')')

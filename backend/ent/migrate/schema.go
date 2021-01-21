@@ -124,6 +124,9 @@ var (
 	// DrugAllergiesColumns holds the columns for the "drug_allergies" table.
 	DrugAllergiesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "symptom", Type: field.TypeString},
+		{Name: "congenital_disease", Type: field.TypeString},
+		{Name: "annotation", Type: field.TypeString},
 		{Name: "date_time", Type: field.TypeTime},
 		{Name: "medicine_id", Type: field.TypeInt, Nullable: true},
 		{Name: "patient_id", Type: field.TypeInt, Nullable: true},
@@ -137,21 +140,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "drug_allergies_medicines_drugallergys",
-				Columns: []*schema.Column{DrugAllergiesColumns[2]},
+				Columns: []*schema.Column{DrugAllergiesColumns[5]},
 
 				RefColumns: []*schema.Column{MedicinesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "drug_allergies_patient_infos_drugallergys",
-				Columns: []*schema.Column{DrugAllergiesColumns[3]},
+				Columns: []*schema.Column{DrugAllergiesColumns[6]},
 
 				RefColumns: []*schema.Column{PatientInfosColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "drug_allergies_pharmacists_drugallergys",
-				Columns: []*schema.Column{DrugAllergiesColumns[4]},
+				Columns: []*schema.Column{DrugAllergiesColumns[7]},
 
 				RefColumns: []*schema.Column{PharmacistsColumns[0]},
 				OnDelete:   schema.SetNull,

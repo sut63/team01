@@ -2384,6 +2384,9 @@ type DrugAllergyMutation struct {
 	op                Op
 	typ               string
 	id                *int
+	symptom           *string
+	congenitalDisease *string
+	annotation        *string
 	dateTime          *time.Time
 	clearedFields     map[string]struct{}
 	patient           *int
@@ -2473,6 +2476,117 @@ func (m *DrugAllergyMutation) ID() (id int, exists bool) {
 		return
 	}
 	return *m.id, true
+}
+
+// SetSymptom sets the symptom field.
+func (m *DrugAllergyMutation) SetSymptom(s string) {
+	m.symptom = &s
+}
+
+// Symptom returns the symptom value in the mutation.
+func (m *DrugAllergyMutation) Symptom() (r string, exists bool) {
+	v := m.symptom
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSymptom returns the old symptom value of the DrugAllergy.
+// If the DrugAllergy object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *DrugAllergyMutation) OldSymptom(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldSymptom is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldSymptom requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSymptom: %w", err)
+	}
+	return oldValue.Symptom, nil
+}
+
+// ResetSymptom reset all changes of the "symptom" field.
+func (m *DrugAllergyMutation) ResetSymptom() {
+	m.symptom = nil
+}
+
+// SetCongenitalDisease sets the congenitalDisease field.
+func (m *DrugAllergyMutation) SetCongenitalDisease(s string) {
+	m.congenitalDisease = &s
+}
+
+// CongenitalDisease returns the congenitalDisease value in the mutation.
+func (m *DrugAllergyMutation) CongenitalDisease() (r string, exists bool) {
+	v := m.congenitalDisease
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCongenitalDisease returns the old congenitalDisease value of the DrugAllergy.
+// If the DrugAllergy object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *DrugAllergyMutation) OldCongenitalDisease(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldCongenitalDisease is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldCongenitalDisease requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCongenitalDisease: %w", err)
+	}
+	return oldValue.CongenitalDisease, nil
+}
+
+// ResetCongenitalDisease reset all changes of the "congenitalDisease" field.
+func (m *DrugAllergyMutation) ResetCongenitalDisease() {
+	m.congenitalDisease = nil
+}
+
+// SetAnnotation sets the annotation field.
+func (m *DrugAllergyMutation) SetAnnotation(s string) {
+	m.annotation = &s
+}
+
+// Annotation returns the annotation value in the mutation.
+func (m *DrugAllergyMutation) Annotation() (r string, exists bool) {
+	v := m.annotation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAnnotation returns the old annotation value of the DrugAllergy.
+// If the DrugAllergy object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *DrugAllergyMutation) OldAnnotation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldAnnotation is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldAnnotation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAnnotation: %w", err)
+	}
+	return oldValue.Annotation, nil
+}
+
+// ResetAnnotation reset all changes of the "annotation" field.
+func (m *DrugAllergyMutation) ResetAnnotation() {
+	m.annotation = nil
 }
 
 // SetDateTime sets the dateTime field.
@@ -2643,7 +2757,16 @@ func (m *DrugAllergyMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *DrugAllergyMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 4)
+	if m.symptom != nil {
+		fields = append(fields, drugallergy.FieldSymptom)
+	}
+	if m.congenitalDisease != nil {
+		fields = append(fields, drugallergy.FieldCongenitalDisease)
+	}
+	if m.annotation != nil {
+		fields = append(fields, drugallergy.FieldAnnotation)
+	}
 	if m.dateTime != nil {
 		fields = append(fields, drugallergy.FieldDateTime)
 	}
@@ -2655,6 +2778,12 @@ func (m *DrugAllergyMutation) Fields() []string {
 // not set, or was not define in the schema.
 func (m *DrugAllergyMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case drugallergy.FieldSymptom:
+		return m.Symptom()
+	case drugallergy.FieldCongenitalDisease:
+		return m.CongenitalDisease()
+	case drugallergy.FieldAnnotation:
+		return m.Annotation()
 	case drugallergy.FieldDateTime:
 		return m.DateTime()
 	}
@@ -2666,6 +2795,12 @@ func (m *DrugAllergyMutation) Field(name string) (ent.Value, bool) {
 // or the query to the database was failed.
 func (m *DrugAllergyMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case drugallergy.FieldSymptom:
+		return m.OldSymptom(ctx)
+	case drugallergy.FieldCongenitalDisease:
+		return m.OldCongenitalDisease(ctx)
+	case drugallergy.FieldAnnotation:
+		return m.OldAnnotation(ctx)
 	case drugallergy.FieldDateTime:
 		return m.OldDateTime(ctx)
 	}
@@ -2677,6 +2812,27 @@ func (m *DrugAllergyMutation) OldField(ctx context.Context, name string) (ent.Va
 // type mismatch the field type.
 func (m *DrugAllergyMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case drugallergy.FieldSymptom:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSymptom(v)
+		return nil
+	case drugallergy.FieldCongenitalDisease:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCongenitalDisease(v)
+		return nil
+	case drugallergy.FieldAnnotation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAnnotation(v)
+		return nil
 	case drugallergy.FieldDateTime:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -2734,6 +2890,15 @@ func (m *DrugAllergyMutation) ClearField(name string) error {
 // defined in the schema.
 func (m *DrugAllergyMutation) ResetField(name string) error {
 	switch name {
+	case drugallergy.FieldSymptom:
+		m.ResetSymptom()
+		return nil
+	case drugallergy.FieldCongenitalDisease:
+		m.ResetCongenitalDisease()
+		return nil
+	case drugallergy.FieldAnnotation:
+		m.ResetAnnotation()
+		return nil
 	case drugallergy.FieldDateTime:
 		m.ResetDateTime()
 		return nil

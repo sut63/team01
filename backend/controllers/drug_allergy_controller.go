@@ -21,10 +21,13 @@ type DrugAllergyController struct {
 }
 
 type DrugAllergy struct {
-	Patient    int
-	Medicine   int
-	Pharmacist int
-	DateTime   string
+	Patient    			int
+	Medicine   			int
+	Pharmacist 			int
+	Symptom				string
+	CongenitalDisease 	string
+	Annotation			string
+	DateTime   			string
 }
 
 // CreateDrugAllergy handles POST requests for adding DrugAllergy entities
@@ -97,10 +100,14 @@ func (ctl *DrugAllergyController) CreateDrugAllergy(c *gin.Context) {
 		SetPatient(p).
 		SetMedicine(m).
 		SetPharmacist(pha).
+		SetSymptom(obj.Symptom).
+		SetCongenitalDisease(obj.CongenitalDisease).
+		SetAnnotation(obj.Annotation).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
-			"error": "saving failed",
+			"status": false,
+			"error": err,
 		})
 		return
 	}

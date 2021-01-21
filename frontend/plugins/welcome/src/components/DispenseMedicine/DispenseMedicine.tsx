@@ -254,7 +254,7 @@ const DispenseMedicine: FC<{}> = () => {
         validateAmount(value)
           ? setamountchangemedicineError('')
           : setamountchangemedicineError(
-              'จำนวนที่ป้อนได้ 1-20 ถ้าไม่มีจำนวนยาที่ถูกเปลี่ยน กรุณาใส่เลข " 0 "',
+              'ถ้าไม่มีจำนวนยาที่ถูกเปลี่ยน กรุณาใส่เลข " 0 "',
             );
         validateAmount(value)
           ? setamountchangemedicineInputError(false)
@@ -310,7 +310,7 @@ const DispenseMedicine: FC<{}> = () => {
       case 'amountchangemedicine':
         alertMessage(
           'error',
-          'จำนวนที่ป้อนได้ 1-20 ถ้าไม่มีจำนวนยาที่ถูกเปลี่ยน กรุณาใส่เลข "0"',
+          'ถ้าไม่มีจำนวนยาที่ถูกเปลี่ยน กรุณาใส่เลข "0"',
         );
         return;
       case 'detailchangemedicine':
@@ -620,6 +620,7 @@ const DispenseMedicine: FC<{}> = () => {
                       error={amountchangemedicineInputError}
                       name="amountchangemedicine"
                       label="ป้อนจำนวนยาที่ถูกเปลี่ยน"
+                      type="number"
                       helperText={amountchangemedicineError}
                       value={sDispensemedicine.amountchangemedicine || ''}
                       onChange={handleChange}

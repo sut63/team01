@@ -49,6 +49,9 @@ interface DrugAllergy {
     patient: number;
     medicine: number;
     pharmacist: number;
+    symptom: string;
+    congenitalDisease: string;
+    annotation: string;
     dateTime: string;
 }
 
@@ -59,8 +62,13 @@ const DrugAllergy: FC<{}> = () => {
     const [drugAllergy, setDrugAllergy] = React.useState<Partial<DrugAllergy>>({});
     const [patients, setPatients] = React.useState<EntPatientInfo[]>([]);
     const [medicine, setMedicine] = React.useState<EntMedicine[]>([]);
-    const [loading, setLoading] = React.useState(true);
     const [PhaName, setPhaName] = React.useState(String);
+    const [symptomInputError, setSymptomInputError] = React.useState(false);
+    const [annotationInputError, setAnnotationInputError] = React.useState(false);
+    const [congenitalDiseaseInputError, setCongenitalDiseaseInputError] = React.useState(false);
+    const [symptomError, setSymptomError] = React.useState("");
+    const [annotationError, setAnnotationError] = React.useState("");
+    const [congenitalDiseaseError, setCongenitalDiseaseError] = React.useState("");
 
     // alert setting
     const Toast = Swal.mixin({
@@ -75,24 +83,100 @@ const DrugAllergy: FC<{}> = () => {
         },
     });
 
-    const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+    const handleChange = (event: React.ChangeEvent<{ name?: string; value: any }>) => {
         const name = event.target.name as keyof typeof DrugAllergy;
         const { value } = event.target;
         setDrugAllergy({ ...drugAllergy, [name]: value });
+        const validateValue = value.toString()
+        checkPattern(name, validateValue)
         //console.log(drugAllergy);
     };
 
     const getPatient = async () => {
         const res = await api.listPatientInfo({ limit: 10, offset: 0 });
-        setLoading(false);
         setPatients(res);
     };
 
     const getMedicine = async () => {
         const res = await api.listMedicine({ limit: 10, offset: 0 });
-        setLoading(false);
         setMedicine(res);
     };
+
+    const validateText = (val: string) => {
+        if (val.length == 1 && val === "-") {
+            return true;
+        }
+        else if (val.length > 1) {
+            return true
+        }
+        else {
+            return false;
+        }
+    }
+
+    const validateSymptom = (val: string) => {
+        if (val.length >= 5) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    const checkPattern = (name: string, value: string) => {
+        switch (name) {
+            case 'symptom':
+                validateSymptom(value) ? setSymptomError('') : setSymptomError("ต้องมีตัวอักษรจํานวน 5 ตัวอักษรขึ้นไป");
+                validateSymptom(value) ? setSymptomInputError(false) : setSymptomInputError(true)
+                return;
+            case 'congenitalDisease':
+                validateText(value) ? setCongenitalDiseaseError('') : setCongenitalDiseaseError("ถ้าไม่มีโรคประจําตัวกรุณาใส่เครื่องหมาย \" - \"");
+                validateText(value) ? setCongenitalDiseaseInputError(false) : setCongenitalDiseaseInputError(true);
+                return;
+            case 'annotation':
+                validateText(value) ? setAnnotationError('') : setAnnotationError("ถ้าไม่มีหมายเหตุกรุณาใส่เครื่องหมาย \" - \"")
+                validateText(value) ? setAnnotationInputError(false) : setAnnotationInputError(true)
+                return;
+            default:
+                return;
+        }
+    }
+
+    const setAlert = (err: string) => {
+        Toast.fire({
+            icon: 'error',
+            title: 'บันทึกข้อมูลไม่สำเร็จ',
+            text: err,
+        });
+    }
+
+    const checkCaseError = (err: string) => {
+        switch (err) {
+            case 'pharmacist not found':
+                setAlert("ไม่พบข้อมูลเภสัชกร")
+                return;
+            case 'patient not found':
+                setAlert("กรุณาเลือกผู้ป่วย")
+                return;
+            case 'medicine not found':
+                setAlert("กรุณาเลือกยาที่เเพ้")
+                return;
+            case 'symptom':
+                setAlert("อาการเเพ้ต้องมี 5 ตัวอักษรขึ้นไป")
+                return;
+            case 'congenitalDisease':
+                setAlert("ถ้าไม่มีโรคประจําตัวกรุณาใส่เครื่องหมาย \" - \"")
+                return;
+            case 'annotation':
+                setAlert("ถ้าไม่มีหมายเหตุกรุณาใส่เครื่องหมาย \" - \"")
+                return;
+            case 'datetime not found':
+                setAlert("กรุณาเลือกวันที่")
+                return;
+            default:
+                return;
+        }
+    }
 
     // function save data
     function save() {
@@ -100,6 +184,9 @@ const DrugAllergy: FC<{}> = () => {
             patient: drugAllergy.patient,
             medicine: drugAllergy.medicine,
             pharmacist: Number(drugAllergy.pharmacist),
+            symptom: drugAllergy.symptom,
+            congenitalDisease: drugAllergy.congenitalDisease,
+            annotation: drugAllergy.annotation,
             dateTime: drugAllergy.dateTime + ":00+07:00",
         };
         const api = 'http://localhost:8080/api/v1/drugallergys';
@@ -120,10 +207,12 @@ const DrugAllergy: FC<{}> = () => {
                     });
                     clear();
                 } else {
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'บันทึกข้อมูลไม่สำเร็จ',
-                    });
+                    if (data.error.Name === undefined) {
+                        checkCaseError(data.error)
+                    }
+                    else {
+                        checkCaseError(data.error.Name)
+                    }
                 }
             });
     }
@@ -206,6 +295,44 @@ const DrugAllergy: FC<{}> = () => {
                                             })}
                                         </Select>
                                     </FormControl>
+                                    <div>
+                                        <TextField
+                                            error={symptomInputError}
+                                            style={{ width: 520, marginTop: 40 }}
+                                            name="symptom"
+                                            label="อาการที่เเพ้"
+                                            value={drugAllergy.symptom || ''}
+                                            onChange={handleChange}
+                                            variant="outlined"
+                                            helperText={symptomError}
+                                        />
+                                    </div>
+                                    <div>
+                                        <TextField
+                                            error={congenitalDiseaseInputError}
+                                            style={{ width: 520, marginTop: 40 }}
+                                            name="congenitalDisease"
+                                            label="โรคประจําตัว"
+                                            onChange={handleChange}
+                                            variant="outlined"
+                                            value={drugAllergy.congenitalDisease || ''}
+                                            helperText={congenitalDiseaseError}
+                                        />
+                                    </div>
+                                    <div>
+                                        <TextField
+                                            error={annotationInputError}
+                                            style={{ width: 520, marginTop: 40 }}
+                                            name="annotation"
+                                            label="หมายเหตุ"
+                                            onChange={handleChange}
+                                            variant="outlined"
+                                            value={drugAllergy.annotation || ''}
+                                            multiline
+                                            rows={3}
+                                            helperText={annotationError}
+                                        />
+                                    </div>
                                     <div style={{ marginTop: 40 }}>
                                         <TextField
                                             label="เลือกวันที่"

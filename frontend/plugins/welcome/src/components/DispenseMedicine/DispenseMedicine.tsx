@@ -26,7 +26,7 @@ import {
 
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Alert } from '@material-ui/lab'; //alert
+import Swal from 'sweetalert2'; // alert
 
 import { DefaultApi } from '../../api/apis'; // Api Gennerate From Command
 import {
@@ -89,8 +89,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 //structure data change
 interface DispenseMedicine {
+  amountchangemedicine: number;
   annotation: number;
   datetime: string;
+  detailchangemedicine: string;
+  note: string;
   prescription: number;
 }
 
@@ -100,8 +103,6 @@ const DispenseMedicine: FC<{}> = () => {
   const cookies = new Cookies();
   const api = new DefaultApi();
   const [loading, setLoading] = useState(true);
-  const [status, setStatus] = useState(false);
-  const [alert, setAlert] = useState(true);
 
   //structure receive data from api
   const [sDispensemedicine, setDispenseMedicine] = React.useState<
@@ -121,6 +122,27 @@ const DispenseMedicine: FC<{}> = () => {
   const [sNamePatient, setNamePatient] = useState(String);
   const [sNameDoctor, setNameDoctor] = useState(String);
 
+  //structure check error
+  const [
+    amountchangemedicineInputError,
+    setamountchangemedicineInputError,
+  ] = React.useState(false);
+  const [
+    detailchangemedicineInputError,
+    setdetailchangemedicineInputError,
+  ] = React.useState(false);
+  const [noteInputError, setnoteInputError] = React.useState(false);
+
+  const [
+    amountchangemedicineError,
+    setamountchangemedicineError,
+  ] = React.useState('');
+  const [
+    detailchangemedicineError,
+    setdetailchangemedicineError,
+  ] = React.useState('');
+  const [noteError, setnoteError] = React.useState('');
+
   //function get from api
   const getAnnotation = async () => {
     const res = await api.listAnnotation({ limit: 0, offset: 0 });
@@ -135,7 +157,7 @@ const DispenseMedicine: FC<{}> = () => {
   };
 
   const getPrescription = async () => {
-    const res = await api.listPrescription({ limit: 8, offset: 0 });
+    const res = await api.listPrescription({ limit: 0, offset: 0 });
     setLoading(false);
     setApiPrescription(res);
   };
@@ -153,12 +175,27 @@ const DispenseMedicine: FC<{}> = () => {
     checkPosition();
   }, [loading]);
 
+  // alert setting
+  const Toast = Swal.mixin({
+    //toast: true,
+    position: 'center',
+    showConfirmButton: false,
+    timer: 1500,
+    timerProgressBar: true,
+    didOpen: toast => {
+      toast.addEventListener('mouseenter', Swal.stopTimer);
+      toast.addEventListener('mouseleave', Swal.resumeTimer);
+    },
+  });
+
   // handleChange
   const handleChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>,
+    event: React.ChangeEvent<{ name?: string; value: any }>,
   ) => {
     const name = event.target.name as keyof typeof DispenseMedicine;
     const { value } = event.target;
+    const validateValue = value.toString();
+    checkPattern(name, validateValue);
     setDispenseMedicine({ ...sDispensemedicine, [name]: value });
   };
 
@@ -184,41 +221,148 @@ const DispenseMedicine: FC<{}> = () => {
     setNameDoctor('');
   }
 
+  // ฟังก์ชั่นสำหรับ validate ข้อความ
+  const validateText = (val: string) => {
+    const regexpText = new RegExp('[`~!@#$%^&*_;?<>]');
+    if (regexpText.test(val)) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  // ฟังก์ชั่นสำหรับ validate จำนวน
+  const validateAmount = (val: string) => {
+    const regexpNum = new RegExp('^[+ 0-9]{1,2}$');
+    return regexpNum.test(val);
+  };
+
+  // สำหรับตรวจสอบรูปแบบข้อมูลที่กรอก ว่าเป็นไปตามที่กำหนดหรือไม่
+  const checkPattern = (name: string, value: string) => {
+    switch (name) {
+      case 'note':
+        validateText(value)
+          ? setnoteError('')
+          : setnoteError(
+              'ห้ามป้อนอักษรพิเศษ ถ้าไม่มีรายละอียดหมายเหตุ กรุณาใส่เครื่องหมาย " - "',
+            );
+        validateText(value)
+          ? setnoteInputError(false)
+          : setnoteInputError(true);
+        return;
+      case 'amountchangemedicine':
+        validateAmount(value)
+          ? setamountchangemedicineError('')
+          : setamountchangemedicineError(
+              'จำนวนที่ป้อนได้ 1-20 ถ้าไม่มีจำนวนยาที่ถูกเปลี่ยน กรุณาใส่เลข " 0 "',
+            );
+        validateAmount(value)
+          ? setamountchangemedicineInputError(false)
+          : setamountchangemedicineInputError(true);
+        return;
+      case 'detailchangemedicine':
+        validateText(value)
+          ? setdetailchangemedicineError('')
+          : setdetailchangemedicineError(
+              'ห้ามป้อนอักษรพิเศษ ถ้าไม่มีรายละอียดยาที่ถูกเปลี่ยน กรุณาใส่เครื่องหมาย " - "',
+            );
+        validateText(value)
+          ? setdetailchangemedicineInputError(false)
+          : setdetailchangemedicineInputError(true);
+        return;
+      default:
+        return;
+    }
+  };
+
+  const alertMessage = (icon: any, text: any) => {
+    Toast.fire({
+      icon: icon,
+      title: 'บันทึกข้อมูลไม่สำเร็จ',
+      text: text,
+    });
+  };
+
+  const checkCaseSaveError = (err: string) => {
+    switch (err) {
+      case 'pharmacist not found':
+        alertMessage('error', 'ไม่พบข้อมูลเภสัชกร');
+        return;
+
+      case 'prescription not found':
+        alertMessage('error', 'กรุณาเลือกคิวที่รับการจ่ายยา');
+        return;
+
+      case 'datetime not found':
+        alertMessage('error', 'กรุณาเลือกวันที่');
+        return;
+
+      case 'annotation not found':
+        alertMessage('error', 'กรุณาเลือกหมายเหตุ');
+        return;
+
+      case 'note':
+        alertMessage(
+          'error',
+          'ถ้าไม่มีรายละอียดหมายเหตุ กรุณาใส่เครื่องหมาย " - "',
+        );
+        return;
+      case 'amountchangemedicine':
+        alertMessage(
+          'error',
+          'จำนวนที่ป้อนได้ 1-20 ถ้าไม่มีจำนวนยาที่ถูกเปลี่ยน กรุณาใส่เลข "0"',
+        );
+        return;
+      case 'detailchangemedicine':
+        alertMessage(
+          'error',
+          'ถ้าไม่มีรายละอียดยาที่ถูกเปลี่ยน กรุณาใส่เครื่องหมาย " - "',
+        );
+        return;
+      default:
+        return;
+    }
+  };
+
   // function CreateDispenseMedicines data
   const CreateDispenseMedicines = async () => {
-    if (
-      sDispensemedicine.annotation != undefined &&
-      sDispensemedicine.datetime != undefined &&
-      sDispensemedicine.datetime != ':00+07:00' &&
-      sPharmacistID != 0 &&
-      sDispensemedicine.prescription != undefined
-    ) {
-      const dispensemedicines = {
-        annotation: sDispensemedicine.annotation,
-        datetime: sDispensemedicine.datetime + ':00+07:00',
-        pharmacist: sPharmacistID,
-        prescription: sDispensemedicine.prescription,
-      };
+    const dispensemediciness = {
+      amountchangemedicine: Number(sDispensemedicine.amountchangemedicine),
+      annotation: sDispensemedicine.annotation,
+      datetime: sDispensemedicine.datetime + ':00+07:00',
+      detailchangemedicine: sDispensemedicine.detailchangemedicine,
+      note: sDispensemedicine.note,
+      pharmacist: sPharmacistID,
+      prescription: sDispensemedicine.prescription,
+    };
 
-      const res: any = await api.createDispensemedicine({
-        dispensemedicine: dispensemedicines,
+    const api = 'http://localhost:8080/api/v1/dispensemedicines';
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dispensemediciness),
+    };
+    console.log(dispensemediciness)
+
+    fetch(api, requestOptions)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (data.status === true) {
+          Toast.fire({
+            icon: 'success',
+            title: 'บันทึกข้อมูลสำเร็จ',
+          });
+          setLoading(true);
+          clear();
+        } else {
+          if (data.error.Name === undefined) {
+            checkCaseSaveError(data.error);
+          } else {
+            checkCaseSaveError(data.error.Name);
+          }
+        }
       });
-
-      setStatus(true);
-      if (res.id != '') {
-        setAlert(true);
-        setLoading(true);
-        clear();
-      } else {
-        setAlert(false);
-      }
-    } else {
-      setStatus(true);
-      setAlert(false);
-    }
-    setTimeout(() => {
-      setStatus(false);
-    }, 2000);
   };
 
   return (
@@ -287,32 +431,9 @@ const DispenseMedicine: FC<{}> = () => {
               minWidth: 400,
             }}
           >
-            <Grid className={classes.flexRowNoCen}>
-              <Typography variant="h5" style={{ marginBottom: 25 }}>
-                ข้อมูลใบสั่งยา
-              </Typography>
-              {status ? (
-                <div>
-                  {alert ? (
-                    <Alert
-                      variant="filled"
-                      severity="success"
-                      style={{ fontSize: 16 }}
-                    >
-                      บันทึกข้อมูลสำเร็จ!
-                    </Alert>
-                  ) : (
-                    <Alert
-                      variant="filled"
-                      severity="warning"
-                      style={{ fontSize: 16 }}
-                    >
-                      บันทึกข้อมูลไม่สำเร็จ!
-                    </Alert>
-                  )}
-                </div>
-              ) : null}
-            </Grid>
+            <Typography variant="h5" style={{ marginBottom: 25 }}>
+              ข้อมูลใบสั่งยา
+            </Typography>
             <Card className={classes.cardMargin}>
               <CardContent>
                 <Grid className={classes.flexRow}>
@@ -468,6 +589,60 @@ const DispenseMedicine: FC<{}> = () => {
                         </MenuItem>
                       ))}
                     </Select>
+                  </FormControl>
+
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                  >
+                    <Typography className={classes.headLabel}>
+                      รายละอียดหมายเหตุ
+                    </Typography>
+                    <TextField
+                      error={noteInputError}
+                      name="note"
+                      label="ป้อนรายละอียดหมายเหตุ"
+                      helperText={noteError}
+                      value={sDispensemedicine.note || ''}
+                      onChange={handleChange}
+                      variant="outlined"
+                    />
+                  </FormControl>
+
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                  >
+                    <Typography className={classes.headLabel}>
+                      จำนวนยาที่ถูกเปลี่ยน
+                    </Typography>
+                    <TextField
+                      error={amountchangemedicineInputError}
+                      name="amountchangemedicine"
+                      label="ป้อนจำนวนยาที่ถูกเปลี่ยน"
+                      helperText={amountchangemedicineError}
+                      value={sDispensemedicine.amountchangemedicine || ''}
+                      onChange={handleChange}
+                      variant="outlined"
+                    />
+                  </FormControl>
+
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                  >
+                    <Typography className={classes.headLabel}>
+                      รายละอียดยาที่ถูกเปลี่ยน
+                    </Typography>
+                    <TextField
+                      error={detailchangemedicineInputError}
+                      name="detailchangemedicine"
+                      label="ป้อนรายละอียดยาที่ถูกเปลี่ยน"
+                      helperText={detailchangemedicineError}
+                      value={sDispensemedicine.detailchangemedicine || ''}
+                      onChange={handleChange}
+                      variant="outlined"
+                    />
                   </FormControl>
 
                   <FormControl

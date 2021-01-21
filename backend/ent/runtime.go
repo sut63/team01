@@ -7,6 +7,7 @@ import (
 	"github.com/sut63/team01/ent/bill"
 	"github.com/sut63/team01/ent/company"
 	"github.com/sut63/team01/ent/doctor"
+	"github.com/sut63/team01/ent/drugallergy"
 	"github.com/sut63/team01/ent/medicine"
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/pharmacist"
@@ -49,6 +50,62 @@ func init() {
 	doctorDescName := doctorFields[2].Descriptor()
 	// doctor.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	doctor.NameValidator = doctorDescName.Validators[0].(func(string) error)
+	drugallergyFields := schema.DrugAllergy{}.Fields()
+	_ = drugallergyFields
+	// drugallergyDescSymptom is the schema descriptor for symptom field.
+	drugallergyDescSymptom := drugallergyFields[0].Descriptor()
+	// drugallergy.SymptomValidator is a validator for the "symptom" field. It is called by the builders before save.
+	drugallergy.SymptomValidator = func() func(string) error {
+		validators := drugallergyDescSymptom.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(symptom string) error {
+			for _, fn := range fns {
+				if err := fn(symptom); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// drugallergyDescCongenitalDisease is the schema descriptor for congenitalDisease field.
+	drugallergyDescCongenitalDisease := drugallergyFields[1].Descriptor()
+	// drugallergy.CongenitalDiseaseValidator is a validator for the "congenitalDisease" field. It is called by the builders before save.
+	drugallergy.CongenitalDiseaseValidator = func() func(string) error {
+		validators := drugallergyDescCongenitalDisease.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(congenitalDisease string) error {
+			for _, fn := range fns {
+				if err := fn(congenitalDisease); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// drugallergyDescAnnotation is the schema descriptor for annotation field.
+	drugallergyDescAnnotation := drugallergyFields[2].Descriptor()
+	// drugallergy.AnnotationValidator is a validator for the "annotation" field. It is called by the builders before save.
+	drugallergy.AnnotationValidator = func() func(string) error {
+		validators := drugallergyDescAnnotation.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(annotation string) error {
+			for _, fn := range fns {
+				if err := fn(annotation); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	medicineFields := schema.Medicine{}.Fields()
 	_ = medicineFields
 	// medicineDescName is the schema descriptor for name field.

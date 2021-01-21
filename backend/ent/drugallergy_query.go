@@ -332,12 +332,12 @@ func (daq *DrugAllergyQuery) WithPharmacist(opts ...func(*PharmacistQuery)) *Dru
 // Example:
 //
 //	var v []struct {
-//		DateTime time.Time `json:"dateTime,omitempty"`
+//		Symptom string `json:"symptom,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.DrugAllergy.Query().
-//		GroupBy(drugallergy.FieldDateTime).
+//		GroupBy(drugallergy.FieldSymptom).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -358,11 +358,11 @@ func (daq *DrugAllergyQuery) GroupBy(field string, fields ...string) *DrugAllerg
 // Example:
 //
 //	var v []struct {
-//		DateTime time.Time `json:"dateTime,omitempty"`
+//		Symptom string `json:"symptom,omitempty"`
 //	}
 //
 //	client.DrugAllergy.Query().
-//		Select(drugallergy.FieldDateTime).
+//		Select(drugallergy.FieldSymptom).
 //		Scan(ctx, &v)
 //
 func (daq *DrugAllergyQuery) Select(field string, fields ...string) *DrugAllergySelect {

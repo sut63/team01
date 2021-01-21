@@ -7,6 +7,12 @@ const (
 	Label = "drug_allergy"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldSymptom holds the string denoting the symptom field in the database.
+	FieldSymptom = "symptom"
+	// FieldCongenitalDisease holds the string denoting the congenitaldisease field in the database.
+	FieldCongenitalDisease = "congenital_disease"
+	// FieldAnnotation holds the string denoting the annotation field in the database.
+	FieldAnnotation = "annotation"
 	// FieldDateTime holds the string denoting the datetime field in the database.
 	FieldDateTime = "date_time"
 
@@ -45,6 +51,9 @@ const (
 // Columns holds all SQL columns for drugallergy fields.
 var Columns = []string{
 	FieldID,
+	FieldSymptom,
+	FieldCongenitalDisease,
+	FieldAnnotation,
 	FieldDateTime,
 }
 
@@ -54,3 +63,12 @@ var ForeignKeys = []string{
 	"patient_id",
 	"pharmacist_id",
 }
+
+var (
+	// SymptomValidator is a validator for the "symptom" field. It is called by the builders before save.
+	SymptomValidator func(string) error
+	// CongenitalDiseaseValidator is a validator for the "congenitalDisease" field. It is called by the builders before save.
+	CongenitalDiseaseValidator func(string) error
+	// AnnotationValidator is a validator for the "annotation" field. It is called by the builders before save.
+	AnnotationValidator func(string) error
+)

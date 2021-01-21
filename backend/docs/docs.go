@@ -3311,6 +3311,14 @@ var doc = `{
         "ent.DrugAllergy": {
             "type": "object",
             "properties": {
+                "annotation": {
+                    "description": "Annotation holds the value of the \"annotation\" field.",
+                    "type": "string"
+                },
+                "congenitalDisease": {
+                    "description": "CongenitalDisease holds the value of the \"congenitalDisease\" field.",
+                    "type": "string"
+                },
                 "dateTime": {
                     "description": "DateTime holds the value of the \"dateTime\" field.",
                     "type": "string"
@@ -3323,6 +3331,10 @@ var doc = `{
                 "id": {
                     "description": "ID of the ent.",
                     "type": "integer"
+                },
+                "symptom": {
+                    "description": "Symptom holds the value of the \"symptom\" field.",
+                    "type": "string"
                 }
             }
         },

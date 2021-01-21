@@ -3039,10 +3039,19 @@ var doc = `{
         "controllers.DispenseMedicine": {
             "type": "object",
             "properties": {
+                "amountchangemedicine": {
+                    "type": "integer"
+                },
                 "annotation": {
                     "type": "integer"
                 },
                 "datetime": {
+                    "type": "string"
+                },
+                "detailchangemedicine": {
+                    "type": "string"
+                },
+                "note": {
                     "type": "string"
                 },
                 "pharmacist": {
@@ -3230,8 +3239,16 @@ var doc = `{
         "ent.DispenseMedicine": {
             "type": "object",
             "properties": {
+                "amountchangemedicine": {
+                    "description": "Amountchangemedicine holds the value of the \"amountchangemedicine\" field.",
+                    "type": "integer"
+                },
                 "datetime": {
                     "description": "Datetime holds the value of the \"datetime\" field.",
+                    "type": "string"
+                },
+                "detailchangemedicine": {
+                    "description": "Detailchangemedicine holds the value of the \"detailchangemedicine\" field.",
                     "type": "string"
                 },
                 "edges": {
@@ -3242,6 +3259,10 @@ var doc = `{
                 "id": {
                     "description": "ID of the ent.",
                     "type": "integer"
+                },
+                "note": {
+                    "description": "Note holds the value of the \"note\" field.",
+                    "type": "string"
                 }
             }
         },

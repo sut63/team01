@@ -9,6 +9,12 @@ const (
 	FieldID = "id"
 	// FieldDatetime holds the string denoting the datetime field in the database.
 	FieldDatetime = "datetime"
+	// FieldNote holds the string denoting the note field in the database.
+	FieldNote = "note"
+	// FieldAmountchangemedicine holds the string denoting the amountchangemedicine field in the database.
+	FieldAmountchangemedicine = "amountchangemedicine"
+	// FieldDetailchangemedicine holds the string denoting the detailchangemedicine field in the database.
+	FieldDetailchangemedicine = "detailchangemedicine"
 
 	// EdgePharmacist holds the string denoting the pharmacist edge name in mutations.
 	EdgePharmacist = "pharmacist"
@@ -55,6 +61,9 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldDatetime,
+	FieldNote,
+	FieldAmountchangemedicine,
+	FieldDetailchangemedicine,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the DispenseMedicine type.
@@ -63,3 +72,12 @@ var ForeignKeys = []string{
 	"pharmacist_id",
 	"prescription_id",
 }
+
+var (
+	// NoteValidator is a validator for the "note" field. It is called by the builders before save.
+	NoteValidator func(string) error
+	// AmountchangemedicineValidator is a validator for the "amountchangemedicine" field. It is called by the builders before save.
+	AmountchangemedicineValidator func(int) error
+	// DetailchangemedicineValidator is a validator for the "detailchangemedicine" field. It is called by the builders before save.
+	DetailchangemedicineValidator func(string) error
+)

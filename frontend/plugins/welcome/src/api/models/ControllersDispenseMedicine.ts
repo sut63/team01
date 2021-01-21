@@ -24,6 +24,12 @@ export interface ControllersDispenseMedicine {
      * @type {number}
      * @memberof ControllersDispenseMedicine
      */
+    amountchangemedicine?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ControllersDispenseMedicine
+     */
     annotation?: number;
     /**
      * 
@@ -31,6 +37,18 @@ export interface ControllersDispenseMedicine {
      * @memberof ControllersDispenseMedicine
      */
     datetime?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControllersDispenseMedicine
+     */
+    detailchangemedicine?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControllersDispenseMedicine
+     */
+    note?: string;
     /**
      * 
      * @type {number}
@@ -55,8 +73,11 @@ export function ControllersDispenseMedicineFromJSONTyped(json: any, ignoreDiscri
     }
     return {
         
+        'amountchangemedicine': !exists(json, 'amountchangemedicine') ? undefined : json['amountchangemedicine'],
         'annotation': !exists(json, 'annotation') ? undefined : json['annotation'],
         'datetime': !exists(json, 'datetime') ? undefined : json['datetime'],
+        'detailchangemedicine': !exists(json, 'detailchangemedicine') ? undefined : json['detailchangemedicine'],
+        'note': !exists(json, 'note') ? undefined : json['note'],
         'pharmacist': !exists(json, 'pharmacist') ? undefined : json['pharmacist'],
         'prescription': !exists(json, 'prescription') ? undefined : json['prescription'],
     };
@@ -71,8 +92,11 @@ export function ControllersDispenseMedicineToJSON(value?: ControllersDispenseMed
     }
     return {
         
+        'amountchangemedicine': value.amountchangemedicine,
         'annotation': value.annotation,
         'datetime': value.datetime,
+        'detailchangemedicine': value.detailchangemedicine,
+        'note': value.note,
         'pharmacist': value.pharmacist,
         'prescription': value.prescription,
     };

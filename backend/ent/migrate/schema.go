@@ -74,6 +74,9 @@ var (
 	DispenseMedicinesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "datetime", Type: field.TypeTime},
+		{Name: "note", Type: field.TypeString},
+		{Name: "amountchangemedicine", Type: field.TypeInt},
+		{Name: "detailchangemedicine", Type: field.TypeString},
 		{Name: "annotation_id", Type: field.TypeInt, Nullable: true},
 		{Name: "pharmacist_id", Type: field.TypeInt, Nullable: true},
 		{Name: "prescription_id", Type: field.TypeInt, Unique: true, Nullable: true},
@@ -86,21 +89,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "dispense_medicines_annotations_dispensemedicine",
-				Columns: []*schema.Column{DispenseMedicinesColumns[2]},
+				Columns: []*schema.Column{DispenseMedicinesColumns[5]},
 
 				RefColumns: []*schema.Column{AnnotationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "dispense_medicines_pharmacists_dispensemedicine",
-				Columns: []*schema.Column{DispenseMedicinesColumns[3]},
+				Columns: []*schema.Column{DispenseMedicinesColumns[6]},
 
 				RefColumns: []*schema.Column{PharmacistsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "dispense_medicines_prescriptions_dispensemedicine",
-				Columns: []*schema.Column{DispenseMedicinesColumns[4]},
+				Columns: []*schema.Column{DispenseMedicinesColumns[7]},
 
 				RefColumns: []*schema.Column{PrescriptionsColumns[0]},
 				OnDelete:   schema.SetNull,

@@ -1364,21 +1364,25 @@ func (m *CompanyMutation) ResetEdge(name string) error {
 // nodes in the graph.
 type DispenseMedicineMutation struct {
 	config
-	op                  Op
-	typ                 string
-	id                  *int
-	datetime            *time.Time
-	clearedFields       map[string]struct{}
-	pharmacist          *int
-	clearedpharmacist   bool
-	annotation          *int
-	clearedannotation   bool
-	prescription        *int
-	clearedprescription bool
-	_Bills              *int
-	cleared_Bills       bool
-	done                bool
-	oldValue            func(context.Context) (*DispenseMedicine, error)
+	op                      Op
+	typ                     string
+	id                      *int
+	datetime                *time.Time
+	note                    *string
+	amountchangemedicine    *int
+	addamountchangemedicine *int
+	detailchangemedicine    *string
+	clearedFields           map[string]struct{}
+	pharmacist              *int
+	clearedpharmacist       bool
+	annotation              *int
+	clearedannotation       bool
+	prescription            *int
+	clearedprescription     bool
+	_Bills                  *int
+	cleared_Bills           bool
+	done                    bool
+	oldValue                func(context.Context) (*DispenseMedicine, error)
 }
 
 var _ ent.Mutation = (*DispenseMedicineMutation)(nil)
@@ -1495,6 +1499,137 @@ func (m *DispenseMedicineMutation) OldDatetime(ctx context.Context) (v time.Time
 // ResetDatetime reset all changes of the "datetime" field.
 func (m *DispenseMedicineMutation) ResetDatetime() {
 	m.datetime = nil
+}
+
+// SetNote sets the note field.
+func (m *DispenseMedicineMutation) SetNote(s string) {
+	m.note = &s
+}
+
+// Note returns the note value in the mutation.
+func (m *DispenseMedicineMutation) Note() (r string, exists bool) {
+	v := m.note
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNote returns the old note value of the DispenseMedicine.
+// If the DispenseMedicine object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *DispenseMedicineMutation) OldNote(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldNote is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldNote requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNote: %w", err)
+	}
+	return oldValue.Note, nil
+}
+
+// ResetNote reset all changes of the "note" field.
+func (m *DispenseMedicineMutation) ResetNote() {
+	m.note = nil
+}
+
+// SetAmountchangemedicine sets the amountchangemedicine field.
+func (m *DispenseMedicineMutation) SetAmountchangemedicine(i int) {
+	m.amountchangemedicine = &i
+	m.addamountchangemedicine = nil
+}
+
+// Amountchangemedicine returns the amountchangemedicine value in the mutation.
+func (m *DispenseMedicineMutation) Amountchangemedicine() (r int, exists bool) {
+	v := m.amountchangemedicine
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAmountchangemedicine returns the old amountchangemedicine value of the DispenseMedicine.
+// If the DispenseMedicine object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *DispenseMedicineMutation) OldAmountchangemedicine(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldAmountchangemedicine is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldAmountchangemedicine requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAmountchangemedicine: %w", err)
+	}
+	return oldValue.Amountchangemedicine, nil
+}
+
+// AddAmountchangemedicine adds i to amountchangemedicine.
+func (m *DispenseMedicineMutation) AddAmountchangemedicine(i int) {
+	if m.addamountchangemedicine != nil {
+		*m.addamountchangemedicine += i
+	} else {
+		m.addamountchangemedicine = &i
+	}
+}
+
+// AddedAmountchangemedicine returns the value that was added to the amountchangemedicine field in this mutation.
+func (m *DispenseMedicineMutation) AddedAmountchangemedicine() (r int, exists bool) {
+	v := m.addamountchangemedicine
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetAmountchangemedicine reset all changes of the "amountchangemedicine" field.
+func (m *DispenseMedicineMutation) ResetAmountchangemedicine() {
+	m.amountchangemedicine = nil
+	m.addamountchangemedicine = nil
+}
+
+// SetDetailchangemedicine sets the detailchangemedicine field.
+func (m *DispenseMedicineMutation) SetDetailchangemedicine(s string) {
+	m.detailchangemedicine = &s
+}
+
+// Detailchangemedicine returns the detailchangemedicine value in the mutation.
+func (m *DispenseMedicineMutation) Detailchangemedicine() (r string, exists bool) {
+	v := m.detailchangemedicine
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDetailchangemedicine returns the old detailchangemedicine value of the DispenseMedicine.
+// If the DispenseMedicine object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *DispenseMedicineMutation) OldDetailchangemedicine(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldDetailchangemedicine is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldDetailchangemedicine requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDetailchangemedicine: %w", err)
+	}
+	return oldValue.Detailchangemedicine, nil
+}
+
+// ResetDetailchangemedicine reset all changes of the "detailchangemedicine" field.
+func (m *DispenseMedicineMutation) ResetDetailchangemedicine() {
+	m.detailchangemedicine = nil
 }
 
 // SetPharmacistID sets the pharmacist edge to Pharmacist by id.
@@ -1667,9 +1802,18 @@ func (m *DispenseMedicineMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *DispenseMedicineMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 4)
 	if m.datetime != nil {
 		fields = append(fields, dispensemedicine.FieldDatetime)
+	}
+	if m.note != nil {
+		fields = append(fields, dispensemedicine.FieldNote)
+	}
+	if m.amountchangemedicine != nil {
+		fields = append(fields, dispensemedicine.FieldAmountchangemedicine)
+	}
+	if m.detailchangemedicine != nil {
+		fields = append(fields, dispensemedicine.FieldDetailchangemedicine)
 	}
 	return fields
 }
@@ -1681,6 +1825,12 @@ func (m *DispenseMedicineMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case dispensemedicine.FieldDatetime:
 		return m.Datetime()
+	case dispensemedicine.FieldNote:
+		return m.Note()
+	case dispensemedicine.FieldAmountchangemedicine:
+		return m.Amountchangemedicine()
+	case dispensemedicine.FieldDetailchangemedicine:
+		return m.Detailchangemedicine()
 	}
 	return nil, false
 }
@@ -1692,6 +1842,12 @@ func (m *DispenseMedicineMutation) OldField(ctx context.Context, name string) (e
 	switch name {
 	case dispensemedicine.FieldDatetime:
 		return m.OldDatetime(ctx)
+	case dispensemedicine.FieldNote:
+		return m.OldNote(ctx)
+	case dispensemedicine.FieldAmountchangemedicine:
+		return m.OldAmountchangemedicine(ctx)
+	case dispensemedicine.FieldDetailchangemedicine:
+		return m.OldDetailchangemedicine(ctx)
 	}
 	return nil, fmt.Errorf("unknown DispenseMedicine field %s", name)
 }
@@ -1708,6 +1864,27 @@ func (m *DispenseMedicineMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetDatetime(v)
 		return nil
+	case dispensemedicine.FieldNote:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNote(v)
+		return nil
+	case dispensemedicine.FieldAmountchangemedicine:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAmountchangemedicine(v)
+		return nil
+	case dispensemedicine.FieldDetailchangemedicine:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDetailchangemedicine(v)
+		return nil
 	}
 	return fmt.Errorf("unknown DispenseMedicine field %s", name)
 }
@@ -1715,13 +1892,21 @@ func (m *DispenseMedicineMutation) SetField(name string, value ent.Value) error 
 // AddedFields returns all numeric fields that were incremented
 // or decremented during this mutation.
 func (m *DispenseMedicineMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addamountchangemedicine != nil {
+		fields = append(fields, dispensemedicine.FieldAmountchangemedicine)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was in/decremented
 // from a field with the given name. The second value indicates
 // that this field was not set, or was not define in the schema.
 func (m *DispenseMedicineMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case dispensemedicine.FieldAmountchangemedicine:
+		return m.AddedAmountchangemedicine()
+	}
 	return nil, false
 }
 
@@ -1730,6 +1915,13 @@ func (m *DispenseMedicineMutation) AddedField(name string) (ent.Value, bool) {
 // type mismatch the field type.
 func (m *DispenseMedicineMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case dispensemedicine.FieldAmountchangemedicine:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddAmountchangemedicine(v)
+		return nil
 	}
 	return fmt.Errorf("unknown DispenseMedicine numeric field %s", name)
 }
@@ -1760,6 +1952,15 @@ func (m *DispenseMedicineMutation) ResetField(name string) error {
 	switch name {
 	case dispensemedicine.FieldDatetime:
 		m.ResetDatetime()
+		return nil
+	case dispensemedicine.FieldNote:
+		m.ResetNote()
+		return nil
+	case dispensemedicine.FieldAmountchangemedicine:
+		m.ResetAmountchangemedicine()
+		return nil
+	case dispensemedicine.FieldDetailchangemedicine:
+		m.ResetDetailchangemedicine()
 		return nil
 	}
 	return fmt.Errorf("unknown DispenseMedicine field %s", name)

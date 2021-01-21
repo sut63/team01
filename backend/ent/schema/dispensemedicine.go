@@ -1,6 +1,9 @@
 package schema
 
 import (
+	"errors"
+	"regexp"
+
 	"github.com/facebookincubator/ent"
 	"github.com/facebookincubator/ent/schema/edge"
 	"github.com/facebookincubator/ent/schema/field"
@@ -15,6 +18,21 @@ type DispenseMedicine struct {
 func (DispenseMedicine) Fields() []ent.Field {
 	return []ent.Field{
 		field.Time("datetime"),
+		field.String("note").Validate(func(s string) error {
+			match, _ := regexp.Match("[`~!@#$%^&*_;?<>]", []byte(s))
+			if match {
+				return errors.New("รูปแบบรายละอียดหมายเหตุไม่ถูกต้องห้ามมีอักษรพิเศษ")
+			}
+			return nil
+		}).NotEmpty(),
+		field.Int("amountchangemedicine").Range(0, 20),
+		field.String("detailchangemedicine").Validate(func(s string) error {
+			match, _ := regexp.Match("[`~!@#$%^&*_;?<>]", []byte(s))
+			if match {
+				return errors.New("รูปแบบรายละอียดการเปลี่ยนยาไม่ถูกต้องห้ามมีอักษรพิเศษ")
+			}
+			return nil
+		}).NotEmpty(),
 	}
 }
 

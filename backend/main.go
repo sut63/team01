@@ -77,10 +77,13 @@ type DispenseMedicines struct {
 
 //DispenseMedicine Structure
 type DispenseMedicine struct {
-	Datetime     string
-	Prescription int
-	Annotation   int
-	Pharmacist   int
+	Datetime             string
+	Note                 string
+	Amountchangemedicine int
+	Detailchangemedicine string
+	Prescription         int
+	Annotation           int
+	Pharmacist           int
 }
 
 //Prescriptions Strucre
@@ -463,7 +466,7 @@ func main() {
 	//Set DispenseMedicine Data
 	DisMedic := DispenseMedicines{
 		DispenseMedicine: []DispenseMedicine{
-			DispenseMedicine{"2021-01-12T01:27:50.52+07:00", 1, 1, 1},
+			DispenseMedicine{"2021-01-12T01:27:50.52+07:00", "ไม่มี", 0, "-", 1, 1, 1},
 		},
 	}
 
@@ -501,6 +504,9 @@ func main() {
 		client.DispenseMedicine.
 			Create().
 			SetDatetime(datetim).
+			SetNote(dim.Note).
+			SetAmountchangemedicine(dim.Amountchangemedicine).
+			SetDetailchangemedicine(dim.Detailchangemedicine).
 			SetPrescription(pres).
 			SetAnnotation(Annota).
 			SetPharmacist(pml).

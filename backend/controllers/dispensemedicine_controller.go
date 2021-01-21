@@ -22,10 +22,13 @@ type DispenseMedicineController struct {
 
 //DispenseMedicine Structure
 type DispenseMedicine struct {
-	Datetime     string
-	Prescription int
-	Annotation   int
-	Pharmacist   int
+	Datetime             string
+	Note                 string
+	Amountchangemedicine int
+	Detailchangemedicine string
+	Prescription         int
+	Annotation           int
+	Pharmacist           int
 }
 
 // CreateDispenseMedicine handles POST requests for adding dispensemedicine entities
@@ -85,18 +88,26 @@ func (ctl *DispenseMedicineController) CreateDispenseMedicine(c *gin.Context) {
 	dm, err := ctl.client.DispenseMedicine.
 		Create().
 		SetDatetime(time).
+		SetNote(obj.Note).
+		SetAmountchangemedicine(obj.Amountchangemedicine).
+		SetDetailchangemedicine(obj.Detailchangemedicine).
 		SetPrescription(psc).
 		SetAnnotation(an).
 		SetPharmacist(pm).
 		Save(context.Background())
 	if err != nil {
+		fmt.Println(err)
 		c.JSON(400, gin.H{
-			"error": "saving dispensemedicine failed",
+			"status": false,
+			"error":  err,
 		})
 		return
 	}
 
-	c.JSON(200, dm)
+	c.JSON(200, gin.H{
+		"status": true,
+		"data":   dm,
+	})
 }
 
 // GetDispenseMedicine handles GET requests to retrieve a dispensemedicine entity

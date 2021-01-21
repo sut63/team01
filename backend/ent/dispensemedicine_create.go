@@ -30,6 +30,24 @@ func (dmc *DispenseMedicineCreate) SetDatetime(t time.Time) *DispenseMedicineCre
 	return dmc
 }
 
+// SetNote sets the note field.
+func (dmc *DispenseMedicineCreate) SetNote(s string) *DispenseMedicineCreate {
+	dmc.mutation.SetNote(s)
+	return dmc
+}
+
+// SetAmountchangemedicine sets the amountchangemedicine field.
+func (dmc *DispenseMedicineCreate) SetAmountchangemedicine(i int) *DispenseMedicineCreate {
+	dmc.mutation.SetAmountchangemedicine(i)
+	return dmc
+}
+
+// SetDetailchangemedicine sets the detailchangemedicine field.
+func (dmc *DispenseMedicineCreate) SetDetailchangemedicine(s string) *DispenseMedicineCreate {
+	dmc.mutation.SetDetailchangemedicine(s)
+	return dmc
+}
+
 // SetPharmacistID sets the pharmacist edge to Pharmacist by id.
 func (dmc *DispenseMedicineCreate) SetPharmacistID(id int) *DispenseMedicineCreate {
 	dmc.mutation.SetPharmacistID(id)
@@ -116,6 +134,30 @@ func (dmc *DispenseMedicineCreate) Save(ctx context.Context) (*DispenseMedicine,
 	if _, ok := dmc.mutation.Datetime(); !ok {
 		return nil, &ValidationError{Name: "datetime", err: errors.New("ent: missing required field \"datetime\"")}
 	}
+	if _, ok := dmc.mutation.Note(); !ok {
+		return nil, &ValidationError{Name: "note", err: errors.New("ent: missing required field \"note\"")}
+	}
+	if v, ok := dmc.mutation.Note(); ok {
+		if err := dispensemedicine.NoteValidator(v); err != nil {
+			return nil, &ValidationError{Name: "note", err: fmt.Errorf("ent: validator failed for field \"note\": %w", err)}
+		}
+	}
+	if _, ok := dmc.mutation.Amountchangemedicine(); !ok {
+		return nil, &ValidationError{Name: "amountchangemedicine", err: errors.New("ent: missing required field \"amountchangemedicine\"")}
+	}
+	if v, ok := dmc.mutation.Amountchangemedicine(); ok {
+		if err := dispensemedicine.AmountchangemedicineValidator(v); err != nil {
+			return nil, &ValidationError{Name: "amountchangemedicine", err: fmt.Errorf("ent: validator failed for field \"amountchangemedicine\": %w", err)}
+		}
+	}
+	if _, ok := dmc.mutation.Detailchangemedicine(); !ok {
+		return nil, &ValidationError{Name: "detailchangemedicine", err: errors.New("ent: missing required field \"detailchangemedicine\"")}
+	}
+	if v, ok := dmc.mutation.Detailchangemedicine(); ok {
+		if err := dispensemedicine.DetailchangemedicineValidator(v); err != nil {
+			return nil, &ValidationError{Name: "detailchangemedicine", err: fmt.Errorf("ent: validator failed for field \"detailchangemedicine\": %w", err)}
+		}
+	}
 	var (
 		err  error
 		node *DispenseMedicine
@@ -183,6 +225,30 @@ func (dmc *DispenseMedicineCreate) createSpec() (*DispenseMedicine, *sqlgraph.Cr
 			Column: dispensemedicine.FieldDatetime,
 		})
 		dm.Datetime = value
+	}
+	if value, ok := dmc.mutation.Note(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: dispensemedicine.FieldNote,
+		})
+		dm.Note = value
+	}
+	if value, ok := dmc.mutation.Amountchangemedicine(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: dispensemedicine.FieldAmountchangemedicine,
+		})
+		dm.Amountchangemedicine = value
+	}
+	if value, ok := dmc.mutation.Detailchangemedicine(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: dispensemedicine.FieldDetailchangemedicine,
+		})
+		dm.Detailchangemedicine = value
 	}
 	if nodes := dmc.mutation.PharmacistIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

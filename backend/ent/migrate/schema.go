@@ -11,7 +11,7 @@ var (
 	// AnnotationsColumns holds the columns for the "annotations" table.
 	AnnotationsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "messages", Type: field.TypeString},
+		{Name: "messages", Type: field.TypeString, Unique: true},
 	}
 	// AnnotationsTable holds the schema information for the "annotations" table.
 	AnnotationsTable = &schema.Table{
@@ -323,7 +323,7 @@ var (
 	// PositionInPharmacistsColumns holds the columns for the "position_in_pharmacists" table.
 	PositionInPharmacistsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "position", Type: field.TypeString},
+		{Name: "position", Type: field.TypeString, Unique: true},
 	}
 	// PositionInPharmacistsTable holds the schema information for the "position_in_pharmacists" table.
 	PositionInPharmacistsTable = &schema.Table{

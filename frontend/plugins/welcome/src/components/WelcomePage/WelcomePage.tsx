@@ -12,7 +12,6 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import { Cookies } from 'react-cookie/cjs'; //cookie
 
 import { Image1Base64Function } from '../../image/Image1';
 import { Image2Base64Function } from '../../image/Image2';
@@ -42,28 +41,15 @@ export type ProfileProps = {
   id: string;
   system: string;
   imgsut: string;
-  linkto: string;
 };
 
-const cookies = new Cookies();
-
-// function set tab who
-function SetTab(nameTab: string) {
-  cookies.set('PositionData', JSON.stringify(nameTab), { path: '/' });
-}
-
-export function CardTeam({ name, id, system, imgsut, linkto }: ProfileProps) {
+export function CardTeam({ name, id, system, imgsut }: ProfileProps) {
   const classes = useStyles();
   return (
     <Grid item xs={12} md={3}>
-      <Card
-        className={classes.root}
-        onClick={() => {
-          SetTab(linkto);
-        }}
-      >
+      <Card className={classes.root}>
         <CardActionArea>
-          <Link href="signin">
+          <Link href="Signin">
             <CardMedia component="img" height="140" image={imgsut} />
           </Link>
           <CardContent>
@@ -92,7 +78,6 @@ const WelcomePage: FC<{}> = () => {
             id={'B6105358'}
             system={'ระบบบันทึกการชำระค่ายา'}
             imgsut={Image1Base64Function}
-            linkto="CreateBill"
           ></CardTeam>
 
           <CardTeam
@@ -100,7 +85,6 @@ const WelcomePage: FC<{}> = () => {
             id={'B6113902'}
             system={'ระบบสั่งจ่ายยา'}
             imgsut={Image2Base64Function}
-            linkto="Prescription"
           ></CardTeam>
 
           <CardTeam
@@ -108,7 +92,6 @@ const WelcomePage: FC<{}> = () => {
             id={'B6114664'}
             system={'ระบบสั่งซื้อยา'}
             imgsut={Image3Base64Function}
-            linkto="Order"
           ></CardTeam>
 
           <CardTeam
@@ -116,7 +99,6 @@ const WelcomePage: FC<{}> = () => {
             id={'B6115821'}
             system={'ระบบบันทึกประวัติการแพ้ยา'}
             imgsut={Image4Base64Function}
-            linkto="DrugAllergy"
           ></CardTeam>
 
           <CardTeam
@@ -124,7 +106,6 @@ const WelcomePage: FC<{}> = () => {
             id={'B6117078'}
             system={'ระบบบันทึกยา'}
             imgsut={Image5Base64Function}
-            linkto="Medicine"
           ></CardTeam>
 
           <CardTeam
@@ -132,7 +113,6 @@ const WelcomePage: FC<{}> = () => {
             id={'B6117566'}
             system={'ระบบบันทึกการจ่ายยา'}
             imgsut={Image6Base64Function}
-            linkto="DispenseMedicine"
           ></CardTeam>
         </Grid>
       </Content>

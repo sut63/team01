@@ -162,7 +162,7 @@ type Bills struct {
 type Bill struct {
 	Annotation       string
 	Amount           int
-	Payer			 string
+	Payer            string
 	Payments         int
 	DispenseMedicine int
 	Pharmacists      int
@@ -324,11 +324,11 @@ func main() {
 	//Set PositionInPharmacists Data
 	PositPha := PositionInPharmacists{
 		PositionInPharmacist: []PositionInPharmacist{
-			PositionInPharmacist{"HistoryTaking"},
+			PositionInPharmacist{"DrugAllergy"},
 			PositionInPharmacist{"Order"},
 			PositionInPharmacist{"Medicine"},
 			PositionInPharmacist{"DispenseMedicine"},
-			PositionInPharmacist{"Payment"},
+			PositionInPharmacist{"Bill"},
 		},
 	}
 	for _, poinphar := range PositPha.PositionInPharmacist {
@@ -558,7 +558,7 @@ func main() {
 	// Set Bills Data
 	Bills := Bills{
 		Bill: []Bill{
-			Bill{"-", 100, "Patarapong Chareongpol",1, 1, 1},
+			Bill{"-", 100, "Patarapong Chareongpol", 1, 1, 1},
 		},
 	}
 

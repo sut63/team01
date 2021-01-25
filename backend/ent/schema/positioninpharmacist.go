@@ -14,7 +14,7 @@ type PositionInPharmacist struct {
 // Fields of the PositionInPharmacist.
 func (PositionInPharmacist) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("position").NotEmpty(),
+		field.String("position").NotEmpty().Unique(),
 	}
 }
 

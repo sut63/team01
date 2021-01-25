@@ -22,7 +22,7 @@ import {
 import SendIcon from '@material-ui/icons/Send';
 import { Alert } from '@material-ui/lab'; //alert
 import Swal from 'sweetalert2'; // alert
-
+import { Cookies } from 'react-cookie/cjs'; //cookie
 import { DefaultApi } from '../../api/apis/'; // Api Gennerate From Command
 import { EntMedicineType } from '../../api/models/EntMedicineType'; // import interface MedicineType
 import { EntLevelOfDangerous } from '../../api/models/EntLevelOfDangerous'; // import interface LevelOfDangerous
@@ -72,7 +72,7 @@ const Medicine: FC<{}> = () => {
   const api = new DefaultApi();
   const [status, setStatus] = React.useState(false);
   const [alert, setAlert] = React.useState(true);
-  
+  const cookies = new Cookies();
 
   const [medicinetype, setMedicineType] = React.useState<EntMedicineType[]>([]);
   const [levelOfdangerous, setLevelOfDangerous] = React.useState<EntLevelOfDangerous[]>([]);
@@ -162,11 +162,19 @@ const Medicine: FC<{}> = () => {
  
   };
 
+  const checkPosition = async () => {
+    if(cookies.get('PositionData') != 'Medicine'){
+      history.pushState('', '', '/' + cookies.get('PositionData'));
+      window.location.reload(false); 
+    }
+  };
+
   // Lifecycle Hooks
   useEffect(() => {
     getMedicineType();
     getLevelOfDangerous();
     getUnitOfMedicine();
+    checkPosition();
   }, []);
 
    // alert setting

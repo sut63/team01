@@ -2063,19 +2063,19 @@ var doc = `{
                 }
             }
         },
-        "/drugallergys/{id}": {
+        "/drugallergys/{card}": {
             "get": {
-                "description": "get DrugAllergy by ID",
+                "description": "get DrugAllergy by Patient CardNumber",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get a DrugAllergy entity by ID",
+                "summary": "Get a DrugAllergy entity by Patient CardNumber",
                 "operationId": "get-drug-allergy",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "DrugAllergy ID",
-                        "name": "id",
+                        "type": "string",
+                        "description": "Patient CardNumber",
+                        "name": "card",
                         "in": "path",
                         "required": true
                     }
@@ -2084,7 +2084,10 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ent.DrugAllergy"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.DrugAllergy"
+                            }
                         }
                     },
                     "400": {
@@ -2106,7 +2109,9 @@ var doc = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/drugallergys/{id}": {
             "put": {
                 "description": "update DrugAllergy by ID",
                 "consumes": [

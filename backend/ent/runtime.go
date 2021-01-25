@@ -31,6 +31,14 @@ func init() {
 	billDescAmount := billFields[0].Descriptor()
 	// bill.AmountValidator is a validator for the "amount" field. It is called by the builders before save.
 	bill.AmountValidator = billDescAmount.Validators[0].(func(int) error)
+	// billDescAnnotation is the schema descriptor for annotation field.
+	billDescAnnotation := billFields[1].Descriptor()
+	// bill.AnnotationValidator is a validator for the "annotation" field. It is called by the builders before save.
+	bill.AnnotationValidator = billDescAnnotation.Validators[0].(func(string) error)
+	// billDescPayer is the schema descriptor for payer field.
+	billDescPayer := billFields[2].Descriptor()
+	// bill.PayerValidator is a validator for the "payer" field. It is called by the builders before save.
+	bill.PayerValidator = billDescPayer.Validators[0].(func(string) error)
 	companyFields := schema.Company{}.Fields()
 	_ = companyFields
 	// companyDescName is the schema descriptor for Name field.

@@ -14,7 +14,7 @@ type Payment struct {
 // Fields of the Payment.
 func (Payment) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("pay"),
+		field.String("pay").Unique(),
 	}
 }
 

@@ -50,6 +50,12 @@ export interface EntBill {
      * @memberof EntBill
      */
     id?: number;
+    /**
+     * Payer holds the value of the "payer" field.
+     * @type {string}
+     * @memberof EntBill
+     */
+    payer?: string;
 }
 
 export function EntBillFromJSON(json: any): EntBill {
@@ -66,6 +72,7 @@ export function EntBillFromJSONTyped(json: any, ignoreDiscriminator: boolean): E
         'annotation': !exists(json, 'annotation') ? undefined : json['annotation'],
         'edges': !exists(json, 'edges') ? undefined : EntBillEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'payer': !exists(json, 'payer') ? undefined : json['payer'],
     };
 }
 
@@ -82,6 +89,7 @@ export function EntBillToJSON(value?: EntBill | null): any {
         'annotation': value.annotation,
         'edges': EntBillEdgesToJSON(value.edges),
         'id': value.id,
+        'payer': value.payer,
     };
 }
 

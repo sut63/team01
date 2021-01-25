@@ -3033,6 +3033,9 @@ var doc = `{
                 "dispenseMedicine": {
                     "type": "integer"
                 },
+                "payer": {
+                    "type": "string"
+                },
                 "payment": {
                     "type": "integer"
                 },
@@ -3188,6 +3191,10 @@ var doc = `{
                 "id": {
                     "description": "ID of the ent.",
                     "type": "integer"
+                },
+                "payer": {
+                    "description": "Payer holds the value of the \"payer\" field.",
+                    "type": "string"
                 }
             }
         },

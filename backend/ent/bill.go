@@ -22,6 +22,8 @@ type Bill struct {
 	Amount int `json:"amount,omitempty"`
 	// Annotation holds the value of the "annotation" field.
 	Annotation string `json:"annotation,omitempty"`
+	// Payer holds the value of the "payer" field.
+	Payer string `json:"payer,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BillQuery when eager-loading is set.
 	Edges               BillEdges `json:"edges"`
@@ -91,6 +93,7 @@ func (*Bill) scanValues() []interface{} {
 		&sql.NullInt64{},  // id
 		&sql.NullInt64{},  // amount
 		&sql.NullString{}, // annotation
+		&sql.NullString{}, // payer
 	}
 }
 
@@ -125,7 +128,12 @@ func (b *Bill) assignValues(values ...interface{}) error {
 	} else if value.Valid {
 		b.Annotation = value.String
 	}
-	values = values[2:]
+	if value, ok := values[2].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field payer", values[2])
+	} else if value.Valid {
+		b.Payer = value.String
+	}
+	values = values[3:]
 	if len(values) == len(bill.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field dispensemedicine_id", value)
@@ -191,6 +199,8 @@ func (b *Bill) String() string {
 	builder.WriteString(fmt.Sprintf("%v", b.Amount))
 	builder.WriteString(", annotation=")
 	builder.WriteString(b.Annotation)
+	builder.WriteString(", payer=")
+	builder.WriteString(b.Payer)
 	builder.WriteByte(')')
 	return builder.String()
 }

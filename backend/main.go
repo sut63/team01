@@ -150,6 +150,7 @@ type Bills struct {
 type Bill struct {
 	Annotation       string
 	Amount           int
+	Payer			 string
 	Payments         int
 	DispenseMedicine int
 	Pharmacists      int
@@ -516,7 +517,7 @@ func main() {
 	// Set Bills Data
 	Bills := Bills{
 		Bill: []Bill{
-			Bill{"-", 100, 1, 1, 1},
+			Bill{"-", 100, "Patarapong Chareongpol",1, 1, 1},
 		},
 	}
 
@@ -556,6 +557,7 @@ func main() {
 			SetPayments(py).
 			SetAnnotation(b.Annotation).
 			SetPharmacists(ph).
+			SetPayer(b.Payer).
 			Save(context.Background())
 	}
 

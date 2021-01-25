@@ -105,6 +105,13 @@ func Annotation(v string) predicate.Bill {
 	})
 }
 
+// Payer applies equality check predicate on the "payer" field. It's identical to PayerEQ.
+func Payer(v string) predicate.Bill {
+	return predicate.Bill(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPayer), v))
+	})
+}
+
 // AmountEQ applies the EQ predicate on the "amount" field.
 func AmountEQ(v int) predicate.Bill {
 	return predicate.Bill(func(s *sql.Selector) {
@@ -289,6 +296,117 @@ func AnnotationEqualFold(v string) predicate.Bill {
 func AnnotationContainsFold(v string) predicate.Bill {
 	return predicate.Bill(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldAnnotation), v))
+	})
+}
+
+// PayerEQ applies the EQ predicate on the "payer" field.
+func PayerEQ(v string) predicate.Bill {
+	return predicate.Bill(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPayer), v))
+	})
+}
+
+// PayerNEQ applies the NEQ predicate on the "payer" field.
+func PayerNEQ(v string) predicate.Bill {
+	return predicate.Bill(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldPayer), v))
+	})
+}
+
+// PayerIn applies the In predicate on the "payer" field.
+func PayerIn(vs ...string) predicate.Bill {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Bill(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldPayer), v...))
+	})
+}
+
+// PayerNotIn applies the NotIn predicate on the "payer" field.
+func PayerNotIn(vs ...string) predicate.Bill {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Bill(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldPayer), v...))
+	})
+}
+
+// PayerGT applies the GT predicate on the "payer" field.
+func PayerGT(v string) predicate.Bill {
+	return predicate.Bill(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldPayer), v))
+	})
+}
+
+// PayerGTE applies the GTE predicate on the "payer" field.
+func PayerGTE(v string) predicate.Bill {
+	return predicate.Bill(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldPayer), v))
+	})
+}
+
+// PayerLT applies the LT predicate on the "payer" field.
+func PayerLT(v string) predicate.Bill {
+	return predicate.Bill(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldPayer), v))
+	})
+}
+
+// PayerLTE applies the LTE predicate on the "payer" field.
+func PayerLTE(v string) predicate.Bill {
+	return predicate.Bill(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldPayer), v))
+	})
+}
+
+// PayerContains applies the Contains predicate on the "payer" field.
+func PayerContains(v string) predicate.Bill {
+	return predicate.Bill(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldPayer), v))
+	})
+}
+
+// PayerHasPrefix applies the HasPrefix predicate on the "payer" field.
+func PayerHasPrefix(v string) predicate.Bill {
+	return predicate.Bill(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldPayer), v))
+	})
+}
+
+// PayerHasSuffix applies the HasSuffix predicate on the "payer" field.
+func PayerHasSuffix(v string) predicate.Bill {
+	return predicate.Bill(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldPayer), v))
+	})
+}
+
+// PayerEqualFold applies the EqualFold predicate on the "payer" field.
+func PayerEqualFold(v string) predicate.Bill {
+	return predicate.Bill(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldPayer), v))
+	})
+}
+
+// PayerContainsFold applies the ContainsFold predicate on the "payer" field.
+func PayerContainsFold(v string) predicate.Bill {
+	return predicate.Bill(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldPayer), v))
 	})
 }
 

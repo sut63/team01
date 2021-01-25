@@ -22,6 +22,7 @@ import (
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/payment"
 	"github.com/sut63/team01/ent/pharmacist"
+	"github.com/sut63/team01/ent/positioninpharmacist"
 	"github.com/sut63/team01/ent/prescription"
 )
 
@@ -58,6 +59,16 @@ type Payment struct {
 	Pay string
 }
 
+//PositionInPharmacists Structure
+type PositionInPharmacists struct {
+	PositionInPharmacist []PositionInPharmacist
+}
+
+//PositionInPharmacist Structure
+type PositionInPharmacist struct {
+	Position string
+}
+
 //Pharmacists Structure
 type Pharmacists struct {
 	Pharmacist []Pharmacist
@@ -65,9 +76,10 @@ type Pharmacists struct {
 
 //Pharmacist Structure
 type Pharmacist struct {
-	Email    string
-	Password string
-	Name     string
+	Email                string
+	Password             string
+	Name                 string
+	PositionInPharmacist int
 }
 
 //DispenseMedicines Structure
@@ -242,6 +254,7 @@ func main() {
 
 	controllers.NewAnnotationController(v1, client)
 	controllers.NewPharmacistController(v1, client)
+	controllers.NewPositionInPharmacistController(v1, client)
 	controllers.NewDispenseMedicineController(v1, client)
 	controllers.NewDrugAllergyController(v1, client)
 	controllers.NewPatientInfoController(v1, client)
@@ -307,23 +320,51 @@ func main() {
 			Save(context.Background())
 	}
 
+	//Set PositionInPharmacists Data
+	PositPha := PositionInPharmacists{
+		PositionInPharmacist: []PositionInPharmacist{
+			PositionInPharmacist{"HistoryTaking"},
+			PositionInPharmacist{"Order"},
+			PositionInPharmacist{"Medicine"},
+			PositionInPharmacist{"DispenseMedicine"},
+			PositionInPharmacist{"Payment"},
+		},
+	}
+	for _, poinphar := range PositPha.PositionInPharmacist {
+		client.PositionInPharmacist.
+			Create().
+			SetPosition(poinphar.Position).
+			Save(context.Background())
+	}
+
 	//Set Pharmacists Data
 	Pharma := Pharmacists{
 		Pharmacist: []Pharmacist{
-			Pharmacist{"code@hotmail.com", "code", "Pharm. Nacodetip Hanchai"},
-			Pharmacist{"anna1231@gmail.com", "anna1231", "Pharm. Anna Saithai"},
-			Pharmacist{"manisara@gmail.com", "mani098765", "Pharm. Manisara Insuwan"},
-			Pharmacist{"somchai@hotmail.com", "s1234", "Pharm. Somchai Poonsuk"},
-			Pharmacist{"supanan5009@gmail.com", "Su14520", "Pharm. Supanan Pongsuwan"},
-			Pharmacist{"kuntarit5010@gmail.com", "Kun@0881234", "Pharm. Kuntarit Wannasak"},
+			Pharmacist{"code@gmail.com", "c1234", "Pharm. Nacodetip Hanchai", 4},
+			Pharmacist{"anna1231@gmail.com", "anna1231", "Pharm. Anna Saithai", 3},
+			Pharmacist{"pay@gmail.com", "p1234", "Pharm. Manisara Insuwan", 1},
+			Pharmacist{"pat@hotmail.com", "pa1234", "Pharm. Somchai Poonsuk", 5},
+			Pharmacist{"dorn@gmail.com", "d1234", "Pharm. Supanan Pongsuwan", 2},
+			Pharmacist{"kuntarit5010@gmail.com", "Kun@0881234", "Pharm. Kuntarit Wannasak", 1},
 		},
 	}
 	for _, phar := range Pharma.Pharmacist {
+
+		posinphar, err := client.PositionInPharmacist.
+			Query().
+			Where(positioninpharmacist.IDEQ(int(phar.PositionInPharmacist))).
+			Only(context.Background())
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
 		client.Pharmacist.
 			Create().
 			SetEmail(phar.Email).
 			SetPassword(phar.Password).
 			SetName(phar.Name).
+			SetPositioninpharmacist(posinphar).
 			Save(context.Background())
 	}
 

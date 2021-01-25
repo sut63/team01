@@ -69,6 +69,9 @@ import {
     EntPharmacist,
     EntPharmacistFromJSON,
     EntPharmacistToJSON,
+    EntPositionInPharmacist,
+    EntPositionInPharmacistFromJSON,
+    EntPositionInPharmacistToJSON,
     EntPrescription,
     EntPrescriptionFromJSON,
     EntPrescriptionToJSON,
@@ -125,6 +128,10 @@ export interface CreatePharmacistRequest {
     pharmacist: EntPharmacist;
 }
 
+export interface CreatePositioninpharmacistRequest {
+    positioninpharmacist: EntPositionInPharmacist;
+}
+
 export interface CreatePpatientInfoRequest {
     patientInfo: EntPatientInfo;
 }
@@ -177,6 +184,10 @@ export interface DeletePharmacistRequest {
     id: number;
 }
 
+export interface DeletePositioninpharmacistRequest {
+    id: number;
+}
+
 export interface DeleteUnitOfMedicineRequest {
     id: number;
 }
@@ -226,6 +237,10 @@ export interface GetPaymentRequest {
 }
 
 export interface GetPharmacistRequest {
+    id: number;
+}
+
+export interface GetPositioninpharmacistRequest {
     id: number;
 }
 
@@ -302,6 +317,11 @@ export interface ListPharmacistRequest {
     offset?: number;
 }
 
+export interface ListPositioninpharmacistRequest {
+    limit?: number;
+    offset?: number;
+}
+
 export interface ListPrescriptionRequest {
     limit?: number;
     offset?: number;
@@ -360,6 +380,11 @@ export interface UpdatePaymentRequest {
 export interface UpdatePharmacistRequest {
     id: number;
     pharmacist: EntPharmacist;
+}
+
+export interface UpdatePositioninpharmacistRequest {
+    id: number;
+    positioninpharmacist: EntPositionInPharmacist;
 }
 
 export interface UpdateUnitOfMedicineRequest {
@@ -793,6 +818,41 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * Create positioninpharmacist
+     * Create positioninpharmacist
+     */
+    async createPositioninpharmacistRaw(requestParameters: CreatePositioninpharmacistRequest): Promise<runtime.ApiResponse<EntPositionInPharmacist>> {
+        if (requestParameters.positioninpharmacist === null || requestParameters.positioninpharmacist === undefined) {
+            throw new runtime.RequiredError('positioninpharmacist','Required parameter requestParameters.positioninpharmacist was null or undefined when calling createPositioninpharmacist.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/positioninpharmacists`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EntPositionInPharmacistToJSON(requestParameters.positioninpharmacist),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntPositionInPharmacistFromJSON(jsonValue));
+    }
+
+    /**
+     * Create positioninpharmacist
+     * Create positioninpharmacist
+     */
+    async createPositioninpharmacist(requestParameters: CreatePositioninpharmacistRequest): Promise<EntPositionInPharmacist> {
+        const response = await this.createPositioninpharmacistRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * Create PatientInfo
      * Create PatientInfo
      */
@@ -1218,6 +1278,38 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * get positioninpharmacist by ID
+     * Delete a positioninpharmacist entity by ID
+     */
+    async deletePositioninpharmacistRaw(requestParameters: DeletePositioninpharmacistRequest): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deletePositioninpharmacist.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/positioninpharmacists/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * get positioninpharmacist by ID
+     * Delete a positioninpharmacist entity by ID
+     */
+    async deletePositioninpharmacist(requestParameters: DeletePositioninpharmacistRequest): Promise<object> {
+        const response = await this.deletePositioninpharmacistRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * get UnitOfMedicine by ID
      * Delete a UnitOfMedicine entity by ID
      */
@@ -1630,6 +1722,38 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getPharmacist(requestParameters: GetPharmacistRequest): Promise<EntPharmacist> {
         const response = await this.getPharmacistRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * get positioninpharmacist by ID
+     * Get a positioninpharmacist entity by ID
+     */
+    async getPositioninpharmacistRaw(requestParameters: GetPositioninpharmacistRequest): Promise<runtime.ApiResponse<EntPositionInPharmacist>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getPositioninpharmacist.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/positioninpharmacists/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntPositionInPharmacistFromJSON(jsonValue));
+    }
+
+    /**
+     * get positioninpharmacist by ID
+     * Get a positioninpharmacist entity by ID
+     */
+    async getPositioninpharmacist(requestParameters: GetPositioninpharmacistRequest): Promise<EntPositionInPharmacist> {
+        const response = await this.getPositioninpharmacistRaw(requestParameters);
         return await response.value();
     }
 
@@ -2166,6 +2290,42 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * list positioninpharmacist entities
+     * List positioninpharmacist entities
+     */
+    async listPositioninpharmacistRaw(requestParameters: ListPositioninpharmacistRequest): Promise<runtime.ApiResponse<Array<EntPositionInPharmacist>>> {
+        const queryParameters: runtime.HTTPQuery = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/positioninpharmacists`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntPositionInPharmacistFromJSON));
+    }
+
+    /**
+     * list positioninpharmacist entities
+     * List positioninpharmacist entities
+     */
+    async listPositioninpharmacist(requestParameters: ListPositioninpharmacistRequest): Promise<Array<EntPositionInPharmacist>> {
+        const response = await this.listPositioninpharmacistRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * list Prescription entities
      * List Prescription entities
      */
@@ -2624,6 +2784,45 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async updatePharmacist(requestParameters: UpdatePharmacistRequest): Promise<EntPharmacist> {
         const response = await this.updatePharmacistRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * update positioninpharmacist by ID
+     * Update a positioninpharmacist entity by ID
+     */
+    async updatePositioninpharmacistRaw(requestParameters: UpdatePositioninpharmacistRequest): Promise<runtime.ApiResponse<EntPositionInPharmacist>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updatePositioninpharmacist.');
+        }
+
+        if (requestParameters.positioninpharmacist === null || requestParameters.positioninpharmacist === undefined) {
+            throw new runtime.RequiredError('positioninpharmacist','Required parameter requestParameters.positioninpharmacist was null or undefined when calling updatePositioninpharmacist.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/positioninpharmacists/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EntPositionInPharmacistToJSON(requestParameters.positioninpharmacist),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntPositionInPharmacistFromJSON(jsonValue));
+    }
+
+    /**
+     * update positioninpharmacist by ID
+     * Update a positioninpharmacist entity by ID
+     */
+    async updatePositioninpharmacist(requestParameters: UpdatePositioninpharmacistRequest): Promise<EntPositionInPharmacist> {
+        const response = await this.updatePositioninpharmacistRaw(requestParameters);
         return await response.value();
     }
 

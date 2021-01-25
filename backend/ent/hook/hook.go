@@ -178,6 +178,19 @@ func (f PharmacistFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, 
 	return f(ctx, mv)
 }
 
+// The PositionInPharmacistFunc type is an adapter to allow the use of ordinary
+// function as PositionInPharmacist mutator.
+type PositionInPharmacistFunc func(context.Context, *ent.PositionInPharmacistMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PositionInPharmacistFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.PositionInPharmacistMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PositionInPharmacistMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The PrescriptionFunc type is an adapter to allow the use of ordinary
 // function as Prescription mutator.
 type PrescriptionFunc func(context.Context, *ent.PrescriptionMutation) (ent.Value, error)

@@ -23,6 +23,7 @@ func (Pharmacist) Fields() []ent.Field {
 // Edges of the Pharmacist.
 func (Pharmacist) Edges() []ent.Edge {
 	return []ent.Edge{
+		edge.From("positioninpharmacist", PositionInPharmacist.Type).Ref("pharmacist").Unique(),
 		edge.To("dispensemedicine", DispenseMedicine.Type).StorageKey(edge.Column("pharmacist_id")),
 		edge.To("drugallergys", DrugAllergy.Type).StorageKey(edge.Column("pharmacist_id")),
 		edge.To("orderpharmacist", Order.Type),

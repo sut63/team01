@@ -3003,6 +3003,232 @@
                     }
                 }
             }
+        },
+        "/positioninpharmacists": {
+            "get": {
+                "description": "list positioninpharmacist entities",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List positioninpharmacist entities",
+                "operationId": "list-positioninpharmacist",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.PositionInPharmacist"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create positioninpharmacist",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create positioninpharmacist",
+                "operationId": "create-positioninpharmacist",
+                "parameters": [
+                    {
+                        "description": "PositionInPharmacist entity",
+                        "name": "positioninpharmacist",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.PositionInPharmacist"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.PositionInPharmacist"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/positioninpharmacists/{id}": {
+            "get": {
+                "description": "get positioninpharmacist by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a positioninpharmacist entity by ID",
+                "operationId": "get-positioninpharmacist",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "PositionInPharmacist ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.PositionInPharmacist"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "update positioninpharmacist by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update a positioninpharmacist entity by ID",
+                "operationId": "update-positioninpharmacist",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "PositionInPharmacist ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "PositionInPharmacist entity",
+                        "name": "positioninpharmacist",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.PositionInPharmacist"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.PositionInPharmacist"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "get positioninpharmacist by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete a positioninpharmacist entity by ID",
+                "operationId": "delete-positioninpharmacist",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "PositionInPharmacist ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -3688,6 +3914,41 @@
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/ent.Order"
+                    }
+                },
+                "positioninpharmacist": {
+                    "description": "Positioninpharmacist holds the value of the positioninpharmacist edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.PositionInPharmacist"
+                }
+            }
+        },
+        "ent.PositionInPharmacist": {
+            "type": "object",
+            "properties": {
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the PositionInPharmacistQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.PositionInPharmacistEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                },
+                "position": {
+                    "description": "Position holds the value of the \"position\" field.",
+                    "type": "string"
+                }
+            }
+        },
+        "ent.PositionInPharmacistEdges": {
+            "type": "object",
+            "properties": {
+                "pharmacist": {
+                    "description": "Pharmacist holds the value of the pharmacist edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Pharmacist"
                     }
                 }
             }

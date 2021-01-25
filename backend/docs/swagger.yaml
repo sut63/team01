@@ -518,6 +518,34 @@ definitions:
         items:
           $ref: '#/definitions/ent.Order'
         type: array
+      positioninpharmacist:
+        $ref: '#/definitions/ent.PositionInPharmacist'
+        description: Positioninpharmacist holds the value of the positioninpharmacist
+          edge.
+        type: object
+    type: object
+  ent.PositionInPharmacist:
+    properties:
+      edges:
+        $ref: '#/definitions/ent.PositionInPharmacistEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the PositionInPharmacistQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+      position:
+        description: Position holds the value of the "position" field.
+        type: string
+    type: object
+  ent.PositionInPharmacistEdges:
+    properties:
+      pharmacist:
+        description: Pharmacist holds the value of the pharmacist edge.
+        items:
+          $ref: '#/definitions/ent.Pharmacist'
+        type: array
     type: object
   ent.Prescription:
     properties:
@@ -2588,6 +2616,157 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Update a pharmacist entity by ID
+  /positioninpharmacists:
+    get:
+      description: list positioninpharmacist entities
+      operationId: list-positioninpharmacist
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.PositionInPharmacist'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List positioninpharmacist entities
+    post:
+      consumes:
+      - application/json
+      description: Create positioninpharmacist
+      operationId: create-positioninpharmacist
+      parameters:
+      - description: PositionInPharmacist entity
+        in: body
+        name: positioninpharmacist
+        required: true
+        schema:
+          $ref: '#/definitions/ent.PositionInPharmacist'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.PositionInPharmacist'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create positioninpharmacist
+  /positioninpharmacists/{id}:
+    delete:
+      description: get positioninpharmacist by ID
+      operationId: delete-positioninpharmacist
+      parameters:
+      - description: PositionInPharmacist ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Delete a positioninpharmacist entity by ID
+    get:
+      description: get positioninpharmacist by ID
+      operationId: get-positioninpharmacist
+      parameters:
+      - description: PositionInPharmacist ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.PositionInPharmacist'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a positioninpharmacist entity by ID
+    put:
+      consumes:
+      - application/json
+      description: update positioninpharmacist by ID
+      operationId: update-positioninpharmacist
+      parameters:
+      - description: PositionInPharmacist ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: PositionInPharmacist entity
+        in: body
+        name: positioninpharmacist
+        required: true
+        schema:
+          $ref: '#/definitions/ent.PositionInPharmacist'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.PositionInPharmacist'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Update a positioninpharmacist entity by ID
 securityDefinitions:
   ApiKeyAuth:
     in: header

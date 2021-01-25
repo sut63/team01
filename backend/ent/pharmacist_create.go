@@ -14,6 +14,7 @@ import (
 	"github.com/sut63/team01/ent/drugallergy"
 	"github.com/sut63/team01/ent/order"
 	"github.com/sut63/team01/ent/pharmacist"
+	"github.com/sut63/team01/ent/positioninpharmacist"
 )
 
 // PharmacistCreate is the builder for creating a Pharmacist entity.
@@ -39,6 +40,25 @@ func (pc *PharmacistCreate) SetPassword(s string) *PharmacistCreate {
 func (pc *PharmacistCreate) SetName(s string) *PharmacistCreate {
 	pc.mutation.SetName(s)
 	return pc
+}
+
+// SetPositioninpharmacistID sets the positioninpharmacist edge to PositionInPharmacist by id.
+func (pc *PharmacistCreate) SetPositioninpharmacistID(id int) *PharmacistCreate {
+	pc.mutation.SetPositioninpharmacistID(id)
+	return pc
+}
+
+// SetNillablePositioninpharmacistID sets the positioninpharmacist edge to PositionInPharmacist by id if the given value is not nil.
+func (pc *PharmacistCreate) SetNillablePositioninpharmacistID(id *int) *PharmacistCreate {
+	if id != nil {
+		pc = pc.SetPositioninpharmacistID(*id)
+	}
+	return pc
+}
+
+// SetPositioninpharmacist sets the positioninpharmacist edge to PositionInPharmacist.
+func (pc *PharmacistCreate) SetPositioninpharmacist(p *PositionInPharmacist) *PharmacistCreate {
+	return pc.SetPositioninpharmacistID(p.ID)
 }
 
 // AddDispensemedicineIDs adds the dispensemedicine edge to DispenseMedicine by ids.
@@ -215,6 +235,25 @@ func (pc *PharmacistCreate) createSpec() (*Pharmacist, *sqlgraph.CreateSpec) {
 			Column: pharmacist.FieldName,
 		})
 		ph.Name = value
+	}
+	if nodes := pc.mutation.PositioninpharmacistIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   pharmacist.PositioninpharmacistTable,
+			Columns: []string{pharmacist.PositioninpharmacistColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: positioninpharmacist.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := pc.mutation.DispensemedicineIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

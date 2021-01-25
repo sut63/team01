@@ -29,6 +29,8 @@ export * from './EntPayment';
 export * from './EntPaymentEdges';
 export * from './EntPharmacist';
 export * from './EntPharmacistEdges';
+export * from './EntPositionInPharmacist';
+export * from './EntPositionInPharmacistEdges';
 export * from './EntPrescription';
 export * from './EntPrescriptionEdges';
 export * from './EntUnitOfMedicine';

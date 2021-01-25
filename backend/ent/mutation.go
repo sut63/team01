@@ -21,6 +21,7 @@ import (
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/payment"
 	"github.com/sut63/team01/ent/pharmacist"
+	"github.com/sut63/team01/ent/positioninpharmacist"
 	"github.com/sut63/team01/ent/prescription"
 	"github.com/sut63/team01/ent/unitofmedicine"
 
@@ -36,21 +37,22 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeAnnotation       = "Annotation"
-	TypeBill             = "Bill"
-	TypeCompany          = "Company"
-	TypeDispenseMedicine = "DispenseMedicine"
-	TypeDoctor           = "Doctor"
-	TypeDrugAllergy      = "DrugAllergy"
-	TypeLevelOfDangerous = "LevelOfDangerous"
-	TypeMedicine         = "Medicine"
-	TypeMedicineType     = "MedicineType"
-	TypeOrder            = "Order"
-	TypePatientInfo      = "PatientInfo"
-	TypePayment          = "Payment"
-	TypePharmacist       = "Pharmacist"
-	TypePrescription     = "Prescription"
-	TypeUnitOfMedicine   = "UnitOfMedicine"
+	TypeAnnotation           = "Annotation"
+	TypeBill                 = "Bill"
+	TypeCompany              = "Company"
+	TypeDispenseMedicine     = "DispenseMedicine"
+	TypeDoctor               = "Doctor"
+	TypeDrugAllergy          = "DrugAllergy"
+	TypeLevelOfDangerous     = "LevelOfDangerous"
+	TypeMedicine             = "Medicine"
+	TypeMedicineType         = "MedicineType"
+	TypeOrder                = "Order"
+	TypePatientInfo          = "PatientInfo"
+	TypePayment              = "Payment"
+	TypePharmacist           = "Pharmacist"
+	TypePositionInPharmacist = "PositionInPharmacist"
+	TypePrescription         = "Prescription"
+	TypeUnitOfMedicine       = "UnitOfMedicine"
 )
 
 // AnnotationMutation represents an operation that mutate the Annotations
@@ -6643,23 +6645,25 @@ func (m *PaymentMutation) ResetEdge(name string) error {
 // nodes in the graph.
 type PharmacistMutation struct {
 	config
-	op                      Op
-	typ                     string
-	id                      *int
-	email                   *string
-	password                *string
-	name                    *string
-	clearedFields           map[string]struct{}
-	dispensemedicine        map[int]struct{}
-	removeddispensemedicine map[int]struct{}
-	drugallergys            map[int]struct{}
-	removeddrugallergys     map[int]struct{}
-	orderpharmacist         map[int]struct{}
-	removedorderpharmacist  map[int]struct{}
-	_Bills                  map[int]struct{}
-	removed_Bills           map[int]struct{}
-	done                    bool
-	oldValue                func(context.Context) (*Pharmacist, error)
+	op                          Op
+	typ                         string
+	id                          *int
+	email                       *string
+	password                    *string
+	name                        *string
+	clearedFields               map[string]struct{}
+	positioninpharmacist        *int
+	clearedpositioninpharmacist bool
+	dispensemedicine            map[int]struct{}
+	removeddispensemedicine     map[int]struct{}
+	drugallergys                map[int]struct{}
+	removeddrugallergys         map[int]struct{}
+	orderpharmacist             map[int]struct{}
+	removedorderpharmacist      map[int]struct{}
+	_Bills                      map[int]struct{}
+	removed_Bills               map[int]struct{}
+	done                        bool
+	oldValue                    func(context.Context) (*Pharmacist, error)
 }
 
 var _ ent.Mutation = (*PharmacistMutation)(nil)
@@ -6850,6 +6854,45 @@ func (m *PharmacistMutation) OldName(ctx context.Context) (v string, err error) 
 // ResetName reset all changes of the "name" field.
 func (m *PharmacistMutation) ResetName() {
 	m.name = nil
+}
+
+// SetPositioninpharmacistID sets the positioninpharmacist edge to PositionInPharmacist by id.
+func (m *PharmacistMutation) SetPositioninpharmacistID(id int) {
+	m.positioninpharmacist = &id
+}
+
+// ClearPositioninpharmacist clears the positioninpharmacist edge to PositionInPharmacist.
+func (m *PharmacistMutation) ClearPositioninpharmacist() {
+	m.clearedpositioninpharmacist = true
+}
+
+// PositioninpharmacistCleared returns if the edge positioninpharmacist was cleared.
+func (m *PharmacistMutation) PositioninpharmacistCleared() bool {
+	return m.clearedpositioninpharmacist
+}
+
+// PositioninpharmacistID returns the positioninpharmacist id in the mutation.
+func (m *PharmacistMutation) PositioninpharmacistID() (id int, exists bool) {
+	if m.positioninpharmacist != nil {
+		return *m.positioninpharmacist, true
+	}
+	return
+}
+
+// PositioninpharmacistIDs returns the positioninpharmacist ids in the mutation.
+// Note that ids always returns len(ids) <= 1 for unique edges, and you should use
+// PositioninpharmacistID instead. It exists only for internal usage by the builders.
+func (m *PharmacistMutation) PositioninpharmacistIDs() (ids []int) {
+	if id := m.positioninpharmacist; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetPositioninpharmacist reset all changes of the "positioninpharmacist" edge.
+func (m *PharmacistMutation) ResetPositioninpharmacist() {
+	m.positioninpharmacist = nil
+	m.clearedpositioninpharmacist = false
 }
 
 // AddDispensemedicineIDs adds the dispensemedicine edge to DispenseMedicine by ids.
@@ -7169,7 +7212,10 @@ func (m *PharmacistMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this
 // mutation.
 func (m *PharmacistMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
+	if m.positioninpharmacist != nil {
+		edges = append(edges, pharmacist.EdgePositioninpharmacist)
+	}
 	if m.dispensemedicine != nil {
 		edges = append(edges, pharmacist.EdgeDispensemedicine)
 	}
@@ -7189,6 +7235,10 @@ func (m *PharmacistMutation) AddedEdges() []string {
 // the given edge name.
 func (m *PharmacistMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case pharmacist.EdgePositioninpharmacist:
+		if id := m.positioninpharmacist; id != nil {
+			return []ent.Value{*id}
+		}
 	case pharmacist.EdgeDispensemedicine:
 		ids := make([]ent.Value, 0, len(m.dispensemedicine))
 		for id := range m.dispensemedicine {
@@ -7220,7 +7270,7 @@ func (m *PharmacistMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this
 // mutation.
 func (m *PharmacistMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.removeddispensemedicine != nil {
 		edges = append(edges, pharmacist.EdgeDispensemedicine)
 	}
@@ -7271,7 +7321,10 @@ func (m *PharmacistMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this
 // mutation.
 func (m *PharmacistMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
+	if m.clearedpositioninpharmacist {
+		edges = append(edges, pharmacist.EdgePositioninpharmacist)
+	}
 	return edges
 }
 
@@ -7279,6 +7332,8 @@ func (m *PharmacistMutation) ClearedEdges() []string {
 // cleared in this mutation.
 func (m *PharmacistMutation) EdgeCleared(name string) bool {
 	switch name {
+	case pharmacist.EdgePositioninpharmacist:
+		return m.clearedpositioninpharmacist
 	}
 	return false
 }
@@ -7287,6 +7342,9 @@ func (m *PharmacistMutation) EdgeCleared(name string) bool {
 // error if the edge name is not defined in the schema.
 func (m *PharmacistMutation) ClearEdge(name string) error {
 	switch name {
+	case pharmacist.EdgePositioninpharmacist:
+		m.ClearPositioninpharmacist()
+		return nil
 	}
 	return fmt.Errorf("unknown Pharmacist unique edge %s", name)
 }
@@ -7296,6 +7354,9 @@ func (m *PharmacistMutation) ClearEdge(name string) error {
 // defined in the schema.
 func (m *PharmacistMutation) ResetEdge(name string) error {
 	switch name {
+	case pharmacist.EdgePositioninpharmacist:
+		m.ResetPositioninpharmacist()
+		return nil
 	case pharmacist.EdgeDispensemedicine:
 		m.ResetDispensemedicine()
 		return nil
@@ -7310,6 +7371,374 @@ func (m *PharmacistMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Pharmacist edge %s", name)
+}
+
+// PositionInPharmacistMutation represents an operation that mutate the PositionInPharmacists
+// nodes in the graph.
+type PositionInPharmacistMutation struct {
+	config
+	op                Op
+	typ               string
+	id                *int
+	position          *string
+	clearedFields     map[string]struct{}
+	pharmacist        map[int]struct{}
+	removedpharmacist map[int]struct{}
+	done              bool
+	oldValue          func(context.Context) (*PositionInPharmacist, error)
+}
+
+var _ ent.Mutation = (*PositionInPharmacistMutation)(nil)
+
+// positioninpharmacistOption allows to manage the mutation configuration using functional options.
+type positioninpharmacistOption func(*PositionInPharmacistMutation)
+
+// newPositionInPharmacistMutation creates new mutation for $n.Name.
+func newPositionInPharmacistMutation(c config, op Op, opts ...positioninpharmacistOption) *PositionInPharmacistMutation {
+	m := &PositionInPharmacistMutation{
+		config:        c,
+		op:            op,
+		typ:           TypePositionInPharmacist,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withPositionInPharmacistID sets the id field of the mutation.
+func withPositionInPharmacistID(id int) positioninpharmacistOption {
+	return func(m *PositionInPharmacistMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *PositionInPharmacist
+		)
+		m.oldValue = func(ctx context.Context) (*PositionInPharmacist, error) {
+			once.Do(func() {
+				if m.done {
+					err = fmt.Errorf("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().PositionInPharmacist.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withPositionInPharmacist sets the old PositionInPharmacist of the mutation.
+func withPositionInPharmacist(node *PositionInPharmacist) positioninpharmacistOption {
+	return func(m *PositionInPharmacistMutation) {
+		m.oldValue = func(context.Context) (*PositionInPharmacist, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m PositionInPharmacistMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m PositionInPharmacistMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, fmt.Errorf("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the id value in the mutation. Note that, the id
+// is available only if it was provided to the builder.
+func (m *PositionInPharmacistMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// SetPosition sets the position field.
+func (m *PositionInPharmacistMutation) SetPosition(s string) {
+	m.position = &s
+}
+
+// Position returns the position value in the mutation.
+func (m *PositionInPharmacistMutation) Position() (r string, exists bool) {
+	v := m.position
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPosition returns the old position value of the PositionInPharmacist.
+// If the PositionInPharmacist object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *PositionInPharmacistMutation) OldPosition(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldPosition is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldPosition requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPosition: %w", err)
+	}
+	return oldValue.Position, nil
+}
+
+// ResetPosition reset all changes of the "position" field.
+func (m *PositionInPharmacistMutation) ResetPosition() {
+	m.position = nil
+}
+
+// AddPharmacistIDs adds the pharmacist edge to Pharmacist by ids.
+func (m *PositionInPharmacistMutation) AddPharmacistIDs(ids ...int) {
+	if m.pharmacist == nil {
+		m.pharmacist = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.pharmacist[ids[i]] = struct{}{}
+	}
+}
+
+// RemovePharmacistIDs removes the pharmacist edge to Pharmacist by ids.
+func (m *PositionInPharmacistMutation) RemovePharmacistIDs(ids ...int) {
+	if m.removedpharmacist == nil {
+		m.removedpharmacist = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.removedpharmacist[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPharmacist returns the removed ids of pharmacist.
+func (m *PositionInPharmacistMutation) RemovedPharmacistIDs() (ids []int) {
+	for id := range m.removedpharmacist {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PharmacistIDs returns the pharmacist ids in the mutation.
+func (m *PositionInPharmacistMutation) PharmacistIDs() (ids []int) {
+	for id := range m.pharmacist {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPharmacist reset all changes of the "pharmacist" edge.
+func (m *PositionInPharmacistMutation) ResetPharmacist() {
+	m.pharmacist = nil
+	m.removedpharmacist = nil
+}
+
+// Op returns the operation name.
+func (m *PositionInPharmacistMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (PositionInPharmacist).
+func (m *PositionInPharmacistMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during
+// this mutation. Note that, in order to get all numeric
+// fields that were in/decremented, call AddedFields().
+func (m *PositionInPharmacistMutation) Fields() []string {
+	fields := make([]string, 0, 1)
+	if m.position != nil {
+		fields = append(fields, positioninpharmacist.FieldPosition)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name.
+// The second boolean value indicates that this field was
+// not set, or was not define in the schema.
+func (m *PositionInPharmacistMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case positioninpharmacist.FieldPosition:
+		return m.Position()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database.
+// An error is returned if the mutation operation is not UpdateOne,
+// or the query to the database was failed.
+func (m *PositionInPharmacistMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case positioninpharmacist.FieldPosition:
+		return m.OldPosition(ctx)
+	}
+	return nil, fmt.Errorf("unknown PositionInPharmacist field %s", name)
+}
+
+// SetField sets the value for the given name. It returns an
+// error if the field is not defined in the schema, or if the
+// type mismatch the field type.
+func (m *PositionInPharmacistMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case positioninpharmacist.FieldPosition:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPosition(v)
+		return nil
+	}
+	return fmt.Errorf("unknown PositionInPharmacist field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented
+// or decremented during this mutation.
+func (m *PositionInPharmacistMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was in/decremented
+// from a field with the given name. The second value indicates
+// that this field was not set, or was not define in the schema.
+func (m *PositionInPharmacistMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value for the given name. It returns an
+// error if the field is not defined in the schema, or if the
+// type mismatch the field type.
+func (m *PositionInPharmacistMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown PositionInPharmacist numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared
+// during this mutation.
+func (m *PositionInPharmacistMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicates if this field was
+// cleared in this mutation.
+func (m *PositionInPharmacistMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value for the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *PositionInPharmacistMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown PositionInPharmacist nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation regarding the
+// given field name. It returns an error if the field is not
+// defined in the schema.
+func (m *PositionInPharmacistMutation) ResetField(name string) error {
+	switch name {
+	case positioninpharmacist.FieldPosition:
+		m.ResetPosition()
+		return nil
+	}
+	return fmt.Errorf("unknown PositionInPharmacist field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this
+// mutation.
+func (m *PositionInPharmacistMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.pharmacist != nil {
+		edges = append(edges, positioninpharmacist.EdgePharmacist)
+	}
+	return edges
+}
+
+// AddedIDs returns all ids (to other nodes) that were added for
+// the given edge name.
+func (m *PositionInPharmacistMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case positioninpharmacist.EdgePharmacist:
+		ids := make([]ent.Value, 0, len(m.pharmacist))
+		for id := range m.pharmacist {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this
+// mutation.
+func (m *PositionInPharmacistMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removedpharmacist != nil {
+		edges = append(edges, positioninpharmacist.EdgePharmacist)
+	}
+	return edges
+}
+
+// RemovedIDs returns all ids (to other nodes) that were removed for
+// the given edge name.
+func (m *PositionInPharmacistMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case positioninpharmacist.EdgePharmacist:
+		ids := make([]ent.Value, 0, len(m.removedpharmacist))
+		for id := range m.removedpharmacist {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this
+// mutation.
+func (m *PositionInPharmacistMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// EdgeCleared returns a boolean indicates if this edge was
+// cleared in this mutation.
+func (m *PositionInPharmacistMutation) EdgeCleared(name string) bool {
+	switch name {
+	}
+	return false
+}
+
+// ClearEdge clears the value for the given name. It returns an
+// error if the edge name is not defined in the schema.
+func (m *PositionInPharmacistMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown PositionInPharmacist unique edge %s", name)
+}
+
+// ResetEdge resets all changes in the mutation regarding the
+// given edge name. It returns an error if the edge is not
+// defined in the schema.
+func (m *PositionInPharmacistMutation) ResetEdge(name string) error {
+	switch name {
+	case positioninpharmacist.EdgePharmacist:
+		m.ResetPharmacist()
+		return nil
+	}
+	return fmt.Errorf("unknown PositionInPharmacist edge %s", name)
 }
 
 // PrescriptionMutation represents an operation that mutate the Prescriptions

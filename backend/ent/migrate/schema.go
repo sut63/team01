@@ -302,12 +302,33 @@ var (
 		{Name: "email", Type: field.TypeString, Unique: true},
 		{Name: "password", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
+		{Name: "positioninpharmacist_id", Type: field.TypeInt, Nullable: true},
 	}
 	// PharmacistsTable holds the schema information for the "pharmacists" table.
 	PharmacistsTable = &schema.Table{
-		Name:        "pharmacists",
-		Columns:     PharmacistsColumns,
-		PrimaryKey:  []*schema.Column{PharmacistsColumns[0]},
+		Name:       "pharmacists",
+		Columns:    PharmacistsColumns,
+		PrimaryKey: []*schema.Column{PharmacistsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:  "pharmacists_position_in_pharmacists_pharmacist",
+				Columns: []*schema.Column{PharmacistsColumns[4]},
+
+				RefColumns: []*schema.Column{PositionInPharmacistsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// PositionInPharmacistsColumns holds the columns for the "position_in_pharmacists" table.
+	PositionInPharmacistsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "position", Type: field.TypeString},
+	}
+	// PositionInPharmacistsTable holds the schema information for the "position_in_pharmacists" table.
+	PositionInPharmacistsTable = &schema.Table{
+		Name:        "position_in_pharmacists",
+		Columns:     PositionInPharmacistsColumns,
+		PrimaryKey:  []*schema.Column{PositionInPharmacistsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{},
 	}
 	// PrescriptionsColumns holds the columns for the "prescriptions" table.
@@ -374,6 +395,7 @@ var (
 		PatientInfosTable,
 		PaymentsTable,
 		PharmacistsTable,
+		PositionInPharmacistsTable,
 		PrescriptionsTable,
 		UnitOfMedicinesTable,
 	}
@@ -395,6 +417,7 @@ func init() {
 	OrdersTable.ForeignKeys[0].RefTable = CompaniesTable
 	OrdersTable.ForeignKeys[1].RefTable = MedicinesTable
 	OrdersTable.ForeignKeys[2].RefTable = PharmacistsTable
+	PharmacistsTable.ForeignKeys[0].RefTable = PositionInPharmacistsTable
 	PrescriptionsTable.ForeignKeys[0].RefTable = DoctorsTable
 	PrescriptionsTable.ForeignKeys[1].RefTable = MedicinesTable
 	PrescriptionsTable.ForeignKeys[2].RefTable = PatientInfosTable

@@ -17,6 +17,7 @@ import (
 	"github.com/sut63/team01/ent/drugallergy"
 	"github.com/sut63/team01/ent/order"
 	"github.com/sut63/team01/ent/pharmacist"
+	"github.com/sut63/team01/ent/positioninpharmacist"
 	"github.com/sut63/team01/ent/predicate"
 )
 
@@ -29,10 +30,12 @@ type PharmacistQuery struct {
 	unique     []string
 	predicates []predicate.Pharmacist
 	// eager-loading edges.
-	withDispensemedicine *DispenseMedicineQuery
-	withDrugallergys     *DrugAllergyQuery
-	withOrderpharmacist  *OrderQuery
-	withBills            *BillQuery
+	withPositioninpharmacist *PositionInPharmacistQuery
+	withDispensemedicine     *DispenseMedicineQuery
+	withDrugallergys         *DrugAllergyQuery
+	withOrderpharmacist      *OrderQuery
+	withBills                *BillQuery
+	withFKs                  bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -60,6 +63,24 @@ func (pq *PharmacistQuery) Offset(offset int) *PharmacistQuery {
 func (pq *PharmacistQuery) Order(o ...OrderFunc) *PharmacistQuery {
 	pq.order = append(pq.order, o...)
 	return pq
+}
+
+// QueryPositioninpharmacist chains the current query on the positioninpharmacist edge.
+func (pq *PharmacistQuery) QueryPositioninpharmacist() *PositionInPharmacistQuery {
+	query := &PositionInPharmacistQuery{config: pq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(pharmacist.Table, pharmacist.FieldID, pq.sqlQuery()),
+			sqlgraph.To(positioninpharmacist.Table, positioninpharmacist.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, pharmacist.PositioninpharmacistTable, pharmacist.PositioninpharmacistColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryDispensemedicine chains the current query on the dispensemedicine edge.
@@ -313,6 +334,17 @@ func (pq *PharmacistQuery) Clone() *PharmacistQuery {
 	}
 }
 
+//  WithPositioninpharmacist tells the query-builder to eager-loads the nodes that are connected to
+// the "positioninpharmacist" edge. The optional arguments used to configure the query builder of the edge.
+func (pq *PharmacistQuery) WithPositioninpharmacist(opts ...func(*PositionInPharmacistQuery)) *PharmacistQuery {
+	query := &PositionInPharmacistQuery{config: pq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withPositioninpharmacist = query
+	return pq
+}
+
 //  WithDispensemedicine tells the query-builder to eager-loads the nodes that are connected to
 // the "dispensemedicine" edge. The optional arguments used to configure the query builder of the edge.
 func (pq *PharmacistQuery) WithDispensemedicine(opts ...func(*DispenseMedicineQuery)) *PharmacistQuery {
@@ -422,18 +454,29 @@ func (pq *PharmacistQuery) prepareQuery(ctx context.Context) error {
 func (pq *PharmacistQuery) sqlAll(ctx context.Context) ([]*Pharmacist, error) {
 	var (
 		nodes       = []*Pharmacist{}
+		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
+			pq.withPositioninpharmacist != nil,
 			pq.withDispensemedicine != nil,
 			pq.withDrugallergys != nil,
 			pq.withOrderpharmacist != nil,
 			pq.withBills != nil,
 		}
 	)
+	if pq.withPositioninpharmacist != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, pharmacist.ForeignKeys...)
+	}
 	_spec.ScanValues = func() []interface{} {
 		node := &Pharmacist{config: pq.config}
 		nodes = append(nodes, node)
 		values := node.scanValues()
+		if withFKs {
+			values = append(values, node.fkValues()...)
+		}
 		return values
 	}
 	_spec.Assign = func(values ...interface{}) error {
@@ -449,6 +492,31 @@ func (pq *PharmacistQuery) sqlAll(ctx context.Context) ([]*Pharmacist, error) {
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+
+	if query := pq.withPositioninpharmacist; query != nil {
+		ids := make([]int, 0, len(nodes))
+		nodeids := make(map[int][]*Pharmacist)
+		for i := range nodes {
+			if fk := nodes[i].positioninpharmacist_id; fk != nil {
+				ids = append(ids, *fk)
+				nodeids[*fk] = append(nodeids[*fk], nodes[i])
+			}
+		}
+		query.Where(positioninpharmacist.IDIn(ids...))
+		neighbors, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, n := range neighbors {
+			nodes, ok := nodeids[n.ID]
+			if !ok {
+				return nil, fmt.Errorf(`unexpected foreign-key "positioninpharmacist_id" returned %v`, n.ID)
+			}
+			for i := range nodes {
+				nodes[i].Edges.Positioninpharmacist = n
+			}
+		}
 	}
 
 	if query := pq.withDispensemedicine; query != nil {

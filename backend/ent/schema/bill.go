@@ -15,7 +15,9 @@ type Bill struct {
 func (Bill) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int("amount").Positive(),
-		field.String("annotation"),
+		field.String("annotation").NotEmpty(),
+		field.String("payer").NotEmpty(),
+
 	}
 }
 

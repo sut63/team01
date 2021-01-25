@@ -23,6 +23,7 @@ type BillController struct {
 type Bill struct {
 	Annotation   		 string
 	Amount				 int
+	Payer				 string
 	Payment		  		 int
 	DispenseMedicine     int
 	Pharmacist	 		 int
@@ -88,15 +89,20 @@ func (ctl *BillController) CreateBill(c *gin.Context) {
 		SetPayments(py).
 		SetAnnotation(obj.Annotation).
 		SetPharmacists(ph).
+		SetPayer(obj.Payer).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
-			"error": "saving bill failed",
+			"status": false,
+			"error": err,
 		})
 		return
 	}
 
-	c.JSON(200, dm)
+	c.JSON(200, gin.H{
+		"status": true,
+		"data": dm,
+	})
 }
 
 // GetBill handles GET requests to retrieve a bill entity
@@ -284,6 +290,7 @@ func (ctl *BillController) UpdateBill(c *gin.Context) {
 		SetPayments(py).
 		SetAnnotation(obj.Annotation).
 		SetPharmacists(ph).
+		SetPayer(obj.Payer).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{"error": "update bill failed"})

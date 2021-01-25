@@ -431,6 +431,7 @@ type BillMutation struct {
 	amount                   *int
 	addamount                *int
 	annotation               *string
+	payer                    *string
 	clearedFields            map[string]struct{}
 	pharmacists              *int
 	clearedpharmacists       bool
@@ -615,6 +616,43 @@ func (m *BillMutation) ResetAnnotation() {
 	m.annotation = nil
 }
 
+// SetPayer sets the payer field.
+func (m *BillMutation) SetPayer(s string) {
+	m.payer = &s
+}
+
+// Payer returns the payer value in the mutation.
+func (m *BillMutation) Payer() (r string, exists bool) {
+	v := m.payer
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPayer returns the old payer value of the Bill.
+// If the Bill object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *BillMutation) OldPayer(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldPayer is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldPayer requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPayer: %w", err)
+	}
+	return oldValue.Payer, nil
+}
+
+// ResetPayer reset all changes of the "payer" field.
+func (m *BillMutation) ResetPayer() {
+	m.payer = nil
+}
+
 // SetPharmacistsID sets the pharmacists edge to Pharmacist by id.
 func (m *BillMutation) SetPharmacistsID(id int) {
 	m.pharmacists = &id
@@ -746,12 +784,15 @@ func (m *BillMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *BillMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 3)
 	if m.amount != nil {
 		fields = append(fields, bill.FieldAmount)
 	}
 	if m.annotation != nil {
 		fields = append(fields, bill.FieldAnnotation)
+	}
+	if m.payer != nil {
+		fields = append(fields, bill.FieldPayer)
 	}
 	return fields
 }
@@ -765,6 +806,8 @@ func (m *BillMutation) Field(name string) (ent.Value, bool) {
 		return m.Amount()
 	case bill.FieldAnnotation:
 		return m.Annotation()
+	case bill.FieldPayer:
+		return m.Payer()
 	}
 	return nil, false
 }
@@ -778,6 +821,8 @@ func (m *BillMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldAmount(ctx)
 	case bill.FieldAnnotation:
 		return m.OldAnnotation(ctx)
+	case bill.FieldPayer:
+		return m.OldPayer(ctx)
 	}
 	return nil, fmt.Errorf("unknown Bill field %s", name)
 }
@@ -800,6 +845,13 @@ func (m *BillMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAnnotation(v)
+		return nil
+	case bill.FieldPayer:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPayer(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Bill field %s", name)
@@ -871,6 +923,9 @@ func (m *BillMutation) ResetField(name string) error {
 		return nil
 	case bill.FieldAnnotation:
 		m.ResetAnnotation()
+		return nil
+	case bill.FieldPayer:
+		m.ResetPayer()
 		return nil
 	}
 	return fmt.Errorf("unknown Bill field %s", name)

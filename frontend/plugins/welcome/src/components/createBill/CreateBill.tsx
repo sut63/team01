@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import Swal from 'sweetalert2'; // alert
 
 import { Content, Header, Page, pageTheme } from '@backstage/core';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
@@ -93,6 +94,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Bill {
   amount: number;
   annotation: string;
+  payer: string;
   dispensemedicine: number;
   payment: number;
 }
@@ -105,6 +107,21 @@ const Bill: FC<{}> = () => {
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState(false);
   const [alert, setAlert] = useState(true);
+  const [amountError, setamountError] = React.useState('');
+  const [payerError, setpayerError] = React.useState('');
+  const [annotationError, setannotationError] = React.useState('');
+  //Sweet Alert
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 5000,
+    timerProgressBar: true,
+    didOpen: toast => {
+      toast.addEventListener('mouseenter', Swal.stopTimer);
+      toast.addEventListener('mouseleave', Swal.resumeTimer);
+    },
+  });
 
   //structure receive data from api
   const [sBill, setBill] = React.useState<
@@ -112,7 +129,7 @@ const Bill: FC<{}> = () => {
   >({});
 
   const [apipayment, setPayment] = useState<EntPayment[]>([]);
-  const [apibill, setBills] = useState<EntBill[]>([]);
+  const [apibill, setApiBills] = useState<EntBill[]>([]);
   
   const [apiprescriptions, setApiPrescription] = useState<EntPrescription[]>(
     [],
@@ -139,6 +156,12 @@ const Bill: FC<{}> = () => {
     setApiDispenseMedicine(res);
   };
 
+  const getBill = async () => {
+    const res = await api.listBill({ limit: 0, offset: 0 });
+    setLoading(false);
+    setApiBills(res);
+  };
+
   const getPrescription = async () => {
     const res = await api.listPrescription({ limit: 8, offset: 0 });
     setLoading(false);
@@ -157,6 +180,7 @@ const Bill: FC<{}> = () => {
     getPrescription();
     checkPosition();
     getPayment();
+    getBill();
   }, [loading]);
 
   // handleChange
@@ -165,6 +189,8 @@ const Bill: FC<{}> = () => {
   ) => {
     const name = event.target.name as keyof typeof Bill;
     const { value } = event.target;
+    const validateValue = value as string
+    checkPattern(name, validateValue)
     setBill({ ...sBill, [name]: value });
     console.log(sBill);
   };
@@ -174,6 +200,8 @@ const Bill: FC<{}> = () => {
   ) => {
     const name = event.target.name as keyof typeof Bill;
     const { value } = event.target;
+    const validateValue = value as string
+    checkPattern(name, validateValue)
     setBill({ ...sBill, [name]: Number(value) });
     console.log(sBill);
   };
@@ -185,6 +213,54 @@ const Bill: FC<{}> = () => {
         dispe => dispe.edges?.dispenseMedicines?.id === presc.id,
       ),
   );
+  //check and Alart massge
+  const validatename = (val: string) => {
+    return val != null ? true : false;
+  }
+  const validateannotation = (val: string) => {
+    return val != null ? true : false;
+  }
+  const validateamount = (val: string) => {
+    return val.charCodeAt(0) != 48 ? true : false ;
+  }
+  const checkPattern  = (id: string, value: string) => {
+    switch(id) {
+      case 'Payer':
+        validatename(value) ? setpayerError('') : setpayerError('กรุณากรอกชื่อผู้จ่ายเงิน');
+        return;
+      case 'annotation':
+        validateannotation(value) ? setannotationError('') : setannotationError('กรุณากรอกหมายเหตุ ถ้าไม่มีใส่ -');
+        return;
+      case 'amount':
+        validateamount(value) ? setamountError('') : setamountError('กรุณากรอกค่ารักษา หรือราคาต้องไม่ติดลบ')
+        return;
+      default:
+        return;
+    }
+  }
+
+  const alertMessage = (icon: any, title: any) => {
+    Toast.fire({
+      icon: icon,
+      title: title,
+    });
+  }
+  const checkCaseSaveError = (field: string) => {
+    switch(field) {
+      case 'payer':
+        alertMessage("error","กรุณากรอกชื่อผู้จ่ายเงิน");
+        return;
+      case 'amount':
+        alertMessage("error","กรุณากรอกค่ารักษา หรือราคาต้องไม่ติดลบ");
+        return;
+      case 'annotation':
+        alertMessage("error","กรุณากรอกหมายเหตุ ถ้าไม่มีใส่ -");
+        return;
+      default:
+        alertMessage("error","บันทึกข้อมูลไม่สำเร็จ");
+        return;
+    }
+  }
 
   //function SetData selectPrescriptions
   function selectPrescriptions(id: any, namePatient: any) {
@@ -199,8 +275,9 @@ const Bill: FC<{}> = () => {
     setNamePatient('');
   }
 
+
   // function CreateDispenseMedicines data
-  const CreateDispenseMedicines = async () => {
+  /* const CreateDispenseMedicines = async () => {
     if (
       sBill.annotation != undefined &&
       sPharmacistID != 0 &&
@@ -211,13 +288,11 @@ const Bill: FC<{}> = () => {
       const Bills = {
         amount: sBill.amount,
         annotation: sBill.annotation,
+        payer: sBill.payer,
         dispenseMedicine: sBill.dispensemedicine,
         payment: sBill.payment,
         pharmacist: sPharmacistID,
-        
-        
-        
-      };
+        };
 
       const res: any = await api.createBill({
         bill: Bills,
@@ -239,7 +314,42 @@ const Bill: FC<{}> = () => {
     setTimeout(() => {
       setStatus(false);
     }, 5000);
+  }; */
+
+  const Create_Bill = async () => {
+    const Bills = {
+      amount: sBill.amount,
+      annotation: sBill.annotation,
+      payer: sBill.payer,
+      dispenseMedicine: sBill.dispensemedicine,
+      payment: sBill.payment,
+      pharmacist: sPharmacistID,
+      };
+    const apiUrl = 'http://localhost:8080/api/v1/bills';
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Bills),
+    };
+  
+    fetch(apiUrl, requestOptions)
+      .then(response => response.json())
+      .then(async data => {
+        console.log(data);
+        if (data.status === true) {
+          Toast.fire({
+            icon: 'success',
+            title: 'บันทึกข้อมูลสำเร็จ',
+          });
+        } else {
+          checkCaseSaveError(data.error.Name);
+
+        }
+      });
   };
+
+
+
 
   return (
     <Page theme={pageTheme.website}>
@@ -404,7 +514,6 @@ const Bill: FC<{}> = () => {
                     <TextField
                       label="ราคา"
                       name="amount"
-                      type="number"
                       value = {sBill.amount}
                       variant="outlined"
                       onChange={handleChange2}
@@ -437,6 +546,21 @@ const Bill: FC<{}> = () => {
 
                   <FormControl
                     variant="outlined"
+                    className={classes.formControl}
+                    fullWidth
+                  >
+                    <Typography className={classes.headLabel}>ผู้จ่ายเงิน</Typography>
+                    <TextField
+                      label="ผู้จ่ายเงิน"
+                      name="payer"
+                      value = {sBill.payer}
+                      variant="outlined"
+                      onChange={handleChange}
+                    ></TextField>
+                  </FormControl>
+
+                  <FormControl
+                    variant="outlined"
                     className={classes.flexRow}
                     fullWidth
                   >
@@ -446,7 +570,7 @@ const Bill: FC<{}> = () => {
                       className={classes.button}
                       startIcon={<SaveIcon />}
                       onClick={() => {
-                        CreateDispenseMedicines();
+                        Create_Bill();
                       }}
                     >
                       <Typography variant="button">บันทึก</Typography>

@@ -49,6 +49,12 @@ func (bu *BillUpdate) SetAnnotation(s string) *BillUpdate {
 	return bu
 }
 
+// SetPayer sets the payer field.
+func (bu *BillUpdate) SetPayer(s string) *BillUpdate {
+	bu.mutation.SetPayer(s)
+	return bu
+}
+
 // SetPharmacistsID sets the pharmacists edge to Pharmacist by id.
 func (bu *BillUpdate) SetPharmacistsID(id int) *BillUpdate {
 	bu.mutation.SetPharmacistsID(id)
@@ -134,6 +140,16 @@ func (bu *BillUpdate) Save(ctx context.Context) (int, error) {
 	if v, ok := bu.mutation.Amount(); ok {
 		if err := bill.AmountValidator(v); err != nil {
 			return 0, &ValidationError{Name: "amount", err: fmt.Errorf("ent: validator failed for field \"amount\": %w", err)}
+		}
+	}
+	if v, ok := bu.mutation.Annotation(); ok {
+		if err := bill.AnnotationValidator(v); err != nil {
+			return 0, &ValidationError{Name: "annotation", err: fmt.Errorf("ent: validator failed for field \"annotation\": %w", err)}
+		}
+	}
+	if v, ok := bu.mutation.Payer(); ok {
+		if err := bill.PayerValidator(v); err != nil {
+			return 0, &ValidationError{Name: "payer", err: fmt.Errorf("ent: validator failed for field \"payer\": %w", err)}
 		}
 	}
 
@@ -223,6 +239,13 @@ func (bu *BillUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeString,
 			Value:  value,
 			Column: bill.FieldAnnotation,
+		})
+	}
+	if value, ok := bu.mutation.Payer(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: bill.FieldPayer,
 		})
 	}
 	if bu.mutation.PharmacistsCleared() {
@@ -367,6 +390,12 @@ func (buo *BillUpdateOne) SetAnnotation(s string) *BillUpdateOne {
 	return buo
 }
 
+// SetPayer sets the payer field.
+func (buo *BillUpdateOne) SetPayer(s string) *BillUpdateOne {
+	buo.mutation.SetPayer(s)
+	return buo
+}
+
 // SetPharmacistsID sets the pharmacists edge to Pharmacist by id.
 func (buo *BillUpdateOne) SetPharmacistsID(id int) *BillUpdateOne {
 	buo.mutation.SetPharmacistsID(id)
@@ -454,6 +483,16 @@ func (buo *BillUpdateOne) Save(ctx context.Context) (*Bill, error) {
 			return nil, &ValidationError{Name: "amount", err: fmt.Errorf("ent: validator failed for field \"amount\": %w", err)}
 		}
 	}
+	if v, ok := buo.mutation.Annotation(); ok {
+		if err := bill.AnnotationValidator(v); err != nil {
+			return nil, &ValidationError{Name: "annotation", err: fmt.Errorf("ent: validator failed for field \"annotation\": %w", err)}
+		}
+	}
+	if v, ok := buo.mutation.Payer(); ok {
+		if err := bill.PayerValidator(v); err != nil {
+			return nil, &ValidationError{Name: "payer", err: fmt.Errorf("ent: validator failed for field \"payer\": %w", err)}
+		}
+	}
 
 	var (
 		err  error
@@ -539,6 +578,13 @@ func (buo *BillUpdateOne) sqlSave(ctx context.Context) (b *Bill, err error) {
 			Type:   field.TypeString,
 			Value:  value,
 			Column: bill.FieldAnnotation,
+		})
+	}
+	if value, ok := buo.mutation.Payer(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: bill.FieldPayer,
 		})
 	}
 	if buo.mutation.PharmacistsCleared() {

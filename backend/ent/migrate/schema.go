@@ -25,6 +25,7 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "amount", Type: field.TypeInt},
 		{Name: "annotation", Type: field.TypeString},
+		{Name: "payer", Type: field.TypeString},
 		{Name: "dispensemedicine_id", Type: field.TypeInt, Unique: true, Nullable: true},
 		{Name: "payment_id", Type: field.TypeInt, Nullable: true},
 		{Name: "pharmacist_id", Type: field.TypeInt, Nullable: true},
@@ -37,21 +38,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "bills_dispense_medicines_Bills",
-				Columns: []*schema.Column{BillsColumns[3]},
+				Columns: []*schema.Column{BillsColumns[4]},
 
 				RefColumns: []*schema.Column{DispenseMedicinesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "bills_payments_Bills",
-				Columns: []*schema.Column{BillsColumns[4]},
+				Columns: []*schema.Column{BillsColumns[5]},
 
 				RefColumns: []*schema.Column{PaymentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "bills_pharmacists_Bills",
-				Columns: []*schema.Column{BillsColumns[5]},
+				Columns: []*schema.Column{BillsColumns[6]},
 
 				RefColumns: []*schema.Column{PharmacistsColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -281,7 +282,7 @@ var (
 	// PaymentsColumns holds the columns for the "payments" table.
 	PaymentsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "pay", Type: field.TypeString},
+		{Name: "pay", Type: field.TypeString, Unique: true},
 	}
 	// PaymentsTable holds the schema information for the "payments" table.
 	PaymentsTable = &schema.Table{

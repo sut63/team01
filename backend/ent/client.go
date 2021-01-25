@@ -22,6 +22,7 @@ import (
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/payment"
 	"github.com/sut63/team01/ent/pharmacist"
+	"github.com/sut63/team01/ent/positioninpharmacist"
 	"github.com/sut63/team01/ent/prescription"
 	"github.com/sut63/team01/ent/unitofmedicine"
 
@@ -61,6 +62,8 @@ type Client struct {
 	Payment *PaymentClient
 	// Pharmacist is the client for interacting with the Pharmacist builders.
 	Pharmacist *PharmacistClient
+	// PositionInPharmacist is the client for interacting with the PositionInPharmacist builders.
+	PositionInPharmacist *PositionInPharmacistClient
 	// Prescription is the client for interacting with the Prescription builders.
 	Prescription *PrescriptionClient
 	// UnitOfMedicine is the client for interacting with the UnitOfMedicine builders.
@@ -91,6 +94,7 @@ func (c *Client) init() {
 	c.PatientInfo = NewPatientInfoClient(c.config)
 	c.Payment = NewPaymentClient(c.config)
 	c.Pharmacist = NewPharmacistClient(c.config)
+	c.PositionInPharmacist = NewPositionInPharmacistClient(c.config)
 	c.Prescription = NewPrescriptionClient(c.config)
 	c.UnitOfMedicine = NewUnitOfMedicineClient(c.config)
 }
@@ -123,23 +127,24 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	}
 	cfg := config{driver: tx, log: c.log, debug: c.debug, hooks: c.hooks}
 	return &Tx{
-		ctx:              ctx,
-		config:           cfg,
-		Annotation:       NewAnnotationClient(cfg),
-		Bill:             NewBillClient(cfg),
-		Company:          NewCompanyClient(cfg),
-		DispenseMedicine: NewDispenseMedicineClient(cfg),
-		Doctor:           NewDoctorClient(cfg),
-		DrugAllergy:      NewDrugAllergyClient(cfg),
-		LevelOfDangerous: NewLevelOfDangerousClient(cfg),
-		Medicine:         NewMedicineClient(cfg),
-		MedicineType:     NewMedicineTypeClient(cfg),
-		Order:            NewOrderClient(cfg),
-		PatientInfo:      NewPatientInfoClient(cfg),
-		Payment:          NewPaymentClient(cfg),
-		Pharmacist:       NewPharmacistClient(cfg),
-		Prescription:     NewPrescriptionClient(cfg),
-		UnitOfMedicine:   NewUnitOfMedicineClient(cfg),
+		ctx:                  ctx,
+		config:               cfg,
+		Annotation:           NewAnnotationClient(cfg),
+		Bill:                 NewBillClient(cfg),
+		Company:              NewCompanyClient(cfg),
+		DispenseMedicine:     NewDispenseMedicineClient(cfg),
+		Doctor:               NewDoctorClient(cfg),
+		DrugAllergy:          NewDrugAllergyClient(cfg),
+		LevelOfDangerous:     NewLevelOfDangerousClient(cfg),
+		Medicine:             NewMedicineClient(cfg),
+		MedicineType:         NewMedicineTypeClient(cfg),
+		Order:                NewOrderClient(cfg),
+		PatientInfo:          NewPatientInfoClient(cfg),
+		Payment:              NewPaymentClient(cfg),
+		Pharmacist:           NewPharmacistClient(cfg),
+		PositionInPharmacist: NewPositionInPharmacistClient(cfg),
+		Prescription:         NewPrescriptionClient(cfg),
+		UnitOfMedicine:       NewUnitOfMedicineClient(cfg),
 	}, nil
 }
 
@@ -154,22 +159,23 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	}
 	cfg := config{driver: &txDriver{tx: tx, drv: c.driver}, log: c.log, debug: c.debug, hooks: c.hooks}
 	return &Tx{
-		config:           cfg,
-		Annotation:       NewAnnotationClient(cfg),
-		Bill:             NewBillClient(cfg),
-		Company:          NewCompanyClient(cfg),
-		DispenseMedicine: NewDispenseMedicineClient(cfg),
-		Doctor:           NewDoctorClient(cfg),
-		DrugAllergy:      NewDrugAllergyClient(cfg),
-		LevelOfDangerous: NewLevelOfDangerousClient(cfg),
-		Medicine:         NewMedicineClient(cfg),
-		MedicineType:     NewMedicineTypeClient(cfg),
-		Order:            NewOrderClient(cfg),
-		PatientInfo:      NewPatientInfoClient(cfg),
-		Payment:          NewPaymentClient(cfg),
-		Pharmacist:       NewPharmacistClient(cfg),
-		Prescription:     NewPrescriptionClient(cfg),
-		UnitOfMedicine:   NewUnitOfMedicineClient(cfg),
+		config:               cfg,
+		Annotation:           NewAnnotationClient(cfg),
+		Bill:                 NewBillClient(cfg),
+		Company:              NewCompanyClient(cfg),
+		DispenseMedicine:     NewDispenseMedicineClient(cfg),
+		Doctor:               NewDoctorClient(cfg),
+		DrugAllergy:          NewDrugAllergyClient(cfg),
+		LevelOfDangerous:     NewLevelOfDangerousClient(cfg),
+		Medicine:             NewMedicineClient(cfg),
+		MedicineType:         NewMedicineTypeClient(cfg),
+		Order:                NewOrderClient(cfg),
+		PatientInfo:          NewPatientInfoClient(cfg),
+		Payment:              NewPaymentClient(cfg),
+		Pharmacist:           NewPharmacistClient(cfg),
+		PositionInPharmacist: NewPositionInPharmacistClient(cfg),
+		Prescription:         NewPrescriptionClient(cfg),
+		UnitOfMedicine:       NewUnitOfMedicineClient(cfg),
 	}, nil
 }
 
@@ -211,6 +217,7 @@ func (c *Client) Use(hooks ...Hook) {
 	c.PatientInfo.Use(hooks...)
 	c.Payment.Use(hooks...)
 	c.Pharmacist.Use(hooks...)
+	c.PositionInPharmacist.Use(hooks...)
 	c.Prescription.Use(hooks...)
 	c.UnitOfMedicine.Use(hooks...)
 }
@@ -1721,6 +1728,22 @@ func (c *PharmacistClient) GetX(ctx context.Context, id int) *Pharmacist {
 	return ph
 }
 
+// QueryPositioninpharmacist queries the positioninpharmacist edge of a Pharmacist.
+func (c *PharmacistClient) QueryPositioninpharmacist(ph *Pharmacist) *PositionInPharmacistQuery {
+	query := &PositionInPharmacistQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := ph.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(pharmacist.Table, pharmacist.FieldID, id),
+			sqlgraph.To(positioninpharmacist.Table, positioninpharmacist.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, pharmacist.PositioninpharmacistTable, pharmacist.PositioninpharmacistColumn),
+		)
+		fromV = sqlgraph.Neighbors(ph.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryDispensemedicine queries the dispensemedicine edge of a Pharmacist.
 func (c *PharmacistClient) QueryDispensemedicine(ph *Pharmacist) *DispenseMedicineQuery {
 	query := &DispenseMedicineQuery{config: c.config}
@@ -1788,6 +1811,105 @@ func (c *PharmacistClient) QueryBills(ph *Pharmacist) *BillQuery {
 // Hooks returns the client hooks.
 func (c *PharmacistClient) Hooks() []Hook {
 	return c.hooks.Pharmacist
+}
+
+// PositionInPharmacistClient is a client for the PositionInPharmacist schema.
+type PositionInPharmacistClient struct {
+	config
+}
+
+// NewPositionInPharmacistClient returns a client for the PositionInPharmacist from the given config.
+func NewPositionInPharmacistClient(c config) *PositionInPharmacistClient {
+	return &PositionInPharmacistClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `positioninpharmacist.Hooks(f(g(h())))`.
+func (c *PositionInPharmacistClient) Use(hooks ...Hook) {
+	c.hooks.PositionInPharmacist = append(c.hooks.PositionInPharmacist, hooks...)
+}
+
+// Create returns a create builder for PositionInPharmacist.
+func (c *PositionInPharmacistClient) Create() *PositionInPharmacistCreate {
+	mutation := newPositionInPharmacistMutation(c.config, OpCreate)
+	return &PositionInPharmacistCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Update returns an update builder for PositionInPharmacist.
+func (c *PositionInPharmacistClient) Update() *PositionInPharmacistUpdate {
+	mutation := newPositionInPharmacistMutation(c.config, OpUpdate)
+	return &PositionInPharmacistUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PositionInPharmacistClient) UpdateOne(pip *PositionInPharmacist) *PositionInPharmacistUpdateOne {
+	mutation := newPositionInPharmacistMutation(c.config, OpUpdateOne, withPositionInPharmacist(pip))
+	return &PositionInPharmacistUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PositionInPharmacistClient) UpdateOneID(id int) *PositionInPharmacistUpdateOne {
+	mutation := newPositionInPharmacistMutation(c.config, OpUpdateOne, withPositionInPharmacistID(id))
+	return &PositionInPharmacistUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for PositionInPharmacist.
+func (c *PositionInPharmacistClient) Delete() *PositionInPharmacistDelete {
+	mutation := newPositionInPharmacistMutation(c.config, OpDelete)
+	return &PositionInPharmacistDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *PositionInPharmacistClient) DeleteOne(pip *PositionInPharmacist) *PositionInPharmacistDeleteOne {
+	return c.DeleteOneID(pip.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *PositionInPharmacistClient) DeleteOneID(id int) *PositionInPharmacistDeleteOne {
+	builder := c.Delete().Where(positioninpharmacist.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PositionInPharmacistDeleteOne{builder}
+}
+
+// Create returns a query builder for PositionInPharmacist.
+func (c *PositionInPharmacistClient) Query() *PositionInPharmacistQuery {
+	return &PositionInPharmacistQuery{config: c.config}
+}
+
+// Get returns a PositionInPharmacist entity by its id.
+func (c *PositionInPharmacistClient) Get(ctx context.Context, id int) (*PositionInPharmacist, error) {
+	return c.Query().Where(positioninpharmacist.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PositionInPharmacistClient) GetX(ctx context.Context, id int) *PositionInPharmacist {
+	pip, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return pip
+}
+
+// QueryPharmacist queries the pharmacist edge of a PositionInPharmacist.
+func (c *PositionInPharmacistClient) QueryPharmacist(pip *PositionInPharmacist) *PharmacistQuery {
+	query := &PharmacistQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := pip.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(positioninpharmacist.Table, positioninpharmacist.FieldID, id),
+			sqlgraph.To(pharmacist.Table, pharmacist.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, positioninpharmacist.PharmacistTable, positioninpharmacist.PharmacistColumn),
+		)
+		fromV = sqlgraph.Neighbors(pip.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PositionInPharmacistClient) Hooks() []Hook {
+	return c.hooks.PositionInPharmacist
 }
 
 // PrescriptionClient is a client for the Prescription schema.

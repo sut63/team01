@@ -8,6 +8,7 @@ import (
 
 	"github.com/facebookincubator/ent/dialect/sql"
 	"github.com/sut63/team01/ent/pharmacist"
+	"github.com/sut63/team01/ent/positioninpharmacist"
 )
 
 // Pharmacist is the model entity for the Pharmacist schema.
@@ -23,11 +24,14 @@ type Pharmacist struct {
 	Name string `json:"name,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PharmacistQuery when eager-loading is set.
-	Edges PharmacistEdges `json:"edges"`
+	Edges                   PharmacistEdges `json:"edges"`
+	positioninpharmacist_id *int
 }
 
 // PharmacistEdges holds the relations/edges for other nodes in the graph.
 type PharmacistEdges struct {
+	// Positioninpharmacist holds the value of the positioninpharmacist edge.
+	Positioninpharmacist *PositionInPharmacist
 	// Dispensemedicine holds the value of the dispensemedicine edge.
 	Dispensemedicine []*DispenseMedicine
 	// Drugallergys holds the value of the drugallergys edge.
@@ -38,13 +42,27 @@ type PharmacistEdges struct {
 	Bills []*Bill
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
+}
+
+// PositioninpharmacistOrErr returns the Positioninpharmacist value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e PharmacistEdges) PositioninpharmacistOrErr() (*PositionInPharmacist, error) {
+	if e.loadedTypes[0] {
+		if e.Positioninpharmacist == nil {
+			// The edge positioninpharmacist was loaded in eager-loading,
+			// but was not found.
+			return nil, &NotFoundError{label: positioninpharmacist.Label}
+		}
+		return e.Positioninpharmacist, nil
+	}
+	return nil, &NotLoadedError{edge: "positioninpharmacist"}
 }
 
 // DispensemedicineOrErr returns the Dispensemedicine value or an error if the edge
 // was not loaded in eager-loading.
 func (e PharmacistEdges) DispensemedicineOrErr() ([]*DispenseMedicine, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.Dispensemedicine, nil
 	}
 	return nil, &NotLoadedError{edge: "dispensemedicine"}
@@ -53,7 +71,7 @@ func (e PharmacistEdges) DispensemedicineOrErr() ([]*DispenseMedicine, error) {
 // DrugallergysOrErr returns the Drugallergys value or an error if the edge
 // was not loaded in eager-loading.
 func (e PharmacistEdges) DrugallergysOrErr() ([]*DrugAllergy, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.Drugallergys, nil
 	}
 	return nil, &NotLoadedError{edge: "drugallergys"}
@@ -62,7 +80,7 @@ func (e PharmacistEdges) DrugallergysOrErr() ([]*DrugAllergy, error) {
 // OrderpharmacistOrErr returns the Orderpharmacist value or an error if the edge
 // was not loaded in eager-loading.
 func (e PharmacistEdges) OrderpharmacistOrErr() ([]*Order, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Orderpharmacist, nil
 	}
 	return nil, &NotLoadedError{edge: "orderpharmacist"}
@@ -71,7 +89,7 @@ func (e PharmacistEdges) OrderpharmacistOrErr() ([]*Order, error) {
 // BillsOrErr returns the Bills value or an error if the edge
 // was not loaded in eager-loading.
 func (e PharmacistEdges) BillsOrErr() ([]*Bill, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Bills, nil
 	}
 	return nil, &NotLoadedError{edge: "Bills"}
@@ -84,6 +102,13 @@ func (*Pharmacist) scanValues() []interface{} {
 		&sql.NullString{}, // email
 		&sql.NullString{}, // password
 		&sql.NullString{}, // name
+	}
+}
+
+// fkValues returns the types for scanning foreign-keys values from sql.Rows.
+func (*Pharmacist) fkValues() []interface{} {
+	return []interface{}{
+		&sql.NullInt64{}, // positioninpharmacist_id
 	}
 }
 
@@ -114,7 +139,21 @@ func (ph *Pharmacist) assignValues(values ...interface{}) error {
 	} else if value.Valid {
 		ph.Name = value.String
 	}
+	values = values[3:]
+	if len(values) == len(pharmacist.ForeignKeys) {
+		if value, ok := values[0].(*sql.NullInt64); !ok {
+			return fmt.Errorf("unexpected type %T for edge-field positioninpharmacist_id", value)
+		} else if value.Valid {
+			ph.positioninpharmacist_id = new(int)
+			*ph.positioninpharmacist_id = int(value.Int64)
+		}
+	}
 	return nil
+}
+
+// QueryPositioninpharmacist queries the positioninpharmacist edge of the Pharmacist.
+func (ph *Pharmacist) QueryPositioninpharmacist() *PositionInPharmacistQuery {
+	return (&PharmacistClient{config: ph.config}).QueryPositioninpharmacist(ph)
 }
 
 // QueryDispensemedicine queries the dispensemedicine edge of the Pharmacist.

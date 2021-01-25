@@ -14,6 +14,8 @@ const (
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 
+	// EdgePositioninpharmacist holds the string denoting the positioninpharmacist edge name in mutations.
+	EdgePositioninpharmacist = "positioninpharmacist"
 	// EdgeDispensemedicine holds the string denoting the dispensemedicine edge name in mutations.
 	EdgeDispensemedicine = "dispensemedicine"
 	// EdgeDrugallergys holds the string denoting the drugallergys edge name in mutations.
@@ -25,6 +27,13 @@ const (
 
 	// Table holds the table name of the pharmacist in the database.
 	Table = "pharmacists"
+	// PositioninpharmacistTable is the table the holds the positioninpharmacist relation/edge.
+	PositioninpharmacistTable = "pharmacists"
+	// PositioninpharmacistInverseTable is the table name for the PositionInPharmacist entity.
+	// It exists in this package in order to avoid circular dependency with the "positioninpharmacist" package.
+	PositioninpharmacistInverseTable = "position_in_pharmacists"
+	// PositioninpharmacistColumn is the table column denoting the positioninpharmacist relation/edge.
+	PositioninpharmacistColumn = "positioninpharmacist_id"
 	// DispensemedicineTable is the table the holds the dispensemedicine relation/edge.
 	DispensemedicineTable = "dispense_medicines"
 	// DispensemedicineInverseTable is the table name for the DispenseMedicine entity.
@@ -61,6 +70,11 @@ var Columns = []string{
 	FieldEmail,
 	FieldPassword,
 	FieldName,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the Pharmacist type.
+var ForeignKeys = []string{
+	"positioninpharmacist_id",
 }
 
 var (

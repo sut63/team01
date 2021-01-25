@@ -1,6 +1,4 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-
 import { Content, Header, Page, pageTheme } from '@backstage/core';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
@@ -162,9 +160,18 @@ const DispenseMedicine: FC<{}> = () => {
     setApiPrescription(res);
   };
 
-  const checkPosition = async () => {
+  const loadingUserData = async () => {
     setPharmacistID(Number(cookies.get('ID')));
     setPharmacistName(cookies.get('Name'));
+  };
+
+  const checkPosition = async () => {
+    if(cookies.get('PositionData') != 'DispenseMedicine'){
+      history.pushState('', '', '/' + cookies.get('PositionData'));
+      window.location.reload(false); 
+    }else{
+      loadingUserData();
+    }
   };
 
   // Lifecycle Hooks

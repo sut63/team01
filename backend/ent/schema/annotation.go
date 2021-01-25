@@ -14,7 +14,7 @@ type Annotation struct {
 // Fields of the Annotation.
 func (Annotation) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("messages").NotEmpty(),
+		field.String("messages").NotEmpty().Unique(),
 	}
 }
 

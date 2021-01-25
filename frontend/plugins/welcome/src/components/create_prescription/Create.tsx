@@ -94,13 +94,20 @@ const NewPatientright: FC<{}> = () => {
     setDoctor(res);
   };
 
+  const checkPosition = async () => {
+    if(cookies.get('PositionData') != 'Prescription'){
+      history.pushState('', '', '/' + cookies.get('PositionData'));
+      window.location.reload(false); 
+    }
+  };
+
   // Lifecycle Hooks
   useEffect(() => {
     getMedicine();
     getPatientInfo();
     getDoctor();
     setName(cookies.get('Name'));
-
+    checkPosition();
     setPrescription({ doctorID: Number(cookies.get('ID')) });
   }, []);
 

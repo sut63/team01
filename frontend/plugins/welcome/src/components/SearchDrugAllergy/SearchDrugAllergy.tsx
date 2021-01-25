@@ -145,11 +145,19 @@ const SearchDrugAllergy: FC<{}> = () => {
         }
     }
 
+    const checkPosition = async () => {
+      if (cookies.get('PositionData') != 'DrugAllergy') {
+        history.pushState('', '', '/' + cookies.get('PositionData'));
+        window.location.reload(false); 
+      }
+    };
+
     useEffect(() => {
     }, [statusTable]);
 
     useEffect(() => {
         getDrugAllergy();
+        checkPosition();
         setPhaName(cookies.get('Name'));
     }, []);
 

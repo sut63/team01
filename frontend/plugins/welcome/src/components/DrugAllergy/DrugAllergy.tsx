@@ -222,10 +222,18 @@ const DrugAllergy: FC<{}> = () => {
         setDrugAllergy({ pharmacist: Number(cookies.get('ID')) });
     }
 
+    const checkPosition = async () => {
+        if(cookies.get('PositionData') != 'DrugAllergy'){
+          history.pushState('', '', '/' + cookies.get('PositionData'));
+          window.location.reload(false); 
+        }
+      };
+
     // Lifecycle Hooks
     useEffect(() => {
         getPatient();
         getMedicine();
+        checkPosition();
         setPhaName(cookies.get('Name'));
         setDrugAllergy({ pharmacist: Number(cookies.get('ID')) });
     }, []);

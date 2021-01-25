@@ -169,6 +169,10 @@ const Bill: FC<{}> = () => {
   };
 
   const checkPosition = async () => {
+    if(cookies.get('PositionData') != 'Bill'){
+      history.pushState('', '', '/' + cookies.get('PositionData'));
+      window.location.reload(false); 
+    }
     setPharmacistID(Number(cookies.get('ID')));
     setPharmacistName(cookies.get('Name'));
     console.log(sPharmacistID);

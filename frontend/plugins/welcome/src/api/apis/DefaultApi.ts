@@ -202,7 +202,7 @@ export interface GetDoctorRequest {
 }
 
 export interface GetDrugAllergyRequest {
-    id: number;
+    card: string;
 }
 
 export interface GetLevelOfDangerousRequest {
@@ -1410,12 +1410,12 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * get DrugAllergy by ID
-     * Get a DrugAllergy entity by ID
+     * get DrugAllergy by Patient CardNumber
+     * Get a DrugAllergy entity by Patient CardNumber
      */
-    async getDrugAllergyRaw(requestParameters: GetDrugAllergyRequest): Promise<runtime.ApiResponse<EntDrugAllergy>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getDrugAllergy.');
+    async getDrugAllergyRaw(requestParameters: GetDrugAllergyRequest): Promise<runtime.ApiResponse<Array<EntDrugAllergy>>> {
+        if (requestParameters.card === null || requestParameters.card === undefined) {
+            throw new runtime.RequiredError('card','Required parameter requestParameters.card was null or undefined when calling getDrugAllergy.');
         }
 
         const queryParameters: runtime.HTTPQuery = {};
@@ -1423,20 +1423,20 @@ export class DefaultApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/drugallergys/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/drugallergys/{card}`.replace(`{${"card"}}`, encodeURIComponent(String(requestParameters.card))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EntDrugAllergyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntDrugAllergyFromJSON));
     }
 
     /**
-     * get DrugAllergy by ID
-     * Get a DrugAllergy entity by ID
+     * get DrugAllergy by Patient CardNumber
+     * Get a DrugAllergy entity by Patient CardNumber
      */
-    async getDrugAllergy(requestParameters: GetDrugAllergyRequest): Promise<EntDrugAllergy> {
+    async getDrugAllergy(requestParameters: GetDrugAllergyRequest): Promise<Array<EntDrugAllergy>> {
         const response = await this.getDrugAllergyRaw(requestParameters);
         return await response.value();
     }

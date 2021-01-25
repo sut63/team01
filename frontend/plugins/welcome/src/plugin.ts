@@ -4,6 +4,7 @@ import WelcomePage from './components/WelcomePage';
 import SignIn from './components/SignIn';
 
 import DrugAllergy from './components/DrugAllergy';
+import SearchDrugAllergy from './components/SearchDrugAllergy/SearchDrugAllergy';
 import create_prescription from './components/create_prescription';
 import Medicine from './components/Medicine';
 import DispenseMedicine from './components/DispenseMedicine';
@@ -23,6 +24,7 @@ export const plugin = createPlugin({
     } else {
       if (sPositionData == 'DrugAllergy') {
         router.registerRoute('/DrugAllergy', DrugAllergy);
+        router.registerRoute('/SearchDrugAllergy', SearchDrugAllergy);
       }
       if (sPositionData == 'Order') {
         router.registerRoute('/Order', Order);

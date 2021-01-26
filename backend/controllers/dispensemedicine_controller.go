@@ -10,6 +10,7 @@ import (
 	"github.com/sut63/team01/ent"
 	"github.com/sut63/team01/ent/annotation"
 	"github.com/sut63/team01/ent/dispensemedicine"
+	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/pharmacist"
 	"github.com/sut63/team01/ent/prescription"
 )
@@ -96,7 +97,7 @@ func (ctl *DispenseMedicineController) CreateDispenseMedicine(c *gin.Context) {
 		Create().
 		SetDatetime(time).
 		SetNote(obj.Note).
-		SetAmountchangemedicine(obj.Amountchangemedicine).
+		SetAmountchangemedicine(int(obj.Amountchangemedicine)).
 		SetDetailchangemedicine(obj.Detailchangemedicine).
 		SetPrescription(psc).
 		SetAnnotation(an).
@@ -122,36 +123,42 @@ func (ctl *DispenseMedicineController) CreateDispenseMedicine(c *gin.Context) {
 // @Description get dispensemedicine by ID
 // @ID get-dispensemedicine
 // @Produce  json
-// @Param id path int true "DispenseMedicine ID"
-// @Success 200 {object} ent.DispenseMedicine
+// @Param id path string true "DispenseMedicine ID"
+// @Success 200 {array} ent.DispenseMedicine
 // @Failure 400 {object} gin.H
 // @Failure 404 {object} gin.H
 // @Failure 500 {object} gin.H
 // @Router /dispensemedicines/{id} [get]
 func (ctl *DispenseMedicineController) GetDispenseMedicine(c *gin.Context) {
-	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-	if err != nil {
-		c.JSON(400, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
+	id := string(c.Param("id"))
 
 	dm, err := ctl.client.DispenseMedicine.
 		Query().
-		WithPrescription().
+		Where(dispensemedicine.HasPrescriptionWith(prescription.HasPrescriptionpatientWith(patientinfo.CardNumberEQ(id)))).
+		WithPrescription(func(pq *ent.PrescriptionQuery) {
+			pq.WithPrescriptionpatient().WithPrescriptionmedicine().WithPrescriptiondoctor()
+		}).
 		WithAnnotation().
 		WithPharmacist().
-		Where(dispensemedicine.IDEQ(int(id))).
-		Only(context.Background())
+		All(context.Background())
 	if err != nil {
 		c.JSON(404, gin.H{
-			"error": err.Error(),
+			"error":  err.Error(),
+			"status": false,
 		})
 		return
 	}
 
-	c.JSON(200, dm)
+	if len(dm) != 0 {
+		c.JSON(200, dm)
+		return
+	} else {
+		c.JSON(404, gin.H{
+			"error":  "patient not found",
+			"status": false,
+		})
+		return
+	}
 }
 
 // ListDispenseMedicine handles request to get a list of dispensemedicine entities
@@ -186,7 +193,9 @@ func (ctl *DispenseMedicineController) ListDispenseMedicine(c *gin.Context) {
 
 	dispensemedicines, err := ctl.client.DispenseMedicine.
 		Query().
-		WithPrescription().
+		WithPrescription(func(pq *ent.PrescriptionQuery) {
+			pq.WithPrescriptionpatient().WithPrescriptionmedicine().WithPrescriptiondoctor()
+		}).
 		WithAnnotation().
 		WithPharmacist().
 		Limit(limit).
@@ -299,6 +308,9 @@ func (ctl *DispenseMedicineController) UpdateDispenseMedicine(c *gin.Context) {
 	dm, err := ctl.client.DispenseMedicine.
 		UpdateOneID(int(id)).
 		SetDatetime(time).
+		SetNote(obj.Note).
+		SetAmountchangemedicine(int(obj.Amountchangemedicine)).
+		SetDetailchangemedicine(obj.Detailchangemedicine).
 		SetPrescription(psc).
 		SetAnnotation(an).
 		SetPharmacist(pm).

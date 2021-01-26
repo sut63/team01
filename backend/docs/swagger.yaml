@@ -1883,14 +1883,16 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/ent.DispenseMedicine'
+            items:
+              $ref: '#/definitions/ent.DispenseMedicine'
+            type: array
         "400":
           description: Bad Request
           schema:

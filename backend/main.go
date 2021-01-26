@@ -551,7 +551,7 @@ func main() {
 			Create().
 			SetDatetime(datetim).
 			SetNote(dim.Note).
-			SetAmountchangemedicine(dim.Amountchangemedicine).
+			SetAmountchangemedicine(int(dim.Amountchangemedicine)).
 			SetDetailchangemedicine(dim.Detailchangemedicine).
 			SetPrescription(pres).
 			SetAnnotation(Annota).

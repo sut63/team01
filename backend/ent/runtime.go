@@ -13,6 +13,7 @@ import (
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/pharmacist"
 	"github.com/sut63/team01/ent/positioninpharmacist"
+	"github.com/sut63/team01/ent/prescription"
 	"github.com/sut63/team01/ent/schema"
 	"github.com/sut63/team01/ent/status"
 )
@@ -217,7 +218,12 @@ func init() {
 	pharmacistDescName := pharmacistFields[2].Descriptor()
 	// pharmacist.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	pharmacist.NameValidator = pharmacistDescName.Validators[0].(func(string) error)
-<<<<<<< HEAD
+	positioninpharmacistFields := schema.PositionInPharmacist{}.Fields()
+	_ = positioninpharmacistFields
+	// positioninpharmacistDescPosition is the schema descriptor for position field.
+	positioninpharmacistDescPosition := positioninpharmacistFields[0].Descriptor()
+	// positioninpharmacist.PositionValidator is a validator for the "position" field. It is called by the builders before save.
+	positioninpharmacist.PositionValidator = positioninpharmacistDescPosition.Validators[0].(func(string) error)
 	prescriptionFields := schema.Prescription{}.Fields()
 	_ = prescriptionFields
 	// prescriptionDescValue is the schema descriptor for Value field.
@@ -238,12 +244,4 @@ func init() {
 	statusDescStatus := statusFields[0].Descriptor()
 	// status.StatusValidator is a validator for the "status" field. It is called by the builders before save.
 	status.StatusValidator = statusDescStatus.Validators[0].(func(string) error)
-=======
-	positioninpharmacistFields := schema.PositionInPharmacist{}.Fields()
-	_ = positioninpharmacistFields
-	// positioninpharmacistDescPosition is the schema descriptor for position field.
-	positioninpharmacistDescPosition := positioninpharmacistFields[0].Descriptor()
-	// positioninpharmacist.PositionValidator is a validator for the "position" field. It is called by the builders before save.
-	positioninpharmacist.PositionValidator = positioninpharmacistDescPosition.Validators[0].(func(string) error)
->>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
 }

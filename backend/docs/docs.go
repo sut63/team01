@@ -3068,16 +3068,6 @@ var doc = `{
                 }
             }
         },
-<<<<<<< HEAD
-        "/statuss": {
-            "get": {
-                "description": "list status entities",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "List status entities",
-                "operationId": "list-status",
-=======
         "/positioninpharmacists": {
             "get": {
                 "description": "list positioninpharmacist entities",
@@ -3086,7 +3076,6 @@ var doc = `{
                 ],
                 "summary": "List positioninpharmacist entities",
                 "operationId": "list-positioninpharmacist",
->>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
                 "parameters": [
                     {
                         "type": "integer",
@@ -3107,11 +3096,7 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-<<<<<<< HEAD
-                                "$ref": "#/definitions/ent.Status"
-=======
                                 "$ref": "#/definitions/ent.PositionInPharmacist"
->>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
                             }
                         }
                     },
@@ -3130,29 +3115,13 @@ var doc = `{
                 }
             },
             "post": {
-<<<<<<< HEAD
-                "description": "Create status",
-=======
                 "description": "Create positioninpharmacist",
->>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-<<<<<<< HEAD
-                "summary": "Create status",
-                "operationId": "create-status",
-                "parameters": [
-                    {
-                        "description": "Status entity",
-                        "name": "status",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/ent.Status"
-=======
                 "summary": "Create positioninpharmacist",
                 "operationId": "create-positioninpharmacist",
                 "parameters": [
@@ -3163,7 +3132,6 @@ var doc = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/ent.PositionInPharmacist"
->>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
                         }
                     }
                 ],
@@ -3171,11 +3139,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-<<<<<<< HEAD
-                            "$ref": "#/definitions/ent.Status"
-=======
                             "$ref": "#/definitions/ent.PositionInPharmacist"
->>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
                         }
                     },
                     "400": {
@@ -3193,20 +3157,6 @@ var doc = `{
                 }
             }
         },
-<<<<<<< HEAD
-        "/statuss/{id}": {
-            "get": {
-                "description": "get status by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get a status entity by ID",
-                "operationId": "get-status",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Status ID",
-=======
         "/positioninpharmacists/{id}": {
             "get": {
                 "description": "get positioninpharmacist by ID",
@@ -3219,7 +3169,6 @@ var doc = `{
                     {
                         "type": "integer",
                         "description": "PositionInPharmacist ID",
->>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -3229,11 +3178,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-<<<<<<< HEAD
-                            "$ref": "#/definitions/ent.Status"
-=======
                             "$ref": "#/definitions/ent.PositionInPharmacist"
->>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
                         }
                     },
                     "400": {
@@ -3256,19 +3201,6 @@ var doc = `{
                     }
                 }
             },
-<<<<<<< HEAD
-            "delete": {
-                "description": "get status by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Delete a status entity by ID",
-                "operationId": "delete-status",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Status ID",
-=======
             "put": {
                 "description": "update positioninpharmacist by ID",
                 "consumes": [
@@ -3329,7 +3261,183 @@ var doc = `{
                     {
                         "type": "integer",
                         "description": "PositionInPharmacist ID",
->>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/statuss": {
+            "get": {
+                "description": "list status entities",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List status entities",
+                "operationId": "list-status",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.Status"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create status",
+                "operationId": "create-status",
+                "parameters": [
+                    {
+                        "description": "Status entity",
+                        "name": "status",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.Status"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Status"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/statuss/{id}": {
+            "get": {
+                "description": "get status by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a status entity by ID",
+                "operationId": "get-status",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Status ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Status"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "get status by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete a status entity by ID",
+                "operationId": "delete-status",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Status ID",
                         "name": "id",
                         "in": "path",
                         "required": true

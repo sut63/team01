@@ -39,6 +39,7 @@ type hooks struct {
 	Pharmacist           []ent.Hook
 	PositionInPharmacist []ent.Hook
 	Prescription         []ent.Hook
+	Status               []ent.Hook
 	UnitOfMedicine       []ent.Hook
 }
 

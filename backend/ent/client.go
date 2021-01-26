@@ -148,6 +148,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Pharmacist:           NewPharmacistClient(cfg),
 		PositionInPharmacist: NewPositionInPharmacistClient(cfg),
 		Prescription:         NewPrescriptionClient(cfg),
+		Status:               NewStatusClient(cfg),
 		UnitOfMedicine:       NewUnitOfMedicineClient(cfg),
 	}, nil
 }
@@ -163,25 +164,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	}
 	cfg := config{driver: &txDriver{tx: tx, drv: c.driver}, log: c.log, debug: c.debug, hooks: c.hooks}
 	return &Tx{
-<<<<<<< HEAD
-		config:           cfg,
-		Annotation:       NewAnnotationClient(cfg),
-		Bill:             NewBillClient(cfg),
-		Company:          NewCompanyClient(cfg),
-		DispenseMedicine: NewDispenseMedicineClient(cfg),
-		Doctor:           NewDoctorClient(cfg),
-		DrugAllergy:      NewDrugAllergyClient(cfg),
-		LevelOfDangerous: NewLevelOfDangerousClient(cfg),
-		Medicine:         NewMedicineClient(cfg),
-		MedicineType:     NewMedicineTypeClient(cfg),
-		Order:            NewOrderClient(cfg),
-		PatientInfo:      NewPatientInfoClient(cfg),
-		Payment:          NewPaymentClient(cfg),
-		Pharmacist:       NewPharmacistClient(cfg),
-		Prescription:     NewPrescriptionClient(cfg),
-		Status:           NewStatusClient(cfg),
-		UnitOfMedicine:   NewUnitOfMedicineClient(cfg),
-=======
 		config:               cfg,
 		Annotation:           NewAnnotationClient(cfg),
 		Bill:                 NewBillClient(cfg),
@@ -198,8 +180,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Pharmacist:           NewPharmacistClient(cfg),
 		PositionInPharmacist: NewPositionInPharmacistClient(cfg),
 		Prescription:         NewPrescriptionClient(cfg),
+		Status:               NewStatusClient(cfg),
 		UnitOfMedicine:       NewUnitOfMedicineClient(cfg),
->>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
 	}, nil
 }
 

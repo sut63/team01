@@ -53,6 +53,7 @@ const (
 	TypePharmacist           = "Pharmacist"
 	TypePositionInPharmacist = "PositionInPharmacist"
 	TypePrescription         = "Prescription"
+	TypeStatus               = "Status"
 	TypeUnitOfMedicine       = "UnitOfMedicine"
 )
 

@@ -7805,6 +7805,8 @@ type PrescriptionMutation struct {
 	id                          *int
 	_Value                      *int
 	add_Value                   *int
+	_Symptom                    *string
+	_Annotation                 *string
 	clearedFields               map[string]struct{}
 	prescriptionpatient         *int
 	clearedprescriptionpatient  bool
@@ -7952,6 +7954,80 @@ func (m *PrescriptionMutation) AddedValue() (r int, exists bool) {
 func (m *PrescriptionMutation) ResetValue() {
 	m._Value = nil
 	m.add_Value = nil
+}
+
+// SetSymptom sets the Symptom field.
+func (m *PrescriptionMutation) SetSymptom(s string) {
+	m._Symptom = &s
+}
+
+// Symptom returns the Symptom value in the mutation.
+func (m *PrescriptionMutation) Symptom() (r string, exists bool) {
+	v := m._Symptom
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSymptom returns the old Symptom value of the Prescription.
+// If the Prescription object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *PrescriptionMutation) OldSymptom(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldSymptom is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldSymptom requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSymptom: %w", err)
+	}
+	return oldValue.Symptom, nil
+}
+
+// ResetSymptom reset all changes of the "Symptom" field.
+func (m *PrescriptionMutation) ResetSymptom() {
+	m._Symptom = nil
+}
+
+// SetAnnotation sets the Annotation field.
+func (m *PrescriptionMutation) SetAnnotation(s string) {
+	m._Annotation = &s
+}
+
+// Annotation returns the Annotation value in the mutation.
+func (m *PrescriptionMutation) Annotation() (r string, exists bool) {
+	v := m._Annotation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAnnotation returns the old Annotation value of the Prescription.
+// If the Prescription object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *PrescriptionMutation) OldAnnotation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldAnnotation is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldAnnotation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAnnotation: %w", err)
+	}
+	return oldValue.Annotation, nil
+}
+
+// ResetAnnotation reset all changes of the "Annotation" field.
+func (m *PrescriptionMutation) ResetAnnotation() {
+	m._Annotation = nil
 }
 
 // SetPrescriptionpatientID sets the prescriptionpatient edge to PatientInfo by id.
@@ -8124,9 +8200,15 @@ func (m *PrescriptionMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *PrescriptionMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 3)
 	if m._Value != nil {
 		fields = append(fields, prescription.FieldValue)
+	}
+	if m._Symptom != nil {
+		fields = append(fields, prescription.FieldSymptom)
+	}
+	if m._Annotation != nil {
+		fields = append(fields, prescription.FieldAnnotation)
 	}
 	return fields
 }
@@ -8138,6 +8220,10 @@ func (m *PrescriptionMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case prescription.FieldValue:
 		return m.Value()
+	case prescription.FieldSymptom:
+		return m.Symptom()
+	case prescription.FieldAnnotation:
+		return m.Annotation()
 	}
 	return nil, false
 }
@@ -8149,6 +8235,10 @@ func (m *PrescriptionMutation) OldField(ctx context.Context, name string) (ent.V
 	switch name {
 	case prescription.FieldValue:
 		return m.OldValue(ctx)
+	case prescription.FieldSymptom:
+		return m.OldSymptom(ctx)
+	case prescription.FieldAnnotation:
+		return m.OldAnnotation(ctx)
 	}
 	return nil, fmt.Errorf("unknown Prescription field %s", name)
 }
@@ -8164,6 +8254,20 @@ func (m *PrescriptionMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetValue(v)
+		return nil
+	case prescription.FieldSymptom:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSymptom(v)
+		return nil
+	case prescription.FieldAnnotation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAnnotation(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Prescription field %s", name)
@@ -8232,6 +8336,12 @@ func (m *PrescriptionMutation) ResetField(name string) error {
 	switch name {
 	case prescription.FieldValue:
 		m.ResetValue()
+		return nil
+	case prescription.FieldSymptom:
+		m.ResetSymptom()
+		return nil
+	case prescription.FieldAnnotation:
+		m.ResetAnnotation()
 		return nil
 	}
 	return fmt.Errorf("unknown Prescription field %s", name)

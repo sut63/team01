@@ -44,6 +44,18 @@ func (pu *PrescriptionUpdate) AddValue(i int) *PrescriptionUpdate {
 	return pu
 }
 
+// SetSymptom sets the Symptom field.
+func (pu *PrescriptionUpdate) SetSymptom(s string) *PrescriptionUpdate {
+	pu.mutation.SetSymptom(s)
+	return pu
+}
+
+// SetAnnotation sets the Annotation field.
+func (pu *PrescriptionUpdate) SetAnnotation(s string) *PrescriptionUpdate {
+	pu.mutation.SetAnnotation(s)
+	return pu
+}
+
 // SetPrescriptionpatientID sets the prescriptionpatient edge to PatientInfo by id.
 func (pu *PrescriptionUpdate) SetPrescriptionpatientID(id int) *PrescriptionUpdate {
 	pu.mutation.SetPrescriptionpatientID(id)
@@ -151,6 +163,21 @@ func (pu *PrescriptionUpdate) ClearDispensemedicine() *PrescriptionUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (pu *PrescriptionUpdate) Save(ctx context.Context) (int, error) {
+	if v, ok := pu.mutation.Value(); ok {
+		if err := prescription.ValueValidator(v); err != nil {
+			return 0, &ValidationError{Name: "Value", err: fmt.Errorf("ent: validator failed for field \"Value\": %w", err)}
+		}
+	}
+	if v, ok := pu.mutation.Symptom(); ok {
+		if err := prescription.SymptomValidator(v); err != nil {
+			return 0, &ValidationError{Name: "Symptom", err: fmt.Errorf("ent: validator failed for field \"Symptom\": %w", err)}
+		}
+	}
+	if v, ok := pu.mutation.Annotation(); ok {
+		if err := prescription.AnnotationValidator(v); err != nil {
+			return 0, &ValidationError{Name: "Annotation", err: fmt.Errorf("ent: validator failed for field \"Annotation\": %w", err)}
+		}
+	}
 
 	var (
 		err      error
@@ -231,6 +258,20 @@ func (pu *PrescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeInt,
 			Value:  value,
 			Column: prescription.FieldValue,
+		})
+	}
+	if value, ok := pu.mutation.Symptom(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: prescription.FieldSymptom,
+		})
+	}
+	if value, ok := pu.mutation.Annotation(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: prescription.FieldAnnotation,
 		})
 	}
 	if pu.mutation.PrescriptionpatientCleared() {
@@ -404,6 +445,18 @@ func (puo *PrescriptionUpdateOne) AddValue(i int) *PrescriptionUpdateOne {
 	return puo
 }
 
+// SetSymptom sets the Symptom field.
+func (puo *PrescriptionUpdateOne) SetSymptom(s string) *PrescriptionUpdateOne {
+	puo.mutation.SetSymptom(s)
+	return puo
+}
+
+// SetAnnotation sets the Annotation field.
+func (puo *PrescriptionUpdateOne) SetAnnotation(s string) *PrescriptionUpdateOne {
+	puo.mutation.SetAnnotation(s)
+	return puo
+}
+
 // SetPrescriptionpatientID sets the prescriptionpatient edge to PatientInfo by id.
 func (puo *PrescriptionUpdateOne) SetPrescriptionpatientID(id int) *PrescriptionUpdateOne {
 	puo.mutation.SetPrescriptionpatientID(id)
@@ -511,6 +564,21 @@ func (puo *PrescriptionUpdateOne) ClearDispensemedicine() *PrescriptionUpdateOne
 
 // Save executes the query and returns the updated entity.
 func (puo *PrescriptionUpdateOne) Save(ctx context.Context) (*Prescription, error) {
+	if v, ok := puo.mutation.Value(); ok {
+		if err := prescription.ValueValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Value", err: fmt.Errorf("ent: validator failed for field \"Value\": %w", err)}
+		}
+	}
+	if v, ok := puo.mutation.Symptom(); ok {
+		if err := prescription.SymptomValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Symptom", err: fmt.Errorf("ent: validator failed for field \"Symptom\": %w", err)}
+		}
+	}
+	if v, ok := puo.mutation.Annotation(); ok {
+		if err := prescription.AnnotationValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Annotation", err: fmt.Errorf("ent: validator failed for field \"Annotation\": %w", err)}
+		}
+	}
 
 	var (
 		err  error
@@ -589,6 +657,20 @@ func (puo *PrescriptionUpdateOne) sqlSave(ctx context.Context) (pr *Prescription
 			Type:   field.TypeInt,
 			Value:  value,
 			Column: prescription.FieldValue,
+		})
+	}
+	if value, ok := puo.mutation.Symptom(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: prescription.FieldSymptom,
+		})
+	}
+	if value, ok := puo.mutation.Annotation(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: prescription.FieldAnnotation,
 		})
 	}
 	if puo.mutation.PrescriptionpatientCleared() {

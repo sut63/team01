@@ -10,6 +10,7 @@ import (
 	"github.com/sut63/team01/ent/medicine"
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/prescription"
+	
 )
 
 // PrescriptionController defines the struct for the Prescription controller
@@ -23,7 +24,10 @@ type Prescription struct {
 	DoctorID      int
 	PatientInfoID int
 	MedicineID    int
-	Value         string
+
+	Value      string
+	Symptom    string
+	Annotation string
 }
 
 // CreatePrescription handles POST requests for adding Prescription entities
@@ -77,9 +81,37 @@ func (ctl *PrescriptionController) CreatePrescription(c *gin.Context) {
 		})
 		return
 	}
+
+
+
 	var Value int
 	if v, err := strconv.ParseInt(obj.Value, 10, 64); err == nil {
 		Value = int(v)
+	}
+	if Value <= 0 {
+		c.JSON(400, gin.H{
+			"error": "Value ไม่ถูกต้อง",
+		})
+		return
+	}
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "Value ไม่ถูกต้อง",
+		})
+		return
+	}
+	if obj.Symptom == "" {
+		c.JSON(400, gin.H{
+			"error": "Symptom ไม่ถูกต้อง",
+		})
+		return
+	}
+
+	if obj.Annotation == "" {
+		c.JSON(400, gin.H{
+			"error": "Annotation ไม่ถูกต้อง",
+		})
+		return
 	}
 
 	pr, err := ctl.client.Prescription.
@@ -88,14 +120,20 @@ func (ctl *PrescriptionController) CreatePrescription(c *gin.Context) {
 		SetPrescriptiondoctor(D).
 		SetPrescriptionmedicine(M).
 		SetPrescriptionpatient(P).
+		SetSymptom(obj.Symptom).
+		SetAnnotation(obj.Annotation).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
-			"error": "saving failed",
+			"status": false,
+			"error":  err,
 		})
 		return
 	}
-	c.JSON(200, pr)
+	c.JSON(200, gin.H{
+		"status": true,
+		"data":   pr,
+	})
 }
 
 // GetPrescription handles GET requests to retrieve a Prescription entity
@@ -119,6 +157,9 @@ func (ctl *PrescriptionController) GetPrescription(c *gin.Context) {
 	}
 	u, err := ctl.client.Prescription.
 		Query().
+		WithPrescriptiondoctor().
+		WithPrescriptionmedicine().
+		WithPrescriptionpatient().
 		Where(prescription.IDEQ(int(id))).
 		Only(context.Background())
 	if err != nil {
@@ -173,7 +214,6 @@ func (ctl *PrescriptionController) ListPrescription(c *gin.Context) {
 	c.JSON(200, Prescription)
 }
 
-/*
 // UpdatePrescription handles PUT requests to update a Prescription entity
 // @Summary Update a Prescription entity by ID
 // @Description update Prescription by ID
@@ -211,7 +251,6 @@ func (ctl *PrescriptionController) UpdatePrescription(c *gin.Context) {
 	}
 	c.JSON(200, u)
 }
-*/
 
 // NewPrescriptionController creates and registers handles for the Prescription controller
 func NewPrescriptionController(router gin.IRouter, client *ent.Client) *PrescriptionController {
@@ -231,7 +270,7 @@ func (ctl *PrescriptionController) register() {
 
 	// CRUD
 	Prescription.POST("", ctl.CreatePrescription)
-	//Prescription.GET(":id", ctl.GetPrescription)
-	//Prescription.PUT(":id", ctl.UpdatePrescription)
+	Prescription.GET(":id", ctl.GetPrescription)
+	Prescription.PUT(":id", ctl.UpdatePrescription)
 
 }

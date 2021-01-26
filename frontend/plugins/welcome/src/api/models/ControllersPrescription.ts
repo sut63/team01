@@ -21,6 +21,12 @@ import { exists, mapValues } from '../runtime';
 export interface ControllersPrescription {
     /**
      * 
+     * @type {string}
+     * @memberof ControllersPrescription
+     */
+    annotation?: string;
+    /**
+     * 
      * @type {number}
      * @memberof ControllersPrescription
      */
@@ -42,6 +48,12 @@ export interface ControllersPrescription {
      * @type {string}
      * @memberof ControllersPrescription
      */
+    symptom?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControllersPrescription
+     */
     value?: string;
 }
 
@@ -55,9 +67,11 @@ export function ControllersPrescriptionFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
+        'annotation': !exists(json, 'annotation') ? undefined : json['annotation'],
         'doctorID': !exists(json, 'doctorID') ? undefined : json['doctorID'],
         'medicineID': !exists(json, 'medicineID') ? undefined : json['medicineID'],
         'patientInfoID': !exists(json, 'patientInfoID') ? undefined : json['patientInfoID'],
+        'symptom': !exists(json, 'symptom') ? undefined : json['symptom'],
         'value': !exists(json, 'value') ? undefined : json['value'],
     };
 }
@@ -71,9 +85,11 @@ export function ControllersPrescriptionToJSON(value?: ControllersPrescription | 
     }
     return {
         
+        'annotation': value.annotation,
         'doctorID': value.doctorID,
         'medicineID': value.medicineID,
         'patientInfoID': value.patientInfoID,
+        'symptom': value.symptom,
         'value': value.value,
     };
 }

@@ -336,6 +336,8 @@ var (
 	PrescriptionsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "value", Type: field.TypeInt},
+		{Name: "symptom", Type: field.TypeString},
+		{Name: "annotation", Type: field.TypeString},
 		{Name: "doctor_id", Type: field.TypeInt, Nullable: true},
 		{Name: "medicine_id", Type: field.TypeInt, Nullable: true},
 		{Name: "patient_id", Type: field.TypeInt, Nullable: true},
@@ -348,21 +350,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "prescriptions_doctors_doctorprescription",
-				Columns: []*schema.Column{PrescriptionsColumns[2]},
+				Columns: []*schema.Column{PrescriptionsColumns[4]},
 
 				RefColumns: []*schema.Column{DoctorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "prescriptions_medicines_medicinepresciption",
-				Columns: []*schema.Column{PrescriptionsColumns[3]},
+				Columns: []*schema.Column{PrescriptionsColumns[5]},
 
 				RefColumns: []*schema.Column{MedicinesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "prescriptions_patient_infos_patientprescription",
-				Columns: []*schema.Column{PrescriptionsColumns[4]},
+				Columns: []*schema.Column{PrescriptionsColumns[6]},
 
 				RefColumns: []*schema.Column{PatientInfosColumns[0]},
 				OnDelete:   schema.SetNull,

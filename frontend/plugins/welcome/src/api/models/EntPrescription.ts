@@ -27,6 +27,18 @@ import {
  */
 export interface EntPrescription {
     /**
+     * Annotation holds the value of the "Annotation" field.
+     * @type {string}
+     * @memberof EntPrescription
+     */
+    annotation?: string;
+    /**
+     * Symptom holds the value of the "Symptom" field.
+     * @type {string}
+     * @memberof EntPrescription
+     */
+    symptom?: string;
+    /**
      * Value holds the value of the "Value" field.
      * @type {number}
      * @memberof EntPrescription
@@ -56,6 +68,8 @@ export function EntPrescriptionFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
+        'annotation': !exists(json, 'Annotation') ? undefined : json['Annotation'],
+        'symptom': !exists(json, 'Symptom') ? undefined : json['Symptom'],
         'value': !exists(json, 'Value') ? undefined : json['Value'],
         'edges': !exists(json, 'edges') ? undefined : EntPrescriptionEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
@@ -71,6 +85,8 @@ export function EntPrescriptionToJSON(value?: EntPrescription | null): any {
     }
     return {
         
+        'Annotation': value.annotation,
+        'Symptom': value.symptom,
         'Value': value.value,
         'edges': EntPrescriptionEdgesToJSON(value.edges),
         'id': value.id,

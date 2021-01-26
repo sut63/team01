@@ -109,6 +109,8 @@ type Prescription struct {
 	PatientInfoID int
 	MedicineID    int
 	Value         int
+	Symptom       string
+	Annotation    string
 }
 
 //Doctors Structure
@@ -463,7 +465,7 @@ func main() {
 	//Set Prescription Data
 	Pres := Prescriptions{
 		Prescription: []Prescription{
-			Prescription{1, 1, 1, 15},
+			Prescription{1, 1, 1, 15, "ปวดหัว", "ไม่มี"},
 		},
 	}
 
@@ -499,6 +501,8 @@ func main() {
 		client.Prescription.
 			Create().
 			SetValue(pci.Value).
+			SetSymptom(pci.Symptom).
+			SetAnnotation(pci.Annotation).
 			SetPrescriptionpatient(pif).
 			SetPrescriptiondoctor(dtr).
 			SetPrescriptionmedicine(mdc).

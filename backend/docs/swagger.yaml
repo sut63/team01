@@ -70,12 +70,16 @@ definitions:
     type: object
   controllers.Prescription:
     properties:
+      annotation:
+        type: string
       doctorID:
         type: integer
       medicineID:
         type: integer
       patientInfoID:
         type: integer
+      symptom:
+        type: string
       value:
         type: string
     type: object
@@ -554,6 +558,12 @@ definitions:
     type: object
   ent.Prescription:
     properties:
+      Annotation:
+        description: Annotation holds the value of the "Annotation" field.
+        type: string
+      Symptom:
+        description: Symptom holds the value of the "Symptom" field.
+        type: string
       Value:
         description: Value holds the value of the "Value" field.
         type: integer
@@ -1201,6 +1211,39 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Get a Prescription entity by ID
+    put:
+      consumes:
+      - application/json
+      description: update Prescription by ID
+      operationId: update-Prescription
+      parameters:
+      - description: Prescription ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Prescription entity
+        in: body
+        name: Prescription
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Prescription'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Prescription'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Update a Prescription entity by ID
   /UnitOfMedicine:
     get:
       description: list UnitOfMedicine entities

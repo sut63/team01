@@ -387,6 +387,11 @@ export interface UpdatePositioninpharmacistRequest {
     positioninpharmacist: EntPositionInPharmacist;
 }
 
+export interface UpdatePrescriptionRequest {
+    id: number;
+    prescription: EntPrescription;
+}
+
 export interface UpdateUnitOfMedicineRequest {
     id: number;
     unitOfMedicine: EntUnitOfMedicine;
@@ -2823,6 +2828,45 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async updatePositioninpharmacist(requestParameters: UpdatePositioninpharmacistRequest): Promise<EntPositionInPharmacist> {
         const response = await this.updatePositioninpharmacistRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * update Prescription by ID
+     * Update a Prescription entity by ID
+     */
+    async updatePrescriptionRaw(requestParameters: UpdatePrescriptionRequest): Promise<runtime.ApiResponse<EntPrescription>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updatePrescription.');
+        }
+
+        if (requestParameters.prescription === null || requestParameters.prescription === undefined) {
+            throw new runtime.RequiredError('prescription','Required parameter requestParameters.prescription was null or undefined when calling updatePrescription.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/Prescription/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EntPrescriptionToJSON(requestParameters.prescription),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntPrescriptionFromJSON(jsonValue));
+    }
+
+    /**
+     * update Prescription by ID
+     * Update a Prescription entity by ID
+     */
+    async updatePrescription(requestParameters: UpdatePrescriptionRequest): Promise<EntPrescription> {
+        const response = await this.updatePrescriptionRaw(requestParameters);
         return await response.value();
     }
 

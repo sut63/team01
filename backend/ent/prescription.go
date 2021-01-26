@@ -21,6 +21,10 @@ type Prescription struct {
 	ID int `json:"id,omitempty"`
 	// Value holds the value of the "Value" field.
 	Value int `json:"Value,omitempty"`
+	// Symptom holds the value of the "Symptom" field.
+	Symptom string `json:"Symptom,omitempty"`
+	// Annotation holds the value of the "Annotation" field.
+	Annotation string `json:"Annotation,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PrescriptionQuery when eager-loading is set.
 	Edges       PrescriptionEdges `json:"edges"`
@@ -103,8 +107,10 @@ func (e PrescriptionEdges) DispensemedicineOrErr() (*DispenseMedicine, error) {
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Prescription) scanValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{}, // id
-		&sql.NullInt64{}, // Value
+		&sql.NullInt64{},  // id
+		&sql.NullInt64{},  // Value
+		&sql.NullString{}, // Symptom
+		&sql.NullString{}, // Annotation
 	}
 }
 
@@ -134,7 +140,17 @@ func (pr *Prescription) assignValues(values ...interface{}) error {
 	} else if value.Valid {
 		pr.Value = int(value.Int64)
 	}
-	values = values[1:]
+	if value, ok := values[1].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field Symptom", values[1])
+	} else if value.Valid {
+		pr.Symptom = value.String
+	}
+	if value, ok := values[2].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field Annotation", values[2])
+	} else if value.Valid {
+		pr.Annotation = value.String
+	}
+	values = values[3:]
 	if len(values) == len(prescription.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field doctor_id", value)
@@ -203,6 +219,10 @@ func (pr *Prescription) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", pr.ID))
 	builder.WriteString(", Value=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Value))
+	builder.WriteString(", Symptom=")
+	builder.WriteString(pr.Symptom)
+	builder.WriteString(", Annotation=")
+	builder.WriteString(pr.Annotation)
 	builder.WriteByte(')')
 	return builder.String()
 }

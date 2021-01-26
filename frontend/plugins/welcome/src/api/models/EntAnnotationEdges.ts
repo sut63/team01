@@ -44,7 +44,7 @@ export function EntAnnotationEdgesFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'dispensemedicine': !exists(json, 'Dispensemedicine') ? undefined : ((json['Dispensemedicine'] as Array<any>).map(EntDispenseMedicineFromJSON)),
+        'dispensemedicine': !exists(json, 'dispensemedicine') ? undefined : ((json['dispensemedicine'] as Array<any>).map(EntDispenseMedicineFromJSON)),
     };
 }
 

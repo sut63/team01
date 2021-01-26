@@ -13,6 +13,7 @@ import (
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/pharmacist"
 	"github.com/sut63/team01/ent/positioninpharmacist"
+	"github.com/sut63/team01/ent/prescription"
 	"github.com/sut63/team01/ent/schema"
 )
 
@@ -222,4 +223,18 @@ func init() {
 	positioninpharmacistDescPosition := positioninpharmacistFields[0].Descriptor()
 	// positioninpharmacist.PositionValidator is a validator for the "position" field. It is called by the builders before save.
 	positioninpharmacist.PositionValidator = positioninpharmacistDescPosition.Validators[0].(func(string) error)
+	prescriptionFields := schema.Prescription{}.Fields()
+	_ = prescriptionFields
+	// prescriptionDescValue is the schema descriptor for Value field.
+	prescriptionDescValue := prescriptionFields[0].Descriptor()
+	// prescription.ValueValidator is a validator for the "Value" field. It is called by the builders before save.
+	prescription.ValueValidator = prescriptionDescValue.Validators[0].(func(int) error)
+	// prescriptionDescSymptom is the schema descriptor for Symptom field.
+	prescriptionDescSymptom := prescriptionFields[1].Descriptor()
+	// prescription.SymptomValidator is a validator for the "Symptom" field. It is called by the builders before save.
+	prescription.SymptomValidator = prescriptionDescSymptom.Validators[0].(func(string) error)
+	// prescriptionDescAnnotation is the schema descriptor for Annotation field.
+	prescriptionDescAnnotation := prescriptionFields[2].Descriptor()
+	// prescription.AnnotationValidator is a validator for the "Annotation" field. It is called by the builders before save.
+	prescription.AnnotationValidator = prescriptionDescAnnotation.Validators[0].(func(string) error)
 }

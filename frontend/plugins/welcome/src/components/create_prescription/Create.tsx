@@ -23,10 +23,11 @@ import { EntPatientInfo } from '../../api/models/EntPatientInfo';
 import { ControllersPrescription } from '../../api/models/ControllersPrescription';
 import { EntDoctor } from '../../api/models/EntDoctor';
 import { EntMedicine } from '../../api/models/EntMedicine';
-import { Alert } from '@material-ui/lab';
+//import { Alert } from '@material-ui/lab';
 import { Link as RouterLink } from 'react-router-dom';
-import { EntPrescription } from '../../api';
+//import { EntPrescription } from '../../api';
 import { Cookies } from 'react-cookie/cjs'; //cookie
+import Swal from 'sweetalert2';
 
 // css style
 const useStyles = makeStyles(theme => ({
@@ -94,6 +95,18 @@ const NewPatientright: FC<{}> = () => {
     setDoctor(res);
   };
 
+   // alert setting
+   const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 5000,
+    timerProgressBar: true,
+    didOpen: toast => {
+      toast.addEventListener('mouseenter', Swal.stopTimer);
+      toast.addEventListener('mouseleave', Swal.resumeTimer);
+    },
+  });
   const checkPosition = async () => {
     if(cookies.get('PositionData') != 'Prescription'){
       history.pushState('', '', '/' + cookies.get('PositionData'));
@@ -117,36 +130,39 @@ const NewPatientright: FC<{}> = () => {
   ) => {
     const name = event.target.name as keyof typeof NewPatientright;
     const { value } = event.target;
+    //const validateValue = value as string
     setPrescription({ ...Prescription, [name]: value });
   };
 
-  const CreatePatientright = async () => {
-    if (
-      Prescription.patientInfoID != null &&
-      Prescription.doctorID != null &&
-      Prescription.medicineID != null &&
-      Prescription.value != null
-    ) {
-      const res: any = await http.createPrescription({
-        prescription: Prescription,
-      });
-      console.log(Prescription);
+ 
+ 
+  const CreatePrescription = async () => {
+    const apiUrl = 'http://localhost:8080/api/v1/Prescription';
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Prescription),
+    };
 
-      if (res.id != '') {
-        setStatus(true);
-        setAlert(true);
-        setTimeout(() => {
-          setStatus(false);
-        }, 4000);
-      }
-    } else {
-      setStatus(true);
-      setAlert(false);
-      setTimeout(() => {
-        setStatus(false);
-      }, 4000);
-    }
+    fetch(apiUrl, requestOptions)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        console.log(data.status);
+        if (data.status == true) {
+          Toast.fire({
+            icon: 'success',
+            title: 'บันทึกข้อมูลสำเร็จ',
+          });
+        } else {
+          Toast.fire({
+            icon: 'error',
+            title: data.error,
+          });
+        }
+      });
   };
+
 
   return (
     <Page theme={pageTheme.home}>
@@ -158,17 +174,7 @@ const NewPatientright: FC<{}> = () => {
       </Header>
       <Content>
         <ContentHeader title="ข้อมูล">
-          {status ? (
-            <div>
-              {alert ? (
-                <Alert severity="success">บันทึกข้อมูลสำเร็จ</Alert>
-              ) : (
-                <Alert severity="warning" style={{ marginTop: 20 }}>
-                  บันทึกข้อมูลไม่สำเร็จ
-                </Alert>
-              )}
-            </div>
-          ) : null}
+         
         </ContentHeader>
 
         <div className={classes.root}>
@@ -236,9 +242,39 @@ const NewPatientright: FC<{}> = () => {
                 name="value"
                 label="Value"
                 variant="outlined"
-                type="number"
+                type="string"
                 size="medium"
                 value={Prescription.value}
+                onChange={handleChange}
+              />
+            </FormControl>
+          </form>
+        </div>
+
+        <div className={classes.root}>
+          <form noValidate autoComplete="off">
+            <FormControl variant="filled" className={classes.formControl}>
+              <TextField
+                name="symptom"
+                label="Symptom อาการ"
+                variant="outlined" 
+                size="medium"
+                value={Prescription.symptom}
+                onChange={handleChange}
+              />
+            </FormControl>
+          </form>
+        </div>
+
+        <div className={classes.root}>
+          <form noValidate autoComplete="off">
+            <FormControl variant="filled" className={classes.formControl}>
+              <TextField
+                name="annotation"
+                label="Annotation หมายเหตุ"
+                variant="outlined"
+                size="medium"
+                value={Prescription.annotation}
                 onChange={handleChange}
               />
             </FormControl>
@@ -250,16 +286,17 @@ const NewPatientright: FC<{}> = () => {
             <div className={classes.margin}>
               <Button
                 onClick={() => {
-                  CreatePatientright();
+                  CreatePrescription();
                 }}
                 variant="contained"
                 color="primary"
+                style={{ backgroundColor: "#e6b800" }}
               >
                 Submit
-              </Button>
+              </Button>&emsp;
 
               <Link component={RouterLink} to="/">
-                <Button variant="contained" color="primary">
+                <Button variant="contained" color="primary" style={{ backgroundColor: "#00b8e6" }}>
                   กลับสู่หน้าหลัก
                 </Button>
               </Link>

@@ -889,6 +889,55 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "put": {
+                "description": "update Prescription by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update a Prescription entity by ID",
+                "operationId": "update-Prescription",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Prescription ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Prescription entity",
+                        "name": "Prescription",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.Prescription"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Prescription"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
             }
         },
         "/UnitOfMedicine": {
@@ -3357,6 +3406,9 @@ var doc = `{
         "controllers.Prescription": {
             "type": "object",
             "properties": {
+                "annotation": {
+                    "type": "string"
+                },
                 "doctorID": {
                     "type": "integer"
                 },
@@ -3365,6 +3417,9 @@ var doc = `{
                 },
                 "patientInfoID": {
                     "type": "integer"
+                },
+                "symptom": {
+                    "type": "string"
                 },
                 "value": {
                     "type": "string"
@@ -3981,6 +4036,14 @@ var doc = `{
         "ent.Prescription": {
             "type": "object",
             "properties": {
+                "Annotation": {
+                    "description": "Annotation holds the value of the \"Annotation\" field.",
+                    "type": "string"
+                },
+                "Symptom": {
+                    "description": "Symptom holds the value of the \"Symptom\" field.",
+                    "type": "string"
+                },
                 "Value": {
                     "description": "Value holds the value of the \"Value\" field.",
                     "type": "integer"

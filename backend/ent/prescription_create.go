@@ -29,6 +29,18 @@ func (pc *PrescriptionCreate) SetValue(i int) *PrescriptionCreate {
 	return pc
 }
 
+// SetSymptom sets the Symptom field.
+func (pc *PrescriptionCreate) SetSymptom(s string) *PrescriptionCreate {
+	pc.mutation.SetSymptom(s)
+	return pc
+}
+
+// SetAnnotation sets the Annotation field.
+func (pc *PrescriptionCreate) SetAnnotation(s string) *PrescriptionCreate {
+	pc.mutation.SetAnnotation(s)
+	return pc
+}
+
 // SetPrescriptionpatientID sets the prescriptionpatient edge to PatientInfo by id.
 func (pc *PrescriptionCreate) SetPrescriptionpatientID(id int) *PrescriptionCreate {
 	pc.mutation.SetPrescriptionpatientID(id)
@@ -115,6 +127,27 @@ func (pc *PrescriptionCreate) Save(ctx context.Context) (*Prescription, error) {
 	if _, ok := pc.mutation.Value(); !ok {
 		return nil, &ValidationError{Name: "Value", err: errors.New("ent: missing required field \"Value\"")}
 	}
+	if v, ok := pc.mutation.Value(); ok {
+		if err := prescription.ValueValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Value", err: fmt.Errorf("ent: validator failed for field \"Value\": %w", err)}
+		}
+	}
+	if _, ok := pc.mutation.Symptom(); !ok {
+		return nil, &ValidationError{Name: "Symptom", err: errors.New("ent: missing required field \"Symptom\"")}
+	}
+	if v, ok := pc.mutation.Symptom(); ok {
+		if err := prescription.SymptomValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Symptom", err: fmt.Errorf("ent: validator failed for field \"Symptom\": %w", err)}
+		}
+	}
+	if _, ok := pc.mutation.Annotation(); !ok {
+		return nil, &ValidationError{Name: "Annotation", err: errors.New("ent: missing required field \"Annotation\"")}
+	}
+	if v, ok := pc.mutation.Annotation(); ok {
+		if err := prescription.AnnotationValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Annotation", err: fmt.Errorf("ent: validator failed for field \"Annotation\": %w", err)}
+		}
+	}
 	var (
 		err  error
 		node *Prescription
@@ -182,6 +215,22 @@ func (pc *PrescriptionCreate) createSpec() (*Prescription, *sqlgraph.CreateSpec)
 			Column: prescription.FieldValue,
 		})
 		pr.Value = value
+	}
+	if value, ok := pc.mutation.Symptom(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: prescription.FieldSymptom,
+		})
+		pr.Symptom = value
+	}
+	if value, ok := pc.mutation.Annotation(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: prescription.FieldAnnotation,
+		})
+		pr.Annotation = value
 	}
 	if nodes := pc.mutation.PrescriptionpatientIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

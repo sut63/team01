@@ -2112,19 +2112,19 @@ var doc = `{
                 }
             }
         },
-        "/drugallergys/{id}": {
+        "/drugallergys/{card}": {
             "get": {
-                "description": "get DrugAllergy by ID",
+                "description": "get DrugAllergy by Patient CardNumber",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get a DrugAllergy entity by ID",
+                "summary": "Get a DrugAllergy entity by Patient CardNumber",
                 "operationId": "get-drug-allergy",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "DrugAllergy ID",
-                        "name": "id",
+                        "type": "string",
+                        "description": "Patient CardNumber",
+                        "name": "card",
                         "in": "path",
                         "required": true
                     }
@@ -2133,7 +2133,10 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ent.DrugAllergy"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.DrugAllergy"
+                            }
                         }
                     },
                     "400": {
@@ -2155,7 +2158,9 @@ var doc = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/drugallergys/{id}": {
             "put": {
                 "description": "update DrugAllergy by ID",
                 "consumes": [
@@ -3063,6 +3068,7 @@ var doc = `{
                 }
             }
         },
+<<<<<<< HEAD
         "/statuss": {
             "get": {
                 "description": "list status entities",
@@ -3071,6 +3077,16 @@ var doc = `{
                 ],
                 "summary": "List status entities",
                 "operationId": "list-status",
+=======
+        "/positioninpharmacists": {
+            "get": {
+                "description": "list positioninpharmacist entities",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List positioninpharmacist entities",
+                "operationId": "list-positioninpharmacist",
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
                 "parameters": [
                     {
                         "type": "integer",
@@ -3091,7 +3107,11 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
+<<<<<<< HEAD
                                 "$ref": "#/definitions/ent.Status"
+=======
+                                "$ref": "#/definitions/ent.PositionInPharmacist"
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
                             }
                         }
                     },
@@ -3110,13 +3130,18 @@ var doc = `{
                 }
             },
             "post": {
+<<<<<<< HEAD
                 "description": "Create status",
+=======
+                "description": "Create positioninpharmacist",
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
+<<<<<<< HEAD
                 "summary": "Create status",
                 "operationId": "create-status",
                 "parameters": [
@@ -3127,6 +3152,18 @@ var doc = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/ent.Status"
+=======
+                "summary": "Create positioninpharmacist",
+                "operationId": "create-positioninpharmacist",
+                "parameters": [
+                    {
+                        "description": "PositionInPharmacist entity",
+                        "name": "positioninpharmacist",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.PositionInPharmacist"
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
                         }
                     }
                 ],
@@ -3134,7 +3171,11 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
+<<<<<<< HEAD
                             "$ref": "#/definitions/ent.Status"
+=======
+                            "$ref": "#/definitions/ent.PositionInPharmacist"
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
                         }
                     },
                     "400": {
@@ -3152,6 +3193,7 @@ var doc = `{
                 }
             }
         },
+<<<<<<< HEAD
         "/statuss/{id}": {
             "get": {
                 "description": "get status by ID",
@@ -3164,6 +3206,20 @@ var doc = `{
                     {
                         "type": "integer",
                         "description": "Status ID",
+=======
+        "/positioninpharmacists/{id}": {
+            "get": {
+                "description": "get positioninpharmacist by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a positioninpharmacist entity by ID",
+                "operationId": "get-positioninpharmacist",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "PositionInPharmacist ID",
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -3173,7 +3229,11 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
+<<<<<<< HEAD
                             "$ref": "#/definitions/ent.Status"
+=======
+                            "$ref": "#/definitions/ent.PositionInPharmacist"
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
                         }
                     },
                     "400": {
@@ -3196,6 +3256,7 @@ var doc = `{
                     }
                 }
             },
+<<<<<<< HEAD
             "delete": {
                 "description": "get status by ID",
                 "produces": [
@@ -3207,6 +3268,68 @@ var doc = `{
                     {
                         "type": "integer",
                         "description": "Status ID",
+=======
+            "put": {
+                "description": "update positioninpharmacist by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update a positioninpharmacist entity by ID",
+                "operationId": "update-positioninpharmacist",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "PositionInPharmacist ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "PositionInPharmacist entity",
+                        "name": "positioninpharmacist",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.PositionInPharmacist"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.PositionInPharmacist"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "get positioninpharmacist by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete a positioninpharmacist entity by ID",
+                "operationId": "delete-positioninpharmacist",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "PositionInPharmacist ID",
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -3254,10 +3377,13 @@ var doc = `{
                 "dispenseMedicine": {
                     "type": "integer"
                 },
-                "payments": {
+                "payer": {
+                    "type": "string"
+                },
+                "payment": {
                     "type": "integer"
                 },
-                "pharmacists": {
+                "pharmacist": {
                     "type": "integer"
                 }
             }
@@ -3265,10 +3391,19 @@ var doc = `{
         "controllers.DispenseMedicine": {
             "type": "object",
             "properties": {
+                "amountchangemedicine": {
+                    "type": "integer"
+                },
                 "annotation": {
                     "type": "integer"
                 },
                 "datetime": {
+                    "type": "string"
+                },
+                "detailchangemedicine": {
+                    "type": "string"
+                },
+                "note": {
                     "type": "string"
                 },
                 "pharmacist": {
@@ -3409,6 +3544,10 @@ var doc = `{
                 "id": {
                     "description": "ID of the ent.",
                     "type": "integer"
+                },
+                "payer": {
+                    "description": "Payer holds the value of the \"payer\" field.",
+                    "type": "string"
                 }
             }
         },
@@ -3465,8 +3604,16 @@ var doc = `{
         "ent.DispenseMedicine": {
             "type": "object",
             "properties": {
+                "amountchangemedicine": {
+                    "description": "Amountchangemedicine holds the value of the \"amountchangemedicine\" field.",
+                    "type": "integer"
+                },
                 "datetime": {
                     "description": "Datetime holds the value of the \"datetime\" field.",
+                    "type": "string"
+                },
+                "detailchangemedicine": {
+                    "description": "Detailchangemedicine holds the value of the \"detailchangemedicine\" field.",
                     "type": "string"
                 },
                 "edges": {
@@ -3477,6 +3624,10 @@ var doc = `{
                 "id": {
                     "description": "ID of the ent.",
                     "type": "integer"
+                },
+                "note": {
+                    "description": "Note holds the value of the \"note\" field.",
+                    "type": "string"
                 }
             }
         },
@@ -3546,6 +3697,14 @@ var doc = `{
         "ent.DrugAllergy": {
             "type": "object",
             "properties": {
+                "annotation": {
+                    "description": "Annotation holds the value of the \"annotation\" field.",
+                    "type": "string"
+                },
+                "congenitalDisease": {
+                    "description": "CongenitalDisease holds the value of the \"congenitalDisease\" field.",
+                    "type": "string"
+                },
                 "dateTime": {
                     "description": "DateTime holds the value of the \"dateTime\" field.",
                     "type": "string"
@@ -3558,6 +3717,10 @@ var doc = `{
                 "id": {
                     "description": "ID of the ent.",
                     "type": "integer"
+                },
+                "symptom": {
+                    "description": "Symptom holds the value of the \"symptom\" field.",
+                    "type": "string"
                 }
             }
         },
@@ -3900,6 +4063,41 @@ var doc = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/ent.Order"
+                    }
+                },
+                "positioninpharmacist": {
+                    "description": "Positioninpharmacist holds the value of the positioninpharmacist edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.PositionInPharmacist"
+                }
+            }
+        },
+        "ent.PositionInPharmacist": {
+            "type": "object",
+            "properties": {
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the PositionInPharmacistQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.PositionInPharmacistEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                },
+                "position": {
+                    "description": "Position holds the value of the \"position\" field.",
+                    "type": "string"
+                }
+            }
+        },
+        "ent.PositionInPharmacistEdges": {
+            "type": "object",
+            "properties": {
+                "pharmacist": {
+                    "description": "Pharmacist holds the value of the pharmacist edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Pharmacist"
                     }
                 }
             }

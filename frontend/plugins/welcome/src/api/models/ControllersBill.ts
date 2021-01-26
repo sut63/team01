@@ -39,16 +39,22 @@ export interface ControllersBill {
     dispenseMedicine?: number;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof ControllersBill
      */
-    payments?: number;
+    payer?: string;
     /**
      * 
      * @type {number}
      * @memberof ControllersBill
      */
-    pharmacists?: number;
+    payment?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ControllersBill
+     */
+    pharmacist?: number;
 }
 
 export function ControllersBillFromJSON(json: any): ControllersBill {
@@ -64,8 +70,9 @@ export function ControllersBillFromJSONTyped(json: any, ignoreDiscriminator: boo
         'amount': !exists(json, 'amount') ? undefined : json['amount'],
         'annotation': !exists(json, 'annotation') ? undefined : json['annotation'],
         'dispenseMedicine': !exists(json, 'dispenseMedicine') ? undefined : json['dispenseMedicine'],
-        'payments': !exists(json, 'payments') ? undefined : json['payments'],
-        'pharmacists': !exists(json, 'pharmacists') ? undefined : json['pharmacists'],
+        'payer': !exists(json, 'payer') ? undefined : json['payer'],
+        'payment': !exists(json, 'payment') ? undefined : json['payment'],
+        'pharmacist': !exists(json, 'pharmacist') ? undefined : json['pharmacist'],
     };
 }
 
@@ -81,8 +88,9 @@ export function ControllersBillToJSON(value?: ControllersBill | null): any {
         'amount': value.amount,
         'annotation': value.annotation,
         'dispenseMedicine': value.dispenseMedicine,
-        'payments': value.payments,
-        'pharmacists': value.pharmacists,
+        'payer': value.payer,
+        'payment': value.payment,
+        'pharmacist': value.pharmacist,
     };
 }
 

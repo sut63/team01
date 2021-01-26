@@ -8,16 +8,24 @@ definitions:
         type: string
       dispenseMedicine:
         type: integer
-      payments:
+      payer:
+        type: string
+      payment:
         type: integer
-      pharmacists:
+      pharmacist:
         type: integer
     type: object
   controllers.DispenseMedicine:
     properties:
+      amountchangemedicine:
+        type: integer
       annotation:
         type: integer
       datetime:
+        type: string
+      detailchangemedicine:
+        type: string
+      note:
         type: string
       pharmacist:
         type: integer
@@ -117,6 +125,9 @@ definitions:
       id:
         description: ID of the ent.
         type: integer
+      payer:
+        description: Payer holds the value of the "payer" field.
+        type: string
     type: object
   ent.BillEdges:
     properties:
@@ -158,8 +169,16 @@ definitions:
     type: object
   ent.DispenseMedicine:
     properties:
+      amountchangemedicine:
+        description: Amountchangemedicine holds the value of the "amountchangemedicine"
+          field.
+        type: integer
       datetime:
         description: Datetime holds the value of the "datetime" field.
+        type: string
+      detailchangemedicine:
+        description: Detailchangemedicine holds the value of the "detailchangemedicine"
+          field.
         type: string
       edges:
         $ref: '#/definitions/ent.DispenseMedicineEdges'
@@ -170,6 +189,9 @@ definitions:
       id:
         description: ID of the ent.
         type: integer
+      note:
+        description: Note holds the value of the "note" field.
+        type: string
     type: object
   ent.DispenseMedicineEdges:
     properties:
@@ -222,6 +244,13 @@ definitions:
     type: object
   ent.DrugAllergy:
     properties:
+      annotation:
+        description: Annotation holds the value of the "annotation" field.
+        type: string
+      congenitalDisease:
+        description: CongenitalDisease holds the value of the "congenitalDisease"
+          field.
+        type: string
       dateTime:
         description: DateTime holds the value of the "dateTime" field.
         type: string
@@ -234,6 +263,9 @@ definitions:
       id:
         description: ID of the ent.
         type: integer
+      symptom:
+        description: Symptom holds the value of the "symptom" field.
+        type: string
     type: object
   ent.DrugAllergyEdges:
     properties:
@@ -496,6 +528,34 @@ definitions:
         description: Orderpharmacist holds the value of the orderpharmacist edge.
         items:
           $ref: '#/definitions/ent.Order'
+        type: array
+      positioninpharmacist:
+        $ref: '#/definitions/ent.PositionInPharmacist'
+        description: Positioninpharmacist holds the value of the positioninpharmacist
+          edge.
+        type: object
+    type: object
+  ent.PositionInPharmacist:
+    properties:
+      edges:
+        $ref: '#/definitions/ent.PositionInPharmacistEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the PositionInPharmacistQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+      position:
+        description: Position holds the value of the "position" field.
+        type: string
+    type: object
+  ent.PositionInPharmacistEdges:
+    properties:
+      pharmacist:
+        description: Pharmacist holds the value of the pharmacist edge.
+        items:
+          $ref: '#/definitions/ent.Pharmacist'
         type: array
     type: object
   ent.Prescription:
@@ -1996,23 +2056,25 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Create drug-allergy
-  /drugallergys/{id}:
+  /drugallergys/{card}:
     get:
-      description: get DrugAllergy by ID
+      description: get DrugAllergy by Patient CardNumber
       operationId: get-drug-allergy
       parameters:
-      - description: DrugAllergy ID
+      - description: Patient CardNumber
         in: path
-        name: id
+        name: card
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/ent.DrugAllergy'
+            items:
+              $ref: '#/definitions/ent.DrugAllergy'
+            type: array
         "400":
           description: Bad Request
           schema:
@@ -2025,7 +2087,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: Get a DrugAllergy entity by ID
+      summary: Get a DrugAllergy entity by Patient CardNumber
+  /drugallergys/{id}:
     put:
       consumes:
       - application/json
@@ -2631,10 +2694,17 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Update a pharmacist entity by ID
+<<<<<<< HEAD
   /statuss:
     get:
       description: list status entities
       operationId: list-status
+=======
+  /positioninpharmacists:
+    get:
+      description: list positioninpharmacist entities
+      operationId: list-positioninpharmacist
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
       parameters:
       - description: Limit
         in: query
@@ -2651,7 +2721,11 @@ paths:
           description: OK
           schema:
             items:
+<<<<<<< HEAD
               $ref: '#/definitions/ent.Status'
+=======
+              $ref: '#/definitions/ent.PositionInPharmacist'
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
             type: array
         "400":
           description: Bad Request
@@ -2661,6 +2735,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
+<<<<<<< HEAD
       summary: List status entities
     post:
       consumes:
@@ -2674,13 +2749,32 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/ent.Status'
+=======
+      summary: List positioninpharmacist entities
+    post:
+      consumes:
+      - application/json
+      description: Create positioninpharmacist
+      operationId: create-positioninpharmacist
+      parameters:
+      - description: PositionInPharmacist entity
+        in: body
+        name: positioninpharmacist
+        required: true
+        schema:
+          $ref: '#/definitions/ent.PositionInPharmacist'
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
+<<<<<<< HEAD
             $ref: '#/definitions/ent.Status'
+=======
+            $ref: '#/definitions/ent.PositionInPharmacist'
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
         "400":
           description: Bad Request
           schema:
@@ -2689,6 +2783,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
+<<<<<<< HEAD
       summary: Create status
   /statuss/{id}:
     delete:
@@ -2696,6 +2791,15 @@ paths:
       operationId: delete-status
       parameters:
       - description: Status ID
+=======
+      summary: Create positioninpharmacist
+  /positioninpharmacists/{id}:
+    delete:
+      description: get positioninpharmacist by ID
+      operationId: delete-positioninpharmacist
+      parameters:
+      - description: PositionInPharmacist ID
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
         in: path
         name: id
         required: true
@@ -2719,12 +2823,21 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
+<<<<<<< HEAD
       summary: Delete a status entity by ID
     get:
       description: get status by ID
       operationId: get-status
       parameters:
       - description: Status ID
+=======
+      summary: Delete a positioninpharmacist entity by ID
+    get:
+      description: get positioninpharmacist by ID
+      operationId: get-positioninpharmacist
+      parameters:
+      - description: PositionInPharmacist ID
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
         in: path
         name: id
         required: true
@@ -2735,7 +2848,11 @@ paths:
         "200":
           description: OK
           schema:
+<<<<<<< HEAD
             $ref: '#/definitions/ent.Status'
+=======
+            $ref: '#/definitions/ent.PositionInPharmacist'
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
         "400":
           description: Bad Request
           schema:
@@ -2748,7 +2865,44 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
+<<<<<<< HEAD
       summary: Get a status entity by ID
+=======
+      summary: Get a positioninpharmacist entity by ID
+    put:
+      consumes:
+      - application/json
+      description: update positioninpharmacist by ID
+      operationId: update-positioninpharmacist
+      parameters:
+      - description: PositionInPharmacist ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: PositionInPharmacist entity
+        in: body
+        name: positioninpharmacist
+        required: true
+        schema:
+          $ref: '#/definitions/ent.PositionInPharmacist'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.PositionInPharmacist'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Update a positioninpharmacist entity by ID
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
 securityDefinitions:
   ApiKeyAuth:
     in: header

@@ -38,6 +38,31 @@ func (dmu *DispenseMedicineUpdate) SetDatetime(t time.Time) *DispenseMedicineUpd
 	return dmu
 }
 
+// SetNote sets the note field.
+func (dmu *DispenseMedicineUpdate) SetNote(s string) *DispenseMedicineUpdate {
+	dmu.mutation.SetNote(s)
+	return dmu
+}
+
+// SetAmountchangemedicine sets the amountchangemedicine field.
+func (dmu *DispenseMedicineUpdate) SetAmountchangemedicine(i int) *DispenseMedicineUpdate {
+	dmu.mutation.ResetAmountchangemedicine()
+	dmu.mutation.SetAmountchangemedicine(i)
+	return dmu
+}
+
+// AddAmountchangemedicine adds i to amountchangemedicine.
+func (dmu *DispenseMedicineUpdate) AddAmountchangemedicine(i int) *DispenseMedicineUpdate {
+	dmu.mutation.AddAmountchangemedicine(i)
+	return dmu
+}
+
+// SetDetailchangemedicine sets the detailchangemedicine field.
+func (dmu *DispenseMedicineUpdate) SetDetailchangemedicine(s string) *DispenseMedicineUpdate {
+	dmu.mutation.SetDetailchangemedicine(s)
+	return dmu
+}
+
 // SetPharmacistID sets the pharmacist edge to Pharmacist by id.
 func (dmu *DispenseMedicineUpdate) SetPharmacistID(id int) *DispenseMedicineUpdate {
 	dmu.mutation.SetPharmacistID(id)
@@ -145,6 +170,21 @@ func (dmu *DispenseMedicineUpdate) ClearBills() *DispenseMedicineUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (dmu *DispenseMedicineUpdate) Save(ctx context.Context) (int, error) {
+	if v, ok := dmu.mutation.Note(); ok {
+		if err := dispensemedicine.NoteValidator(v); err != nil {
+			return 0, &ValidationError{Name: "note", err: fmt.Errorf("ent: validator failed for field \"note\": %w", err)}
+		}
+	}
+	if v, ok := dmu.mutation.Amountchangemedicine(); ok {
+		if err := dispensemedicine.AmountchangemedicineValidator(v); err != nil {
+			return 0, &ValidationError{Name: "amountchangemedicine", err: fmt.Errorf("ent: validator failed for field \"amountchangemedicine\": %w", err)}
+		}
+	}
+	if v, ok := dmu.mutation.Detailchangemedicine(); ok {
+		if err := dispensemedicine.DetailchangemedicineValidator(v); err != nil {
+			return 0, &ValidationError{Name: "detailchangemedicine", err: fmt.Errorf("ent: validator failed for field \"detailchangemedicine\": %w", err)}
+		}
+	}
 
 	var (
 		err      error
@@ -218,6 +258,34 @@ func (dmu *DispenseMedicineUpdate) sqlSave(ctx context.Context) (n int, err erro
 			Type:   field.TypeTime,
 			Value:  value,
 			Column: dispensemedicine.FieldDatetime,
+		})
+	}
+	if value, ok := dmu.mutation.Note(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: dispensemedicine.FieldNote,
+		})
+	}
+	if value, ok := dmu.mutation.Amountchangemedicine(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: dispensemedicine.FieldAmountchangemedicine,
+		})
+	}
+	if value, ok := dmu.mutation.AddedAmountchangemedicine(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: dispensemedicine.FieldAmountchangemedicine,
+		})
+	}
+	if value, ok := dmu.mutation.Detailchangemedicine(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: dispensemedicine.FieldDetailchangemedicine,
 		})
 	}
 	if dmu.mutation.PharmacistCleared() {
@@ -384,6 +452,31 @@ func (dmuo *DispenseMedicineUpdateOne) SetDatetime(t time.Time) *DispenseMedicin
 	return dmuo
 }
 
+// SetNote sets the note field.
+func (dmuo *DispenseMedicineUpdateOne) SetNote(s string) *DispenseMedicineUpdateOne {
+	dmuo.mutation.SetNote(s)
+	return dmuo
+}
+
+// SetAmountchangemedicine sets the amountchangemedicine field.
+func (dmuo *DispenseMedicineUpdateOne) SetAmountchangemedicine(i int) *DispenseMedicineUpdateOne {
+	dmuo.mutation.ResetAmountchangemedicine()
+	dmuo.mutation.SetAmountchangemedicine(i)
+	return dmuo
+}
+
+// AddAmountchangemedicine adds i to amountchangemedicine.
+func (dmuo *DispenseMedicineUpdateOne) AddAmountchangemedicine(i int) *DispenseMedicineUpdateOne {
+	dmuo.mutation.AddAmountchangemedicine(i)
+	return dmuo
+}
+
+// SetDetailchangemedicine sets the detailchangemedicine field.
+func (dmuo *DispenseMedicineUpdateOne) SetDetailchangemedicine(s string) *DispenseMedicineUpdateOne {
+	dmuo.mutation.SetDetailchangemedicine(s)
+	return dmuo
+}
+
 // SetPharmacistID sets the pharmacist edge to Pharmacist by id.
 func (dmuo *DispenseMedicineUpdateOne) SetPharmacistID(id int) *DispenseMedicineUpdateOne {
 	dmuo.mutation.SetPharmacistID(id)
@@ -491,6 +584,21 @@ func (dmuo *DispenseMedicineUpdateOne) ClearBills() *DispenseMedicineUpdateOne {
 
 // Save executes the query and returns the updated entity.
 func (dmuo *DispenseMedicineUpdateOne) Save(ctx context.Context) (*DispenseMedicine, error) {
+	if v, ok := dmuo.mutation.Note(); ok {
+		if err := dispensemedicine.NoteValidator(v); err != nil {
+			return nil, &ValidationError{Name: "note", err: fmt.Errorf("ent: validator failed for field \"note\": %w", err)}
+		}
+	}
+	if v, ok := dmuo.mutation.Amountchangemedicine(); ok {
+		if err := dispensemedicine.AmountchangemedicineValidator(v); err != nil {
+			return nil, &ValidationError{Name: "amountchangemedicine", err: fmt.Errorf("ent: validator failed for field \"amountchangemedicine\": %w", err)}
+		}
+	}
+	if v, ok := dmuo.mutation.Detailchangemedicine(); ok {
+		if err := dispensemedicine.DetailchangemedicineValidator(v); err != nil {
+			return nil, &ValidationError{Name: "detailchangemedicine", err: fmt.Errorf("ent: validator failed for field \"detailchangemedicine\": %w", err)}
+		}
+	}
 
 	var (
 		err  error
@@ -562,6 +670,34 @@ func (dmuo *DispenseMedicineUpdateOne) sqlSave(ctx context.Context) (dm *Dispens
 			Type:   field.TypeTime,
 			Value:  value,
 			Column: dispensemedicine.FieldDatetime,
+		})
+	}
+	if value, ok := dmuo.mutation.Note(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: dispensemedicine.FieldNote,
+		})
+	}
+	if value, ok := dmuo.mutation.Amountchangemedicine(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: dispensemedicine.FieldAmountchangemedicine,
+		})
+	}
+	if value, ok := dmuo.mutation.AddedAmountchangemedicine(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: dispensemedicine.FieldAmountchangemedicine,
+		})
+	}
+	if value, ok := dmuo.mutation.Detailchangemedicine(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: dispensemedicine.FieldDetailchangemedicine,
 		})
 	}
 	if dmuo.mutation.PharmacistCleared() {

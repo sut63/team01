@@ -93,10 +93,364 @@ func IDLTE(id int) predicate.DrugAllergy {
 	})
 }
 
+// Symptom applies equality check predicate on the "symptom" field. It's identical to SymptomEQ.
+func Symptom(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSymptom), v))
+	})
+}
+
+// CongenitalDisease applies equality check predicate on the "congenitalDisease" field. It's identical to CongenitalDiseaseEQ.
+func CongenitalDisease(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCongenitalDisease), v))
+	})
+}
+
+// Annotation applies equality check predicate on the "annotation" field. It's identical to AnnotationEQ.
+func Annotation(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAnnotation), v))
+	})
+}
+
 // DateTime applies equality check predicate on the "dateTime" field. It's identical to DateTimeEQ.
 func DateTime(v time.Time) predicate.DrugAllergy {
 	return predicate.DrugAllergy(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldDateTime), v))
+	})
+}
+
+// SymptomEQ applies the EQ predicate on the "symptom" field.
+func SymptomEQ(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomNEQ applies the NEQ predicate on the "symptom" field.
+func SymptomNEQ(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomIn applies the In predicate on the "symptom" field.
+func SymptomIn(vs ...string) predicate.DrugAllergy {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldSymptom), v...))
+	})
+}
+
+// SymptomNotIn applies the NotIn predicate on the "symptom" field.
+func SymptomNotIn(vs ...string) predicate.DrugAllergy {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldSymptom), v...))
+	})
+}
+
+// SymptomGT applies the GT predicate on the "symptom" field.
+func SymptomGT(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomGTE applies the GTE predicate on the "symptom" field.
+func SymptomGTE(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomLT applies the LT predicate on the "symptom" field.
+func SymptomLT(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomLTE applies the LTE predicate on the "symptom" field.
+func SymptomLTE(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomContains applies the Contains predicate on the "symptom" field.
+func SymptomContains(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomHasPrefix applies the HasPrefix predicate on the "symptom" field.
+func SymptomHasPrefix(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomHasSuffix applies the HasSuffix predicate on the "symptom" field.
+func SymptomHasSuffix(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomEqualFold applies the EqualFold predicate on the "symptom" field.
+func SymptomEqualFold(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomContainsFold applies the ContainsFold predicate on the "symptom" field.
+func SymptomContainsFold(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldSymptom), v))
+	})
+}
+
+// CongenitalDiseaseEQ applies the EQ predicate on the "congenitalDisease" field.
+func CongenitalDiseaseEQ(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCongenitalDisease), v))
+	})
+}
+
+// CongenitalDiseaseNEQ applies the NEQ predicate on the "congenitalDisease" field.
+func CongenitalDiseaseNEQ(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldCongenitalDisease), v))
+	})
+}
+
+// CongenitalDiseaseIn applies the In predicate on the "congenitalDisease" field.
+func CongenitalDiseaseIn(vs ...string) predicate.DrugAllergy {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldCongenitalDisease), v...))
+	})
+}
+
+// CongenitalDiseaseNotIn applies the NotIn predicate on the "congenitalDisease" field.
+func CongenitalDiseaseNotIn(vs ...string) predicate.DrugAllergy {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldCongenitalDisease), v...))
+	})
+}
+
+// CongenitalDiseaseGT applies the GT predicate on the "congenitalDisease" field.
+func CongenitalDiseaseGT(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldCongenitalDisease), v))
+	})
+}
+
+// CongenitalDiseaseGTE applies the GTE predicate on the "congenitalDisease" field.
+func CongenitalDiseaseGTE(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldCongenitalDisease), v))
+	})
+}
+
+// CongenitalDiseaseLT applies the LT predicate on the "congenitalDisease" field.
+func CongenitalDiseaseLT(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldCongenitalDisease), v))
+	})
+}
+
+// CongenitalDiseaseLTE applies the LTE predicate on the "congenitalDisease" field.
+func CongenitalDiseaseLTE(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldCongenitalDisease), v))
+	})
+}
+
+// CongenitalDiseaseContains applies the Contains predicate on the "congenitalDisease" field.
+func CongenitalDiseaseContains(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldCongenitalDisease), v))
+	})
+}
+
+// CongenitalDiseaseHasPrefix applies the HasPrefix predicate on the "congenitalDisease" field.
+func CongenitalDiseaseHasPrefix(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldCongenitalDisease), v))
+	})
+}
+
+// CongenitalDiseaseHasSuffix applies the HasSuffix predicate on the "congenitalDisease" field.
+func CongenitalDiseaseHasSuffix(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldCongenitalDisease), v))
+	})
+}
+
+// CongenitalDiseaseEqualFold applies the EqualFold predicate on the "congenitalDisease" field.
+func CongenitalDiseaseEqualFold(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldCongenitalDisease), v))
+	})
+}
+
+// CongenitalDiseaseContainsFold applies the ContainsFold predicate on the "congenitalDisease" field.
+func CongenitalDiseaseContainsFold(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldCongenitalDisease), v))
+	})
+}
+
+// AnnotationEQ applies the EQ predicate on the "annotation" field.
+func AnnotationEQ(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationNEQ applies the NEQ predicate on the "annotation" field.
+func AnnotationNEQ(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationIn applies the In predicate on the "annotation" field.
+func AnnotationIn(vs ...string) predicate.DrugAllergy {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldAnnotation), v...))
+	})
+}
+
+// AnnotationNotIn applies the NotIn predicate on the "annotation" field.
+func AnnotationNotIn(vs ...string) predicate.DrugAllergy {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldAnnotation), v...))
+	})
+}
+
+// AnnotationGT applies the GT predicate on the "annotation" field.
+func AnnotationGT(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationGTE applies the GTE predicate on the "annotation" field.
+func AnnotationGTE(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationLT applies the LT predicate on the "annotation" field.
+func AnnotationLT(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationLTE applies the LTE predicate on the "annotation" field.
+func AnnotationLTE(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationContains applies the Contains predicate on the "annotation" field.
+func AnnotationContains(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationHasPrefix applies the HasPrefix predicate on the "annotation" field.
+func AnnotationHasPrefix(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationHasSuffix applies the HasSuffix predicate on the "annotation" field.
+func AnnotationHasSuffix(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationEqualFold applies the EqualFold predicate on the "annotation" field.
+func AnnotationEqualFold(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationContainsFold applies the ContainsFold predicate on the "annotation" field.
+func AnnotationContainsFold(v string) predicate.DrugAllergy {
+	return predicate.DrugAllergy(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldAnnotation), v))
 	})
 }
 

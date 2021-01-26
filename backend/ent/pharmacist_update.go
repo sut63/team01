@@ -14,6 +14,7 @@ import (
 	"github.com/sut63/team01/ent/drugallergy"
 	"github.com/sut63/team01/ent/order"
 	"github.com/sut63/team01/ent/pharmacist"
+	"github.com/sut63/team01/ent/positioninpharmacist"
 	"github.com/sut63/team01/ent/predicate"
 )
 
@@ -47,6 +48,25 @@ func (pu *PharmacistUpdate) SetPassword(s string) *PharmacistUpdate {
 func (pu *PharmacistUpdate) SetName(s string) *PharmacistUpdate {
 	pu.mutation.SetName(s)
 	return pu
+}
+
+// SetPositioninpharmacistID sets the positioninpharmacist edge to PositionInPharmacist by id.
+func (pu *PharmacistUpdate) SetPositioninpharmacistID(id int) *PharmacistUpdate {
+	pu.mutation.SetPositioninpharmacistID(id)
+	return pu
+}
+
+// SetNillablePositioninpharmacistID sets the positioninpharmacist edge to PositionInPharmacist by id if the given value is not nil.
+func (pu *PharmacistUpdate) SetNillablePositioninpharmacistID(id *int) *PharmacistUpdate {
+	if id != nil {
+		pu = pu.SetPositioninpharmacistID(*id)
+	}
+	return pu
+}
+
+// SetPositioninpharmacist sets the positioninpharmacist edge to PositionInPharmacist.
+func (pu *PharmacistUpdate) SetPositioninpharmacist(p *PositionInPharmacist) *PharmacistUpdate {
+	return pu.SetPositioninpharmacistID(p.ID)
 }
 
 // AddDispensemedicineIDs adds the dispensemedicine edge to DispenseMedicine by ids.
@@ -112,6 +132,12 @@ func (pu *PharmacistUpdate) AddBills(b ...*Bill) *PharmacistUpdate {
 // Mutation returns the PharmacistMutation object of the builder.
 func (pu *PharmacistUpdate) Mutation() *PharmacistMutation {
 	return pu.mutation
+}
+
+// ClearPositioninpharmacist clears the positioninpharmacist edge to PositionInPharmacist.
+func (pu *PharmacistUpdate) ClearPositioninpharmacist() *PharmacistUpdate {
+	pu.mutation.ClearPositioninpharmacist()
+	return pu
 }
 
 // RemoveDispensemedicineIDs removes the dispensemedicine edge to DispenseMedicine by ids.
@@ -279,6 +305,41 @@ func (pu *PharmacistUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Value:  value,
 			Column: pharmacist.FieldName,
 		})
+	}
+	if pu.mutation.PositioninpharmacistCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   pharmacist.PositioninpharmacistTable,
+			Columns: []string{pharmacist.PositioninpharmacistColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: positioninpharmacist.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.PositioninpharmacistIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   pharmacist.PositioninpharmacistTable,
+			Columns: []string{pharmacist.PositioninpharmacistColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: positioninpharmacist.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if nodes := pu.mutation.RemovedDispensemedicineIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -468,6 +529,25 @@ func (puo *PharmacistUpdateOne) SetName(s string) *PharmacistUpdateOne {
 	return puo
 }
 
+// SetPositioninpharmacistID sets the positioninpharmacist edge to PositionInPharmacist by id.
+func (puo *PharmacistUpdateOne) SetPositioninpharmacistID(id int) *PharmacistUpdateOne {
+	puo.mutation.SetPositioninpharmacistID(id)
+	return puo
+}
+
+// SetNillablePositioninpharmacistID sets the positioninpharmacist edge to PositionInPharmacist by id if the given value is not nil.
+func (puo *PharmacistUpdateOne) SetNillablePositioninpharmacistID(id *int) *PharmacistUpdateOne {
+	if id != nil {
+		puo = puo.SetPositioninpharmacistID(*id)
+	}
+	return puo
+}
+
+// SetPositioninpharmacist sets the positioninpharmacist edge to PositionInPharmacist.
+func (puo *PharmacistUpdateOne) SetPositioninpharmacist(p *PositionInPharmacist) *PharmacistUpdateOne {
+	return puo.SetPositioninpharmacistID(p.ID)
+}
+
 // AddDispensemedicineIDs adds the dispensemedicine edge to DispenseMedicine by ids.
 func (puo *PharmacistUpdateOne) AddDispensemedicineIDs(ids ...int) *PharmacistUpdateOne {
 	puo.mutation.AddDispensemedicineIDs(ids...)
@@ -531,6 +611,12 @@ func (puo *PharmacistUpdateOne) AddBills(b ...*Bill) *PharmacistUpdateOne {
 // Mutation returns the PharmacistMutation object of the builder.
 func (puo *PharmacistUpdateOne) Mutation() *PharmacistMutation {
 	return puo.mutation
+}
+
+// ClearPositioninpharmacist clears the positioninpharmacist edge to PositionInPharmacist.
+func (puo *PharmacistUpdateOne) ClearPositioninpharmacist() *PharmacistUpdateOne {
+	puo.mutation.ClearPositioninpharmacist()
+	return puo
 }
 
 // RemoveDispensemedicineIDs removes the dispensemedicine edge to DispenseMedicine by ids.
@@ -696,6 +782,41 @@ func (puo *PharmacistUpdateOne) sqlSave(ctx context.Context) (ph *Pharmacist, er
 			Value:  value,
 			Column: pharmacist.FieldName,
 		})
+	}
+	if puo.mutation.PositioninpharmacistCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   pharmacist.PositioninpharmacistTable,
+			Columns: []string{pharmacist.PositioninpharmacistColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: positioninpharmacist.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.PositioninpharmacistIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   pharmacist.PositioninpharmacistTable,
+			Columns: []string{pharmacist.PositioninpharmacistColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: positioninpharmacist.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if nodes := puo.mutation.RemovedDispensemedicineIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -27,6 +27,18 @@ import {
  */
 export interface EntDrugAllergy {
     /**
+     * Annotation holds the value of the "annotation" field.
+     * @type {string}
+     * @memberof EntDrugAllergy
+     */
+    annotation?: string;
+    /**
+     * CongenitalDisease holds the value of the "congenitalDisease" field.
+     * @type {string}
+     * @memberof EntDrugAllergy
+     */
+    congenitalDisease?: string;
+    /**
      * DateTime holds the value of the "dateTime" field.
      * @type {string}
      * @memberof EntDrugAllergy
@@ -44,6 +56,12 @@ export interface EntDrugAllergy {
      * @memberof EntDrugAllergy
      */
     id?: number;
+    /**
+     * Symptom holds the value of the "symptom" field.
+     * @type {string}
+     * @memberof EntDrugAllergy
+     */
+    symptom?: string;
 }
 
 export function EntDrugAllergyFromJSON(json: any): EntDrugAllergy {
@@ -56,9 +74,12 @@ export function EntDrugAllergyFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
+        'annotation': !exists(json, 'annotation') ? undefined : json['annotation'],
+        'congenitalDisease': !exists(json, 'congenitalDisease') ? undefined : json['congenitalDisease'],
         'dateTime': !exists(json, 'dateTime') ? undefined : json['dateTime'],
         'edges': !exists(json, 'edges') ? undefined : EntDrugAllergyEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'symptom': !exists(json, 'symptom') ? undefined : json['symptom'],
     };
 }
 
@@ -71,9 +92,12 @@ export function EntDrugAllergyToJSON(value?: EntDrugAllergy | null): any {
     }
     return {
         
+        'annotation': value.annotation,
+        'congenitalDisease': value.congenitalDisease,
         'dateTime': value.dateTime,
         'edges': EntDrugAllergyEdgesToJSON(value.edges),
         'id': value.id,
+        'symptom': value.symptom,
     };
 }
 

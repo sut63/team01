@@ -445,6 +445,34 @@ func NameContainsFold(v string) predicate.Pharmacist {
 	})
 }
 
+// HasPositioninpharmacist applies the HasEdge predicate on the "positioninpharmacist" edge.
+func HasPositioninpharmacist() predicate.Pharmacist {
+	return predicate.Pharmacist(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(PositioninpharmacistTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, PositioninpharmacistTable, PositioninpharmacistColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPositioninpharmacistWith applies the HasEdge predicate on the "positioninpharmacist" edge with a given conditions (other predicates).
+func HasPositioninpharmacistWith(preds ...predicate.PositionInPharmacist) predicate.Pharmacist {
+	return predicate.Pharmacist(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(PositioninpharmacistInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, PositioninpharmacistTable, PositioninpharmacistColumn),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasDispensemedicine applies the HasEdge predicate on the "dispensemedicine" edge.
 func HasDispensemedicine() predicate.Pharmacist {
 	return predicate.Pharmacist(func(s *sql.Selector) {

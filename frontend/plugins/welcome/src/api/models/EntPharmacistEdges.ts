@@ -30,6 +30,10 @@ import {
     EntOrderFromJSON,
     EntOrderFromJSONTyped,
     EntOrderToJSON,
+    EntPositionInPharmacist,
+    EntPositionInPharmacistFromJSON,
+    EntPositionInPharmacistFromJSONTyped,
+    EntPositionInPharmacistToJSON,
 } from './';
 
 /**
@@ -62,6 +66,12 @@ export interface EntPharmacistEdges {
      * @memberof EntPharmacistEdges
      */
     orderpharmacist?: Array<EntOrder>;
+    /**
+     * 
+     * @type {EntPositionInPharmacist}
+     * @memberof EntPharmacistEdges
+     */
+    positioninpharmacist?: EntPositionInPharmacist;
 }
 
 export function EntPharmacistEdgesFromJSON(json: any): EntPharmacistEdges {
@@ -75,9 +85,10 @@ export function EntPharmacistEdgesFromJSONTyped(json: any, ignoreDiscriminator: 
     return {
         
         'bills': !exists(json, 'bills') ? undefined : ((json['bills'] as Array<any>).map(EntBillFromJSON)),
-        'dispensemedicine': !exists(json, 'dispensemedicine') ? undefined : ((json['dispensemedicine'] as Array<any>).map(EntDispenseMedicineFromJSON)),
-        'drugallergys': !exists(json, 'drugallergys') ? undefined : ((json['drugallergys'] as Array<any>).map(EntDrugAllergyFromJSON)),
-        'orderpharmacist': !exists(json, 'orderpharmacist') ? undefined : ((json['orderpharmacist'] as Array<any>).map(EntOrderFromJSON)),
+        'dispensemedicine': !exists(json, 'Dispensemedicine') ? undefined : ((json['Dispensemedicine'] as Array<any>).map(EntDispenseMedicineFromJSON)),
+        'drugallergys': !exists(json, 'Drugallergys') ? undefined : ((json['Drugallergys'] as Array<any>).map(EntDrugAllergyFromJSON)),
+        'orderpharmacist': !exists(json, 'Orderpharmacist') ? undefined : ((json['Orderpharmacist'] as Array<any>).map(EntOrderFromJSON)),
+        'positioninpharmacist': !exists(json, 'Positioninpharmacist') ? undefined : EntPositionInPharmacistFromJSON(json['Positioninpharmacist']),
     };
 }
 
@@ -94,6 +105,7 @@ export function EntPharmacistEdgesToJSON(value?: EntPharmacistEdges | null): any
         'dispensemedicine': value.dispensemedicine === undefined ? undefined : ((value.dispensemedicine as Array<any>).map(EntDispenseMedicineToJSON)),
         'drugallergys': value.drugallergys === undefined ? undefined : ((value.drugallergys as Array<any>).map(EntDrugAllergyToJSON)),
         'orderpharmacist': value.orderpharmacist === undefined ? undefined : ((value.orderpharmacist as Array<any>).map(EntOrderToJSON)),
+        'positioninpharmacist': EntPositionInPharmacistToJSON(value.positioninpharmacist),
     };
 }
 

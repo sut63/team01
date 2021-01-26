@@ -11,6 +11,8 @@ const (
 	FieldAmount = "amount"
 	// FieldAnnotation holds the string denoting the annotation field in the database.
 	FieldAnnotation = "annotation"
+	// FieldPayer holds the string denoting the payer field in the database.
+	FieldPayer = "payer"
 
 	// EdgePharmacists holds the string denoting the pharmacists edge name in mutations.
 	EdgePharmacists = "pharmacists"
@@ -49,6 +51,7 @@ var Columns = []string{
 	FieldID,
 	FieldAmount,
 	FieldAnnotation,
+	FieldPayer,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Bill type.
@@ -61,4 +64,8 @@ var ForeignKeys = []string{
 var (
 	// AmountValidator is a validator for the "amount" field. It is called by the builders before save.
 	AmountValidator func(int) error
+	// AnnotationValidator is a validator for the "annotation" field. It is called by the builders before save.
+	AnnotationValidator func(string) error
+	// PayerValidator is a validator for the "payer" field. It is called by the builders before save.
+	PayerValidator func(string) error
 )

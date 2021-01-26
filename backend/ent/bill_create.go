@@ -34,6 +34,12 @@ func (bc *BillCreate) SetAnnotation(s string) *BillCreate {
 	return bc
 }
 
+// SetPayer sets the payer field.
+func (bc *BillCreate) SetPayer(s string) *BillCreate {
+	bc.mutation.SetPayer(s)
+	return bc
+}
+
 // SetPharmacistsID sets the pharmacists edge to Pharmacist by id.
 func (bc *BillCreate) SetPharmacistsID(id int) *BillCreate {
 	bc.mutation.SetPharmacistsID(id)
@@ -108,6 +114,19 @@ func (bc *BillCreate) Save(ctx context.Context) (*Bill, error) {
 	}
 	if _, ok := bc.mutation.Annotation(); !ok {
 		return nil, &ValidationError{Name: "annotation", err: errors.New("ent: missing required field \"annotation\"")}
+	}
+	if v, ok := bc.mutation.Annotation(); ok {
+		if err := bill.AnnotationValidator(v); err != nil {
+			return nil, &ValidationError{Name: "annotation", err: fmt.Errorf("ent: validator failed for field \"annotation\": %w", err)}
+		}
+	}
+	if _, ok := bc.mutation.Payer(); !ok {
+		return nil, &ValidationError{Name: "payer", err: errors.New("ent: missing required field \"payer\"")}
+	}
+	if v, ok := bc.mutation.Payer(); ok {
+		if err := bill.PayerValidator(v); err != nil {
+			return nil, &ValidationError{Name: "payer", err: fmt.Errorf("ent: validator failed for field \"payer\": %w", err)}
+		}
 	}
 	var (
 		err  error
@@ -184,6 +203,14 @@ func (bc *BillCreate) createSpec() (*Bill, *sqlgraph.CreateSpec) {
 			Column: bill.FieldAnnotation,
 		})
 		b.Annotation = value
+	}
+	if value, ok := bc.mutation.Payer(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: bill.FieldPayer,
+		})
+		b.Payer = value
 	}
 	if nodes := bc.mutation.PharmacistsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

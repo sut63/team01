@@ -119,6 +119,7 @@ func (ctl *PatientInfoController) ListPatientInfo(c *gin.Context) {
 
 	patientinfos, err := ctl.client.PatientInfo.
 		Query().
+		WithDrugallergys().
 		Limit(limit).
 		Offset(offset).
 		All(context.Background())

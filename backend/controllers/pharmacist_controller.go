@@ -8,12 +8,21 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sut63/team01/ent"
 	"github.com/sut63/team01/ent/pharmacist"
+	"github.com/sut63/team01/ent/positioninpharmacist"
 )
 
 // PharmacistController defines the struct for the pharmacist controller
 type PharmacistController struct {
 	client *ent.Client
 	router gin.IRouter
+}
+
+//Pharmacist Structure
+type Pharmacist struct {
+	Email                string
+	Password             string
+	Name                 string
+	PositionInPharmacist int
 }
 
 // CreatePharmacist handles POST requests for adding pharmacist entities
@@ -28,10 +37,21 @@ type PharmacistController struct {
 // @Failure 500 {object} gin.H
 // @Router /pharmacists [post]
 func (ctl *PharmacistController) CreatePharmacist(c *gin.Context) {
-	obj := ent.Pharmacist{}
+	obj := Pharmacist{}
 	if err := c.ShouldBind(&obj); err != nil {
 		c.JSON(400, gin.H{
 			"error": "pharmacist binding failed",
+		})
+		return
+	}
+
+	pip, err := ctl.client.PositionInPharmacist.
+		Query().
+		Where(positioninpharmacist.IDEQ(int(obj.PositionInPharmacist))).
+		Only(context.Background())
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "positioninpharmacist not found",
 		})
 		return
 	}
@@ -41,6 +61,7 @@ func (ctl *PharmacistController) CreatePharmacist(c *gin.Context) {
 		SetEmail(obj.Email).
 		SetPassword(obj.Password).
 		SetName(obj.Name).
+		SetPositioninpharmacist(pip).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -74,6 +95,7 @@ func (ctl *PharmacistController) GetPharmacist(c *gin.Context) {
 
 	p, err := ctl.client.Pharmacist.
 		Query().
+		WithPositioninpharmacist().
 		Where(pharmacist.IDEQ(int(id))).
 		Only(context.Background())
 	if err != nil {
@@ -118,6 +140,7 @@ func (ctl *PharmacistController) ListPharmacist(c *gin.Context) {
 
 	pharmacists, err := ctl.client.Pharmacist.
 		Query().
+		WithPositioninpharmacist().
 		Limit(limit).
 		Offset(offset).
 		All(context.Background())
@@ -185,10 +208,21 @@ func (ctl *PharmacistController) UpdatePharmacist(c *gin.Context) {
 		return
 	}
 
-	obj := ent.Pharmacist{}
+	obj := Pharmacist{}
 	if err := c.ShouldBind(&obj); err != nil {
 		c.JSON(400, gin.H{
 			"error": "pharmacist binding failed",
+		})
+		return
+	}
+
+	pip, err := ctl.client.PositionInPharmacist.
+		Query().
+		Where(positioninpharmacist.IDEQ(int(obj.PositionInPharmacist))).
+		Only(context.Background())
+	if err != nil {
+		c.JSON(404, gin.H{
+			"error": err.Error(),
 		})
 		return
 	}
@@ -198,6 +232,7 @@ func (ctl *PharmacistController) UpdatePharmacist(c *gin.Context) {
 		SetEmail(obj.Email).
 		SetPassword(obj.Password).
 		SetName(obj.Name).
+		SetPositioninpharmacist(pip).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{

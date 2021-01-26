@@ -6,11 +6,13 @@ import (
 	"github.com/sut63/team01/ent/annotation"
 	"github.com/sut63/team01/ent/bill"
 	"github.com/sut63/team01/ent/company"
+	"github.com/sut63/team01/ent/dispensemedicine"
 	"github.com/sut63/team01/ent/doctor"
+	"github.com/sut63/team01/ent/drugallergy"
 	"github.com/sut63/team01/ent/medicine"
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/pharmacist"
-	"github.com/sut63/team01/ent/prescription"
+	"github.com/sut63/team01/ent/positioninpharmacist"
 	"github.com/sut63/team01/ent/schema"
 	"github.com/sut63/team01/ent/status"
 )
@@ -31,12 +33,62 @@ func init() {
 	billDescAmount := billFields[0].Descriptor()
 	// bill.AmountValidator is a validator for the "amount" field. It is called by the builders before save.
 	bill.AmountValidator = billDescAmount.Validators[0].(func(int) error)
+	// billDescAnnotation is the schema descriptor for annotation field.
+	billDescAnnotation := billFields[1].Descriptor()
+	// bill.AnnotationValidator is a validator for the "annotation" field. It is called by the builders before save.
+	bill.AnnotationValidator = billDescAnnotation.Validators[0].(func(string) error)
+	// billDescPayer is the schema descriptor for payer field.
+	billDescPayer := billFields[2].Descriptor()
+	// bill.PayerValidator is a validator for the "payer" field. It is called by the builders before save.
+	bill.PayerValidator = billDescPayer.Validators[0].(func(string) error)
 	companyFields := schema.Company{}.Fields()
 	_ = companyFields
 	// companyDescName is the schema descriptor for Name field.
 	companyDescName := companyFields[0].Descriptor()
 	// company.NameValidator is a validator for the "Name" field. It is called by the builders before save.
 	company.NameValidator = companyDescName.Validators[0].(func(string) error)
+	dispensemedicineFields := schema.DispenseMedicine{}.Fields()
+	_ = dispensemedicineFields
+	// dispensemedicineDescNote is the schema descriptor for note field.
+	dispensemedicineDescNote := dispensemedicineFields[1].Descriptor()
+	// dispensemedicine.NoteValidator is a validator for the "note" field. It is called by the builders before save.
+	dispensemedicine.NoteValidator = func() func(string) error {
+		validators := dispensemedicineDescNote.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(note string) error {
+			for _, fn := range fns {
+				if err := fn(note); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// dispensemedicineDescAmountchangemedicine is the schema descriptor for amountchangemedicine field.
+	dispensemedicineDescAmountchangemedicine := dispensemedicineFields[2].Descriptor()
+	// dispensemedicine.AmountchangemedicineValidator is a validator for the "amountchangemedicine" field. It is called by the builders before save.
+	dispensemedicine.AmountchangemedicineValidator = dispensemedicineDescAmountchangemedicine.Validators[0].(func(int) error)
+	// dispensemedicineDescDetailchangemedicine is the schema descriptor for detailchangemedicine field.
+	dispensemedicineDescDetailchangemedicine := dispensemedicineFields[3].Descriptor()
+	// dispensemedicine.DetailchangemedicineValidator is a validator for the "detailchangemedicine" field. It is called by the builders before save.
+	dispensemedicine.DetailchangemedicineValidator = func() func(string) error {
+		validators := dispensemedicineDescDetailchangemedicine.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(detailchangemedicine string) error {
+			for _, fn := range fns {
+				if err := fn(detailchangemedicine); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	doctorFields := schema.Doctor{}.Fields()
 	_ = doctorFields
 	// doctorDescEmail is the schema descriptor for email field.
@@ -51,6 +103,62 @@ func init() {
 	doctorDescName := doctorFields[2].Descriptor()
 	// doctor.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	doctor.NameValidator = doctorDescName.Validators[0].(func(string) error)
+	drugallergyFields := schema.DrugAllergy{}.Fields()
+	_ = drugallergyFields
+	// drugallergyDescSymptom is the schema descriptor for symptom field.
+	drugallergyDescSymptom := drugallergyFields[0].Descriptor()
+	// drugallergy.SymptomValidator is a validator for the "symptom" field. It is called by the builders before save.
+	drugallergy.SymptomValidator = func() func(string) error {
+		validators := drugallergyDescSymptom.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(symptom string) error {
+			for _, fn := range fns {
+				if err := fn(symptom); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// drugallergyDescCongenitalDisease is the schema descriptor for congenitalDisease field.
+	drugallergyDescCongenitalDisease := drugallergyFields[1].Descriptor()
+	// drugallergy.CongenitalDiseaseValidator is a validator for the "congenitalDisease" field. It is called by the builders before save.
+	drugallergy.CongenitalDiseaseValidator = func() func(string) error {
+		validators := drugallergyDescCongenitalDisease.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(congenitalDisease string) error {
+			for _, fn := range fns {
+				if err := fn(congenitalDisease); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// drugallergyDescAnnotation is the schema descriptor for annotation field.
+	drugallergyDescAnnotation := drugallergyFields[2].Descriptor()
+	// drugallergy.AnnotationValidator is a validator for the "annotation" field. It is called by the builders before save.
+	drugallergy.AnnotationValidator = func() func(string) error {
+		validators := drugallergyDescAnnotation.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(annotation string) error {
+			for _, fn := range fns {
+				if err := fn(annotation); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	medicineFields := schema.Medicine{}.Fields()
 	_ = medicineFields
 	// medicineDescName is the schema descriptor for name field.
@@ -109,6 +217,7 @@ func init() {
 	pharmacistDescName := pharmacistFields[2].Descriptor()
 	// pharmacist.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	pharmacist.NameValidator = pharmacistDescName.Validators[0].(func(string) error)
+<<<<<<< HEAD
 	prescriptionFields := schema.Prescription{}.Fields()
 	_ = prescriptionFields
 	// prescriptionDescValue is the schema descriptor for Value field.
@@ -129,4 +238,12 @@ func init() {
 	statusDescStatus := statusFields[0].Descriptor()
 	// status.StatusValidator is a validator for the "status" field. It is called by the builders before save.
 	status.StatusValidator = statusDescStatus.Validators[0].(func(string) error)
+=======
+	positioninpharmacistFields := schema.PositionInPharmacist{}.Fields()
+	_ = positioninpharmacistFields
+	// positioninpharmacistDescPosition is the schema descriptor for position field.
+	positioninpharmacistDescPosition := positioninpharmacistFields[0].Descriptor()
+	// positioninpharmacist.PositionValidator is a validator for the "position" field. It is called by the builders before save.
+	positioninpharmacist.PositionValidator = positioninpharmacistDescPosition.Validators[0].(func(string) error)
+>>>>>>> 08a3f62028c02db8c596adc7c9f47a298393e8c1
 }

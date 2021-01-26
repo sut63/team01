@@ -22,6 +22,12 @@ type DispenseMedicine struct {
 	ID int `json:"id,omitempty"`
 	// Datetime holds the value of the "datetime" field.
 	Datetime time.Time `json:"datetime,omitempty"`
+	// Note holds the value of the "note" field.
+	Note string `json:"note,omitempty"`
+	// Amountchangemedicine holds the value of the "amountchangemedicine" field.
+	Amountchangemedicine int `json:"amountchangemedicine,omitempty"`
+	// Detailchangemedicine holds the value of the "detailchangemedicine" field.
+	Detailchangemedicine string `json:"detailchangemedicine,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DispenseMedicineQuery when eager-loading is set.
 	Edges           DispenseMedicineEdges `json:"edges"`
@@ -104,8 +110,11 @@ func (e DispenseMedicineEdges) BillsOrErr() (*Bill, error) {
 // scanValues returns the types for scanning values from sql.Rows.
 func (*DispenseMedicine) scanValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{}, // id
-		&sql.NullTime{},  // datetime
+		&sql.NullInt64{},  // id
+		&sql.NullTime{},   // datetime
+		&sql.NullString{}, // note
+		&sql.NullInt64{},  // amountchangemedicine
+		&sql.NullString{}, // detailchangemedicine
 	}
 }
 
@@ -135,7 +144,22 @@ func (dm *DispenseMedicine) assignValues(values ...interface{}) error {
 	} else if value.Valid {
 		dm.Datetime = value.Time
 	}
-	values = values[1:]
+	if value, ok := values[1].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field note", values[1])
+	} else if value.Valid {
+		dm.Note = value.String
+	}
+	if value, ok := values[2].(*sql.NullInt64); !ok {
+		return fmt.Errorf("unexpected type %T for field amountchangemedicine", values[2])
+	} else if value.Valid {
+		dm.Amountchangemedicine = int(value.Int64)
+	}
+	if value, ok := values[3].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field detailchangemedicine", values[3])
+	} else if value.Valid {
+		dm.Detailchangemedicine = value.String
+	}
+	values = values[4:]
 	if len(values) == len(dispensemedicine.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field annotation_id", value)
@@ -204,6 +228,12 @@ func (dm *DispenseMedicine) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", dm.ID))
 	builder.WriteString(", datetime=")
 	builder.WriteString(dm.Datetime.Format(time.ANSIC))
+	builder.WriteString(", note=")
+	builder.WriteString(dm.Note)
+	builder.WriteString(", amountchangemedicine=")
+	builder.WriteString(fmt.Sprintf("%v", dm.Amountchangemedicine))
+	builder.WriteString(", detailchangemedicine=")
+	builder.WriteString(dm.Detailchangemedicine)
 	builder.WriteByte(')')
 	return builder.String()
 }

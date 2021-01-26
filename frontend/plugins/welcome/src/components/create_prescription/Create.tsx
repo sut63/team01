@@ -107,6 +107,12 @@ const NewPatientright: FC<{}> = () => {
       toast.addEventListener('mouseleave', Swal.resumeTimer);
     },
   });
+  const checkPosition = async () => {
+    if(cookies.get('PositionData') != 'Prescription'){
+      history.pushState('', '', '/' + cookies.get('PositionData'));
+      window.location.reload(false); 
+    }
+  };
 
   // Lifecycle Hooks
   useEffect(() => {
@@ -114,7 +120,7 @@ const NewPatientright: FC<{}> = () => {
     getPatientInfo();
     getDoctor();
     setName(cookies.get('Name'));
-
+    checkPosition();
     setPrescription({ doctorID: Number(cookies.get('ID')) });
   }, []);
 

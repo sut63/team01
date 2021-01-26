@@ -21,10 +21,13 @@ type DrugAllergyController struct {
 }
 
 type DrugAllergy struct {
-	Patient    int
-	Medicine   int
-	Pharmacist int
-	DateTime   string
+	Patient    			int
+	Medicine   			int
+	Pharmacist 			int
+	Symptom				string
+	CongenitalDisease 	string
+	Annotation			string
+	DateTime   			string
 }
 
 // CreateDrugAllergy handles POST requests for adding DrugAllergy entities
@@ -97,10 +100,14 @@ func (ctl *DrugAllergyController) CreateDrugAllergy(c *gin.Context) {
 		SetPatient(p).
 		SetMedicine(m).
 		SetPharmacist(pha).
+		SetSymptom(obj.Symptom).
+		SetCongenitalDisease(obj.CongenitalDisease).
+		SetAnnotation(obj.Annotation).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
-			"error": "saving failed",
+			"status": false,
+			"error": err,
 		})
 		return
 	}
@@ -112,37 +119,46 @@ func (ctl *DrugAllergyController) CreateDrugAllergy(c *gin.Context) {
 }
 
 // GetDrugAllergy handles GET requests to retrieve a DrugAllergy entity
-// @Summary Get a DrugAllergy entity by ID
-// @Description get DrugAllergy by ID
+// @Summary Get a DrugAllergy entity by Patient CardNumber
+// @Description get DrugAllergy by Patient CardNumber
 // @ID get-drug-allergy
 // @Produce  json
-// @Param id path int true "DrugAllergy ID"
-// @Success 200 {object} ent.DrugAllergy
+// @Param card path string true "Patient CardNumber"
+// @Success 200 {array} ent.DrugAllergy
 // @Failure 400 {object} gin.H
 // @Failure 404 {object} gin.H
 // @Failure 500 {object} gin.H
-// @Router /drugallergys/{id} [get]
+// @Router /drugallergys/{card} [get]
 func (ctl *DrugAllergyController) GetDrugAllergy(c *gin.Context) {
-	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-	if err != nil {
-		c.JSON(400, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
+	CardNumber := string(c.Param("card"))
 
 	da, err := ctl.client.DrugAllergy.
 		Query().
-		Where(drugallergy.IDEQ(int(id))).
-		Only(context.Background())
+		Where(drugallergy.HasPatientWith(patientinfo.CardNumberEQ(string(CardNumber)))).
+		WithPatient().
+		WithPharmacist().
+		WithMedicine().
+		All(context.Background())
 	if err != nil {
 		c.JSON(404, gin.H{
 			"error": err.Error(),
+			"status" : false,
 		})
 		return
 	}
 
-	c.JSON(200, da)
+	if len(da) != 0 {
+		c.JSON(200, da)
+		return
+	}else{
+		c.JSON(404, gin.H{
+			"error": "patient not found",
+			"status" : false,
+		})
+		return
+	}
+
+	
 }
 
 // ListDrugAllergy handles request to get a list of DrugAllergy entities
@@ -158,7 +174,7 @@ func (ctl *DrugAllergyController) GetDrugAllergy(c *gin.Context) {
 // @Router /drugallergys [get]
 func (ctl *DrugAllergyController) ListDrugAllergy(c *gin.Context) {
 	limitQuery := c.Query("limit")
-	limit := 10
+	limit := 20
 	if limitQuery != "" {
 		limit64, err := strconv.ParseInt(limitQuery, 10, 64)
 		if err == nil {
@@ -282,7 +298,7 @@ func (ctl *DrugAllergyController) register() {
 
 	// CRUD
 	drugallergys.POST("", ctl.CreateDrugAllergy)
-	drugallergys.GET(":id", ctl.GetDrugAllergy)
+	drugallergys.GET(":card", ctl.GetDrugAllergy)
 	drugallergys.PUT(":id", ctl.UpdateDrugAllergy)
 	drugallergys.DELETE(":id", ctl.DeleteDrugAllergy)
 }

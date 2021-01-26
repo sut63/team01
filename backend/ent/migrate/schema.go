@@ -11,7 +11,7 @@ var (
 	// AnnotationsColumns holds the columns for the "annotations" table.
 	AnnotationsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "messages", Type: field.TypeString},
+		{Name: "messages", Type: field.TypeString, Unique: true},
 	}
 	// AnnotationsTable holds the schema information for the "annotations" table.
 	AnnotationsTable = &schema.Table{
@@ -25,6 +25,7 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "amount", Type: field.TypeInt},
 		{Name: "annotation", Type: field.TypeString},
+		{Name: "payer", Type: field.TypeString},
 		{Name: "dispensemedicine_id", Type: field.TypeInt, Unique: true, Nullable: true},
 		{Name: "payment_id", Type: field.TypeInt, Nullable: true},
 		{Name: "pharmacist_id", Type: field.TypeInt, Nullable: true},
@@ -37,21 +38,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "bills_dispense_medicines_Bills",
-				Columns: []*schema.Column{BillsColumns[3]},
+				Columns: []*schema.Column{BillsColumns[4]},
 
 				RefColumns: []*schema.Column{DispenseMedicinesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "bills_payments_Bills",
-				Columns: []*schema.Column{BillsColumns[4]},
+				Columns: []*schema.Column{BillsColumns[5]},
 
 				RefColumns: []*schema.Column{PaymentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "bills_pharmacists_Bills",
-				Columns: []*schema.Column{BillsColumns[5]},
+				Columns: []*schema.Column{BillsColumns[6]},
 
 				RefColumns: []*schema.Column{PharmacistsColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -74,6 +75,9 @@ var (
 	DispenseMedicinesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "datetime", Type: field.TypeTime},
+		{Name: "note", Type: field.TypeString},
+		{Name: "amountchangemedicine", Type: field.TypeInt},
+		{Name: "detailchangemedicine", Type: field.TypeString},
 		{Name: "annotation_id", Type: field.TypeInt, Nullable: true},
 		{Name: "pharmacist_id", Type: field.TypeInt, Nullable: true},
 		{Name: "prescription_id", Type: field.TypeInt, Unique: true, Nullable: true},
@@ -86,21 +90,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "dispense_medicines_annotations_dispensemedicine",
-				Columns: []*schema.Column{DispenseMedicinesColumns[2]},
+				Columns: []*schema.Column{DispenseMedicinesColumns[5]},
 
 				RefColumns: []*schema.Column{AnnotationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "dispense_medicines_pharmacists_dispensemedicine",
-				Columns: []*schema.Column{DispenseMedicinesColumns[3]},
+				Columns: []*schema.Column{DispenseMedicinesColumns[6]},
 
 				RefColumns: []*schema.Column{PharmacistsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "dispense_medicines_prescriptions_dispensemedicine",
-				Columns: []*schema.Column{DispenseMedicinesColumns[4]},
+				Columns: []*schema.Column{DispenseMedicinesColumns[7]},
 
 				RefColumns: []*schema.Column{PrescriptionsColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -124,6 +128,9 @@ var (
 	// DrugAllergiesColumns holds the columns for the "drug_allergies" table.
 	DrugAllergiesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "symptom", Type: field.TypeString},
+		{Name: "congenital_disease", Type: field.TypeString},
+		{Name: "annotation", Type: field.TypeString},
 		{Name: "date_time", Type: field.TypeTime},
 		{Name: "medicine_id", Type: field.TypeInt, Nullable: true},
 		{Name: "patient_id", Type: field.TypeInt, Nullable: true},
@@ -137,21 +144,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "drug_allergies_medicines_drugallergys",
-				Columns: []*schema.Column{DrugAllergiesColumns[2]},
+				Columns: []*schema.Column{DrugAllergiesColumns[5]},
 
 				RefColumns: []*schema.Column{MedicinesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "drug_allergies_patient_infos_drugallergys",
-				Columns: []*schema.Column{DrugAllergiesColumns[3]},
+				Columns: []*schema.Column{DrugAllergiesColumns[6]},
 
 				RefColumns: []*schema.Column{PatientInfosColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "drug_allergies_pharmacists_drugallergys",
-				Columns: []*schema.Column{DrugAllergiesColumns[4]},
+				Columns: []*schema.Column{DrugAllergiesColumns[7]},
 
 				RefColumns: []*schema.Column{PharmacistsColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -281,7 +288,7 @@ var (
 	// PaymentsColumns holds the columns for the "payments" table.
 	PaymentsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "pay", Type: field.TypeString},
+		{Name: "pay", Type: field.TypeString, Unique: true},
 	}
 	// PaymentsTable holds the schema information for the "payments" table.
 	PaymentsTable = &schema.Table{
@@ -296,12 +303,33 @@ var (
 		{Name: "email", Type: field.TypeString, Unique: true},
 		{Name: "password", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
+		{Name: "positioninpharmacist_id", Type: field.TypeInt, Nullable: true},
 	}
 	// PharmacistsTable holds the schema information for the "pharmacists" table.
 	PharmacistsTable = &schema.Table{
-		Name:        "pharmacists",
-		Columns:     PharmacistsColumns,
-		PrimaryKey:  []*schema.Column{PharmacistsColumns[0]},
+		Name:       "pharmacists",
+		Columns:    PharmacistsColumns,
+		PrimaryKey: []*schema.Column{PharmacistsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:  "pharmacists_position_in_pharmacists_pharmacist",
+				Columns: []*schema.Column{PharmacistsColumns[4]},
+
+				RefColumns: []*schema.Column{PositionInPharmacistsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// PositionInPharmacistsColumns holds the columns for the "position_in_pharmacists" table.
+	PositionInPharmacistsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "position", Type: field.TypeString, Unique: true},
+	}
+	// PositionInPharmacistsTable holds the schema information for the "position_in_pharmacists" table.
+	PositionInPharmacistsTable = &schema.Table{
+		Name:        "position_in_pharmacists",
+		Columns:     PositionInPharmacistsColumns,
+		PrimaryKey:  []*schema.Column{PositionInPharmacistsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{},
 	}
 	// PrescriptionsColumns holds the columns for the "prescriptions" table.
@@ -390,6 +418,7 @@ var (
 		PatientInfosTable,
 		PaymentsTable,
 		PharmacistsTable,
+		PositionInPharmacistsTable,
 		PrescriptionsTable,
 		StatusTable,
 		UnitOfMedicinesTable,
@@ -412,6 +441,7 @@ func init() {
 	OrdersTable.ForeignKeys[0].RefTable = CompaniesTable
 	OrdersTable.ForeignKeys[1].RefTable = MedicinesTable
 	OrdersTable.ForeignKeys[2].RefTable = PharmacistsTable
+	PharmacistsTable.ForeignKeys[0].RefTable = PositionInPharmacistsTable
 	PrescriptionsTable.ForeignKeys[0].RefTable = DoctorsTable
 	PrescriptionsTable.ForeignKeys[1].RefTable = MedicinesTable
 	PrescriptionsTable.ForeignKeys[2].RefTable = PatientInfosTable

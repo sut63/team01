@@ -45,6 +45,9 @@ type Payment func(*sql.Selector)
 // Pharmacist is the predicate function for pharmacist builders.
 type Pharmacist func(*sql.Selector)
 
+// PositionInPharmacist is the predicate function for positioninpharmacist builders.
+type PositionInPharmacist func(*sql.Selector)
+
 // Prescription is the predicate function for prescription builders.
 type Prescription func(*sql.Selector)
 

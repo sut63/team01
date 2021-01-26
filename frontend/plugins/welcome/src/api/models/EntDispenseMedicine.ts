@@ -27,11 +27,23 @@ import {
  */
 export interface EntDispenseMedicine {
     /**
+     * Amountchangemedicine holds the value of the "amountchangemedicine" field.
+     * @type {number}
+     * @memberof EntDispenseMedicine
+     */
+    amountchangemedicine?: number;
+    /**
      * Datetime holds the value of the "datetime" field.
      * @type {string}
      * @memberof EntDispenseMedicine
      */
     datetime?: string;
+    /**
+     * Detailchangemedicine holds the value of the "detailchangemedicine" field.
+     * @type {string}
+     * @memberof EntDispenseMedicine
+     */
+    detailchangemedicine?: string;
     /**
      * 
      * @type {EntDispenseMedicineEdges}
@@ -44,6 +56,12 @@ export interface EntDispenseMedicine {
      * @memberof EntDispenseMedicine
      */
     id?: number;
+    /**
+     * Note holds the value of the "note" field.
+     * @type {string}
+     * @memberof EntDispenseMedicine
+     */
+    note?: string;
 }
 
 export function EntDispenseMedicineFromJSON(json: any): EntDispenseMedicine {
@@ -56,9 +74,12 @@ export function EntDispenseMedicineFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
+        'amountchangemedicine': !exists(json, 'amountchangemedicine') ? undefined : json['amountchangemedicine'],
         'datetime': !exists(json, 'datetime') ? undefined : json['datetime'],
+        'detailchangemedicine': !exists(json, 'detailchangemedicine') ? undefined : json['detailchangemedicine'],
         'edges': !exists(json, 'edges') ? undefined : EntDispenseMedicineEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'note': !exists(json, 'note') ? undefined : json['note'],
     };
 }
 
@@ -71,9 +92,12 @@ export function EntDispenseMedicineToJSON(value?: EntDispenseMedicine | null): a
     }
     return {
         
+        'amountchangemedicine': value.amountchangemedicine,
         'datetime': value.datetime,
+        'detailchangemedicine': value.detailchangemedicine,
         'edges': EntDispenseMedicineEdgesToJSON(value.edges),
         'id': value.id,
+        'note': value.note,
     };
 }
 

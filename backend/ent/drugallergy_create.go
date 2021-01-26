@@ -23,6 +23,24 @@ type DrugAllergyCreate struct {
 	hooks    []Hook
 }
 
+// SetSymptom sets the symptom field.
+func (dac *DrugAllergyCreate) SetSymptom(s string) *DrugAllergyCreate {
+	dac.mutation.SetSymptom(s)
+	return dac
+}
+
+// SetCongenitalDisease sets the congenitalDisease field.
+func (dac *DrugAllergyCreate) SetCongenitalDisease(s string) *DrugAllergyCreate {
+	dac.mutation.SetCongenitalDisease(s)
+	return dac
+}
+
+// SetAnnotation sets the annotation field.
+func (dac *DrugAllergyCreate) SetAnnotation(s string) *DrugAllergyCreate {
+	dac.mutation.SetAnnotation(s)
+	return dac
+}
+
 // SetDateTime sets the dateTime field.
 func (dac *DrugAllergyCreate) SetDateTime(t time.Time) *DrugAllergyCreate {
 	dac.mutation.SetDateTime(t)
@@ -93,6 +111,30 @@ func (dac *DrugAllergyCreate) Mutation() *DrugAllergyMutation {
 
 // Save creates the DrugAllergy in the database.
 func (dac *DrugAllergyCreate) Save(ctx context.Context) (*DrugAllergy, error) {
+	if _, ok := dac.mutation.Symptom(); !ok {
+		return nil, &ValidationError{Name: "symptom", err: errors.New("ent: missing required field \"symptom\"")}
+	}
+	if v, ok := dac.mutation.Symptom(); ok {
+		if err := drugallergy.SymptomValidator(v); err != nil {
+			return nil, &ValidationError{Name: "symptom", err: fmt.Errorf("ent: validator failed for field \"symptom\": %w", err)}
+		}
+	}
+	if _, ok := dac.mutation.CongenitalDisease(); !ok {
+		return nil, &ValidationError{Name: "congenitalDisease", err: errors.New("ent: missing required field \"congenitalDisease\"")}
+	}
+	if v, ok := dac.mutation.CongenitalDisease(); ok {
+		if err := drugallergy.CongenitalDiseaseValidator(v); err != nil {
+			return nil, &ValidationError{Name: "congenitalDisease", err: fmt.Errorf("ent: validator failed for field \"congenitalDisease\": %w", err)}
+		}
+	}
+	if _, ok := dac.mutation.Annotation(); !ok {
+		return nil, &ValidationError{Name: "annotation", err: errors.New("ent: missing required field \"annotation\"")}
+	}
+	if v, ok := dac.mutation.Annotation(); ok {
+		if err := drugallergy.AnnotationValidator(v); err != nil {
+			return nil, &ValidationError{Name: "annotation", err: fmt.Errorf("ent: validator failed for field \"annotation\": %w", err)}
+		}
+	}
 	if _, ok := dac.mutation.DateTime(); !ok {
 		return nil, &ValidationError{Name: "dateTime", err: errors.New("ent: missing required field \"dateTime\"")}
 	}
@@ -156,6 +198,30 @@ func (dac *DrugAllergyCreate) createSpec() (*DrugAllergy, *sqlgraph.CreateSpec) 
 			},
 		}
 	)
+	if value, ok := dac.mutation.Symptom(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: drugallergy.FieldSymptom,
+		})
+		da.Symptom = value
+	}
+	if value, ok := dac.mutation.CongenitalDisease(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: drugallergy.FieldCongenitalDisease,
+		})
+		da.CongenitalDisease = value
+	}
+	if value, ok := dac.mutation.Annotation(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: drugallergy.FieldAnnotation,
+		})
+		da.Annotation = value
+	}
 	if value, ok := dac.mutation.DateTime(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,

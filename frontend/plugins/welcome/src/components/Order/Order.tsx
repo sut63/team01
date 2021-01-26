@@ -19,7 +19,7 @@ import TableCell from '@material-ui/core/TableCell';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import { Alert } from '@material-ui/lab';
-
+import { Cookies } from 'react-cookie/cjs'; //cookie
 
 import { EntMedicine } from '../../api/models/EntMedicine';
 import { EntCompany } from '../../api/models/EntCompany';
@@ -75,7 +75,7 @@ export default function Order() {
   const [status, setStatus] = useState(false);
   const [alert, setAlert] = useState(true);
   const [loading, setLoading] = useState(true);
-
+  const cookies = new Cookies();
   const [oorder, setOreder] = React.useState<Partial<oorder>>({});
 
   const [medicines, setMedicines] = React.useState<EntMedicine[]>([]);
@@ -97,6 +97,14 @@ export default function Order() {
   let companyid = Number(companyID)
   
   console.log(pharmacistID)
+
+  const checkPosition = async () => {
+    if(cookies.get('PositionData') != 'Order'){
+      history.pushState('', '', '/' + cookies.get('PositionData'));
+      window.location.reload(false); 
+    }
+  };
+
   useEffect(() => {
 
     const getpharmacists = async () => {
@@ -124,7 +132,7 @@ export default function Order() {
       setCompanys(pay);
     };
     getcompanys();
-
+    checkPosition();
   }, [loading]);
 
   const order = {

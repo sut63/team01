@@ -205,7 +205,7 @@ export interface GetCompanyRequest {
 }
 
 export interface GetDispensemedicineRequest {
-    id: number;
+    id: string;
 }
 
 export interface GetDoctorRequest {
@@ -1441,7 +1441,7 @@ export class DefaultApi extends runtime.BaseAPI {
      * get dispensemedicine by ID
      * Get a dispensemedicine entity by ID
      */
-    async getDispensemedicineRaw(requestParameters: GetDispensemedicineRequest): Promise<runtime.ApiResponse<EntDispenseMedicine>> {
+    async getDispensemedicineRaw(requestParameters: GetDispensemedicineRequest): Promise<runtime.ApiResponse<Array<EntDispenseMedicine>>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getDispensemedicine.');
         }
@@ -1457,14 +1457,14 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EntDispenseMedicineFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntDispenseMedicineFromJSON));
     }
 
     /**
      * get dispensemedicine by ID
      * Get a dispensemedicine entity by ID
      */
-    async getDispensemedicine(requestParameters: GetDispensemedicineRequest): Promise<EntDispenseMedicine> {
+    async getDispensemedicine(requestParameters: GetDispensemedicineRequest): Promise<Array<EntDispenseMedicine>> {
         const response = await this.getDispensemedicineRaw(requestParameters);
         return await response.value();
     }

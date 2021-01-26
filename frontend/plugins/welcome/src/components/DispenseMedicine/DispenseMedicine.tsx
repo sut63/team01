@@ -77,11 +77,6 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 110,
       height: 50,
     },
-
-    AlertMargin: {
-      marginBottom: theme.spacing(5),
-      width: 300,
-    },
   }),
 );
 
@@ -240,7 +235,7 @@ const DispenseMedicine: FC<{}> = () => {
 
   // ฟังก์ชั่นสำหรับ validate จำนวน
   const validateAmount = (val: string) => {
-    const regexpNum = new RegExp('^[+ 0-9]{1,2}$');
+    const regexpNum = new RegExp('^[+ 0-9]{0,3}$');
     return regexpNum.test(val);
   };
 
@@ -511,7 +506,7 @@ const DispenseMedicine: FC<{}> = () => {
                         <TableRow>
                           <TableCell align="center">No.</TableCell>
                           <TableCell align="center">ชื่อยา</TableCell>
-                          <TableCell align="center">หมายเลข</TableCell>
+                          <TableCell align="center">หมายเลขยา</TableCell>
                           <TableCell align="center">แบนด์</TableCell>
                           <TableCell align="center">จำนวน</TableCell>
                           <TableCell align="center">

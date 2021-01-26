@@ -44,7 +44,7 @@ export function EntPositionInPharmacistEdgesFromJSONTyped(json: any, ignoreDiscr
     }
     return {
         
-        'pharmacist': !exists(json, 'pharmacist') ? undefined : ((json['pharmacist'] as Array<any>).map(EntPharmacistFromJSON)),
+        'pharmacist': !exists(json, 'Pharmacist') ? undefined : ((json['Pharmacist'] as Array<any>).map(EntPharmacistFromJSON)),
     };
 }
 

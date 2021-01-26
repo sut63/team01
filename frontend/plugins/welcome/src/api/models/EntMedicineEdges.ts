@@ -94,12 +94,12 @@ export function EntMedicineEdgesFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'drugallergys': !exists(json, 'drugallergys') ? undefined : ((json['drugallergys'] as Array<any>).map(EntDrugAllergyFromJSON)),
-        'levelOfDangerous': !exists(json, 'levelOfDangerous') ? undefined : EntLevelOfDangerousFromJSON(json['levelOfDangerous']),
-        'medicineType': !exists(json, 'medicineType') ? undefined : EntMedicineTypeFromJSON(json['medicineType']),
-        'medicinepresciption': !exists(json, 'medicinepresciption') ? undefined : ((json['medicinepresciption'] as Array<any>).map(EntPrescriptionFromJSON)),
-        'ordermedicine': !exists(json, 'ordermedicine') ? undefined : ((json['ordermedicine'] as Array<any>).map(EntOrderFromJSON)),
-        'unitOfMedicine': !exists(json, 'unitOfMedicine') ? undefined : EntUnitOfMedicineFromJSON(json['unitOfMedicine']),
+        'drugallergys': !exists(json, 'Drugallergys') ? undefined : ((json['Drugallergys'] as Array<any>).map(EntDrugAllergyFromJSON)),
+        'levelOfDangerous': !exists(json, 'LevelOfDangerous') ? undefined : EntLevelOfDangerousFromJSON(json['LevelOfDangerous']),
+        'medicineType': !exists(json, 'MedicineType') ? undefined : EntMedicineTypeFromJSON(json['MedicineType']),
+        'medicinepresciption': !exists(json, 'Medicinepresciption') ? undefined : ((json['Medicinepresciption'] as Array<any>).map(EntPrescriptionFromJSON)),
+        'ordermedicine': !exists(json, 'Ordermedicine') ? undefined : ((json['Ordermedicine'] as Array<any>).map(EntOrderFromJSON)),
+        'unitOfMedicine': !exists(json, 'UnitOfMedicine') ? undefined : EntUnitOfMedicineFromJSON(json['UnitOfMedicine']),
     };
 }
 

@@ -18,6 +18,7 @@ import (
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/predicate"
 	"github.com/sut63/team01/ent/prescription"
+	"github.com/sut63/team01/ent/status"
 )
 
 // PrescriptionQuery is the builder for querying Prescription entities.
@@ -32,6 +33,7 @@ type PrescriptionQuery struct {
 	withPrescriptionpatient  *PatientInfoQuery
 	withPrescriptiondoctor   *DoctorQuery
 	withPrescriptionmedicine *MedicineQuery
+	withPrescriptonstatus    *StatusQuery
 	withDispensemedicine     *DispenseMedicineQuery
 	withFKs                  bool
 	// intermediate query (i.e. traversal path).
@@ -110,6 +112,24 @@ func (pq *PrescriptionQuery) QueryPrescriptionmedicine() *MedicineQuery {
 			sqlgraph.From(prescription.Table, prescription.FieldID, pq.sqlQuery()),
 			sqlgraph.To(medicine.Table, medicine.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, prescription.PrescriptionmedicineTable, prescription.PrescriptionmedicineColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPrescriptonstatus chains the current query on the prescriptonstatus edge.
+func (pq *PrescriptionQuery) QueryPrescriptonstatus() *StatusQuery {
+	query := &StatusQuery{config: pq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(prescription.Table, prescription.FieldID, pq.sqlQuery()),
+			sqlgraph.To(status.Table, status.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, prescription.PrescriptonstatusTable, prescription.PrescriptonstatusColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -347,6 +367,17 @@ func (pq *PrescriptionQuery) WithPrescriptionmedicine(opts ...func(*MedicineQuer
 	return pq
 }
 
+//  WithPrescriptonstatus tells the query-builder to eager-loads the nodes that are connected to
+// the "prescriptonstatus" edge. The optional arguments used to configure the query builder of the edge.
+func (pq *PrescriptionQuery) WithPrescriptonstatus(opts ...func(*StatusQuery)) *PrescriptionQuery {
+	query := &StatusQuery{config: pq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withPrescriptonstatus = query
+	return pq
+}
+
 //  WithDispensemedicine tells the query-builder to eager-loads the nodes that are connected to
 // the "dispensemedicine" edge. The optional arguments used to configure the query builder of the edge.
 func (pq *PrescriptionQuery) WithDispensemedicine(opts ...func(*DispenseMedicineQuery)) *PrescriptionQuery {
@@ -425,14 +456,15 @@ func (pq *PrescriptionQuery) sqlAll(ctx context.Context) ([]*Prescription, error
 		nodes       = []*Prescription{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			pq.withPrescriptionpatient != nil,
 			pq.withPrescriptiondoctor != nil,
 			pq.withPrescriptionmedicine != nil,
+			pq.withPrescriptonstatus != nil,
 			pq.withDispensemedicine != nil,
 		}
 	)
-	if pq.withPrescriptionpatient != nil || pq.withPrescriptiondoctor != nil || pq.withPrescriptionmedicine != nil {
+	if pq.withPrescriptionpatient != nil || pq.withPrescriptiondoctor != nil || pq.withPrescriptionmedicine != nil || pq.withPrescriptonstatus != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -533,6 +565,31 @@ func (pq *PrescriptionQuery) sqlAll(ctx context.Context) ([]*Prescription, error
 			}
 			for i := range nodes {
 				nodes[i].Edges.Prescriptionmedicine = n
+			}
+		}
+	}
+
+	if query := pq.withPrescriptonstatus; query != nil {
+		ids := make([]int, 0, len(nodes))
+		nodeids := make(map[int][]*Prescription)
+		for i := range nodes {
+			if fk := nodes[i].status_id; fk != nil {
+				ids = append(ids, *fk)
+				nodeids[*fk] = append(nodeids[*fk], nodes[i])
+			}
+		}
+		query.Where(status.IDIn(ids...))
+		neighbors, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, n := range neighbors {
+			nodes, ok := nodeids[n.ID]
+			if !ok {
+				return nil, fmt.Errorf(`unexpected foreign-key "status_id" returned %v`, n.ID)
+			}
+			for i := range nodes {
+				nodes[i].Edges.Prescriptonstatus = n
 			}
 		}
 	}

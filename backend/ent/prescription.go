@@ -12,6 +12,7 @@ import (
 	"github.com/sut63/team01/ent/medicine"
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/prescription"
+	"github.com/sut63/team01/ent/status"
 )
 
 // Prescription is the model entity for the Prescription schema.
@@ -21,12 +22,17 @@ type Prescription struct {
 	ID int `json:"id,omitempty"`
 	// Value holds the value of the "Value" field.
 	Value int `json:"Value,omitempty"`
+	// Symptom holds the value of the "Symptom" field.
+	Symptom string `json:"Symptom,omitempty"`
+	// Annotation holds the value of the "Annotation" field.
+	Annotation string `json:"Annotation,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PrescriptionQuery when eager-loading is set.
 	Edges       PrescriptionEdges `json:"edges"`
 	doctor_id   *int
 	medicine_id *int
 	patient_id  *int
+	status_id   *int
 }
 
 // PrescriptionEdges holds the relations/edges for other nodes in the graph.
@@ -37,11 +43,13 @@ type PrescriptionEdges struct {
 	Prescriptiondoctor *Doctor
 	// Prescriptionmedicine holds the value of the prescriptionmedicine edge.
 	Prescriptionmedicine *Medicine
+	// Prescriptonstatus holds the value of the prescriptonstatus edge.
+	Prescriptonstatus *Status
 	// Dispensemedicine holds the value of the dispensemedicine edge.
 	Dispensemedicine *DispenseMedicine
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 }
 
 // PrescriptionpatientOrErr returns the Prescriptionpatient value or an error if the edge
@@ -86,10 +94,24 @@ func (e PrescriptionEdges) PrescriptionmedicineOrErr() (*Medicine, error) {
 	return nil, &NotLoadedError{edge: "prescriptionmedicine"}
 }
 
+// PrescriptonstatusOrErr returns the Prescriptonstatus value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e PrescriptionEdges) PrescriptonstatusOrErr() (*Status, error) {
+	if e.loadedTypes[3] {
+		if e.Prescriptonstatus == nil {
+			// The edge prescriptonstatus was loaded in eager-loading,
+			// but was not found.
+			return nil, &NotFoundError{label: status.Label}
+		}
+		return e.Prescriptonstatus, nil
+	}
+	return nil, &NotLoadedError{edge: "prescriptonstatus"}
+}
+
 // DispensemedicineOrErr returns the Dispensemedicine value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e PrescriptionEdges) DispensemedicineOrErr() (*DispenseMedicine, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		if e.Dispensemedicine == nil {
 			// The edge dispensemedicine was loaded in eager-loading,
 			// but was not found.
@@ -103,8 +125,10 @@ func (e PrescriptionEdges) DispensemedicineOrErr() (*DispenseMedicine, error) {
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Prescription) scanValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{}, // id
-		&sql.NullInt64{}, // Value
+		&sql.NullInt64{},  // id
+		&sql.NullInt64{},  // Value
+		&sql.NullString{}, // Symptom
+		&sql.NullString{}, // Annotation
 	}
 }
 
@@ -114,6 +138,7 @@ func (*Prescription) fkValues() []interface{} {
 		&sql.NullInt64{}, // doctor_id
 		&sql.NullInt64{}, // medicine_id
 		&sql.NullInt64{}, // patient_id
+		&sql.NullInt64{}, // status_id
 	}
 }
 
@@ -134,7 +159,17 @@ func (pr *Prescription) assignValues(values ...interface{}) error {
 	} else if value.Valid {
 		pr.Value = int(value.Int64)
 	}
-	values = values[1:]
+	if value, ok := values[1].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field Symptom", values[1])
+	} else if value.Valid {
+		pr.Symptom = value.String
+	}
+	if value, ok := values[2].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field Annotation", values[2])
+	} else if value.Valid {
+		pr.Annotation = value.String
+	}
+	values = values[3:]
 	if len(values) == len(prescription.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field doctor_id", value)
@@ -154,6 +189,12 @@ func (pr *Prescription) assignValues(values ...interface{}) error {
 			pr.patient_id = new(int)
 			*pr.patient_id = int(value.Int64)
 		}
+		if value, ok := values[3].(*sql.NullInt64); !ok {
+			return fmt.Errorf("unexpected type %T for edge-field status_id", value)
+		} else if value.Valid {
+			pr.status_id = new(int)
+			*pr.status_id = int(value.Int64)
+		}
 	}
 	return nil
 }
@@ -171,6 +212,11 @@ func (pr *Prescription) QueryPrescriptiondoctor() *DoctorQuery {
 // QueryPrescriptionmedicine queries the prescriptionmedicine edge of the Prescription.
 func (pr *Prescription) QueryPrescriptionmedicine() *MedicineQuery {
 	return (&PrescriptionClient{config: pr.config}).QueryPrescriptionmedicine(pr)
+}
+
+// QueryPrescriptonstatus queries the prescriptonstatus edge of the Prescription.
+func (pr *Prescription) QueryPrescriptonstatus() *StatusQuery {
+	return (&PrescriptionClient{config: pr.config}).QueryPrescriptonstatus(pr)
 }
 
 // QueryDispensemedicine queries the dispensemedicine edge of the Prescription.
@@ -203,6 +249,10 @@ func (pr *Prescription) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", pr.ID))
 	builder.WriteString(", Value=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Value))
+	builder.WriteString(", Symptom=")
+	builder.WriteString(pr.Symptom)
+	builder.WriteString(", Annotation=")
+	builder.WriteString(pr.Annotation)
 	builder.WriteByte(')')
 	return builder.String()
 }

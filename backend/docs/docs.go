@@ -889,6 +889,55 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "put": {
+                "description": "update Prescription by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update a Prescription entity by ID",
+                "operationId": "update-Prescription",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Prescription ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Prescription entity",
+                        "name": "Prescription",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.Prescription"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Prescription"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
             }
         },
         "/UnitOfMedicine": {
@@ -3013,6 +3062,183 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/statuss": {
+            "get": {
+                "description": "list status entities",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List status entities",
+                "operationId": "list-status",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.Status"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create status",
+                "operationId": "create-status",
+                "parameters": [
+                    {
+                        "description": "Status entity",
+                        "name": "status",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.Status"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Status"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/statuss/{id}": {
+            "get": {
+                "description": "get status by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a status entity by ID",
+                "operationId": "get-status",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Status ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Status"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "get status by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete a status entity by ID",
+                "operationId": "delete-status",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Status ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -3111,6 +3337,9 @@ var doc = `{
         "controllers.Prescription": {
             "type": "object",
             "properties": {
+                "annotation": {
+                    "type": "string"
+                },
                 "doctorID": {
                     "type": "integer"
                 },
@@ -3119,6 +3348,12 @@ var doc = `{
                 },
                 "patientInfoID": {
                     "type": "integer"
+                },
+                "statusID": {
+                    "type": "integer"
+                },
+                "symptom": {
+                    "type": "string"
                 },
                 "value": {
                     "type": "string"
@@ -3672,6 +3907,14 @@ var doc = `{
         "ent.Prescription": {
             "type": "object",
             "properties": {
+                "Annotation": {
+                    "description": "Annotation holds the value of the \"Annotation\" field.",
+                    "type": "string"
+                },
+                "Symptom": {
+                    "description": "Symptom holds the value of the \"Symptom\" field.",
+                    "type": "string"
+                },
                 "Value": {
                     "description": "Value holds the value of the \"Value\" field.",
                     "type": "integer"
@@ -3709,6 +3952,41 @@ var doc = `{
                     "description": "Prescriptionpatient holds the value of the prescriptionpatient edge.",
                     "type": "object",
                     "$ref": "#/definitions/ent.PatientInfo"
+                },
+                "prescriptonstatus": {
+                    "description": "Prescriptonstatus holds the value of the prescriptonstatus edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.Status"
+                }
+            }
+        },
+        "ent.Status": {
+            "type": "object",
+            "properties": {
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the StatusQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.StatusEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "Status holds the value of the \"status\" field.",
+                    "type": "string"
+                }
+            }
+        },
+        "ent.StatusEdges": {
+            "type": "object",
+            "properties": {
+                "statusprescription": {
+                    "description": "Statusprescription holds the value of the statusprescription edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Prescription"
+                    }
                 }
             }
         },

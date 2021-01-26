@@ -9,6 +9,10 @@ const (
 	FieldID = "id"
 	// FieldValue holds the string denoting the value field in the database.
 	FieldValue = "value"
+	// FieldSymptom holds the string denoting the symptom field in the database.
+	FieldSymptom = "symptom"
+	// FieldAnnotation holds the string denoting the annotation field in the database.
+	FieldAnnotation = "annotation"
 
 	// EdgePrescriptionpatient holds the string denoting the prescriptionpatient edge name in mutations.
 	EdgePrescriptionpatient = "prescriptionpatient"
@@ -16,6 +20,8 @@ const (
 	EdgePrescriptiondoctor = "prescriptiondoctor"
 	// EdgePrescriptionmedicine holds the string denoting the prescriptionmedicine edge name in mutations.
 	EdgePrescriptionmedicine = "prescriptionmedicine"
+	// EdgePrescriptonstatus holds the string denoting the prescriptonstatus edge name in mutations.
+	EdgePrescriptonstatus = "prescriptonstatus"
 	// EdgeDispensemedicine holds the string denoting the dispensemedicine edge name in mutations.
 	EdgeDispensemedicine = "dispensemedicine"
 
@@ -42,6 +48,13 @@ const (
 	PrescriptionmedicineInverseTable = "medicines"
 	// PrescriptionmedicineColumn is the table column denoting the prescriptionmedicine relation/edge.
 	PrescriptionmedicineColumn = "medicine_id"
+	// PrescriptonstatusTable is the table the holds the prescriptonstatus relation/edge.
+	PrescriptonstatusTable = "prescriptions"
+	// PrescriptonstatusInverseTable is the table name for the Status entity.
+	// It exists in this package in order to avoid circular dependency with the "status" package.
+	PrescriptonstatusInverseTable = "status"
+	// PrescriptonstatusColumn is the table column denoting the prescriptonstatus relation/edge.
+	PrescriptonstatusColumn = "status_id"
 	// DispensemedicineTable is the table the holds the dispensemedicine relation/edge.
 	DispensemedicineTable = "dispense_medicines"
 	// DispensemedicineInverseTable is the table name for the DispenseMedicine entity.
@@ -55,6 +68,8 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldValue,
+	FieldSymptom,
+	FieldAnnotation,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Prescription type.
@@ -62,4 +77,14 @@ var ForeignKeys = []string{
 	"doctor_id",
 	"medicine_id",
 	"patient_id",
+	"status_id",
 }
+
+var (
+	// ValueValidator is a validator for the "Value" field. It is called by the builders before save.
+	ValueValidator func(int) error
+	// SymptomValidator is a validator for the "Symptom" field. It is called by the builders before save.
+	SymptomValidator func(string) error
+	// AnnotationValidator is a validator for the "Annotation" field. It is called by the builders before save.
+	AnnotationValidator func(string) error
+)

@@ -191,6 +191,19 @@ func (f PrescriptionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value
 	return f(ctx, mv)
 }
 
+// The StatusFunc type is an adapter to allow the use of ordinary
+// function as Status mutator.
+type StatusFunc func(context.Context, *ent.StatusMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f StatusFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.StatusMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.StatusMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The UnitOfMedicineFunc type is an adapter to allow the use of ordinary
 // function as UnitOfMedicine mutator.
 type UnitOfMedicineFunc func(context.Context, *ent.UnitOfMedicineMutation) (ent.Value, error)

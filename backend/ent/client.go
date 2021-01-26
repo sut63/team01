@@ -23,6 +23,7 @@ import (
 	"github.com/sut63/team01/ent/payment"
 	"github.com/sut63/team01/ent/pharmacist"
 	"github.com/sut63/team01/ent/prescription"
+	"github.com/sut63/team01/ent/status"
 	"github.com/sut63/team01/ent/unitofmedicine"
 
 	"github.com/facebookincubator/ent/dialect"
@@ -63,6 +64,8 @@ type Client struct {
 	Pharmacist *PharmacistClient
 	// Prescription is the client for interacting with the Prescription builders.
 	Prescription *PrescriptionClient
+	// Status is the client for interacting with the Status builders.
+	Status *StatusClient
 	// UnitOfMedicine is the client for interacting with the UnitOfMedicine builders.
 	UnitOfMedicine *UnitOfMedicineClient
 }
@@ -92,6 +95,7 @@ func (c *Client) init() {
 	c.Payment = NewPaymentClient(c.config)
 	c.Pharmacist = NewPharmacistClient(c.config)
 	c.Prescription = NewPrescriptionClient(c.config)
+	c.Status = NewStatusClient(c.config)
 	c.UnitOfMedicine = NewUnitOfMedicineClient(c.config)
 }
 
@@ -139,6 +143,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Payment:          NewPaymentClient(cfg),
 		Pharmacist:       NewPharmacistClient(cfg),
 		Prescription:     NewPrescriptionClient(cfg),
+		Status:           NewStatusClient(cfg),
 		UnitOfMedicine:   NewUnitOfMedicineClient(cfg),
 	}, nil
 }
@@ -169,6 +174,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Payment:          NewPaymentClient(cfg),
 		Pharmacist:       NewPharmacistClient(cfg),
 		Prescription:     NewPrescriptionClient(cfg),
+		Status:           NewStatusClient(cfg),
 		UnitOfMedicine:   NewUnitOfMedicineClient(cfg),
 	}, nil
 }
@@ -212,6 +218,7 @@ func (c *Client) Use(hooks ...Hook) {
 	c.Payment.Use(hooks...)
 	c.Pharmacist.Use(hooks...)
 	c.Prescription.Use(hooks...)
+	c.Status.Use(hooks...)
 	c.UnitOfMedicine.Use(hooks...)
 }
 
@@ -1916,6 +1923,22 @@ func (c *PrescriptionClient) QueryPrescriptionmedicine(pr *Prescription) *Medici
 	return query
 }
 
+// QueryPrescriptonstatus queries the prescriptonstatus edge of a Prescription.
+func (c *PrescriptionClient) QueryPrescriptonstatus(pr *Prescription) *StatusQuery {
+	query := &StatusQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(prescription.Table, prescription.FieldID, id),
+			sqlgraph.To(status.Table, status.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, prescription.PrescriptonstatusTable, prescription.PrescriptonstatusColumn),
+		)
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryDispensemedicine queries the dispensemedicine edge of a Prescription.
 func (c *PrescriptionClient) QueryDispensemedicine(pr *Prescription) *DispenseMedicineQuery {
 	query := &DispenseMedicineQuery{config: c.config}
@@ -1935,6 +1958,105 @@ func (c *PrescriptionClient) QueryDispensemedicine(pr *Prescription) *DispenseMe
 // Hooks returns the client hooks.
 func (c *PrescriptionClient) Hooks() []Hook {
 	return c.hooks.Prescription
+}
+
+// StatusClient is a client for the Status schema.
+type StatusClient struct {
+	config
+}
+
+// NewStatusClient returns a client for the Status from the given config.
+func NewStatusClient(c config) *StatusClient {
+	return &StatusClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `status.Hooks(f(g(h())))`.
+func (c *StatusClient) Use(hooks ...Hook) {
+	c.hooks.Status = append(c.hooks.Status, hooks...)
+}
+
+// Create returns a create builder for Status.
+func (c *StatusClient) Create() *StatusCreate {
+	mutation := newStatusMutation(c.config, OpCreate)
+	return &StatusCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Update returns an update builder for Status.
+func (c *StatusClient) Update() *StatusUpdate {
+	mutation := newStatusMutation(c.config, OpUpdate)
+	return &StatusUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *StatusClient) UpdateOne(s *Status) *StatusUpdateOne {
+	mutation := newStatusMutation(c.config, OpUpdateOne, withStatus(s))
+	return &StatusUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *StatusClient) UpdateOneID(id int) *StatusUpdateOne {
+	mutation := newStatusMutation(c.config, OpUpdateOne, withStatusID(id))
+	return &StatusUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Status.
+func (c *StatusClient) Delete() *StatusDelete {
+	mutation := newStatusMutation(c.config, OpDelete)
+	return &StatusDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *StatusClient) DeleteOne(s *Status) *StatusDeleteOne {
+	return c.DeleteOneID(s.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *StatusClient) DeleteOneID(id int) *StatusDeleteOne {
+	builder := c.Delete().Where(status.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &StatusDeleteOne{builder}
+}
+
+// Create returns a query builder for Status.
+func (c *StatusClient) Query() *StatusQuery {
+	return &StatusQuery{config: c.config}
+}
+
+// Get returns a Status entity by its id.
+func (c *StatusClient) Get(ctx context.Context, id int) (*Status, error) {
+	return c.Query().Where(status.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *StatusClient) GetX(ctx context.Context, id int) *Status {
+	s, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return s
+}
+
+// QueryStatusprescription queries the statusprescription edge of a Status.
+func (c *StatusClient) QueryStatusprescription(s *Status) *PrescriptionQuery {
+	query := &PrescriptionQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(status.Table, status.FieldID, id),
+			sqlgraph.To(prescription.Table, prescription.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, status.StatusprescriptionTable, status.StatusprescriptionColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *StatusClient) Hooks() []Hook {
+	return c.hooks.Status
 }
 
 // UnitOfMedicineClient is a client for the UnitOfMedicine schema.

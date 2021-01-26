@@ -1,6 +1,7 @@
 package schema
 
 import (
+	//"regexp"
 	"github.com/facebookincubator/ent"
 	"github.com/facebookincubator/ent/schema/edge"
 	"github.com/facebookincubator/ent/schema/field"
@@ -14,7 +15,9 @@ type Prescription struct {
 // Fields of the Prescription.
 func (Prescription) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int("Value"),
+		field.Int("Value").Positive(),
+		field.String("Symptom").NotEmpty(),
+		field.String("Annotation").NotEmpty(),
 	}
 }
 
@@ -24,6 +27,7 @@ func (Prescription) Edges() []ent.Edge {
 		edge.From("prescriptionpatient", PatientInfo.Type).Ref("patientprescription").Unique(),
 		edge.From("prescriptiondoctor", Doctor.Type).Ref("doctorprescription").Unique(),
 		edge.From("prescriptionmedicine", Medicine.Type).Ref("medicinepresciption").Unique(),
+		edge.From("prescriptonstatus", Status.Type).Ref("statusprescription").Unique(),
 		edge.To("dispensemedicine", DispenseMedicine.Type).Unique().StorageKey(edge.Column("prescription_id")),
 	}
 }

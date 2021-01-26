@@ -94,6 +94,8 @@ type Prescription struct {
 	PatientInfoID int
 	MedicineID    int
 	Value         int
+	Symptom       string
+	Annotation    string
 }
 
 //Doctors Structure
@@ -106,6 +108,14 @@ type Doctor struct {
 	email    string
 	password string
 	name     string
+}
+
+type Statuss struct {
+	Status []Status
+}
+
+type Status struct {
+	StatusPrescription string
 }
 
 // MedicineTypes structer input data
@@ -249,6 +259,7 @@ func main() {
 	controllers.NewLevelOfDangerousController(v1, client)
 	controllers.NewMedicineController(v1, client)
 	controllers.NewPaymentController(v1, client)
+	controllers.NewStatusController(v1, client)
 
 	//Set PatientInfos Data
 	Patient := PatientInfos{
@@ -339,6 +350,23 @@ func main() {
 			Save(context.Background())
 	}
 
+	// set status Data for checkout
+	statuss := Statuss{
+		Status: []Status{
+			Status{"สั่งจ่ายยาเรียบร้อย"},
+			Status{"ไม่พบการสั่งจ่ายยา"},
+			
+		},
+	}
+
+	for _, sc := range statuss.Status {
+		client.Status.
+			Create().
+			SetStatus(sc.StatusPrescription).
+			Save(context.Background())
+	}
+
+
 	// Set MedicineTypes Data
 	MedicineTypes := MedicineTypes{
 		MedicineType: []MedicineType{
@@ -415,7 +443,7 @@ func main() {
 	//Set Prescription Data
 	Pres := Prescriptions{
 		Prescription: []Prescription{
-			Prescription{1, 1, 1, 15},
+			Prescription{1, 1, 1, 15, "ปวดหัว", "ไม่มี"},
 		},
 	}
 
@@ -451,6 +479,8 @@ func main() {
 		client.Prescription.
 			Create().
 			SetValue(pci.Value).
+			SetSymptom(pci.Symptom).
+			SetAnnotation(pci.Annotation).
 			SetPrescriptionpatient(pif).
 			SetPrescriptiondoctor(dtr).
 			SetPrescriptionmedicine(mdc).

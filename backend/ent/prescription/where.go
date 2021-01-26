@@ -98,6 +98,20 @@ func Value(v int) predicate.Prescription {
 	})
 }
 
+// Symptom applies equality check predicate on the "Symptom" field. It's identical to SymptomEQ.
+func Symptom(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSymptom), v))
+	})
+}
+
+// Annotation applies equality check predicate on the "Annotation" field. It's identical to AnnotationEQ.
+func Annotation(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAnnotation), v))
+	})
+}
+
 // ValueEQ applies the EQ predicate on the "Value" field.
 func ValueEQ(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
@@ -171,6 +185,228 @@ func ValueLT(v int) predicate.Prescription {
 func ValueLTE(v int) predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldValue), v))
+	})
+}
+
+// SymptomEQ applies the EQ predicate on the "Symptom" field.
+func SymptomEQ(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomNEQ applies the NEQ predicate on the "Symptom" field.
+func SymptomNEQ(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomIn applies the In predicate on the "Symptom" field.
+func SymptomIn(vs ...string) predicate.Prescription {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Prescription(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldSymptom), v...))
+	})
+}
+
+// SymptomNotIn applies the NotIn predicate on the "Symptom" field.
+func SymptomNotIn(vs ...string) predicate.Prescription {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Prescription(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldSymptom), v...))
+	})
+}
+
+// SymptomGT applies the GT predicate on the "Symptom" field.
+func SymptomGT(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomGTE applies the GTE predicate on the "Symptom" field.
+func SymptomGTE(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomLT applies the LT predicate on the "Symptom" field.
+func SymptomLT(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomLTE applies the LTE predicate on the "Symptom" field.
+func SymptomLTE(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomContains applies the Contains predicate on the "Symptom" field.
+func SymptomContains(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomHasPrefix applies the HasPrefix predicate on the "Symptom" field.
+func SymptomHasPrefix(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomHasSuffix applies the HasSuffix predicate on the "Symptom" field.
+func SymptomHasSuffix(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomEqualFold applies the EqualFold predicate on the "Symptom" field.
+func SymptomEqualFold(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldSymptom), v))
+	})
+}
+
+// SymptomContainsFold applies the ContainsFold predicate on the "Symptom" field.
+func SymptomContainsFold(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldSymptom), v))
+	})
+}
+
+// AnnotationEQ applies the EQ predicate on the "Annotation" field.
+func AnnotationEQ(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationNEQ applies the NEQ predicate on the "Annotation" field.
+func AnnotationNEQ(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationIn applies the In predicate on the "Annotation" field.
+func AnnotationIn(vs ...string) predicate.Prescription {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Prescription(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldAnnotation), v...))
+	})
+}
+
+// AnnotationNotIn applies the NotIn predicate on the "Annotation" field.
+func AnnotationNotIn(vs ...string) predicate.Prescription {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Prescription(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldAnnotation), v...))
+	})
+}
+
+// AnnotationGT applies the GT predicate on the "Annotation" field.
+func AnnotationGT(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationGTE applies the GTE predicate on the "Annotation" field.
+func AnnotationGTE(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationLT applies the LT predicate on the "Annotation" field.
+func AnnotationLT(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationLTE applies the LTE predicate on the "Annotation" field.
+func AnnotationLTE(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationContains applies the Contains predicate on the "Annotation" field.
+func AnnotationContains(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationHasPrefix applies the HasPrefix predicate on the "Annotation" field.
+func AnnotationHasPrefix(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationHasSuffix applies the HasSuffix predicate on the "Annotation" field.
+func AnnotationHasSuffix(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationEqualFold applies the EqualFold predicate on the "Annotation" field.
+func AnnotationEqualFold(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldAnnotation), v))
+	})
+}
+
+// AnnotationContainsFold applies the ContainsFold predicate on the "Annotation" field.
+func AnnotationContainsFold(v string) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldAnnotation), v))
 	})
 }
 
@@ -249,6 +485,34 @@ func HasPrescriptionmedicineWith(preds ...predicate.Medicine) predicate.Prescrip
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.To(PrescriptionmedicineInverseTable, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, PrescriptionmedicineTable, PrescriptionmedicineColumn),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPrescriptonstatus applies the HasEdge predicate on the "prescriptonstatus" edge.
+func HasPrescriptonstatus() predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(PrescriptonstatusTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, PrescriptonstatusTable, PrescriptonstatusColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPrescriptonstatusWith applies the HasEdge predicate on the "prescriptonstatus" edge with a given conditions (other predicates).
+func HasPrescriptonstatusWith(preds ...predicate.Status) predicate.Prescription {
+	return predicate.Prescription(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(PrescriptonstatusInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, PrescriptonstatusTable, PrescriptonstatusColumn),
 		)
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

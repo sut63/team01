@@ -73,6 +73,7 @@ export const AppSidebar = () => (
           to="Prescription"
           text="สั่งจ่ายยา"
         />
+        
       ) : sPositionData == 'DispenseMedicine' ? (
         <SidebarItem
           icon={PostAddOutlinedIcon}

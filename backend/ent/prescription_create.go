@@ -14,6 +14,7 @@ import (
 	"github.com/sut63/team01/ent/medicine"
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/prescription"
+	"github.com/sut63/team01/ent/status"
 )
 
 // PrescriptionCreate is the builder for creating a Prescription entity.
@@ -26,6 +27,18 @@ type PrescriptionCreate struct {
 // SetValue sets the Value field.
 func (pc *PrescriptionCreate) SetValue(i int) *PrescriptionCreate {
 	pc.mutation.SetValue(i)
+	return pc
+}
+
+// SetSymptom sets the Symptom field.
+func (pc *PrescriptionCreate) SetSymptom(s string) *PrescriptionCreate {
+	pc.mutation.SetSymptom(s)
+	return pc
+}
+
+// SetAnnotation sets the Annotation field.
+func (pc *PrescriptionCreate) SetAnnotation(s string) *PrescriptionCreate {
+	pc.mutation.SetAnnotation(s)
 	return pc
 }
 
@@ -86,6 +99,25 @@ func (pc *PrescriptionCreate) SetPrescriptionmedicine(m *Medicine) *Prescription
 	return pc.SetPrescriptionmedicineID(m.ID)
 }
 
+// SetPrescriptonstatusID sets the prescriptonstatus edge to Status by id.
+func (pc *PrescriptionCreate) SetPrescriptonstatusID(id int) *PrescriptionCreate {
+	pc.mutation.SetPrescriptonstatusID(id)
+	return pc
+}
+
+// SetNillablePrescriptonstatusID sets the prescriptonstatus edge to Status by id if the given value is not nil.
+func (pc *PrescriptionCreate) SetNillablePrescriptonstatusID(id *int) *PrescriptionCreate {
+	if id != nil {
+		pc = pc.SetPrescriptonstatusID(*id)
+	}
+	return pc
+}
+
+// SetPrescriptonstatus sets the prescriptonstatus edge to Status.
+func (pc *PrescriptionCreate) SetPrescriptonstatus(s *Status) *PrescriptionCreate {
+	return pc.SetPrescriptonstatusID(s.ID)
+}
+
 // SetDispensemedicineID sets the dispensemedicine edge to DispenseMedicine by id.
 func (pc *PrescriptionCreate) SetDispensemedicineID(id int) *PrescriptionCreate {
 	pc.mutation.SetDispensemedicineID(id)
@@ -114,6 +146,27 @@ func (pc *PrescriptionCreate) Mutation() *PrescriptionMutation {
 func (pc *PrescriptionCreate) Save(ctx context.Context) (*Prescription, error) {
 	if _, ok := pc.mutation.Value(); !ok {
 		return nil, &ValidationError{Name: "Value", err: errors.New("ent: missing required field \"Value\"")}
+	}
+	if v, ok := pc.mutation.Value(); ok {
+		if err := prescription.ValueValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Value", err: fmt.Errorf("ent: validator failed for field \"Value\": %w", err)}
+		}
+	}
+	if _, ok := pc.mutation.Symptom(); !ok {
+		return nil, &ValidationError{Name: "Symptom", err: errors.New("ent: missing required field \"Symptom\"")}
+	}
+	if v, ok := pc.mutation.Symptom(); ok {
+		if err := prescription.SymptomValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Symptom", err: fmt.Errorf("ent: validator failed for field \"Symptom\": %w", err)}
+		}
+	}
+	if _, ok := pc.mutation.Annotation(); !ok {
+		return nil, &ValidationError{Name: "Annotation", err: errors.New("ent: missing required field \"Annotation\"")}
+	}
+	if v, ok := pc.mutation.Annotation(); ok {
+		if err := prescription.AnnotationValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Annotation", err: fmt.Errorf("ent: validator failed for field \"Annotation\": %w", err)}
+		}
 	}
 	var (
 		err  error
@@ -183,6 +236,22 @@ func (pc *PrescriptionCreate) createSpec() (*Prescription, *sqlgraph.CreateSpec)
 		})
 		pr.Value = value
 	}
+	if value, ok := pc.mutation.Symptom(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: prescription.FieldSymptom,
+		})
+		pr.Symptom = value
+	}
+	if value, ok := pc.mutation.Annotation(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: prescription.FieldAnnotation,
+		})
+		pr.Annotation = value
+	}
 	if nodes := pc.mutation.PrescriptionpatientIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -232,6 +301,25 @@ func (pc *PrescriptionCreate) createSpec() (*Prescription, *sqlgraph.CreateSpec)
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
 					Column: medicine.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.PrescriptonstatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   prescription.PrescriptonstatusTable,
+			Columns: []string{prescription.PrescriptonstatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: status.FieldID,
 				},
 			},
 		}

@@ -15,6 +15,7 @@ import (
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/predicate"
 	"github.com/sut63/team01/ent/prescription"
+	"github.com/sut63/team01/ent/status"
 )
 
 // PrescriptionUpdate is the builder for updating Prescription entities.
@@ -41,6 +42,18 @@ func (pu *PrescriptionUpdate) SetValue(i int) *PrescriptionUpdate {
 // AddValue adds i to Value.
 func (pu *PrescriptionUpdate) AddValue(i int) *PrescriptionUpdate {
 	pu.mutation.AddValue(i)
+	return pu
+}
+
+// SetSymptom sets the Symptom field.
+func (pu *PrescriptionUpdate) SetSymptom(s string) *PrescriptionUpdate {
+	pu.mutation.SetSymptom(s)
+	return pu
+}
+
+// SetAnnotation sets the Annotation field.
+func (pu *PrescriptionUpdate) SetAnnotation(s string) *PrescriptionUpdate {
+	pu.mutation.SetAnnotation(s)
 	return pu
 }
 
@@ -101,6 +114,25 @@ func (pu *PrescriptionUpdate) SetPrescriptionmedicine(m *Medicine) *Prescription
 	return pu.SetPrescriptionmedicineID(m.ID)
 }
 
+// SetPrescriptonstatusID sets the prescriptonstatus edge to Status by id.
+func (pu *PrescriptionUpdate) SetPrescriptonstatusID(id int) *PrescriptionUpdate {
+	pu.mutation.SetPrescriptonstatusID(id)
+	return pu
+}
+
+// SetNillablePrescriptonstatusID sets the prescriptonstatus edge to Status by id if the given value is not nil.
+func (pu *PrescriptionUpdate) SetNillablePrescriptonstatusID(id *int) *PrescriptionUpdate {
+	if id != nil {
+		pu = pu.SetPrescriptonstatusID(*id)
+	}
+	return pu
+}
+
+// SetPrescriptonstatus sets the prescriptonstatus edge to Status.
+func (pu *PrescriptionUpdate) SetPrescriptonstatus(s *Status) *PrescriptionUpdate {
+	return pu.SetPrescriptonstatusID(s.ID)
+}
+
 // SetDispensemedicineID sets the dispensemedicine edge to DispenseMedicine by id.
 func (pu *PrescriptionUpdate) SetDispensemedicineID(id int) *PrescriptionUpdate {
 	pu.mutation.SetDispensemedicineID(id)
@@ -143,6 +175,12 @@ func (pu *PrescriptionUpdate) ClearPrescriptionmedicine() *PrescriptionUpdate {
 	return pu
 }
 
+// ClearPrescriptonstatus clears the prescriptonstatus edge to Status.
+func (pu *PrescriptionUpdate) ClearPrescriptonstatus() *PrescriptionUpdate {
+	pu.mutation.ClearPrescriptonstatus()
+	return pu
+}
+
 // ClearDispensemedicine clears the dispensemedicine edge to DispenseMedicine.
 func (pu *PrescriptionUpdate) ClearDispensemedicine() *PrescriptionUpdate {
 	pu.mutation.ClearDispensemedicine()
@@ -151,6 +189,21 @@ func (pu *PrescriptionUpdate) ClearDispensemedicine() *PrescriptionUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (pu *PrescriptionUpdate) Save(ctx context.Context) (int, error) {
+	if v, ok := pu.mutation.Value(); ok {
+		if err := prescription.ValueValidator(v); err != nil {
+			return 0, &ValidationError{Name: "Value", err: fmt.Errorf("ent: validator failed for field \"Value\": %w", err)}
+		}
+	}
+	if v, ok := pu.mutation.Symptom(); ok {
+		if err := prescription.SymptomValidator(v); err != nil {
+			return 0, &ValidationError{Name: "Symptom", err: fmt.Errorf("ent: validator failed for field \"Symptom\": %w", err)}
+		}
+	}
+	if v, ok := pu.mutation.Annotation(); ok {
+		if err := prescription.AnnotationValidator(v); err != nil {
+			return 0, &ValidationError{Name: "Annotation", err: fmt.Errorf("ent: validator failed for field \"Annotation\": %w", err)}
+		}
+	}
 
 	var (
 		err      error
@@ -231,6 +284,20 @@ func (pu *PrescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeInt,
 			Value:  value,
 			Column: prescription.FieldValue,
+		})
+	}
+	if value, ok := pu.mutation.Symptom(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: prescription.FieldSymptom,
+		})
+	}
+	if value, ok := pu.mutation.Annotation(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: prescription.FieldAnnotation,
 		})
 	}
 	if pu.mutation.PrescriptionpatientCleared() {
@@ -338,6 +405,41 @@ func (pu *PrescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if pu.mutation.PrescriptonstatusCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   prescription.PrescriptonstatusTable,
+			Columns: []string{prescription.PrescriptonstatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: status.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.PrescriptonstatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   prescription.PrescriptonstatusTable,
+			Columns: []string{prescription.PrescriptonstatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: status.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if pu.mutation.DispensemedicineCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -404,6 +506,18 @@ func (puo *PrescriptionUpdateOne) AddValue(i int) *PrescriptionUpdateOne {
 	return puo
 }
 
+// SetSymptom sets the Symptom field.
+func (puo *PrescriptionUpdateOne) SetSymptom(s string) *PrescriptionUpdateOne {
+	puo.mutation.SetSymptom(s)
+	return puo
+}
+
+// SetAnnotation sets the Annotation field.
+func (puo *PrescriptionUpdateOne) SetAnnotation(s string) *PrescriptionUpdateOne {
+	puo.mutation.SetAnnotation(s)
+	return puo
+}
+
 // SetPrescriptionpatientID sets the prescriptionpatient edge to PatientInfo by id.
 func (puo *PrescriptionUpdateOne) SetPrescriptionpatientID(id int) *PrescriptionUpdateOne {
 	puo.mutation.SetPrescriptionpatientID(id)
@@ -461,6 +575,25 @@ func (puo *PrescriptionUpdateOne) SetPrescriptionmedicine(m *Medicine) *Prescrip
 	return puo.SetPrescriptionmedicineID(m.ID)
 }
 
+// SetPrescriptonstatusID sets the prescriptonstatus edge to Status by id.
+func (puo *PrescriptionUpdateOne) SetPrescriptonstatusID(id int) *PrescriptionUpdateOne {
+	puo.mutation.SetPrescriptonstatusID(id)
+	return puo
+}
+
+// SetNillablePrescriptonstatusID sets the prescriptonstatus edge to Status by id if the given value is not nil.
+func (puo *PrescriptionUpdateOne) SetNillablePrescriptonstatusID(id *int) *PrescriptionUpdateOne {
+	if id != nil {
+		puo = puo.SetPrescriptonstatusID(*id)
+	}
+	return puo
+}
+
+// SetPrescriptonstatus sets the prescriptonstatus edge to Status.
+func (puo *PrescriptionUpdateOne) SetPrescriptonstatus(s *Status) *PrescriptionUpdateOne {
+	return puo.SetPrescriptonstatusID(s.ID)
+}
+
 // SetDispensemedicineID sets the dispensemedicine edge to DispenseMedicine by id.
 func (puo *PrescriptionUpdateOne) SetDispensemedicineID(id int) *PrescriptionUpdateOne {
 	puo.mutation.SetDispensemedicineID(id)
@@ -503,6 +636,12 @@ func (puo *PrescriptionUpdateOne) ClearPrescriptionmedicine() *PrescriptionUpdat
 	return puo
 }
 
+// ClearPrescriptonstatus clears the prescriptonstatus edge to Status.
+func (puo *PrescriptionUpdateOne) ClearPrescriptonstatus() *PrescriptionUpdateOne {
+	puo.mutation.ClearPrescriptonstatus()
+	return puo
+}
+
 // ClearDispensemedicine clears the dispensemedicine edge to DispenseMedicine.
 func (puo *PrescriptionUpdateOne) ClearDispensemedicine() *PrescriptionUpdateOne {
 	puo.mutation.ClearDispensemedicine()
@@ -511,6 +650,21 @@ func (puo *PrescriptionUpdateOne) ClearDispensemedicine() *PrescriptionUpdateOne
 
 // Save executes the query and returns the updated entity.
 func (puo *PrescriptionUpdateOne) Save(ctx context.Context) (*Prescription, error) {
+	if v, ok := puo.mutation.Value(); ok {
+		if err := prescription.ValueValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Value", err: fmt.Errorf("ent: validator failed for field \"Value\": %w", err)}
+		}
+	}
+	if v, ok := puo.mutation.Symptom(); ok {
+		if err := prescription.SymptomValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Symptom", err: fmt.Errorf("ent: validator failed for field \"Symptom\": %w", err)}
+		}
+	}
+	if v, ok := puo.mutation.Annotation(); ok {
+		if err := prescription.AnnotationValidator(v); err != nil {
+			return nil, &ValidationError{Name: "Annotation", err: fmt.Errorf("ent: validator failed for field \"Annotation\": %w", err)}
+		}
+	}
 
 	var (
 		err  error
@@ -589,6 +743,20 @@ func (puo *PrescriptionUpdateOne) sqlSave(ctx context.Context) (pr *Prescription
 			Type:   field.TypeInt,
 			Value:  value,
 			Column: prescription.FieldValue,
+		})
+	}
+	if value, ok := puo.mutation.Symptom(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: prescription.FieldSymptom,
+		})
+	}
+	if value, ok := puo.mutation.Annotation(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: prescription.FieldAnnotation,
 		})
 	}
 	if puo.mutation.PrescriptionpatientCleared() {
@@ -688,6 +856,41 @@ func (puo *PrescriptionUpdateOne) sqlSave(ctx context.Context) (pr *Prescription
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
 					Column: medicine.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.PrescriptonstatusCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   prescription.PrescriptonstatusTable,
+			Columns: []string{prescription.PrescriptonstatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: status.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.PrescriptonstatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   prescription.PrescriptonstatusTable,
+			Columns: []string{prescription.PrescriptonstatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: status.FieldID,
 				},
 			},
 		}

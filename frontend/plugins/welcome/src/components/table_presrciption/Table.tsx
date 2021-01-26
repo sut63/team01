@@ -25,7 +25,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 
 const Table: FC<{}> = () => {
-  const profile = { givenName: 'ระบบ ลงทะเบียนสิทธิ์' };
+  const profile = { givenName: 'ระบบค้นหารายการการสั่งจ่ายยา' };
   const http = new DefaultApi();
   const useStyles = makeStyles(theme => ({
     table: {
@@ -60,10 +60,10 @@ const getPatientInfo = async () => {
     <Page theme={pageTheme.home}>
       <Header
         title={`ยินดีต้อนรับ เข้าสู่ ${profile.givenName || 'to Backstage'}`}
-        subtitle="ของโรงบาล">
+       >
       </Header>
       <Content>
-        <ContentHeader title="ลงทะเบียนสิทธิ์">
+        <ContentHeader title="รายการการสั่งจ่ายยา">
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel>ผู้ป่วย</InputLabel>
             <Select
@@ -86,19 +86,18 @@ const getPatientInfo = async () => {
             }}
             style={{ marginLeft: 10 }}
             variant="contained"
-            color="primary"
+            color="primary" 
+            style={{ backgroundColor: "#66cc00" }}
           >
             ค้นหา
                </Button>&emsp;
          <Link component={RouterLink} to="/">
-            <Button variant="contained" color="primary">
-              Home
-           </Button>
+            <Button variant="contained" color="primary" style={{ backgroundColor: "#FFcc00" }}> Home</Button>
           </Link>&emsp;
 
-         <Link component={RouterLink} to="/create_Prescription">
-            <Button variant="contained" color="primary">
-              ลงทะเบียนสิทธิ์
+         <Link component={RouterLink} to="/Prescription">
+            <Button variant="contained" color="primary"  style={{ backgroundColor: "#FF6666" }}>
+              เพิ่มรายการ
            </Button>
           </Link>
 

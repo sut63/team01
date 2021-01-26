@@ -96,7 +96,7 @@ export const AppSidebar = () => (
             to="Prescription"
             text="สั่งจ่ายยา"
           />
-          <SidebarItem icon={SearchRoundedIcon} to="" text="ค้นหา------" />
+          <SidebarItem icon={SearchRoundedIcon} to="TablePrescription" text="ค้นหารายการการสั่งจ่ายยา" />
         </>
       ) : sPositionData == 'DispenseMedicine' ? (
         <>

@@ -12,7 +12,6 @@ import (
 	"github.com/sut63/team01/ent/medicine"
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/prescription"
-	"github.com/sut63/team01/ent/status"
 )
 
 // Prescription is the model entity for the Prescription schema.
@@ -32,7 +31,6 @@ type Prescription struct {
 	doctor_id   *int
 	medicine_id *int
 	patient_id  *int
-	status_id   *int
 }
 
 // PrescriptionEdges holds the relations/edges for other nodes in the graph.
@@ -43,13 +41,11 @@ type PrescriptionEdges struct {
 	Prescriptiondoctor *Doctor
 	// Prescriptionmedicine holds the value of the prescriptionmedicine edge.
 	Prescriptionmedicine *Medicine
-	// Prescriptonstatus holds the value of the prescriptonstatus edge.
-	Prescriptonstatus *Status
 	// Dispensemedicine holds the value of the dispensemedicine edge.
 	Dispensemedicine *DispenseMedicine
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [4]bool
 }
 
 // PrescriptionpatientOrErr returns the Prescriptionpatient value or an error if the edge
@@ -94,24 +90,10 @@ func (e PrescriptionEdges) PrescriptionmedicineOrErr() (*Medicine, error) {
 	return nil, &NotLoadedError{edge: "prescriptionmedicine"}
 }
 
-// PrescriptonstatusOrErr returns the Prescriptonstatus value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e PrescriptionEdges) PrescriptonstatusOrErr() (*Status, error) {
-	if e.loadedTypes[3] {
-		if e.Prescriptonstatus == nil {
-			// The edge prescriptonstatus was loaded in eager-loading,
-			// but was not found.
-			return nil, &NotFoundError{label: status.Label}
-		}
-		return e.Prescriptonstatus, nil
-	}
-	return nil, &NotLoadedError{edge: "prescriptonstatus"}
-}
-
 // DispensemedicineOrErr returns the Dispensemedicine value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e PrescriptionEdges) DispensemedicineOrErr() (*DispenseMedicine, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[3] {
 		if e.Dispensemedicine == nil {
 			// The edge dispensemedicine was loaded in eager-loading,
 			// but was not found.
@@ -138,7 +120,6 @@ func (*Prescription) fkValues() []interface{} {
 		&sql.NullInt64{}, // doctor_id
 		&sql.NullInt64{}, // medicine_id
 		&sql.NullInt64{}, // patient_id
-		&sql.NullInt64{}, // status_id
 	}
 }
 
@@ -189,12 +170,6 @@ func (pr *Prescription) assignValues(values ...interface{}) error {
 			pr.patient_id = new(int)
 			*pr.patient_id = int(value.Int64)
 		}
-		if value, ok := values[3].(*sql.NullInt64); !ok {
-			return fmt.Errorf("unexpected type %T for edge-field status_id", value)
-		} else if value.Valid {
-			pr.status_id = new(int)
-			*pr.status_id = int(value.Int64)
-		}
 	}
 	return nil
 }
@@ -212,11 +187,6 @@ func (pr *Prescription) QueryPrescriptiondoctor() *DoctorQuery {
 // QueryPrescriptionmedicine queries the prescriptionmedicine edge of the Prescription.
 func (pr *Prescription) QueryPrescriptionmedicine() *MedicineQuery {
 	return (&PrescriptionClient{config: pr.config}).QueryPrescriptionmedicine(pr)
-}
-
-// QueryPrescriptonstatus queries the prescriptonstatus edge of the Prescription.
-func (pr *Prescription) QueryPrescriptonstatus() *StatusQuery {
-	return (&PrescriptionClient{config: pr.config}).QueryPrescriptonstatus(pr)
 }
 
 // QueryDispensemedicine queries the dispensemedicine edge of the Prescription.

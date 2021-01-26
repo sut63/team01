@@ -9,6 +9,7 @@ import Medicine from './components/Medicine';
 import DispenseMedicine from './components/DispenseMedicine';
 import Order from './components/Order';
 import CreateBill from './components/createBill';
+import table_presrciption from './components/table_presrciption'
 
 export const plugin = createPlugin({
   id: 'welcome',
@@ -24,6 +25,7 @@ export const plugin = createPlugin({
     router.registerRoute('/Medicine', Medicine);
     //
     router.registerRoute('/Prescription', create_prescription);
+    router.registerRoute('/TablePrescription', table_presrciption);
     //
     router.registerRoute('/DispenseMedicine', DispenseMedicine);
     //

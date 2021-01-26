@@ -51,8 +51,5 @@ type PositionInPharmacist func(*sql.Selector)
 // Prescription is the predicate function for prescription builders.
 type Prescription func(*sql.Selector)
 
-// Status is the predicate function for status builders.
-type Status func(*sql.Selector)
-
 // UnitOfMedicine is the predicate function for unitofmedicine builders.
 type UnitOfMedicine func(*sql.Selector)

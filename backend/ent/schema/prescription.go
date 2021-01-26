@@ -27,7 +27,6 @@ func (Prescription) Edges() []ent.Edge {
 		edge.From("prescriptionpatient", PatientInfo.Type).Ref("patientprescription").Unique(),
 		edge.From("prescriptiondoctor", Doctor.Type).Ref("doctorprescription").Unique(),
 		edge.From("prescriptionmedicine", Medicine.Type).Ref("medicinepresciption").Unique(),
-		edge.From("prescriptonstatus", Status.Type).Ref("statusprescription").Unique(),
 		edge.To("dispensemedicine", DispenseMedicine.Type).Unique().StorageKey(edge.Column("prescription_id")),
 	}
 }

@@ -494,34 +494,6 @@ func HasPrescriptionmedicineWith(preds ...predicate.Medicine) predicate.Prescrip
 	})
 }
 
-// HasPrescriptonstatus applies the HasEdge predicate on the "prescriptonstatus" edge.
-func HasPrescriptonstatus() predicate.Prescription {
-	return predicate.Prescription(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(PrescriptonstatusTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, PrescriptonstatusTable, PrescriptonstatusColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasPrescriptonstatusWith applies the HasEdge predicate on the "prescriptonstatus" edge with a given conditions (other predicates).
-func HasPrescriptonstatusWith(preds ...predicate.Status) predicate.Prescription {
-	return predicate.Prescription(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(PrescriptonstatusInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, PrescriptonstatusTable, PrescriptonstatusColumn),
-		)
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasDispensemedicine applies the HasEdge predicate on the "dispensemedicine" edge.
 func HasDispensemedicine() predicate.Prescription {
 	return predicate.Prescription(func(s *sql.Selector) {

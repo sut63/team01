@@ -33,5 +33,7 @@ export * from './EntPositionInPharmacist';
 export * from './EntPositionInPharmacistEdges';
 export * from './EntPrescription';
 export * from './EntPrescriptionEdges';
+export * from './EntStatus';
+export * from './EntStatusEdges';
 export * from './EntUnitOfMedicine';
 export * from './EntUnitOfMedicineEdges';

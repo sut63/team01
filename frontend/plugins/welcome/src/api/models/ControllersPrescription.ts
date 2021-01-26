@@ -45,6 +45,12 @@ export interface ControllersPrescription {
     patientInfoID?: number;
     /**
      * 
+     * @type {number}
+     * @memberof ControllersPrescription
+     */
+    statusID?: number;
+    /**
+     * 
      * @type {string}
      * @memberof ControllersPrescription
      */
@@ -71,6 +77,7 @@ export function ControllersPrescriptionFromJSONTyped(json: any, ignoreDiscrimina
         'doctorID': !exists(json, 'doctorID') ? undefined : json['doctorID'],
         'medicineID': !exists(json, 'medicineID') ? undefined : json['medicineID'],
         'patientInfoID': !exists(json, 'patientInfoID') ? undefined : json['patientInfoID'],
+        'statusID': !exists(json, 'statusID') ? undefined : json['statusID'],
         'symptom': !exists(json, 'symptom') ? undefined : json['symptom'],
         'value': !exists(json, 'value') ? undefined : json['value'],
     };
@@ -89,6 +96,7 @@ export function ControllersPrescriptionToJSON(value?: ControllersPrescription | 
         'doctorID': value.doctorID,
         'medicineID': value.medicineID,
         'patientInfoID': value.patientInfoID,
+        'statusID': value.statusID,
         'symptom': value.symptom,
         'value': value.value,
     };

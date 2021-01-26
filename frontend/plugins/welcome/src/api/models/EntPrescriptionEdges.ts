@@ -30,6 +30,10 @@ import {
     EntPatientInfoFromJSON,
     EntPatientInfoFromJSONTyped,
     EntPatientInfoToJSON,
+    EntStatus,
+    EntStatusFromJSON,
+    EntStatusFromJSONTyped,
+    EntStatusToJSON,
 } from './';
 
 /**
@@ -62,6 +66,12 @@ export interface EntPrescriptionEdges {
      * @memberof EntPrescriptionEdges
      */
     prescriptionpatient?: EntPatientInfo;
+    /**
+     * 
+     * @type {EntStatus}
+     * @memberof EntPrescriptionEdges
+     */
+    prescriptonstatus?: EntStatus;
 }
 
 export function EntPrescriptionEdgesFromJSON(json: any): EntPrescriptionEdges {
@@ -78,6 +88,7 @@ export function EntPrescriptionEdgesFromJSONTyped(json: any, ignoreDiscriminator
         'prescriptiondoctor': !exists(json, 'prescriptiondoctor') ? undefined : EntDoctorFromJSON(json['prescriptiondoctor']),
         'prescriptionmedicine': !exists(json, 'prescriptionmedicine') ? undefined : EntMedicineFromJSON(json['prescriptionmedicine']),
         'prescriptionpatient': !exists(json, 'prescriptionpatient') ? undefined : EntPatientInfoFromJSON(json['prescriptionpatient']),
+        'prescriptonstatus': !exists(json, 'prescriptonstatus') ? undefined : EntStatusFromJSON(json['prescriptonstatus']),
     };
 }
 
@@ -94,6 +105,7 @@ export function EntPrescriptionEdgesToJSON(value?: EntPrescriptionEdges | null):
         'prescriptiondoctor': EntDoctorToJSON(value.prescriptiondoctor),
         'prescriptionmedicine': EntMedicineToJSON(value.prescriptionmedicine),
         'prescriptionpatient': EntPatientInfoToJSON(value.prescriptionpatient),
+        'prescriptonstatus': EntStatusToJSON(value.prescriptonstatus),
     };
 }
 

@@ -1802,7 +1802,7 @@ var doc = `{
                 "operationId": "get-dispensemedicine",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "DispenseMedicine ID",
                         "name": "id",
                         "in": "path",
@@ -1813,7 +1813,10 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ent.DispenseMedicine"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.DispenseMedicine"
+                            }
                         }
                     },
                     "400": {

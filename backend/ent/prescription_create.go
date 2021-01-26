@@ -14,7 +14,6 @@ import (
 	"github.com/sut63/team01/ent/medicine"
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/prescription"
-	"github.com/sut63/team01/ent/status"
 )
 
 // PrescriptionCreate is the builder for creating a Prescription entity.
@@ -97,25 +96,6 @@ func (pc *PrescriptionCreate) SetNillablePrescriptionmedicineID(id *int) *Prescr
 // SetPrescriptionmedicine sets the prescriptionmedicine edge to Medicine.
 func (pc *PrescriptionCreate) SetPrescriptionmedicine(m *Medicine) *PrescriptionCreate {
 	return pc.SetPrescriptionmedicineID(m.ID)
-}
-
-// SetPrescriptonstatusID sets the prescriptonstatus edge to Status by id.
-func (pc *PrescriptionCreate) SetPrescriptonstatusID(id int) *PrescriptionCreate {
-	pc.mutation.SetPrescriptonstatusID(id)
-	return pc
-}
-
-// SetNillablePrescriptonstatusID sets the prescriptonstatus edge to Status by id if the given value is not nil.
-func (pc *PrescriptionCreate) SetNillablePrescriptonstatusID(id *int) *PrescriptionCreate {
-	if id != nil {
-		pc = pc.SetPrescriptonstatusID(*id)
-	}
-	return pc
-}
-
-// SetPrescriptonstatus sets the prescriptonstatus edge to Status.
-func (pc *PrescriptionCreate) SetPrescriptonstatus(s *Status) *PrescriptionCreate {
-	return pc.SetPrescriptonstatusID(s.ID)
 }
 
 // SetDispensemedicineID sets the dispensemedicine edge to DispenseMedicine by id.
@@ -301,25 +281,6 @@ func (pc *PrescriptionCreate) createSpec() (*Prescription, *sqlgraph.CreateSpec)
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
 					Column: medicine.FieldID,
-				},
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := pc.mutation.PrescriptonstatusIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   prescription.PrescriptonstatusTable,
-			Columns: []string{prescription.PrescriptonstatusColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: status.FieldID,
 				},
 			},
 		}

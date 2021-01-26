@@ -42,8 +42,6 @@ type Tx struct {
 	PositionInPharmacist *PositionInPharmacistClient
 	// Prescription is the client for interacting with the Prescription builders.
 	Prescription *PrescriptionClient
-	// Status is the client for interacting with the Status builders.
-	Status *StatusClient
 	// UnitOfMedicine is the client for interacting with the UnitOfMedicine builders.
 	UnitOfMedicine *UnitOfMedicineClient
 
@@ -196,7 +194,6 @@ func (tx *Tx) init() {
 	tx.Pharmacist = NewPharmacistClient(tx.config)
 	tx.PositionInPharmacist = NewPositionInPharmacistClient(tx.config)
 	tx.Prescription = NewPrescriptionClient(tx.config)
-	tx.Status = NewStatusClient(tx.config)
 	tx.UnitOfMedicine = NewUnitOfMedicineClient(tx.config)
 }
 

@@ -85,12 +85,11 @@ export default function ComponentsTable(sim: any) {
                   <TableCell align="center">{item.id}</TableCell>
                   <TableCell align="center">{item.edges?.prescriptionpatient?.name}</TableCell>
                   <TableCell align="center">{item.edges?.prescriptiondoctor?.name}</TableCell>
-
                   <TableCell align="center">{item.edges?.prescriptionmedicine?.name}</TableCell>
                   <TableCell align="center">{item.value}</TableCell>
                   <TableCell align="center">{item.symptom}</TableCell>
                   <TableCell align="center">{item.annotation}</TableCell>
-  
+                  
                 </TableRow>
               ))}
           </TableBody>
@@ -103,7 +102,7 @@ export default function ComponentsTable(sim: any) {
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell align="center">ไม่พบสิทธ์</TableCell>
+              <TableCell align="center">ไม่พบรายการการสั่งจ่ายยาของผู้ป่วยที่ท่านค้นหา กรุณาเพิ่มรายการสั่งจ่ายยา</TableCell>
             </TableRow>
 
           </TableHead>

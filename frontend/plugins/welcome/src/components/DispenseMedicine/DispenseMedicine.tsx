@@ -17,6 +17,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TablePagination,
   Paper,
   Avatar,
   Select,
@@ -115,6 +116,21 @@ const DispenseMedicine: FC<{}> = () => {
   const [sNamePatient, setNamePatient] = useState(String);
   const [sNameDoctor, setNameDoctor] = useState(String);
 
+  //structure table page
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(7);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
   //structure check error
   const [
     amountchangemedicineInputError,
@@ -161,10 +177,10 @@ const DispenseMedicine: FC<{}> = () => {
   };
 
   const checkPosition = async () => {
-    if(cookies.get('PositionData') != 'DispenseMedicine'){
+    if (cookies.get('PositionData') != 'DispenseMedicine') {
       history.pushState('', '', '/' + cookies.get('PositionData'));
-      window.location.reload(false); 
-    }else{
+      window.location.reload(false);
+    } else {
       loadingUserData();
     }
   };
@@ -309,12 +325,11 @@ const DispenseMedicine: FC<{}> = () => {
           'ถ้าไม่มีรายละอียดหมายเหตุ กรุณาใส่เครื่องหมาย " - "',
         );
         return;
+
       case 'amountchangemedicine':
-        alertMessage(
-          'error',
-          'ถ้าไม่มีจำนวนยาที่ถูกเปลี่ยน กรุณาใส่เลข "0"',
-        );
+        alertMessage('error', 'ถ้าไม่มีจำนวนยาที่ถูกเปลี่ยน กรุณาใส่เลข "0"');
         return;
+
       case 'detailchangemedicine':
         alertMessage(
           'error',
@@ -344,12 +359,10 @@ const DispenseMedicine: FC<{}> = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dispensemediciness),
     };
-    console.log(dispensemediciness)
 
     fetch(api, requestOptions)
       .then(response => response.json())
       .then(data => {
-        console.log(data);
         if (data.status === true) {
           Toast.fire({
             icon: 'success',
@@ -387,48 +400,64 @@ const DispenseMedicine: FC<{}> = () => {
             <Typography variant="h5" style={{ marginBottom: 25 }}>
               ตารางข้อมูลคิว
             </Typography>
-            <TableContainer component={Paper}>
-              <Table aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">No.</TableCell>
-                    <TableCell align="center">รายชื่อคนไข้</TableCell>
-                    <TableCell align="center">เลือกคิว</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {prescriptionMap.map((item: any) => (
-                    <TableRow key={item.id}>
-                      <TableCell align="center">{item.id}</TableCell>
-                      <TableCell align="center">
-                        {item.edges?.prescriptionpatient?.name}
-                      </TableCell>
-                      <TableCell align="center">
-                        <Button
-                          onClick={() => {
-                            selectPrescriptions(
-                              item.id,
-                              item.edges?.prescriptionpatient?.name,
-                              item.edges?.prescriptiondoctor?.name,
-                            );
-                          }}
-                          style={{ marginLeft: 2 }}
-                          variant="contained"
-                          color="primary"
-                        >
-                          เลือก
-                        </Button>
-                      </TableCell>
+            <Paper>
+              <TablePagination
+                rowsPerPageOptions={[5, 7, 15]}
+                component="div"
+                count={prescriptionMap.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+              />
+              <TableContainer component={Paper}>
+                <Table aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">No.</TableCell>
+                      <TableCell align="center">รายชื่อคนไข้</TableCell>
+                      <TableCell align="center">เลือกคิว</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                  </TableHead>
+                  <TableBody>
+                    {prescriptionMap
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage,
+                      )
+                      .map((item: any) => (
+                        <TableRow key={item.id}>
+                          <TableCell align="center">{item.id}</TableCell>
+                          <TableCell align="center">
+                            {item.edges?.prescriptionpatient?.name}
+                          </TableCell>
+                          <TableCell align="center">
+                            <Button
+                              onClick={() => {
+                                selectPrescriptions(
+                                  item.id,
+                                  item.edges?.prescriptionpatient?.name,
+                                  item.edges?.prescriptiondoctor?.name,
+                                );
+                              }}
+                              style={{ marginLeft: 2 }}
+                              variant="contained"
+                              color="primary"
+                            >
+                              เลือก
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Paper>
           </Grid>
 
           <Grid
             item
-            xs={6}
+            xs={7}
             style={{
               minWidth: 400,
             }}

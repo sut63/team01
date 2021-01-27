@@ -15,7 +15,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TablePagination,
   Paper,
   Avatar,
   Button,
@@ -82,21 +81,6 @@ const SearchDispenseMedicine: FC<{}> = () => {
 
   //structure check error
   const [validateCardNumberError, setValodateCardNumberError] = useState('');
-
-  //structure table page
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(6);
-
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
 
   //function get from api
   const getDispenseMedicine = async () => {
@@ -182,19 +166,19 @@ const SearchDispenseMedicine: FC<{}> = () => {
       } catch (e) {
         Toast.fire({
           icon: 'error',
-          title: 'ไม่พบข้อมูลประวัติการจ่ายยาของผู้ป่วยที่ค้นหา',
+          text: 'ไม่พบข้อมูลประวัติการจ่ายยาของผู้ป่วยที่ค้นหา',
         });
       }
     } else if (validateCardNumberError != '') {
       Toast.fire({
         icon: 'error',
-        title: validateCardNumberError,
+        text: validateCardNumberError,
       });
       setStatusTable(false);
     } else if (sCardNumberID === '') {
         Toast.fire({
           icon: 'info',
-          title: 'ข้อมูลประวัติการจ่ายยาทั้งหมด',
+          text: 'ข้อมูลประวัติการจ่ายยาทั้งหมด',
         });
         setStatusTable(false);
     }else {
@@ -266,15 +250,6 @@ const SearchDispenseMedicine: FC<{}> = () => {
                 </Grid>
 
                 <Grid className={classes.flexRow}>
-                <TablePagination
-                rowsPerPageOptions={[3, 6, 12]}
-                component="div"
-                count={switchTable().length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-              />
                   <TableContainer
                     component={Paper}
                     className={classes.tableMargin}
@@ -304,10 +279,7 @@ const SearchDispenseMedicine: FC<{}> = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {switchTable().slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage,
-                      ).map(item => (
+                        {switchTable().map(item => (
                           <TableRow key={item.id}>
                             <TableCell align="center">
                               {moment(item.datetime).format(

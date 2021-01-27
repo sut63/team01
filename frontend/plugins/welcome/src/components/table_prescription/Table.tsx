@@ -6,7 +6,7 @@ import { DefaultApi } from '../../api/apis';
 //import { EntUser } from '../../api/models/EntUser';
 import { Cookies } from 'react-cookie/cjs';//cookie
 import { useEffect } from 'react';
-
+import { Alert } from '@material-ui/lab';
 import { EntPatientInfo } from '../../api/models/EntPatientInfo';
 import {
   Content,
@@ -41,7 +41,8 @@ const [Pat, setPat] = React.useState<number>(0);
 const classes = useStyles();
 const [loading, setLoading] = React.useState(true);
 //const [Users, setUsers] = React.useState<Partial<EntUser>>();
-
+const [status, setStatus] =   React.useState(false);
+const [alert, setAlert] =  React.useState(true);
 const [PatientInfo, setPatientInfo] = React.useState<EntPatientInfo[]>([]);
 const getPatientInfo = async () => {
     const res = await http.listPatientInfo({ limit: 110, offset: 0 });
@@ -50,9 +51,29 @@ const getPatientInfo = async () => {
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setPat(event.target.value as number);
   };
-  const So =()=>{
+  const So = async ()=>{
 setSc(Pat)
-  }
+
+//setStatus(true);
+var p = (await http.getPatientInfo({id:Pat})).edges?.patientprescription
+console.log("ผู้ป่วย = ",Pat)
+console.log("p = ",p)
+
+ if (p != undefined){
+   setStatus(true);
+   setAlert(true);
+ } else {
+   setStatus(true);
+   setAlert(false);
+ }
+
+ setTimeout(() => {
+   setStatus(false);
+ }, 4000);
+ 
+};
+
+ 
   useEffect(() => {
     getPatientInfo();
     setLoading(false);
@@ -61,11 +82,24 @@ setSc(Pat)
    return (
     <Page theme={pageTheme.home}>
       <Header
-        title={`ยินดีต้อนรับ เข้าสู่ ${profile.givenName || 'to Backstage'}`}
+        title={`ยินดีต้อนรับเข้าสู่${profile.givenName || 'to Backstage'}`}
        >
       </Header>
       <Content>
         <ContentHeader title="รายการการสั่งจ่ายยา">
+        {status ? (
+           <div>
+             {alert ? (
+               <Alert severity="success">
+                 พบรายการการสั่งจ่ายยา
+               </Alert>
+             ) : (
+               <Alert severity="warning" style={{ marginTop: 20 }}>
+                 ไม่พบรายการการสั่งจ่ายยา
+               </Alert>
+             )}
+           </div>
+         ) : null}
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel>ผู้ป่วย</InputLabel>
             <Select

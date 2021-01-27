@@ -10,7 +10,6 @@ import (
 	"github.com/sut63/team01/ent/medicine"
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/prescription"
-
 )
 
 // PrescriptionController defines the struct for the Prescription controller
@@ -81,6 +80,11 @@ func (ctl *PrescriptionController) CreatePrescription(c *gin.Context) {
 		return
 	}
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 3f44d504064285debd69c134107b05f0232e77b7
 	var Value int
 	if v, err := strconv.ParseInt(obj.Value, 10, 64); err == nil {
 		Value = int(v)
@@ -154,6 +158,9 @@ func (ctl *PrescriptionController) GetPrescription(c *gin.Context) {
 	}
 	u, err := ctl.client.Prescription.
 		Query().
+		WithPrescriptiondoctor().
+		WithPrescriptionmedicine().
+		WithPrescriptionpatient().
 		Where(prescription.IDEQ(int(id))).
 		Only(context.Background())
 	if err != nil {

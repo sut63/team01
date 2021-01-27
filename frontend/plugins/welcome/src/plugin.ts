@@ -7,6 +7,7 @@ import SearchDrugAllergy from './components/SearchDrugAllergy/SearchDrugAllergy'
 import create_prescription from './components/create_prescription';
 import Medicine from './components/Medicine';
 import DispenseMedicine from './components/DispenseMedicine';
+import SearchDispenseMedicine from './components/SearchDispenseMedicine';
 import Order from './components/Order';
 import CreateBill from './components/createBill';
 import table_presrciption from './components/table_prescription';
@@ -27,6 +28,7 @@ export const plugin = createPlugin({
     router.registerRoute('/TablePrescription', table_presrciption);
     //
     router.registerRoute('/DispenseMedicine', DispenseMedicine);
+    router.registerRoute('/SearchDispenseMedicine', SearchDispenseMedicine);
     //
     router.registerRoute('/Bill', CreateBill);
   },

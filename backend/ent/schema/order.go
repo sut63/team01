@@ -1,5 +1,5 @@
 package schema
-
+import "regexp"
 import (
 	"github.com/facebookincubator/ent"
 	"github.com/facebookincubator/ent/schema/field"
@@ -14,9 +14,11 @@ type Order struct {
 // Fields of the Order.
 func (Order) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("hospitalid").Match(regexp.MustCompile("[0]\\d{8}")),
 		field.Time("addedtime"),
-		field.Int("price"),
-		field.Int("amount"),
+		field.Int("price").Min(0).Positive(),
+		field.Int("amount").Min(0).Positive(),
+		
 
 	}
 }
@@ -35,4 +37,3 @@ func (Order) Edges() []ent.Edge {
 		Unique(),
 	}
 }
-

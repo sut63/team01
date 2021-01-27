@@ -25,7 +25,7 @@ func (DispenseMedicine) Fields() []ent.Field {
 			}
 			return nil
 		}).NotEmpty(),
-		field.Int("amountchangemedicine").Min(-1),
+		field.Int("amountchangemedicine").NonNegative(),
 		field.String("detailchangemedicine").Validate(func(s string) error {
 			match, _ := regexp.Match("[`~!@#$%^&*_;?<>]", []byte(s))
 			if match {

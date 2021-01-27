@@ -389,7 +389,6 @@ func main() {
 			Save(context.Background())
 	}
 
-
 	// Set MedicineTypes Data
 	MedicineTypes := MedicineTypes{
 		MedicineType: []MedicineType{
@@ -552,7 +551,7 @@ func main() {
 			Create().
 			SetDatetime(datetim).
 			SetNote(dim.Note).
-			SetAmountchangemedicine(dim.Amountchangemedicine).
+			SetAmountchangemedicine(int(dim.Amountchangemedicine)).
 			SetDetailchangemedicine(dim.Detailchangemedicine).
 			SetPrescription(pres).
 			SetAnnotation(Annota).

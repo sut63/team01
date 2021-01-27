@@ -1,4 +1,4 @@
-import React , { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import HomeIcon from '@material-ui/icons/Home';
 
 import EventNoteOutlinedIcon from '@material-ui/icons/EventNoteOutlined';
@@ -105,15 +105,15 @@ export const AppSidebar = () => (
             to="DispenseMedicine"
             text="บันทึกการจ่ายยา"
           />
-          <SidebarItem icon={SearchRoundedIcon} to="" text="ค้นหา------" />
+          <SidebarItem
+            icon={SearchRoundedIcon}
+            to="SearchDispenseMedicine"
+            text="ค้นหาประวัติการจ่ายยา"
+          />
         </>
       ) : sPositionData == 'Bill' ? (
         <>
-          <SidebarItem
-            icon={ReceiptOutlinedIcon}
-            to="Bill"
-            text="ชำระค่ายา"
-          />
+          <SidebarItem icon={ReceiptOutlinedIcon} to="Bill" text="ชำระค่ายา" />
           <SidebarItem icon={SearchRoundedIcon} to="" text="ค้นหา------" />
         </>
       ) : null

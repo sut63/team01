@@ -3836,10 +3836,6 @@ var doc = `{
                     "type": "object",
                     "$ref": "#/definitions/ent.OrderEdges"
                 },
-                "hospitalid": {
-                    "description": "Hospitalid holds the value of the \"hospitalid\" field.",
-                    "type": "string"
-                },
                 "id": {
                     "description": "ID of the ent.",
                     "type": "integer"

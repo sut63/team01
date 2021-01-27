@@ -95,7 +95,7 @@ func (ctl *OrderController) CreateOrder(c *gin.Context) {
 		SetCompany(pay).
 		SetMedicine(p).
 		SetPrice(obj.Price).
-		SetHospitalid(obj.Hospitalid).
+		
 		SetAmount(obj.Amount).
         SetAddedtime(times).
 		Save(context.Background())

@@ -403,9 +403,6 @@ definitions:
           Edges holds the relations/edges for other nodes in the graph.
           The values are being populated by the OrderQuery when eager-loading is set.
         type: object
-      hospitalid:
-        description: Hospitalid holds the value of the "hospitalid" field.
-        type: string
       id:
         description: ID of the ent.
         type: integer

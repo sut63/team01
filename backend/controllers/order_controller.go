@@ -24,6 +24,7 @@ type Order struct{
 	Companyid          int
 	Medicineid         int
 	Price			   int
+	Hospitalid         string
 	Amount			   int
 	Addedtime       string
 }
@@ -94,26 +95,33 @@ func (ctl *OrderController) CreateOrder(c *gin.Context) {
 		SetCompany(pay).
 		SetMedicine(p).
 		SetPrice(obj.Price).
+		SetHospitalid(obj.Hospitalid).
 		SetAmount(obj.Amount).
         SetAddedtime(times).
 		Save(context.Background())
 		
-	if err != nil {
-		c.JSON(400, gin.H{
-			"error": "saving failed",
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(400, gin.H{
+				"status": false,
+				"error": err,
+			})
+			return
+		}
+		c.JSON(200, gin.H{
+			"status": true,
+			"data": ol,
 		})
-		return
-	}
-  
-	c.JSON(200, ol)
- }
+	  
+	
+	 }
 // GetOrder handles GET requests to retrieve a order entity
 // @Summary Get a order entity by ID
 // @Description get order by ID
 // @ID get-order
 // @Produce  json
 // @Param id path int true "Order ID"
-// @Success 200 {object} ent.Order
+// @Success 200 {array} ent.Order
 // @Failure 400 {object} gin.H
 // @Failure 404 {object} gin.H
 // @Failure 500 {object} gin.H
@@ -128,8 +136,11 @@ func (ctl *OrderController) GetOrder(c *gin.Context) {
 	}
 	pa, err := ctl.client.Order.
 		Query().
-		Where(order.IDEQ(int(id))).
-		Only(context.Background())
+		WithMedicine().
+		WithCompany().
+		WithPharmacist().
+		Where(order.HasMedicineWith(medicine.IDEQ(int(id)))).
+		All(context.Background())
 	if err != nil {
 		c.JSON(404, gin.H{
 			"error": err.Error(),

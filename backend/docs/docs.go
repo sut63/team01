@@ -2324,7 +2324,10 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ent.Order"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.Order"
+                            }
                         }
                     },
                     "400": {
@@ -3392,6 +3395,9 @@ var doc = `{
                 "companyid": {
                     "type": "integer"
                 },
+                "hospitalid": {
+                    "type": "string"
+                },
                 "medicineid": {
                     "type": "integer"
                 },
@@ -3829,6 +3835,10 @@ var doc = `{
                     "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the OrderQuery when eager-loading is set.",
                     "type": "object",
                     "$ref": "#/definitions/ent.OrderEdges"
+                },
+                "hospitalid": {
+                    "description": "Hospitalid holds the value of the \"hospitalid\" field.",
+                    "type": "string"
                 },
                 "id": {
                     "description": "ID of the ent.",

@@ -10,7 +10,7 @@ import (
 	"github.com/sut63/team01/ent/medicine"
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/prescription"
-	"github.com/sut63/team01/ent/status"
+
 )
 
 // PrescriptionController defines the struct for the Prescription controller
@@ -24,7 +24,6 @@ type Prescription struct {
 	DoctorID      int
 	PatientInfoID int
 	MedicineID    int
-	StatusID      int
 	Value         string
 	Symptom       string
 	Annotation    string
@@ -82,18 +81,6 @@ func (ctl *PrescriptionController) CreatePrescription(c *gin.Context) {
 		return
 	}
 
-	s, err := ctl.client.Status.
-		Query().
-		Where(status.IDEQ(int(obj.StatusID))).
-		Only(context.Background())
-
-	if err != nil {
-		c.JSON(400, gin.H{
-			"error": "Status not found",
-		})
-		return
-	}
-
 	var Value int
 	if v, err := strconv.ParseInt(obj.Value, 10, 64); err == nil {
 		Value = int(v)
@@ -132,7 +119,6 @@ func (ctl *PrescriptionController) CreatePrescription(c *gin.Context) {
 		SetPrescriptionpatient(P).
 		SetSymptom(obj.Symptom).
 		SetAnnotation(obj.Annotation).
-		SetPrescriptonstatus(s).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -212,7 +198,6 @@ func (ctl *PrescriptionController) ListPrescription(c *gin.Context) {
 		WithPrescriptiondoctor().
 		WithPrescriptionmedicine().
 		WithPrescriptionpatient().
-		WithPrescriptonstatus().
 		Limit(limit).
 		Offset(offset).
 		All(context.Background())

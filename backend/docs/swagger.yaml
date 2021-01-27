@@ -78,8 +78,6 @@ definitions:
         type: integer
       patientInfoID:
         type: integer
-      statusID:
-        type: integer
       symptom:
         type: string
       value:
@@ -600,34 +598,6 @@ definitions:
         description: Prescriptionpatient holds the value of the prescriptionpatient
           edge.
         type: object
-      prescriptonstatus:
-        $ref: '#/definitions/ent.Status'
-        description: Prescriptonstatus holds the value of the prescriptonstatus edge.
-        type: object
-    type: object
-  ent.Status:
-    properties:
-      edges:
-        $ref: '#/definitions/ent.StatusEdges'
-        description: |-
-          Edges holds the relations/edges for other nodes in the graph.
-          The values are being populated by the StatusQuery when eager-loading is set.
-        type: object
-      id:
-        description: ID of the ent.
-        type: integer
-      status:
-        description: Status holds the value of the "status" field.
-        type: string
-    type: object
-  ent.StatusEdges:
-    properties:
-      statusprescription:
-        description: Statusprescription holds the value of the statusprescription
-          edge.
-        items:
-          $ref: '#/definitions/ent.Prescription'
-        type: array
     type: object
   ent.UnitOfMedicine:
     properties:
@@ -2845,124 +2815,6 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Update a positioninpharmacist entity by ID
-  /statuss:
-    get:
-      description: list status entities
-      operationId: list-status
-      parameters:
-      - description: Limit
-        in: query
-        name: limit
-        type: integer
-      - description: Offset
-        in: query
-        name: offset
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/ent.Status'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: List status entities
-    post:
-      consumes:
-      - application/json
-      description: Create status
-      operationId: create-status
-      parameters:
-      - description: Status entity
-        in: body
-        name: status
-        required: true
-        schema:
-          $ref: '#/definitions/ent.Status'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/ent.Status'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Create status
-  /statuss/{id}:
-    delete:
-      description: get status by ID
-      operationId: delete-status
-      parameters:
-      - description: Status ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/gin.H'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Delete a status entity by ID
-    get:
-      description: get status by ID
-      operationId: get-status
-      parameters:
-      - description: Status ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/ent.Status'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Get a status entity by ID
 securityDefinitions:
   ApiKeyAuth:
     in: header

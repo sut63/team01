@@ -75,9 +75,6 @@ import {
     EntPrescription,
     EntPrescriptionFromJSON,
     EntPrescriptionToJSON,
-    EntStatus,
-    EntStatusFromJSON,
-    EntStatusToJSON,
     EntUnitOfMedicine,
     EntUnitOfMedicineFromJSON,
     EntUnitOfMedicineToJSON,
@@ -143,10 +140,6 @@ export interface CreatePrescriptionRequest {
     prescription: ControllersPrescription;
 }
 
-export interface CreateStatusRequest {
-    status: EntStatus;
-}
-
 export interface CreateUnitOfMedicineRequest {
     unitOfMedicine: EntUnitOfMedicine;
 }
@@ -192,10 +185,6 @@ export interface DeletePharmacistRequest {
 }
 
 export interface DeletePositioninpharmacistRequest {
-    id: number;
-}
-
-export interface DeleteStatusRequest {
     id: number;
 }
 
@@ -256,10 +245,6 @@ export interface GetPositioninpharmacistRequest {
 }
 
 export interface GetPrescriptionRequest {
-    id: number;
-}
-
-export interface GetStatusRequest {
     id: number;
 }
 
@@ -338,11 +323,6 @@ export interface ListPositioninpharmacistRequest {
 }
 
 export interface ListPrescriptionRequest {
-    limit?: number;
-    offset?: number;
-}
-
-export interface ListStatusRequest {
     limit?: number;
     offset?: number;
 }
@@ -948,41 +928,6 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Create status
-     * Create status
-     */
-    async createStatusRaw(requestParameters: CreateStatusRequest): Promise<runtime.ApiResponse<EntStatus>> {
-        if (requestParameters.status === null || requestParameters.status === undefined) {
-            throw new runtime.RequiredError('status','Required parameter requestParameters.status was null or undefined when calling createStatus.');
-        }
-
-        const queryParameters: runtime.HTTPQuery = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/statuss`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: EntStatusToJSON(requestParameters.status),
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => EntStatusFromJSON(jsonValue));
-    }
-
-    /**
-     * Create status
-     * Create status
-     */
-    async createStatus(requestParameters: CreateStatusRequest): Promise<EntStatus> {
-        const response = await this.createStatusRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
      * Create UnitOfMedicine
      * Create UnitOfMedicine
      */
@@ -1366,38 +1311,6 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async deletePositioninpharmacist(requestParameters: DeletePositioninpharmacistRequest): Promise<object> {
         const response = await this.deletePositioninpharmacistRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     * get status by ID
-     * Delete a status entity by ID
-     */
-    async deleteStatusRaw(requestParameters: DeleteStatusRequest): Promise<runtime.ApiResponse<object>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteStatus.');
-        }
-
-        const queryParameters: runtime.HTTPQuery = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/statuss/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     * get status by ID
-     * Delete a status entity by ID
-     */
-    async deleteStatus(requestParameters: DeleteStatusRequest): Promise<object> {
-        const response = await this.deleteStatusRaw(requestParameters);
         return await response.value();
     }
 
@@ -1878,38 +1791,6 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getPrescription(requestParameters: GetPrescriptionRequest): Promise<EntPrescription> {
         const response = await this.getPrescriptionRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     * get status by ID
-     * Get a status entity by ID
-     */
-    async getStatusRaw(requestParameters: GetStatusRequest): Promise<runtime.ApiResponse<EntStatus>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getStatus.');
-        }
-
-        const queryParameters: runtime.HTTPQuery = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/statuss/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => EntStatusFromJSON(jsonValue));
-    }
-
-    /**
-     * get status by ID
-     * Get a status entity by ID
-     */
-    async getStatus(requestParameters: GetStatusRequest): Promise<EntStatus> {
-        const response = await this.getStatusRaw(requestParameters);
         return await response.value();
     }
 
@@ -2482,42 +2363,6 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async listPrescription(requestParameters: ListPrescriptionRequest): Promise<Array<EntPrescription>> {
         const response = await this.listPrescriptionRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     * list status entities
-     * List status entities
-     */
-    async listStatusRaw(requestParameters: ListStatusRequest): Promise<runtime.ApiResponse<Array<EntStatus>>> {
-        const queryParameters: runtime.HTTPQuery = {};
-
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
-        }
-
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/statuss`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntStatusFromJSON));
-    }
-
-    /**
-     * list status entities
-     * List status entities
-     */
-    async listStatus(requestParameters: ListStatusRequest): Promise<Array<EntStatus>> {
-        const response = await this.listStatusRaw(requestParameters);
         return await response.value();
     }
 

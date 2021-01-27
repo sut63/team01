@@ -289,13 +289,13 @@ const NewPatientright: FC<{}> = () => {
                   CreatePrescription();
                 }}
                 variant="contained"
-                color="primary"
+                color="primary" style={{ backgroundColor: "#ffd600" }}
               >
                 Submit
-              </Button>
+              </Button>&emsp;
 
               <Link component={RouterLink} to="/">
-                <Button variant="contained" color="primary">
+                <Button variant="contained" color="primary" style={{ backgroundColor: "#ffd600" }}>
                   กลับสู่หน้าหลัก
                 </Button>
               </Link>

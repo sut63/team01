@@ -125,14 +125,6 @@ type Doctor struct {
 	name     string
 }
 
-type Statuss struct {
-	Status []Status
-}
-
-type Status struct {
-	StatusPrescription string
-}
-
 // MedicineTypes structer input data
 type MedicineTypes struct {
 	MedicineType []MedicineType
@@ -276,7 +268,6 @@ func main() {
 	controllers.NewLevelOfDangerousController(v1, client)
 	controllers.NewMedicineController(v1, client)
 	controllers.NewPaymentController(v1, client)
-	controllers.NewStatusController(v1, client)
 	controllers.NewBillController(v1, client)
 	controllers.NewOrderController(v1, client)
 	controllers.NewCompanyController(v1, client)
@@ -395,22 +386,6 @@ func main() {
 			SetEmail(doc.email).
 			SetPassword(doc.password).
 			SetName(doc.name).
-			Save(context.Background())
-	}
-
-	// set status Data for checkout
-	statuss := Statuss{
-		Status: []Status{
-			Status{"สั่งจ่ายยาเรียบร้อย"},
-			Status{"ไม่พบการสั่งจ่ายยา"},
-			
-		},
-	}
-
-	for _, sc := range statuss.Status {
-		client.Status.
-			Create().
-			SetStatus(sc.StatusPrescription).
 			Save(context.Background())
 	}
 

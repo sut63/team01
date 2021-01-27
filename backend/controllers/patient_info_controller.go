@@ -74,6 +74,7 @@ func (ctl *PatientInfoController) GetPatientInfo(c *gin.Context) {
 	}
 	p, err := ctl.client.PatientInfo.
 		Query().
+		WithPatientprescription().
 		Where(patientinfo.IDEQ(int(id))).
 		Only(context.Background())
 
@@ -120,6 +121,7 @@ func (ctl *PatientInfoController) ListPatientInfo(c *gin.Context) {
 	patientinfos, err := ctl.client.PatientInfo.
 		Query().
 		WithDrugallergys().
+		WithPatientprescription().
 		Limit(limit).
 		Offset(offset).
 		All(context.Background())

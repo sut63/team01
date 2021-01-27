@@ -15,7 +15,6 @@ import (
 	"github.com/sut63/team01/ent/positioninpharmacist"
 	"github.com/sut63/team01/ent/prescription"
 	"github.com/sut63/team01/ent/schema"
-	"github.com/sut63/team01/ent/status"
 )
 
 // The init function reads all schema descriptors with runtime
@@ -238,10 +237,4 @@ func init() {
 	prescriptionDescAnnotation := prescriptionFields[2].Descriptor()
 	// prescription.AnnotationValidator is a validator for the "Annotation" field. It is called by the builders before save.
 	prescription.AnnotationValidator = prescriptionDescAnnotation.Validators[0].(func(string) error)
-	statusFields := schema.Status{}.Fields()
-	_ = statusFields
-	// statusDescStatus is the schema descriptor for status field.
-	statusDescStatus := statusFields[0].Descriptor()
-	// status.StatusValidator is a validator for the "status" field. It is called by the builders before save.
-	status.StatusValidator = statusDescStatus.Validators[0].(func(string) error)
 }

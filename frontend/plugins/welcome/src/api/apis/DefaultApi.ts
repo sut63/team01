@@ -220,6 +220,10 @@ export interface GetLevelOfDangerousRequest {
     id: number;
 }
 
+export interface GetMedicineRequest {
+    id: string;
+}
+
 export interface GetMedicineTypeRequest {
     id: number;
 }
@@ -1567,6 +1571,38 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getLevelOfDangerous(requestParameters: GetLevelOfDangerousRequest): Promise<EntLevelOfDangerous> {
         const response = await this.getLevelOfDangerousRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * get medicine by ID
+     * Get a medicine entity by ID
+     */
+    async getMedicineRaw(requestParameters: GetMedicineRequest): Promise<runtime.ApiResponse<Array<EntMedicine>>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getMedicine.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/medicine/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntMedicineFromJSON));
+    }
+
+    /**
+     * get medicine by ID
+     * Get a medicine entity by ID
+     */
+    async getMedicine(requestParameters: GetMedicineRequest): Promise<Array<EntMedicine>> {
+        const response = await this.getMedicineRaw(requestParameters);
         return await response.value();
     }
 

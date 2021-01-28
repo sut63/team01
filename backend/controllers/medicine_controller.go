@@ -114,28 +114,22 @@ func (ctl *MedicineController) CreateMedicine(c *gin.Context) {
 // @Description get medicine by ID
 // @ID get-medicine
 // @Produce  json
-// @Param id path int true "Medicine ID"
-// @Success 200 {object} ent.Medicine
+// @Param id path string true "Medicine ID"
+// @Success 200 {array} ent.Medicine
 // @Failure 400 {object} gin.H
 // @Failure 404 {object} gin.H
 // @Failure 500 {object} gin.H
-// @Router /bills/{id} [get]
+// @Router /medicine/{id} [get]
 func (ctl *MedicineController) GetMedicine(c *gin.Context) {
-	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-	if err != nil {
-		c.JSON(400, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
+	id := string(c.Param("id"))
 
 	dm, err := ctl.client.Medicine.
 		Query().
+		Where(medicine.SerialEQ(string(id))).
 		WithMedicineType().
 		WithLevelOfDangerous().
 		WithUnitOfMedicine().
-		Where(medicine.IDEQ(int(id))).
-		Only(context.Background())
+		All(context.Background())
 	if err != nil {
 		c.JSON(404, gin.H{
 			"error": err.Error(),

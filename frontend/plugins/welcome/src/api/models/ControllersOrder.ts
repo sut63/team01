@@ -39,6 +39,12 @@ export interface ControllersOrder {
     companyid?: number;
     /**
      * 
+     * @type {string}
+     * @memberof ControllersOrder
+     */
+    hospitalid?: string;
+    /**
+     * 
      * @type {number}
      * @memberof ControllersOrder
      */
@@ -70,6 +76,7 @@ export function ControllersOrderFromJSONTyped(json: any, ignoreDiscriminator: bo
         'addedtime': !exists(json, 'addedtime') ? undefined : json['addedtime'],
         'amount': !exists(json, 'amount') ? undefined : json['amount'],
         'companyid': !exists(json, 'companyid') ? undefined : json['companyid'],
+        'hospitalid': !exists(json, 'hospitalid') ? undefined : json['hospitalid'],
         'medicineid': !exists(json, 'medicineid') ? undefined : json['medicineid'],
         'pharmacistid': !exists(json, 'pharmacistid') ? undefined : json['pharmacistid'],
         'price': !exists(json, 'price') ? undefined : json['price'],
@@ -88,6 +95,7 @@ export function ControllersOrderToJSON(value?: ControllersOrder | null): any {
         'addedtime': value.addedtime,
         'amount': value.amount,
         'companyid': value.companyid,
+        'hospitalid': value.hospitalid,
         'medicineid': value.medicineid,
         'pharmacistid': value.pharmacistid,
         'price': value.price,

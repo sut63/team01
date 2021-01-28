@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sut63/team01/ent"
 	"github.com/sut63/team01/ent/levelofdangerous"
+	"github.com/sut63/team01/ent/medicine"
 	"github.com/sut63/team01/ent/medicinetype"
 	"github.com/sut63/team01/ent/unitofmedicine"
 )
@@ -56,7 +57,7 @@ func (ctl *MedicineController) CreateMedicine(c *gin.Context) {
 		Only(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
-			"error": "province not found",
+			"error": "MedicineType not found",
 		})
 		return
 	}
@@ -67,7 +68,7 @@ func (ctl *MedicineController) CreateMedicine(c *gin.Context) {
 		Only(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
-			"error": "type not found",
+			"error": "LevelOfDangerous not found",
 		})
 		return
 	}
@@ -78,7 +79,7 @@ func (ctl *MedicineController) CreateMedicine(c *gin.Context) {
 		Only(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
-			"error": "district not found",
+			"error": "UnitOfMedicine not found",
 		})
 		return
 	}
@@ -97,7 +98,8 @@ func (ctl *MedicineController) CreateMedicine(c *gin.Context) {
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
-			"error": "saving failed",
+			"status": false,
+			"error":  err,
 		})
 		return
 	}
@@ -105,6 +107,43 @@ func (ctl *MedicineController) CreateMedicine(c *gin.Context) {
 		"status": true,
 		"data":   m,
 	})
+}
+
+// GetMedicine handles GET requests to retrieve a medicine entity
+// @Summary Get a medicine entity by ID
+// @Description get medicine by ID
+// @ID get-medicine
+// @Produce  json
+// @Param id path int true "Medicine ID"
+// @Success 200 {object} ent.Medicine
+// @Failure 400 {object} gin.H
+// @Failure 404 {object} gin.H
+// @Failure 500 {object} gin.H
+// @Router /bills/{id} [get]
+func (ctl *MedicineController) GetMedicine(c *gin.Context) {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	dm, err := ctl.client.Medicine.
+		Query().
+		WithMedicineType().
+		WithLevelOfDangerous().
+		WithUnitOfMedicine().
+		Where(medicine.IDEQ(int(id))).
+		Only(context.Background())
+	if err != nil {
+		c.JSON(404, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, dm)
 }
 
 // ListMedicine handles request to get a list of Medicine entities
@@ -168,5 +207,6 @@ func (ctl *MedicineController) register() {
 
 	// CRUD
 	Medicine.POST("", ctl.CreateMedicine)
+	Medicine.GET(":id", ctl.GetMedicine)
 
 }

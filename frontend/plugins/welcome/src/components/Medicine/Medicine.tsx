@@ -22,7 +22,7 @@ import {
 import SendIcon from '@material-ui/icons/Send';
 import { Alert } from '@material-ui/lab'; //alert
 import Swal from 'sweetalert2'; // alert
-import { Cookies } from 'react-cookie/cjs'; //cookie
+
 import { DefaultApi } from '../../api/apis/'; // Api Gennerate From Command
 import { EntMedicineType } from '../../api/models/EntMedicineType'; // import interface MedicineType
 import { EntLevelOfDangerous } from '../../api/models/EntLevelOfDangerous'; // import interface LevelOfDangerous
@@ -72,7 +72,7 @@ const Medicine: FC<{}> = () => {
   const api = new DefaultApi();
   const [status, setStatus] = React.useState(false);
   const [alert, setAlert] = React.useState(true);
-  const cookies = new Cookies();
+  
 
   const [medicinetype, setMedicineType] = React.useState<EntMedicineType[]>([]);
   const [levelOfdangerous, setLevelOfDangerous] = React.useState<EntLevelOfDangerous[]>([]);
@@ -162,19 +162,11 @@ const Medicine: FC<{}> = () => {
  
   };
 
-  const checkPosition = async () => {
-    if(cookies.get('PositionData') != 'Medicine'){
-      history.pushState('', '', '/' + cookies.get('PositionData'));
-      window.location.reload(false); 
-    }
-  };
-
   // Lifecycle Hooks
   useEffect(() => {
     getMedicineType();
     getLevelOfDangerous();
     getUnitOfMedicine();
-    checkPosition();
   }, []);
 
    // alert setting
@@ -191,6 +183,51 @@ const Medicine: FC<{}> = () => {
   });
 
 
+  const checkCaseSaveError = (field: String) => {
+    switch(field){
+      case 'name':
+        Toast.fire({
+          icon: 'error',
+          title: 'กรุณาระบุชื่อยา',
+      });
+      return;
+      case 'serial':
+        Toast.fire({
+          icon: 'error',
+          title: 'กรุณาระบุรหัสยา',
+      });
+      return;
+      case 'brand':
+        Toast.fire({
+          icon: 'error',
+          title: 'กรุณาระบุยี่ห้อยา',
+      });
+      return;
+      case 'amount':
+        Toast.fire({
+          icon: 'error',
+          title: 'กรุณาระบุจำนวนยา',
+      });
+      return;
+      case 'price':
+        Toast.fire({
+          icon: 'error',
+          title: 'กรุณาระบุราคายา',
+      });
+      return;
+      case 'howtouse':
+        Toast.fire({
+          icon: 'error',
+          title: 'กรุณาระบุวิธีใช้งานของยา',
+      });
+      return;
+      default:
+        Toast.fire({
+          icon: 'error',
+          title: 'กรุณาระบุข้อมูลให้ครบถ้วน',
+      });
+    }
+  }
   const CreateMedicine = async () => {
     const smedicine = {
       levelOfDangerousID: sMLevelOfDangerous,
@@ -220,10 +257,7 @@ const Medicine: FC<{}> = () => {
                         title: 'บันทึกข้อมูลสำเร็จ',
                     });
                 } else {
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'บันทึกข้อมูลไม่สำเร็จ',
-                    });
+                    checkCaseSaveError(data.error.Name)
                 }
             });
     }

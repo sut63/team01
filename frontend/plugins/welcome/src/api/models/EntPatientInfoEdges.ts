@@ -54,7 +54,7 @@ export function EntPatientInfoEdgesFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'drugallergys': !exists(json, 'drugallergys') ? undefined : ((json['drugallergys'] as Array<any>).map(EntDrugAllergyFromJSON)),
+        'drugallergys': !exists(json, 'Drugallergys') ? undefined : ((json['Drugallergys'] as Array<any>).map(EntDrugAllergyFromJSON)),
         'patientprescription': !exists(json, 'Patientprescription') ? undefined : ((json['Patientprescription'] as Array<any>).map(EntPrescriptionFromJSON)),
     };
 }

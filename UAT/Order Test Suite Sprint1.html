@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+	<title>Order Test Suite Sprint1</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Validate Success Test Case</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/Order<datalist><option>http://localhost:3000/Order</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-medicine<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-medicine</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-medicine']/div[3]/ul/li[3]<datalist><option>//div[@id='menu-medicine']/div[3]/ul/li[3]</option><option>//li[3]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=amount<datalist><option>id=amount</option><option>//input[@id='amount']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[3]/div/div/input</option><option>//div[3]/div/div/input</option><option>css=#amount</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=amount<datalist><option>id=amount</option><option>//input[@id='amount']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[3]/div/div/input</option><option>//div[3]/div/div/input</option><option>css=#amount</option></datalist></td><td>1555</td>
+</tr>
+<tr><td>click</td><td>id=price<datalist><option>id=price</option><option>//input[@id='price']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=#price</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=price<datalist><option>id=price</option><option>//input[@id='price']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=#price</option></datalist></td><td>3453</td>
+</tr>
+<tr><td>click</td><td>id=hospitalid<datalist><option>id=hospitalid</option><option>//input[@id='hospitalid']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=#hospitalid</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=hospitalid<datalist><option>id=hospitalid</option><option>//input[@id='hospitalid']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=#hospitalid</option></datalist></td><td>H12345</td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-company<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-company</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-company']/div[3]/ul/li[5]<datalist><option>//div[@id='menu-company']/div[3]/ul/li[5]</option><option>//li[5]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=date<datalist><option>id=date</option><option>//input[@id='date']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[7]/div/div/input</option><option>//div[7]/div/div/input</option><option>css=#date</option></datalist></td><td></td>
+</tr>
+<tr><td>setText</td><td>id=date<datalist><option>id=date</option><option>//input[@id='date']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[7]/div/div/input</option><option>//div[7]/div/div/input</option><option>css=#date</option></datalist></td><td>2021-01-21T13:34</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div[2]/form/div/td/a/span<datalist><option>//div[@id='root']/div/div[2]/article/div[2]/form/div/td/a/span</option><option>//td/a/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>id=swal2-title<datalist><option>id=swal2-title</option><option>//h2[@id='swal2-title']</option><option>//h2</option><option>css=#swal2-title</option></datalist></td><td>บันทึกข้อมูลสำเร็จ</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Validate Error price Test Case</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/Order<datalist><option>http://localhost:3000/Order</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-medicine<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-medicine</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-medicine']/div[3]/ul/li[3]<datalist><option>//div[@id='menu-medicine']/div[3]/ul/li[3]</option><option>//li[3]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=amount<datalist><option>id=amount</option><option>//input[@id='amount']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[3]/div/div/input</option><option>//div[3]/div/div/input</option><option>css=#amount</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=amount<datalist><option>id=amount</option><option>//input[@id='amount']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[3]/div/div/input</option><option>//div[3]/div/div/input</option><option>css=#amount</option></datalist></td><td>24524</td>
+</tr>
+<tr><td>click</td><td>id=price<datalist><option>id=price</option><option>//input[@id='price']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=#price</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=price<datalist><option>id=price</option><option>//input[@id='price']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=#price</option></datalist></td><td>0</td>
+</tr>
+<tr><td>click</td><td>id=hospitalid<datalist><option>id=hospitalid</option><option>//input[@id='hospitalid']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=#hospitalid</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=hospitalid<datalist><option>id=hospitalid</option><option>//input[@id='hospitalid']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=#hospitalid</option></datalist></td><td>H12345</td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-company<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-company</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-company']/div[3]/ul/li[5]<datalist><option>//div[@id='menu-company']/div[3]/ul/li[5]</option><option>//li[5]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=date<datalist><option>id=date</option><option>//input[@id='date']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[7]/div/div/input</option><option>//div[7]/div/div/input</option><option>css=#date</option></datalist></td><td></td>
+</tr>
+<tr><td>setText</td><td>id=date<datalist><option>id=date</option><option>//input[@id='date']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[7]/div/div/input</option><option>//div[7]/div/div/input</option><option>css=#date</option></datalist></td><td>2021-01-21T13:43</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div[2]/form/div/td/a/span<datalist><option>//div[@id='root']/div/div[2]/article/div[2]/form/div/td/a/span</option><option>//td/a/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>id=swal2-title<datalist><option>id=swal2-title</option><option>//h2[@id='swal2-title']</option><option>//h2</option><option>css=#swal2-title</option></datalist></td><td>กรอกราคาสินค้าไม่ถุกต้อง</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Validate Error amount Test Case</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/Order<datalist><option>http://localhost:3000/Order</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-medicine<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-medicine</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-medicine']/div[3]/ul/li[3]<datalist><option>//div[@id='menu-medicine']/div[3]/ul/li[3]</option><option>//li[3]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=amount<datalist><option>id=amount</option><option>//input[@id='amount']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[3]/div/div/input</option><option>//div[3]/div/div/input</option><option>css=#amount</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=amount<datalist><option>id=amount</option><option>//input[@id='amount']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[3]/div/div/input</option><option>//div[3]/div/div/input</option><option>css=#amount</option></datalist></td><td>0</td>
+</tr>
+<tr><td>click</td><td>id=price<datalist><option>id=price</option><option>//input[@id='price']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=#price</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=price<datalist><option>id=price</option><option>//input[@id='price']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=#price</option></datalist></td><td>24254</td>
+</tr>
+<tr><td>click</td><td>id=hospitalid<datalist><option>id=hospitalid</option><option>//input[@id='hospitalid']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=#hospitalid</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=hospitalid<datalist><option>id=hospitalid</option><option>//input[@id='hospitalid']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=#hospitalid</option></datalist></td><td>H12345</td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-company<datalist><option>//body</option><option>css=body</option><option>	id=mui-component-select-company</option><option>id=mui-component-select-company</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-company']/div[3]/ul/li[6]<datalist><option>//div[@id='menu-company']/div[3]/ul/li[6]</option><option>//li[6]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=date<datalist><option>id=date</option><option>//input[@id='date']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[7]/div/div/input</option><option>//div[7]/div/div/input</option><option>css=#date</option></datalist></td><td></td>
+</tr>
+<tr><td>setText</td><td>id=date<datalist><option>id=date</option><option>//input[@id='date']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[7]/div/div/input</option><option>//div[7]/div/div/input</option><option>css=#date</option></datalist></td><td>2021-01-21T13:36</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div[2]/form/div/td/a/span<datalist><option>//div[@id='root']/div/div[2]/article/div[2]/form/div/td/a/span</option><option>//td/a/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>id=swal2-title<datalist><option>id=swal2-title</option><option>//h2[@id='swal2-title']</option><option>//h2</option><option>css=#swal2-title</option></datalist></td><td>กรอกจำนวนสินค้าไม่ถูกต้อง</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Validate Error HospitalPhone Test Case</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/Order<datalist><option>http://localhost:3000/Order</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-medicine<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-medicine</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-medicine']/div[3]/ul/li[3]<datalist><option>//div[@id='menu-medicine']/div[3]/ul/li[3]</option><option>//li[3]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=amount<datalist><option>id=amount</option><option>//input[@id='amount']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[3]/div/div/input</option><option>//div[3]/div/div/input</option><option>css=#amount</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=amount<datalist><option>id=amount</option><option>//input[@id='amount']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[3]/div/div/input</option><option>//div[3]/div/div/input</option><option>css=#amount</option></datalist></td><td>24242</td>
+</tr>
+<tr><td>click</td><td>id=price<datalist><option>id=price</option><option>//input[@id='price']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=#price</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=price<datalist><option>id=price</option><option>//input[@id='price']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=#price</option></datalist></td><td>2452452</td>
+</tr>
+<tr><td>click</td><td>id=hospitalid<datalist><option>id=hospitalid</option><option>//input[@id='hospitalid']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=#hospitalid</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>id=hospitalid<datalist><option>id=hospitalid</option><option>//input[@id='hospitalid']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=#hospitalid</option></datalist></td><td>2452452452</td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-company<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-company</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-company']/div[3]/ul/li[6]<datalist><option>//div[@id='menu-company']/div[3]/ul/li[6]</option><option>//li[6]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=date<datalist><option>id=date</option><option>//input[@id='date']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[7]/div/div/input</option><option>//div[7]/div/div/input</option><option>css=#date</option></datalist></td><td></td>
+</tr>
+<tr><td>setText</td><td>id=date<datalist><option>id=date</option><option>//input[@id='date']</option><option>//div[@id='root']/div/div[2]/article/div[2]/form/td/div[7]/div/div/input</option><option>//div[7]/div/div/input</option><option>css=#date</option></datalist></td><td>2021-02-05T20:41</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div[2]/form/div/td/a/span<datalist><option>//div[@id='root']/div/div[2]/article/div[2]/form/div/td/a/span</option><option>//td/a/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>id=swal2-title<datalist><option>id=swal2-title</option><option>//h2[@id='swal2-title']</option><option>//h2</option><option>css=#swal2-title</option></datalist></td><td>รูปแบบหมายเลขติดต่อหน่วยงานไม่ถุกต้อง</td>
+</tr>
+</tbody></table>
+</body>
+</html>

@@ -45,6 +45,12 @@ export interface EntOrder {
      */
     edges?: EntOrderEdges;
     /**
+     * Hospitalid holds the value of the "hospitalid" field.
+     * @type {string}
+     * @memberof EntOrder
+     */
+    hospitalid?: string;
+    /**
      * ID of the ent.
      * @type {number}
      * @memberof EntOrder
@@ -71,6 +77,7 @@ export function EntOrderFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'addedtime': !exists(json, 'addedtime') ? undefined : json['addedtime'],
         'amount': !exists(json, 'amount') ? undefined : json['amount'],
         'edges': !exists(json, 'edges') ? undefined : EntOrderEdgesFromJSON(json['edges']),
+        'hospitalid': !exists(json, 'hospitalid') ? undefined : json['hospitalid'],
         'id': !exists(json, 'id') ? undefined : json['id'],
         'price': !exists(json, 'price') ? undefined : json['price'],
     };
@@ -88,6 +95,7 @@ export function EntOrderToJSON(value?: EntOrder | null): any {
         'addedtime': value.addedtime,
         'amount': value.amount,
         'edges': EntOrderEdgesToJSON(value.edges),
+        'hospitalid': value.hospitalid,
         'id': value.id,
         'price': value.price,
     };

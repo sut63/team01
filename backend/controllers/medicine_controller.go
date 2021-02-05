@@ -119,7 +119,7 @@ func (ctl *MedicineController) CreateMedicine(c *gin.Context) {
 // @Failure 400 {object} gin.H
 // @Failure 404 {object} gin.H
 // @Failure 500 {object} gin.H
-// @Router /medicine/{id} [get]
+// @Router /Medicine/{id} [get]
 func (ctl *MedicineController) GetMedicine(c *gin.Context) {
 	id := string(c.Param("id"))
 
@@ -137,7 +137,16 @@ func (ctl *MedicineController) GetMedicine(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, dm)
+	if len(dm) != 0 {
+		c.JSON(200, dm)
+		return
+	} else {
+		c.JSON(404, gin.H{
+			"error":  "Medicine not found",
+			"status": false,
+		})
+		return
+	}
 }
 
 // ListMedicine handles request to get a list of Medicine entities

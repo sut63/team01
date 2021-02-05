@@ -108,11 +108,17 @@ interface oorder {
   let companyid = Number(companyID)
   
   console.log(pharmacistID)
+
+  const checkPosition = async () => {
+    if(cookies.get('PositionData') != 'Order'){
+      history.pushState('', '', '/' + cookies.get('PositionData'));
+      window.location.reload(false); 
+    }
+  };
+
   useEffect(() => {
 
-  
-
-
+    checkPosition();
 
     const getmedicines = async () => {
 

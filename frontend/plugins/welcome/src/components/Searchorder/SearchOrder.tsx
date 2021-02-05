@@ -123,8 +123,16 @@ const SearchOrder: FC<{}> = () => {
         setOrders(res)
     }
 
+    const checkPosition = async () => {
+      if (cookies.get('PositionData') != 'Order') {
+        history.pushState('', '', '/' + cookies.get('PositionData'));
+        window.location.reload(false);
+      }
+    };
+
     // Lifecycle Hooks
     useEffect(() => {
+        checkPosition();
         getMedicine();
         listOrders();
     }, []);

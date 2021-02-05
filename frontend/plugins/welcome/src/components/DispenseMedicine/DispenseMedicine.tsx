@@ -195,10 +195,10 @@ const DispenseMedicine: FC<{}> = () => {
 
   // alert setting
   const Toast = Swal.mixin({
-    //toast: true,
-    position: 'center',
+    toast: true,
+    position: 'top-end',
     showConfirmButton: false,
-    timer: 1500,
+    timer: 2500,
     timerProgressBar: true,
     didOpen: toast => {
       toast.addEventListener('mouseenter', Swal.stopTimer);
@@ -262,7 +262,7 @@ const DispenseMedicine: FC<{}> = () => {
         validateText(value)
           ? setnoteError('')
           : setnoteError(
-              'ห้ามป้อนอักษรพิเศษ ถ้าไม่มีรายละอียดหมายเหตุ กรุณาใส่เครื่องหมาย " - "',
+              'ห้ามป้อนอักษรพิเศษ ถ้าไม่มีรายละเอียดหมายเหตุ กรุณาใส่เครื่องหมาย " - "',
             );
         validateText(value)
           ? setnoteInputError(false)
@@ -282,7 +282,7 @@ const DispenseMedicine: FC<{}> = () => {
         validateText(value)
           ? setdetailchangemedicineError('')
           : setdetailchangemedicineError(
-              'ห้ามป้อนอักษรพิเศษ ถ้าไม่มีรายละอียดยาที่ถูกเปลี่ยน กรุณาใส่เครื่องหมาย " - "',
+              'ห้ามป้อนอักษรพิเศษ ถ้าไม่มีรายละเอียดยาที่ถูกเปลี่ยน กรุณาใส่เครื่องหมาย " - "',
             );
         validateText(value)
           ? setdetailchangemedicineInputError(false)
@@ -322,7 +322,7 @@ const DispenseMedicine: FC<{}> = () => {
       case 'note':
         alertMessage(
           'error',
-          'ถ้าไม่มีรายละอียดหมายเหตุ กรุณาใส่เครื่องหมาย " - "',
+          'ถ้าไม่มีรายละเอียดหมายเหตุ กรุณาใส่เครื่องหมาย " - "',
         );
         return;
 
@@ -333,7 +333,7 @@ const DispenseMedicine: FC<{}> = () => {
       case 'detailchangemedicine':
         alertMessage(
           'error',
-          'ถ้าไม่มีรายละอียดยาที่ถูกเปลี่ยน กรุณาใส่เครื่องหมาย " - "',
+          'ถ้าไม่มีรายละเอียดยาที่ถูกเปลี่ยน กรุณาใส่เครื่องหมาย " - "',
         );
         return;
       default:
@@ -627,12 +627,12 @@ const DispenseMedicine: FC<{}> = () => {
                     className={classes.formControl}
                   >
                     <Typography className={classes.headLabel}>
-                      รายละอียดหมายเหตุ
+                      รายละเอียดหมายเหตุ
                     </Typography>
                     <TextField
                       error={noteInputError}
                       name="note"
-                      label="ป้อนรายละอียดหมายเหตุ"
+                      label="ป้อนรายละเอียดหมายเหตุ"
                       helperText={noteError}
                       value={sDispensemedicine.note || ''}
                       onChange={handleChange}
@@ -664,12 +664,12 @@ const DispenseMedicine: FC<{}> = () => {
                     className={classes.formControl}
                   >
                     <Typography className={classes.headLabel}>
-                      รายละอียดยาที่ถูกเปลี่ยน
+                      รายละเอียดยาที่ถูกเปลี่ยน
                     </Typography>
                     <TextField
                       error={detailchangemedicineInputError}
                       name="detailchangemedicine"
-                      label="ป้อนรายละอียดยาที่ถูกเปลี่ยน"
+                      label="ป้อนรายละเอียดยาที่ถูกเปลี่ยน"
                       helperText={detailchangemedicineError}
                       value={sDispensemedicine.detailchangemedicine || ''}
                       onChange={handleChange}

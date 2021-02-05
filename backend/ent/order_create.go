@@ -23,6 +23,12 @@ type OrderCreate struct {
 	hooks    []Hook
 }
 
+// SetHospitalid sets the hospitalid field.
+func (oc *OrderCreate) SetHospitalid(s string) *OrderCreate {
+	oc.mutation.SetHospitalid(s)
+	return oc
+}
+
 // SetAddedtime sets the addedtime field.
 func (oc *OrderCreate) SetAddedtime(t time.Time) *OrderCreate {
 	oc.mutation.SetAddedtime(t)
@@ -105,14 +111,32 @@ func (oc *OrderCreate) Mutation() *OrderMutation {
 
 // Save creates the Order in the database.
 func (oc *OrderCreate) Save(ctx context.Context) (*Order, error) {
+	if _, ok := oc.mutation.Hospitalid(); !ok {
+		return nil, &ValidationError{Name: "hospitalid", err: errors.New("ent: missing required field \"hospitalid\"")}
+	}
+	if v, ok := oc.mutation.Hospitalid(); ok {
+		if err := order.HospitalidValidator(v); err != nil {
+			return nil, &ValidationError{Name: "hospitalid", err: fmt.Errorf("ent: validator failed for field \"hospitalid\": %w", err)}
+		}
+	}
 	if _, ok := oc.mutation.Addedtime(); !ok {
 		return nil, &ValidationError{Name: "addedtime", err: errors.New("ent: missing required field \"addedtime\"")}
 	}
 	if _, ok := oc.mutation.Price(); !ok {
 		return nil, &ValidationError{Name: "price", err: errors.New("ent: missing required field \"price\"")}
 	}
+	if v, ok := oc.mutation.Price(); ok {
+		if err := order.PriceValidator(v); err != nil {
+			return nil, &ValidationError{Name: "price", err: fmt.Errorf("ent: validator failed for field \"price\": %w", err)}
+		}
+	}
 	if _, ok := oc.mutation.Amount(); !ok {
 		return nil, &ValidationError{Name: "amount", err: errors.New("ent: missing required field \"amount\"")}
+	}
+	if v, ok := oc.mutation.Amount(); ok {
+		if err := order.AmountValidator(v); err != nil {
+			return nil, &ValidationError{Name: "amount", err: fmt.Errorf("ent: validator failed for field \"amount\": %w", err)}
+		}
 	}
 	var (
 		err  error
@@ -174,6 +198,14 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
+	if value, ok := oc.mutation.Hospitalid(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: order.FieldHospitalid,
+		})
+		o.Hospitalid = value
+	}
 	if value, ok := oc.mutation.Addedtime(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,

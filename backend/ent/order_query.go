@@ -332,12 +332,12 @@ func (oq *OrderQuery) WithPharmacist(opts ...func(*PharmacistQuery)) *OrderQuery
 // Example:
 //
 //	var v []struct {
-//		Addedtime time.Time `json:"addedtime,omitempty"`
+//		Hospitalid string `json:"hospitalid,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Order.Query().
-//		GroupBy(order.FieldAddedtime).
+//		GroupBy(order.FieldHospitalid).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -358,11 +358,11 @@ func (oq *OrderQuery) GroupBy(field string, fields ...string) *OrderGroupBy {
 // Example:
 //
 //	var v []struct {
-//		Addedtime time.Time `json:"addedtime,omitempty"`
+//		Hospitalid string `json:"hospitalid,omitempty"`
 //	}
 //
 //	client.Order.Query().
-//		Select(order.FieldAddedtime).
+//		Select(order.FieldHospitalid).
 //		Scan(ctx, &v)
 //
 func (oq *OrderQuery) Select(field string, fields ...string) *OrderSelect {

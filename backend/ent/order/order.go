@@ -7,6 +7,8 @@ const (
 	Label = "order"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldHospitalid holds the string denoting the hospitalid field in the database.
+	FieldHospitalid = "hospitalid"
 	// FieldAddedtime holds the string denoting the addedtime field in the database.
 	FieldAddedtime = "addedtime"
 	// FieldPrice holds the string denoting the price field in the database.
@@ -49,6 +51,7 @@ const (
 // Columns holds all SQL columns for order fields.
 var Columns = []string{
 	FieldID,
+	FieldHospitalid,
 	FieldAddedtime,
 	FieldPrice,
 	FieldAmount,
@@ -60,3 +63,12 @@ var ForeignKeys = []string{
 	"medicine_ordermedicine",
 	"pharmacist_orderpharmacist",
 }
+
+var (
+	// HospitalidValidator is a validator for the "hospitalid" field. It is called by the builders before save.
+	HospitalidValidator func(string) error
+	// PriceValidator is a validator for the "price" field. It is called by the builders before save.
+	PriceValidator func(int) error
+	// AmountValidator is a validator for the "amount" field. It is called by the builders before save.
+	AmountValidator func(int) error
+)

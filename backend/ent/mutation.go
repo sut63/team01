@@ -5042,6 +5042,7 @@ type OrderMutation struct {
 	op                Op
 	typ               string
 	id                *int
+	hospitalid        *string
 	addedtime         *time.Time
 	price             *int
 	addprice          *int
@@ -5135,6 +5136,43 @@ func (m *OrderMutation) ID() (id int, exists bool) {
 		return
 	}
 	return *m.id, true
+}
+
+// SetHospitalid sets the hospitalid field.
+func (m *OrderMutation) SetHospitalid(s string) {
+	m.hospitalid = &s
+}
+
+// Hospitalid returns the hospitalid value in the mutation.
+func (m *OrderMutation) Hospitalid() (r string, exists bool) {
+	v := m.hospitalid
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHospitalid returns the old hospitalid value of the Order.
+// If the Order object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *OrderMutation) OldHospitalid(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldHospitalid is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldHospitalid requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHospitalid: %w", err)
+	}
+	return oldValue.Hospitalid, nil
+}
+
+// ResetHospitalid reset all changes of the "hospitalid" field.
+func (m *OrderMutation) ResetHospitalid() {
+	m.hospitalid = nil
 }
 
 // SetAddedtime sets the addedtime field.
@@ -5419,7 +5457,10 @@ func (m *OrderMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *OrderMutation) Fields() []string {
-	fields := make([]string, 0, 3)
+	fields := make([]string, 0, 4)
+	if m.hospitalid != nil {
+		fields = append(fields, order.FieldHospitalid)
+	}
 	if m.addedtime != nil {
 		fields = append(fields, order.FieldAddedtime)
 	}
@@ -5437,6 +5478,8 @@ func (m *OrderMutation) Fields() []string {
 // not set, or was not define in the schema.
 func (m *OrderMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case order.FieldHospitalid:
+		return m.Hospitalid()
 	case order.FieldAddedtime:
 		return m.Addedtime()
 	case order.FieldPrice:
@@ -5452,6 +5495,8 @@ func (m *OrderMutation) Field(name string) (ent.Value, bool) {
 // or the query to the database was failed.
 func (m *OrderMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case order.FieldHospitalid:
+		return m.OldHospitalid(ctx)
 	case order.FieldAddedtime:
 		return m.OldAddedtime(ctx)
 	case order.FieldPrice:
@@ -5467,6 +5512,13 @@ func (m *OrderMutation) OldField(ctx context.Context, name string) (ent.Value, e
 // type mismatch the field type.
 func (m *OrderMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case order.FieldHospitalid:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHospitalid(v)
+		return nil
 	case order.FieldAddedtime:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -5565,6 +5617,9 @@ func (m *OrderMutation) ClearField(name string) error {
 // defined in the schema.
 func (m *OrderMutation) ResetField(name string) error {
 	switch name {
+	case order.FieldHospitalid:
+		m.ResetHospitalid()
+		return nil
 	case order.FieldAddedtime:
 		m.ResetAddedtime()
 		return nil

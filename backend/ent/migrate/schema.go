@@ -234,6 +234,7 @@ var (
 	// OrdersColumns holds the columns for the "orders" table.
 	OrdersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "hospitalid", Type: field.TypeString},
 		{Name: "addedtime", Type: field.TypeTime},
 		{Name: "price", Type: field.TypeInt},
 		{Name: "amount", Type: field.TypeInt},
@@ -249,21 +250,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "orders_companies_ordercompany",
-				Columns: []*schema.Column{OrdersColumns[4]},
+				Columns: []*schema.Column{OrdersColumns[5]},
 
 				RefColumns: []*schema.Column{CompaniesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "orders_medicines_ordermedicine",
-				Columns: []*schema.Column{OrdersColumns[5]},
+				Columns: []*schema.Column{OrdersColumns[6]},
 
 				RefColumns: []*schema.Column{MedicinesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "orders_pharmacists_orderpharmacist",
-				Columns: []*schema.Column{OrdersColumns[6]},
+				Columns: []*schema.Column{OrdersColumns[7]},
 
 				RefColumns: []*schema.Column{PharmacistsColumns[0]},
 				OnDelete:   schema.SetNull,

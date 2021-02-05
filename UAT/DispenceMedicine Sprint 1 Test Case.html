@@ -8,42 +8,108 @@
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Success Test Case</td></tr>
+<tr><td rowspan="1" colspan="3">Success</td></tr>
 </thead>
 <tbody>
 <tr><td>open</td><td>http://localhost:3000/DispenseMedicine<datalist><option>http://localhost:3000/DispenseMedicine</option></datalist></td><td></td>
 </tr>
-<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div/div/table/tbody/tr/td[3]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div/div/table/tbody/tr/td[3]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+<tr><td>click</td><td>xpath=(//button[@type='button'])[3]<datalist><option>xpath=(//button[@type='button'])[3]</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div[2]/table/tbody/tr/td[3]/button</option><option>//td[3]/button</option><option>css=button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary</option></datalist></td><td></td>
 </tr>
-<tr><td>click</td><td>name=datetime<datalist><option>name=datetime</option><option>//input[@name='datetime']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[4]/div/div/div/div/div/input</option><option>//div[4]/div/div/div/div/div/input</option><option>css=input[name="datetime"]</option></datalist></td><td></td>
+<tr><td>setText</td><td>name=datetime<datalist><option>name=datetime</option><option>//input[@name='datetime']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div/div/div/input</option><option>//div[3]/div/div/div/div/div/input</option><option>css=input[name="datetime"]</option></datalist></td><td>2021-01-21T20:24</td>
 </tr>
-<tr><td>setText</td><td>name=datetime<datalist><option>name=datetime</option><option>//input[@name='datetime']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[4]/div/div/div/div/div/input</option><option>//div[4]/div/div/div/div/div/input</option><option>css=input[name="datetime"]</option></datalist></td><td>2021-01-14T20:36</td>
+<tr><td>click</td><td>id=mui-component-select-annotation<datalist><option>id=mui-component-select-annotation</option><option>//div[@id='menu-annotation']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button</option></datalist></td><td></td>
 </tr>
-<tr><td>click</td><td>id=mui-component-select-annotation<datalist><option>//div[@id='menu-annotation']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button</option><option>id=mui-component-select-annotation</option></datalist></td><td></td>
+<tr><td>click</td><td>//div[@id='menu-annotation']/div[3]/ul/li<datalist><option>//div[@id='menu-annotation']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button</option></datalist></td><td></td>
 </tr>
-<tr><td>click</td><td>//div[@id='menu-annotation']/div[3]/ul/li[1]<datalist><option>//div[@id='menu-annotation']/div[3]/ul/li[2]</option><option>//li[2]</option><option>//div[@id='menu-annotation']/div[3]/ul/li[1]</option></datalist></td><td></td>
+<tr><td>type</td><td>name=note<datalist><option>name=note</option><option>//input[@name='note']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[3]/div/div/input</option><option>//div[3]/div/div/div[3]/div/div/input</option><option>css=input[name="note"]</option></datalist></td><td>-</td>
 </tr>
-<tr><td>click</td><td>css=span.MuiButton-startIcon.MuiButton-iconSizeMedium &gt; svg.MuiSvgIcon-root<datalist><option>css=span.MuiButton-startIcon.MuiButton-iconSizeMedium &gt; svg.MuiSvgIcon-root</option></datalist></td><td></td>
+<tr><td>type</td><td>name=amountchangemedicine<datalist><option>name=amountchangemedicine</option><option>//input[@name='amountchangemedicine']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=input[name="amountchangemedicine"]</option></datalist></td><td>0</td>
 </tr>
-<tr><td>verifyText</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div/div[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div/div[2]</option><option>//div[2]/div/div/div/div[2]</option><option>css=div.MuiAlert-message</option></datalist></td><td>บันทึกข้อมูลสำเร็จ!</td>
+<tr><td>type</td><td>name=detailchangemedicine<datalist><option>name=detailchangemedicine</option><option>//input[@name='detailchangemedicine']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=input[name="detailchangemedicine"]</option></datalist></td><td>-</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[6]/button/span/span[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[6]/button/span/span[2]</option><option>//span/span[2]</option><option>css=span.MuiTypography-root.MuiTypography-button</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyText</td><td>id=swal2-title<datalist><option>id=swal2-title</option><option>//h2[@id='swal2-title']</option><option>//h2</option><option>css=#swal2-title</option></datalist></td><td>บันทึกข้อมูลสำเร็จ</td>
 </tr>
 </tbody></table>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Failure Test Case</td></tr>
+<tr><td rowspan="1" colspan="3">Failure field 1</td></tr>
 </thead>
 <tbody>
 <tr><td>open</td><td>http://localhost:3000/DispenseMedicine<datalist><option>http://localhost:3000/DispenseMedicine</option></datalist></td><td></td>
 </tr>
-<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div/div/table/tbody/tr/td[3]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div/div/table/tbody/tr/td[3]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+<tr><td>click</td><td>xpath=(//button[@type='button'])[3]<datalist><option>//div[@id='root']/div/div[2]/article/div/div/div/table/tbody/tr/td[3]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option><option>xpath=(//button[@type='button'])[3]</option></datalist></td><td></td>
 </tr>
-<tr><td>click</td><td>name=datetime<datalist><option>name=datetime</option><option>//input[@name='datetime']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[4]/div/div/div/div/div/input</option><option>//div[4]/div/div/div/div/div/input</option><option>css=input[name="datetime"]</option></datalist></td><td></td>
+<tr><td>setText</td><td>name=datetime<datalist><option>name=datetime</option><option>//input[@name='datetime']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div/div/div/input</option><option>//div[3]/div/div/div/div/div/input</option><option>css=input[name="datetime"]</option></datalist></td><td>2021-01-21T20:25</td>
 </tr>
-<tr><td>type</td><td>name=datetime<datalist><option>name=datetime</option><option>//input[@name='datetime']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[4]/div/div/div/div/div/input</option><option>//div[4]/div/div/div/div/div/input</option><option>css=input[name="datetime"]</option></datalist></td><td>2021-01-14T20:38</td>
+<tr><td>click</td><td>id=mui-component-select-annotation<datalist><option>id=mui-component-select-annotation</option><option>//div[@id='menu-annotation']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button</option></datalist></td><td></td>
 </tr>
-<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/div[4]/div/div/div[3]/button/span/span[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[4]/div/div/div[3]/button/span/span[2]</option><option>//span/span[2]</option><option>css=span.MuiTypography-root.MuiTypography-button</option></datalist></td><td></td>
+<tr><td>click</td><td>//div[@id='menu-annotation']/div[3]/ul/li<datalist><option>//div[@id='menu-annotation']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button</option></datalist></td><td></td>
 </tr>
-<tr><td>verifyText</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div/div[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/div/div/div/div[2]</option><option>//div[2]/div/div/div/div[2]</option><option>css=div.MuiAlert-message</option></datalist></td><td>บันทึกข้อมูลไม่สำเร็จ!</td>
+<tr><td>type</td><td>name=note<datalist><option>name=note</option><option>//input[@name='note']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[3]/div/div/input</option><option>//div[3]/div/div/div[3]/div/div/input</option><option>css=input[name="note"]</option></datalist></td><td>!@@</td>
+</tr>
+<tr><td>type</td><td>name=amountchangemedicine<datalist><option>name=amountchangemedicine</option><option>//input[@name='amountchangemedicine']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=input[name="amountchangemedicine"]</option></datalist></td><td>0</td>
+</tr>
+<tr><td>type</td><td>name=detailchangemedicine<datalist><option>name=detailchangemedicine</option><option>//input[@name='detailchangemedicine']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=input[name="detailchangemedicine"]</option></datalist></td><td>-</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[6]/button/span/span[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[6]/button/span/span[2]</option><option>//span/span[2]</option><option>css=span.MuiTypography-root.MuiTypography-button</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyText</td><td>id=swal2-content<datalist><option>id=swal2-content</option><option>//div[@id='swal2-content']</option><option>//div[2]/div/div[2]/div</option><option>css=#swal2-content</option></datalist></td><td>ถ้าไม่มีรายละเอียดหมายเหตุ กรุณาใส่เครื่องหมาย " - "</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Failure field 2</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/DispenseMedicine<datalist><option>http://localhost:3000/DispenseMedicine</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>xpath=(//button[@type='button'])[3]<datalist><option>//div[@id='root']/div/div[2]/article/div/div/div/table/tbody/tr/td[3]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option><option>xpath=(//button[@type='button'])[3]</option></datalist></td><td></td>
+</tr>
+<tr><td>setText</td><td>name=datetime<datalist><option>name=datetime</option><option>//input[@name='datetime']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div/div/div/input</option><option>//div[3]/div/div/div/div/div/input</option><option>css=input[name="datetime"]</option></datalist></td><td>2021-01-21T20:27</td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-annotation<datalist><option>id=mui-component-select-annotation</option><option>//div[@id='menu-annotation']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-annotation']/div[3]/ul/li[2]<datalist><option>//div[@id='menu-annotation']/div[3]/ul/li[2]</option><option>//li[2]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=note<datalist><option>name=note</option><option>//input[@name='note']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[3]/div/div/input</option><option>//div[3]/div/div/div[3]/div/div/input</option><option>css=input[name="note"]</option></datalist></td><td>-</td>
+</tr>
+<tr><td>click</td><td>name=amountchangemedicine<datalist><option>name=amountchangemedicine</option><option>//input[@name='amountchangemedicine']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=input[name="amountchangemedicine"]</option></datalist></td><td></td>
+</tr>
+<tr><td>setText</td><td>name=amountchangemedicine<datalist><option>name=amountchangemedicine</option><option>//input[@name='amountchangemedicine']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=input[name="amountchangemedicine"]</option></datalist></td><td>-1</td>
+</tr>
+<tr><td>type</td><td>name=detailchangemedicine<datalist><option>name=detailchangemedicine</option><option>//input[@name='detailchangemedicine']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=input[name="detailchangemedicine"]</option></datalist></td><td>-</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[6]/button/span/span[2]<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[6]/button/span/span[2]</option><option>//span/span[2]</option><option>css=span.MuiTypography-root.MuiTypography-button</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyText</td><td>id=swal2-content<datalist><option>id=swal2-content</option><option>//div[@id='swal2-content']</option><option>//div[2]/div/div[2]/div</option><option>css=#swal2-content</option></datalist></td><td>ถ้าไม่มีจำนวนยาที่ถูกเปลี่ยน กรุณาใส่เลข "0"</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Failure field 3</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/DispenseMedicine<datalist><option>http://localhost:3000/DispenseMedicine</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>xpath=(//button[@type='button'])[3]<datalist><option>//div[@id='root']/div/div[2]/article/div/div/div/table/tbody/tr/td[3]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option><option>xpath=(//button[@type='button'])[3]</option></datalist></td><td></td>
+</tr>
+<tr><td>setText</td><td>name=datetime<datalist><option>name=datetime</option><option>//input[@name='datetime']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div/div/div/input</option><option>//div[3]/div/div/div/div/div/input</option><option>css=input[name="datetime"]</option></datalist></td><td>2021-01-21T20:30</td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-annotation<datalist><option>id=mui-component-select-annotation</option><option>//div[@id='menu-annotation']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-annotation']/div[3]/ul/li[2]<datalist><option>//div[@id='menu-annotation']/div[3]/ul/li[2]</option><option>//li[2]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=note<datalist><option>name=note</option><option>//input[@name='note']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[3]/div/div/input</option><option>//div[3]/div/div/div[3]/div/div/input</option><option>css=input[name="note"]</option></datalist></td><td>-</td>
+</tr>
+<tr><td>type</td><td>name=amountchangemedicine<datalist><option>name=amountchangemedicine</option><option>//input[@name='amountchangemedicine']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=input[name="amountchangemedicine"]</option></datalist></td><td>5</td>
+</tr>
+<tr><td>type</td><td>name=detailchangemedicine<datalist><option>name=detailchangemedicine</option><option>//input[@name='detailchangemedicine']</option><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=input[name="detailchangemedicine"]</option></datalist></td><td>@#</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[6]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/div[3]/div/div/div[6]/button/span</option><option>//div[6]/button/span</option><option>css=button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.makeStyles-button-30.MuiButton-containedSecondary &gt; span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyText</td><td>id=swal2-content<datalist><option>id=swal2-content</option><option>//div[@id='swal2-content']</option><option>//div[2]/div/div[2]/div</option><option>css=#swal2-content</option></datalist></td><td>ถ้าไม่มีรายละเอียดยาที่ถูกเปลี่ยน กรุณาใส่เครื่องหมาย " - "</td>
 </tr>
 </tbody></table>
 </body>

@@ -14,7 +14,7 @@ import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 
 import { DefaultApi } from '../../api/apis';
-import { InputLabel, MenuItem, Select } from '@material-ui/core';
+import { AppBar, InputLabel, MenuItem, Select } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import TableCell from '@material-ui/core/TableCell';
 import Avatar from '@material-ui/core/Avatar';
@@ -108,17 +108,11 @@ interface oorder {
   let companyid = Number(companyID)
   
   console.log(pharmacistID)
-
-  const checkPosition = async () => {
-    if(cookies.get('PositionData') != 'Order'){
-      history.pushState('', '', '/' + cookies.get('PositionData'));
-      window.location.reload(false); 
-    }
-  };
-
   useEffect(() => {
 
-    checkPosition();
+  
+
+
 
     const getmedicines = async () => {
 
@@ -195,7 +189,7 @@ const checkCaseSaveError = (field : String) => {
       alertMessage("error","กรอกราคาสินค้าไม่ถุกต้อง");
       return;
       case 'hospitalid' :
-        alertMessage("error","รูปแบบรหัสหน่วยงานไม่ถุกต้อง");
+        alertMessage("error","รูปแบบหมายเลขติดต่อหน่วยงานไม่ถุกต้อง");
         return;
     default:
       alertMessage("error","บันทึกข้อมูลไม่สำเร็จ");
@@ -278,11 +272,13 @@ const checkCaseSaveError = (field : String) => {
   return (
     <Page theme={pageTheme.home}>
       <Header
-        title={`Welcome ${profile.givenName || 'to MedicineOrder'}`}
-        subtitle="เลือกยาที่สั่งซื้อ."
+        
+        title={`Welcome to MedicineOrder `}
+        subtitle="เลือกยาที่สั่งซื้อ"
       >
+     
 
-        <Avatar>C</Avatar>
+        <Avatar></Avatar>
         <Typography component="div" variant="body1">
           <Box color=""> เภสัชกร</Box>
           <Box color="secondary.main"></Box>
@@ -315,7 +311,7 @@ const checkCaseSaveError = (field : String) => {
 
 
 
-            <FormControl variant='outlined' style={{ marginLeft: 700, width: 302 }}>
+            <FormControl variant='outlined' style={{ marginLeft: 693, width: 302 }}>
                          <InputLabel id="pharmacist"></InputLabel>
                          <div className={classes.margin}>
                                     <div>

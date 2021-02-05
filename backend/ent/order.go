@@ -19,6 +19,8 @@ type Order struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// Hospitalid holds the value of the "hospitalid" field.
+	Hospitalid string `json:"hospitalid,omitempty"`
 	// Addedtime holds the value of the "addedtime" field.
 	Addedtime time.Time `json:"addedtime,omitempty"`
 	// Price holds the value of the "price" field.
@@ -91,10 +93,11 @@ func (e OrderEdges) PharmacistOrErr() (*Pharmacist, error) {
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Order) scanValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{}, // id
-		&sql.NullTime{},  // addedtime
-		&sql.NullInt64{}, // price
-		&sql.NullInt64{}, // amount
+		&sql.NullInt64{},  // id
+		&sql.NullString{}, // hospitalid
+		&sql.NullTime{},   // addedtime
+		&sql.NullInt64{},  // price
+		&sql.NullInt64{},  // amount
 	}
 }
 
@@ -119,22 +122,27 @@ func (o *Order) assignValues(values ...interface{}) error {
 	}
 	o.ID = int(value.Int64)
 	values = values[1:]
-	if value, ok := values[0].(*sql.NullTime); !ok {
-		return fmt.Errorf("unexpected type %T for field addedtime", values[0])
+	if value, ok := values[0].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field hospitalid", values[0])
+	} else if value.Valid {
+		o.Hospitalid = value.String
+	}
+	if value, ok := values[1].(*sql.NullTime); !ok {
+		return fmt.Errorf("unexpected type %T for field addedtime", values[1])
 	} else if value.Valid {
 		o.Addedtime = value.Time
 	}
-	if value, ok := values[1].(*sql.NullInt64); !ok {
-		return fmt.Errorf("unexpected type %T for field price", values[1])
+	if value, ok := values[2].(*sql.NullInt64); !ok {
+		return fmt.Errorf("unexpected type %T for field price", values[2])
 	} else if value.Valid {
 		o.Price = int(value.Int64)
 	}
-	if value, ok := values[2].(*sql.NullInt64); !ok {
-		return fmt.Errorf("unexpected type %T for field amount", values[2])
+	if value, ok := values[3].(*sql.NullInt64); !ok {
+		return fmt.Errorf("unexpected type %T for field amount", values[3])
 	} else if value.Valid {
 		o.Amount = int(value.Int64)
 	}
-	values = values[3:]
+	values = values[4:]
 	if len(values) == len(order.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field company_ordercompany", value)
@@ -196,6 +204,8 @@ func (o *Order) String() string {
 	var builder strings.Builder
 	builder.WriteString("Order(")
 	builder.WriteString(fmt.Sprintf("id=%v", o.ID))
+	builder.WriteString(", hospitalid=")
+	builder.WriteString(o.Hospitalid)
 	builder.WriteString(", addedtime=")
 	builder.WriteString(o.Addedtime.Format(time.ANSIC))
 	builder.WriteString(", price=")

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,FC } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { Cookies } from 'react-cookie/cjs'; //cookie
 import {
   Content,
   ContentHeader,
@@ -19,7 +20,7 @@ import TableCell from '@material-ui/core/TableCell';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import { Alert } from '@material-ui/lab';
-import { Cookies } from 'react-cookie/cjs'; //cookie
+
 
 import { EntMedicine } from '../../api/models/EntMedicine';
 import { EntCompany } from '../../api/models/EntCompany';
@@ -59,6 +60,7 @@ const Toast = Swal.mixin({
   },
 });
 
+
 interface oorder {
   pharmacistid: number;
   medicineid: number;
@@ -68,52 +70,47 @@ interface oorder {
   addedtime: Date;
 }
 
-export default function Order() {
+
+  const oorder: FC<{}> = () => {
   const classes = useStyles();
   const profile = { givenName: 'to Order ' };
   const api = new DefaultApi();
+  const cookies = new Cookies();
   const [status, setStatus] = useState(false);
   const [alert, setAlert] = useState(true);
   const [loading, setLoading] = useState(true);
-  const cookies = new Cookies();
-  const [oorder, setOreder] = React.useState<Partial<oorder>>({});
+
+  const [oorDer, setOreder] = React.useState<Partial<oorder>>({});
+  
 
   const [medicines, setMedicines] = React.useState<EntMedicine[]>([]);
   const [companys, setCompanys] = React.useState<EntCompany[]>([]);
-  const [pharmacists, setPharmacists] = React.useState<EntPharmacist[]>([]);
+ 
 
-  const [pharmacistID, setPharmacistid] = useState(Number);
+  const [pharmacistID, setPharmacistid] = React.useState(String);
   const [medicineID, setMedicineid] = useState(Number);
   const [companyID, setCompanyid] = useState(Number);
   const [orderpriceid, setOrderpriceid] = useState(Number);
+  const [hospitalid, setOrderhospitalid] = useState(String);
   const [orderamountid, setOrderamountid] = useState(Number);
   const [datetime, setDatetime] = useState(String);
 
+  const [orderpriceidError, SetPriceIDError] = React.useState('');
+  const [orderhospitalidError, SetHospitalIDError] = React.useState('');
+  const [orderamountidError, SetAmountIDError] = React.useState('');
+  const [errors, setError] = React.useState(String);
+
 
   let price = Number(orderpriceid)
+  let hospitalId = String(hospitalid)
   let amount = Number(orderamountid)
-  let pharmacistid = Number(pharmacistID)
   let medicineid = Number(medicineID)
   let companyid = Number(companyID)
   
   console.log(pharmacistID)
-
-  const checkPosition = async () => {
-    if(cookies.get('PositionData') != 'Order'){
-      history.pushState('', '', '/' + cookies.get('PositionData'));
-      window.location.reload(false); 
-    }
-  };
-
   useEffect(() => {
 
-    const getpharmacists = async () => {
-
-      const mn = await api.listPharmacist({ limit: 10, offset: 0 });
-      setLoading(false);
-      setPharmacists(mn);
-    };
-    getpharmacists();
+  
 
 
 
@@ -132,20 +129,87 @@ export default function Order() {
       setCompanys(pay);
     };
     getcompanys();
-    checkPosition();
+
   }, [loading]);
 
-  const order = {
-    pharmacistid,
-    medicineid,
-    companyid,
-    amount,
-    price,
-    addedtime: datetime + ":00+07:00"
+  const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+    const name = event.target.name as keyof typeof oorder;
+    const { value } = event.target;
+    //const validateValue = value.toString()
+    //checkPattern(name, validateValue)
+    setOreder({ ...oorDer, [name]: value });
+    //console.log(oorder);
+};
+
+/*const validatePhoneID = (val: string) => {
+return val.length == 9 ? true : false;
+}
+
+const validateAmountID = (val: number) => {
+  return val > 1 ;
   }
-  console.log(order)
+
+  const validatePriceID = (val: number) => {
+    return val > 1 ;
+    }
+
+
+
+const checkPattern = (id:number ,value: number ) => {
+  switch(id) {
+    case 'amount':
+      validateAmountID(value) ? SetAmountIDError('') :  SetAmountIDError('กรอกจำนวนยา');
+      return;
+    case 'price':
+      validatePriceID(value) ? SetPriceIDError('') :  SetPriceIDError('กรอกราคาสุทธิ');
+      return;
+   case 'phone':
+      validatePhoneID(value) ? SetPhoneIDError('') :  SetPhoneIDError('กรอกเบอร์โทรศัพท์ 9 ตัว');
+      return;
+  }
+}*/
+
+
+
+const alertMessage = (icon: any , title: any) => {
+  Toast.fire({
+    icon: icon,
+    title: title,
+  })
+}
+
+
+
+const checkCaseSaveError = (field : String) => {
+  switch(field) {
+    case 'amount' :
+      alertMessage("error","กรอกจำนวนสินค้าไม่ถูกต้อง");
+      return;
+    case 'price' :
+      alertMessage("error","กรอกราคาสินค้าไม่ถุกต้อง");
+      return;
+      case 'hospitalid' :
+        alertMessage("error","รูปแบบรหัสหน่วยงานไม่ถุกต้อง");
+        return;
+    default:
+      alertMessage("error","บันทึกข้อมูลไม่สำเร็จ");
+      return;
+  }
+}
+
+  //console.log(order)
 
   function save() {
+
+    const order = {
+      pharmacistid: Number(oorDer.pharmacistid),
+      medicineid,
+      companyid,
+      amount,
+      hospitalId,
+      price,
+      addedtime: datetime + ":00+07:00"
+    };
     const apiUrl = 'http://localhost:8080/api/v1/orders';
     const requestOptions = {
       method: 'POST',
@@ -159,24 +223,19 @@ export default function Order() {
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        if (data.id != null) {
+        if (data.status == true) {
           //clear();
           Toast.fire({
             icon: 'success',
             title: 'บันทึกข้อมูลสำเร็จ',
           });
         } else {
-          Toast.fire({
-            icon: 'error',
-            title: 'บันทึกข้อมูลไม่สำเร็จ',
-          });
+          checkCaseSaveError(data.error.Name)
         }
       });
   }
 
-  const Pharmacist_id_handleChange = (event: any) => {
-    setPharmacistid(event.target.value);
-  };
+
 
   const Medicine_id_handleChange = (event: any) => {
     setMedicineid(event.target.value);
@@ -191,9 +250,23 @@ export default function Order() {
   const Orderamount_id_handleChange = (event: any) => {
     setOrderamountid(event.target.value);
   };
+  const Orderhospital_id_handleChange = (event: any) => {
+    setOrderhospitalid(event.target.value);
+  };
   const handleDatetimeChange = (event: any) => {
     setDatetime(event.target.value as string);
   };
+
+  const clear = async () => {
+    setOreder({});
+    setOreder({ pharmacistid: Number(cookies.get('ID')) });
+}
+  useEffect(() => {
+  
+    setPharmacistid(cookies.get('Name'));
+    setOreder({ pharmacistid: Number(cookies.get('ID')) });
+    
+}, []);
 
  
   return (
@@ -237,21 +310,20 @@ export default function Order() {
 
 
             <FormControl variant='outlined' style={{ marginLeft: 700, width: 302 }}>
-                         <InputLabel id="pharmacist">เภสัชกร</InputLabel>
-                                        <Select
-                                            labelId="pharmacist"
+                         <InputLabel id="pharmacist"></InputLabel>
+                         <div className={classes.margin}>
+                                    <div>
+                                        <TextField
+                                            style={{ width: 302 }}
                                             name="pharmacist"
-                                            onChange={Pharmacist_id_handleChange}
-                                            label='เภสัชกร'
-                                        >
-                                            {pharmacists.map(item => {
-                                                return (
-                                                    <MenuItem key={item.id} value={item.id}>
-                                                        {item.name}
-                                                    </MenuItem>
-                                                );
-                                            })}
-                                        </Select>
+                                            label="เภสัชกร"
+                                            value={pharmacistID}
+                                            InputProps={{
+                                                readOnly: true,
+                                            }}
+                                            variant="outlined"
+                                        />
+                                    </div></div>
                                     </FormControl>
 
                                      <FormControl variant='outlined' style={{ marginTop: 20 , marginLeft: 700, width: 302 }}>
@@ -273,7 +345,64 @@ export default function Order() {
                                     </FormControl>
                                     
 
-                                    <FormControl variant='outlined' style={{ marginTop: 20 , marginLeft: 700, width: 302 }}>
+
+
+
+              
+              <FormControl
+                fullWidth
+                className={classes.margin}
+                variant="outlined"
+                style={{marginTop: 20 , marginLeft: 700, width: 302 }}
+              >
+                <TextField id="amount" type='number' InputLabelProps={{
+                  shrink: true,
+                }} label="จำนวนสินค้า" variant="outlined"
+                  onChange={Orderamount_id_handleChange}
+                  value={orderamountid || ''}
+                />
+              </FormControl>
+
+ 
+              
+
+              <FormControl
+                fullWidth
+                className={classes.margin}
+                variant="outlined"
+                style={{ marginTop: 20 ,marginLeft: 700, width: 302 }}
+              >
+                <TextField id="price" type='number' InputLabelProps={{
+                  shrink: true,
+                }} label="ราคาสุทธิ" variant="outlined"
+                  onChange={Orderprice_id_handleChange}
+                  value={orderpriceid || ''}
+                />
+              </FormControl>
+
+              <FormControl
+                fullWidth
+                className={classes.margin}
+                variant="outlined"
+                style={{ marginTop: 20 ,marginLeft: 700, width: 302 }}
+              >
+                <TextField
+                  id="hospitalid"
+                  label="เบอร์ติดต่อหน่วยงาน"
+                  variant="outlined"
+                  type="string"
+                  size="medium"
+                  value={hospitalid}
+                  onChange={Orderhospital_id_handleChange}
+                  style={{ marginRight: 300, width: 300 }}
+                />
+              </FormControl>
+
+  
+
+
+              
+              <FormControl variant='outlined' style={{ marginTop: 20 , marginLeft: 700, width: 302 }}>
                                         <InputLabel id="company">บริษัท</InputLabel>
                                         <Select
                                             labelId="company"
@@ -290,40 +419,6 @@ export default function Order() {
                                             })}
                                         </Select>
                                     </FormControl>
-
-
-
-              
-              <FormControl
-                fullWidth
-                className={classes.margin}
-                variant="outlined"
-                style={{marginTop: 20 , marginLeft: 700, width: 302 }}
-              >
-                <TextField id="outlined-number" type='number' InputLabelProps={{
-                  shrink: true,
-                }} label="จำนวนที่สี่ง" variant="outlined"
-                  onChange={Orderamount_id_handleChange}
-                  value={orderamountid || ''}
-                />
-              </FormControl>
-
- 
-              
-
-              <FormControl
-                fullWidth
-                className={classes.margin}
-                variant="outlined"
-                style={{ marginTop: 20 ,marginLeft: 700, width: 302 }}
-              >
-                <TextField id="outlined-number" type='number' InputLabelProps={{
-                  shrink: true,
-                }} label="ราคาสุทธิ" variant="outlined"
-                  onChange={Orderprice_id_handleChange}
-                  value={orderpriceid || ''}
-                />
-              </FormControl>
 
 
 
@@ -353,8 +448,8 @@ export default function Order() {
 
             </TableCell>
 
-            <div className={classes.margin}>
-            <TableCell align="right">
+              <div className={classes.margin}>
+              <TableCell align="right">
                 <Button
                 component={RouterLink}
                 to="/Order"
@@ -371,6 +466,15 @@ export default function Order() {
                 >
                   Save
                 </Button>
+                <Button
+                    style={{ marginLeft: 40 }}
+                    component={RouterLink}
+                    to="/SearchOrder"
+                    variant="contained"
+                    color="secondary"
+                  >
+                    ค้นหาข้อมูลสั่งซื้อยาย้อนหลัง
+                </Button>
               </TableCell>
 
              
@@ -383,4 +487,7 @@ export default function Order() {
       </Content>
     </Page>
   );
-}
+ 
+};
+
+export default oorder;

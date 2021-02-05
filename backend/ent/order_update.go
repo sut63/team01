@@ -31,6 +31,12 @@ func (ou *OrderUpdate) Where(ps ...predicate.Order) *OrderUpdate {
 	return ou
 }
 
+// SetHospitalid sets the hospitalid field.
+func (ou *OrderUpdate) SetHospitalid(s string) *OrderUpdate {
+	ou.mutation.SetHospitalid(s)
+	return ou
+}
+
 // SetAddedtime sets the addedtime field.
 func (ou *OrderUpdate) SetAddedtime(t time.Time) *OrderUpdate {
 	ou.mutation.SetAddedtime(t)
@@ -145,6 +151,21 @@ func (ou *OrderUpdate) ClearPharmacist() *OrderUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (ou *OrderUpdate) Save(ctx context.Context) (int, error) {
+	if v, ok := ou.mutation.Hospitalid(); ok {
+		if err := order.HospitalidValidator(v); err != nil {
+			return 0, &ValidationError{Name: "hospitalid", err: fmt.Errorf("ent: validator failed for field \"hospitalid\": %w", err)}
+		}
+	}
+	if v, ok := ou.mutation.Price(); ok {
+		if err := order.PriceValidator(v); err != nil {
+			return 0, &ValidationError{Name: "price", err: fmt.Errorf("ent: validator failed for field \"price\": %w", err)}
+		}
+	}
+	if v, ok := ou.mutation.Amount(); ok {
+		if err := order.AmountValidator(v); err != nil {
+			return 0, &ValidationError{Name: "amount", err: fmt.Errorf("ent: validator failed for field \"amount\": %w", err)}
+		}
+	}
 
 	var (
 		err      error
@@ -212,6 +233,13 @@ func (ou *OrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := ou.mutation.Hospitalid(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: order.FieldHospitalid,
+		})
 	}
 	if value, ok := ou.mutation.Addedtime(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
@@ -371,6 +399,12 @@ type OrderUpdateOne struct {
 	mutation *OrderMutation
 }
 
+// SetHospitalid sets the hospitalid field.
+func (ouo *OrderUpdateOne) SetHospitalid(s string) *OrderUpdateOne {
+	ouo.mutation.SetHospitalid(s)
+	return ouo
+}
+
 // SetAddedtime sets the addedtime field.
 func (ouo *OrderUpdateOne) SetAddedtime(t time.Time) *OrderUpdateOne {
 	ouo.mutation.SetAddedtime(t)
@@ -485,6 +519,21 @@ func (ouo *OrderUpdateOne) ClearPharmacist() *OrderUpdateOne {
 
 // Save executes the query and returns the updated entity.
 func (ouo *OrderUpdateOne) Save(ctx context.Context) (*Order, error) {
+	if v, ok := ouo.mutation.Hospitalid(); ok {
+		if err := order.HospitalidValidator(v); err != nil {
+			return nil, &ValidationError{Name: "hospitalid", err: fmt.Errorf("ent: validator failed for field \"hospitalid\": %w", err)}
+		}
+	}
+	if v, ok := ouo.mutation.Price(); ok {
+		if err := order.PriceValidator(v); err != nil {
+			return nil, &ValidationError{Name: "price", err: fmt.Errorf("ent: validator failed for field \"price\": %w", err)}
+		}
+	}
+	if v, ok := ouo.mutation.Amount(); ok {
+		if err := order.AmountValidator(v); err != nil {
+			return nil, &ValidationError{Name: "amount", err: fmt.Errorf("ent: validator failed for field \"amount\": %w", err)}
+		}
+	}
 
 	var (
 		err  error
@@ -551,6 +600,13 @@ func (ouo *OrderUpdateOne) sqlSave(ctx context.Context) (o *Order, err error) {
 		return nil, &ValidationError{Name: "ID", err: fmt.Errorf("missing Order.ID for update")}
 	}
 	_spec.Node.ID.Value = id
+	if value, ok := ouo.mutation.Hospitalid(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: order.FieldHospitalid,
+		})
+	}
 	if value, ok := ouo.mutation.Addedtime(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,

@@ -531,6 +531,54 @@ var doc = `{
                 }
             }
         },
+        "/Medicine/{id}": {
+            "get": {
+                "description": "get medicine by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a medicine entity by ID",
+                "operationId": "get-medicine",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Medicine ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.Medicine"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
         "/MedicineType": {
             "get": {
                 "description": "list MedicineType entities",
@@ -2214,54 +2262,6 @@ var doc = `{
                 }
             }
         },
-        "/medicine/{id}": {
-            "get": {
-                "description": "get medicine by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get a medicine entity by ID",
-                "operationId": "get-medicine",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Medicine ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/ent.Medicine"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            }
-        },
         "/orders": {
             "get": {
                 "description": "list order entities",
@@ -3883,6 +3883,10 @@ var doc = `{
                     "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the OrderQuery when eager-loading is set.",
                     "type": "object",
                     "$ref": "#/definitions/ent.OrderEdges"
+                },
+                "hospitalid": {
+                    "description": "Hospitalid holds the value of the \"hospitalid\" field.",
+                    "type": "string"
                 },
                 "id": {
                     "description": "ID of the ent.",

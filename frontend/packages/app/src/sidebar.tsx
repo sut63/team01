@@ -67,7 +67,7 @@ export const AppSidebar = () => (
           />
           <SidebarItem
             icon={SearchRoundedIcon}
-            to="SearchDrugAllergy"
+            to="/SearchDrugAllergy"
             text="ค้นหาประวัติการเเพ้"
           />
         </>
@@ -78,7 +78,11 @@ export const AppSidebar = () => (
             to="Order"
             text="สั่งซื้อยา"
           />
-          <SidebarItem icon={SearchRoundedIcon} to="" text="ค้นหา------" />
+          <SidebarItem
+            icon={SearchRoundedIcon}
+            to="/SearchOrder"
+            text="ค้นหาการสั่งซื้อยาย้อนหลัง"
+          />
         </>
       ) : sPositionData == 'Medicine' ? (
         <>
@@ -87,7 +91,11 @@ export const AppSidebar = () => (
             to="Medicine"
             text="บันทึกข้อมูลยา"
           />
-          <SidebarItem icon={SearchRoundedIcon} to="/SearchMedicine" text="ค้นหาข้อมูลยา" />
+          <SidebarItem
+            icon={SearchRoundedIcon}
+            to="/SearchMedicine"
+            text="ค้นหาข้อมูลยา"
+          />
         </>
       ) : sPositionData == 'Prescription' ? (
         <>
@@ -96,7 +104,11 @@ export const AppSidebar = () => (
             to="Prescription"
             text="สั่งจ่ายยา"
           />
-          <SidebarItem icon={SearchRoundedIcon} to="/TablePrescription" text="ค้นหารายการการสั่งจ่ายยา" />
+          <SidebarItem
+            icon={SearchRoundedIcon}
+            to="/TablePrescription"
+            text="ค้นหารายการการสั่งจ่ายยา"
+          />
         </>
       ) : sPositionData == 'DispenseMedicine' ? (
         <>

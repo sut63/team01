@@ -26,6 +26,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const Table: FC<{}> = () => {
   const profile = { givenName: 'ระบบค้นหารายการการสั่งจ่ายยา' };
+  const cookies = new Cookies();
   const http = new DefaultApi();
   const useStyles = makeStyles(theme => ({
     table: {
@@ -73,8 +74,15 @@ console.log("p = ",p)
  
 };
 
+const checkPosition = async () => {
+  if (cookies.get('PositionData') != 'Prescription') {
+    history.pushState('', '', '/' + cookies.get('PositionData'));
+    window.location.reload(false);
+  }
+};
  
   useEffect(() => {
+    checkPosition();
     getPatientInfo();
     setLoading(false);
   }, [loading]);

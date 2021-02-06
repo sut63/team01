@@ -7,10 +7,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-
 import Button from '@material-ui/core/Button';
 import { DefaultApi } from '../../api/apis';
 import { EntPrescription } from '../../api/models/EntPrescription';
+
 
 const useStyles = makeStyles(theme => ({
   table: {
@@ -28,33 +28,33 @@ export default function ComponentsTable(sim: any) {
   const classes = useStyles();
   const api = new DefaultApi();
   const [Prescriptions, setPrescriptions] = useState<EntPrescription[]>(Array);
-
-
   const [loading, setLoading] = useState(true);
-
+  const [nc, setnc] = useState(true);
+  const [no, setno] = useState<EntPrescription>({});
   const getPrescriptions = async () => {
     const res = await api.listPrescription({ limit: 100, offset: 0 });
     setLoading(false);
     setPrescriptions(res);
   };
 
-
   //console.log(Prescriptions)
 
-
   useEffect(() => {
-
     getPrescriptions();
-
-
+    setnc(true);
   }, [loading]);
 
+ const Show = async (i: any) => {
 
+    setno(i);
+    setnc(false);
+
+  };
 
   var p = 0;
-  console.log(sim.sim)
+  console.log("sim",sim.sim)
   for (var val of Prescriptions) {
-    if (val.edges?.prescriptionpatient?.id === sim.sim || sim.sim === 0) {
+    if (val.edges?.prescriptionpatient?.name === sim.sim || sim.sim === undefined || sim.sim === null) {
       p = p + 1
     }
     //console.log(val)
@@ -80,7 +80,7 @@ export default function ComponentsTable(sim: any) {
           <TableBody>
             {Prescriptions === undefined
               ? null
-              : Prescriptions.filter(i => i.edges?.prescriptionpatient?.id === sim.sim || sim.sim === 0).map((item: any) => (
+              : Prescriptions.filter(i => i.edges?.prescriptionpatient?.name === sim.sim || sim.sim === 0).map((item: any) => (
                 <TableRow>
                   <TableCell align="center">{item.id}</TableCell>
                   <TableCell align="center">{item.edges?.prescriptionpatient?.name}</TableCell>
@@ -111,7 +111,4 @@ export default function ComponentsTable(sim: any) {
       </TableContainer>
     );
   }
-
-
-
 }

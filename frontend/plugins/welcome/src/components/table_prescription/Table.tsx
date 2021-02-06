@@ -8,25 +8,13 @@ import { Cookies } from 'react-cookie/cjs';//cookie
 import { useEffect } from 'react';
 import { Alert } from '@material-ui/lab';
 import { EntPatientInfo } from '../../api/models/EntPatientInfo';
-import {
-  Content,
-  Header,
-  Page,
-  pageTheme,
-  ContentHeader,
-  Link,
-} from '@backstage/core';
-import {
-  FormControl,
-  Select,
-  InputLabel,
-  MenuItem,
-} from '@material-ui/core';
+import { Content, Header, Page, pageTheme,ContentHeader,Link,} from '@backstage/core';
+import {FormControl,TextField} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const Table: FC<{}> = () => {
   const profile = { givenName: 'ระบบค้นหารายการการสั่งจ่ายยา' };
-  const cookies = new Cookies();
   const http = new DefaultApi();
   const useStyles = makeStyles(theme => ({
     table: {
@@ -37,52 +25,46 @@ const Table: FC<{}> = () => {
       width: 350,
     },
   }));
-  const [Sc, setSc] = React.useState<number>(0);
-const [Pat, setPat] = React.useState<number>(0);
+const [Sc, setSc] = React.useState<string>();
+const [Pat, setPat] = React.useState<string>();
 const classes = useStyles();
 const [loading, setLoading] = React.useState(true);
-//const [Users, setUsers] = React.useState<Partial<EntUser>>();
 const [status, setStatus] =   React.useState(false);
 const [alert, setAlert] =  React.useState(true);
 const [PatientInfo, setPatientInfo] = React.useState<EntPatientInfo[]>([]);
 const getPatientInfo = async () => {
-    const res = await http.listPatientInfo({ limit: 110, offset: 0 });
-    setPatientInfo(res);
-  };
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setPat(event.target.value as number);
-  };
-  const So = async ()=>{
-setSc(Pat)
+  const res = await http.listPatientInfo({ limit: 110, offset: 0 });
+  setPatientInfo(res);
+};
+const handleChange = (event : any, value : unknown) => {
+  setPat(value as string);
+};
+const So = async ()=>{
+  setSc(Pat);
+  var p = await http.listPatientInfo({ limit: 100, offset: 0 })
+  let i = 0
+  for (let u of p){
+    if( u.name === Pat && u.edges?.patientprescription !== undefined)
+    i = i+1
+  console.log(i)  
+  }
+  //console.log("ผู้ป่วย = ",Pat)
+  //console.log("p = ",p)
 
-//setStatus(true);
-var p = (await http.getPatientInfo({id:Pat})).edges?.patientprescription
-console.log("ผู้ป่วย = ",Pat)
-console.log("p = ",p)
-
- if (p != undefined){
+  if (i != 0){
    setStatus(true);
    setAlert(true);
- } else {
+  } else {
    setStatus(true);
    setAlert(false);
- }
-
- setTimeout(() => {
-   setStatus(false);
- }, 4000);
- 
-};
-
-const checkPosition = async () => {
-  if (cookies.get('PositionData') != 'Prescription') {
-    history.pushState('', '', '/' + cookies.get('PositionData'));
-    window.location.reload(false);
   }
-};
+   setTimeout(() => {
+   setStatus(false);
+  }, 6000);
  
-  useEffect(() => {
-    checkPosition();
+};
+
+ useEffect(() => {
     getPatientInfo();
     setLoading(false);
   }, [loading]);
@@ -108,22 +90,18 @@ const checkPosition = async () => {
              )}
            </div>
          ) : null}
+
+
           <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel>ผู้ป่วย</InputLabel>
-            <Select
-              name="patientinfo"
-              value={Pat}
+            <Autocomplete
+              id="patientname"  
+              options={PatientInfo.map((option) => option.name)}
               onChange={handleChange}
-            >
-              {PatientInfo.map((item: any) => {
-                return (
-                  <MenuItem key={item.id} value={item.id}>
-                    {item.name}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
+              renderInput={(params) => (
+                <TextField {...params} label="ชื่อผู้ป่วย" margin="normal" variant="outlined" />
+              )}
+            />
+            </FormControl>
           <Button
             onClick={() => {
               So();
@@ -131,10 +109,8 @@ const checkPosition = async () => {
             style={{ marginLeft: 10 }}
             variant="contained"
             color="primary" 
-          
-          >
-            ค้นหา
-               </Button>&emsp;
+          >ค้นหา</Button>&emsp;
+         
          <Link component={RouterLink} to="/">
             <Button variant="contained" color="primary" style={{ backgroundColor: "#FFcc00" }}> Home</Button>
           </Link>&emsp;

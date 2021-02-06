@@ -66,7 +66,7 @@ const SearchDrugAllergy: FC<{}> = () => {
     const [searchDrugAllergy, setSearchDrugAllergy] = React.useState<EntDrugAllergy[]>([]);
     const [statusTable, setStatusTable] = React.useState(false);
     const [validateCardNumberInput, setValidateCardNumberInput] = React.useState(false);
-    //const [storage, setStorage] = useState<EntStorage[]>([]);
+    
 
     // alert setting
     const Toast = Swal.mixin({
@@ -92,13 +92,18 @@ const SearchDrugAllergy: FC<{}> = () => {
         setDrugAllergy(res);
     };
 
+    const validateText = (val: string) => {
+        const regexpNum = new RegExp('^[+ 0-9]{13}$');
+        return regexpNum.test(val);
+    };
+
     const checkValidate = (text: string) => {
-        if(text.length > 12 || text === ""){
+        if(validateText(text)){
             setValodateCardNumberText("")
             setValidateCardNumberInput(false);
         }
         else{
-            setValodateCardNumberText("กรุณาใส่เลขประจําตัวประชาชนให้ครบ 13 หลัก");
+            setValodateCardNumberText("กรุณาใส่เลขประจําตัวประชาชนให้ครบ 13 หลัก เเละตัวเลขเท่านั้น");
             setValidateCardNumberInput(true);
         }
     }

@@ -93,6 +93,13 @@ func IDLTE(id int) predicate.Order {
 	})
 }
 
+// Hospitalid applies equality check predicate on the "hospitalid" field. It's identical to HospitalidEQ.
+func Hospitalid(v string) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldHospitalid), v))
+	})
+}
+
 // Addedtime applies equality check predicate on the "addedtime" field. It's identical to AddedtimeEQ.
 func Addedtime(v time.Time) predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
@@ -111,6 +118,117 @@ func Price(v int) predicate.Order {
 func Amount(v int) predicate.Order {
 	return predicate.Order(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldAmount), v))
+	})
+}
+
+// HospitalidEQ applies the EQ predicate on the "hospitalid" field.
+func HospitalidEQ(v string) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldHospitalid), v))
+	})
+}
+
+// HospitalidNEQ applies the NEQ predicate on the "hospitalid" field.
+func HospitalidNEQ(v string) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldHospitalid), v))
+	})
+}
+
+// HospitalidIn applies the In predicate on the "hospitalid" field.
+func HospitalidIn(vs ...string) predicate.Order {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Order(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldHospitalid), v...))
+	})
+}
+
+// HospitalidNotIn applies the NotIn predicate on the "hospitalid" field.
+func HospitalidNotIn(vs ...string) predicate.Order {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Order(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldHospitalid), v...))
+	})
+}
+
+// HospitalidGT applies the GT predicate on the "hospitalid" field.
+func HospitalidGT(v string) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldHospitalid), v))
+	})
+}
+
+// HospitalidGTE applies the GTE predicate on the "hospitalid" field.
+func HospitalidGTE(v string) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldHospitalid), v))
+	})
+}
+
+// HospitalidLT applies the LT predicate on the "hospitalid" field.
+func HospitalidLT(v string) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldHospitalid), v))
+	})
+}
+
+// HospitalidLTE applies the LTE predicate on the "hospitalid" field.
+func HospitalidLTE(v string) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldHospitalid), v))
+	})
+}
+
+// HospitalidContains applies the Contains predicate on the "hospitalid" field.
+func HospitalidContains(v string) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldHospitalid), v))
+	})
+}
+
+// HospitalidHasPrefix applies the HasPrefix predicate on the "hospitalid" field.
+func HospitalidHasPrefix(v string) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldHospitalid), v))
+	})
+}
+
+// HospitalidHasSuffix applies the HasSuffix predicate on the "hospitalid" field.
+func HospitalidHasSuffix(v string) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldHospitalid), v))
+	})
+}
+
+// HospitalidEqualFold applies the EqualFold predicate on the "hospitalid" field.
+func HospitalidEqualFold(v string) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldHospitalid), v))
+	})
+}
+
+// HospitalidContainsFold applies the ContainsFold predicate on the "hospitalid" field.
+func HospitalidContainsFold(v string) predicate.Order {
+	return predicate.Order(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldHospitalid), v))
 	})
 }
 

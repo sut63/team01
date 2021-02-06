@@ -80,11 +80,6 @@ func (ctl *PrescriptionController) CreatePrescription(c *gin.Context) {
 		return
 	}
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 3f44d504064285debd69c134107b05f0232e77b7
 	var Value int
 	if v, err := strconv.ParseInt(obj.Value, 10, 64); err == nil {
 		Value = int(v)

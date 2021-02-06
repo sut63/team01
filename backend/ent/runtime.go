@@ -10,6 +10,7 @@ import (
 	"github.com/sut63/team01/ent/doctor"
 	"github.com/sut63/team01/ent/drugallergy"
 	"github.com/sut63/team01/ent/medicine"
+	"github.com/sut63/team01/ent/order"
 	"github.com/sut63/team01/ent/patientinfo"
 	"github.com/sut63/team01/ent/pharmacist"
 	"github.com/sut63/team01/ent/positioninpharmacist"
@@ -185,6 +186,48 @@ func init() {
 	medicineDescHowtouse := medicineFields[5].Descriptor()
 	// medicine.HowtouseValidator is a validator for the "howtouse" field. It is called by the builders before save.
 	medicine.HowtouseValidator = medicineDescHowtouse.Validators[0].(func(string) error)
+	orderFields := schema.Order{}.Fields()
+	_ = orderFields
+	// orderDescHospitalid is the schema descriptor for hospitalid field.
+	orderDescHospitalid := orderFields[0].Descriptor()
+	// order.HospitalidValidator is a validator for the "hospitalid" field. It is called by the builders before save.
+	order.HospitalidValidator = orderDescHospitalid.Validators[0].(func(string) error)
+	// orderDescPrice is the schema descriptor for price field.
+	orderDescPrice := orderFields[2].Descriptor()
+	// order.PriceValidator is a validator for the "price" field. It is called by the builders before save.
+	order.PriceValidator = func() func(int) error {
+		validators := orderDescPrice.Validators
+		fns := [...]func(int) error{
+			validators[0].(func(int) error),
+			validators[1].(func(int) error),
+		}
+		return func(price int) error {
+			for _, fn := range fns {
+				if err := fn(price); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// orderDescAmount is the schema descriptor for amount field.
+	orderDescAmount := orderFields[3].Descriptor()
+	// order.AmountValidator is a validator for the "amount" field. It is called by the builders before save.
+	order.AmountValidator = func() func(int) error {
+		validators := orderDescAmount.Validators
+		fns := [...]func(int) error{
+			validators[0].(func(int) error),
+			validators[1].(func(int) error),
+		}
+		return func(amount int) error {
+			for _, fn := range fns {
+				if err := fn(amount); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	patientinfoFields := schema.PatientInfo{}.Fields()
 	_ = patientinfoFields
 	// patientinfoDescCardNumber is the schema descriptor for cardNumber field.

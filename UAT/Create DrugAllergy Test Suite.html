@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+	<title>Create DrugAllergy Test Suite</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">บันทึกข้อมูลสําเร็จ</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/DrugAllergy<datalist><option>http://localhost:3000/DrugAllergy</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div/div/a/h6<datalist><option>//div[@id='root']/div/div/div/a/h6</option><option>//a/h6</option><option>css=a.makeStyles-root-8.makeStyles-open-10.makeStyles-selected-18 &gt; h6.MuiTypography-root.makeStyles-label-11.MuiTypography-subtitle2</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-patient<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-patient</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-patient']/div[3]/ul/li[6]<datalist><option>//div[@id='menu-patient']/div[3]/ul/li[6]</option><option>//li[6]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-medicine<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-medicine</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-medicine']/div[3]/ul/li[2]<datalist><option>//div[@id='menu-medicine']/div[3]/ul/li[2]</option><option>//li[2]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>name=symptom<datalist><option>name=symptom</option><option>//input[@name='symptom']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=input[name="symptom"]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=symptom<datalist><option>name=symptom</option><option>//input[@name='symptom']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=input[name="symptom"]</option></datalist></td><td>หัวใจเต้นผิดปกติ</td>
+</tr>
+<tr><td>click</td><td>name=congenitalDisease<datalist><option>name=congenitalDisease</option><option>//input[@name='congenitalDisease']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=input[name="congenitalDisease"]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=congenitalDisease<datalist><option>name=congenitalDisease</option><option>//input[@name='congenitalDisease']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=input[name="congenitalDisease"]</option></datalist></td><td>-</td>
+</tr>
+<tr><td>type</td><td>name=annotation<datalist><option>name=annotation</option><option>//textarea[@name='annotation']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[6]/div/div/textarea</option><option>//textarea</option><option>css=textarea[name="annotation"]</option></datalist></td><td>-</td>
+</tr>
+<tr><td>click</td><td>name=dateTime<datalist><option>name=dateTime</option><option>//input[@name='dateTime']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[7]/div/div/input</option><option>//div[7]/div/div/input</option><option>css=input[name="dateTime"]</option></datalist></td><td></td>
+</tr>
+<tr><td>setText</td><td>name=dateTime<datalist><option>name=dateTime</option><option>//input[@name='dateTime']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[7]/div/div/input</option><option>//div[7]/div/div/input</option><option>css=input[name="dateTime"]</option></datalist></td><td>2021-01-21T18:41</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>id=swal2-title<datalist><option>id=swal2-title</option><option>//h2[@id='swal2-title']</option><option>//h2</option><option>css=#swal2-title</option></datalist></td><td>บันทึกข้อมูลสำเร็จ</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">ใส่อาการที่เเพ้ไม่ครบกําหนด</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/DrugAllergy<datalist><option>http://localhost:3000/DrugAllergy</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div/div/a/h6<datalist><option>//div[@id='root']/div/div/div/a/h6</option><option>//a/h6</option><option>css=a.makeStyles-root-8.makeStyles-open-10.makeStyles-selected-18 &gt; h6.MuiTypography-root.makeStyles-label-11.MuiTypography-subtitle2</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-patient<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-patient</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-patient']/div[3]/ul/li[6]<datalist><option>//div[@id='menu-patient']/div[3]/ul/li[6]</option><option>//li[6]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-medicine<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-medicine</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-medicine']/div[3]/ul/li<datalist><option>//div[@id='menu-medicine']/div[3]/ul/li</option><option>//li</option><option>css=li.MuiButtonBase-root.MuiListItem-root.MuiMenuItem-root.MuiMenuItem-gutters.MuiListItem-gutters.MuiListItem-button</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>name=symptom<datalist><option>name=symptom</option><option>//input[@name='symptom']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=input[name="symptom"]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=symptom<datalist><option>name=symptom</option><option>//input[@name='symptom']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=input[name="symptom"]</option></datalist></td><td>ง่วง</td>
+</tr>
+<tr><td>click</td><td>name=congenitalDisease<datalist><option>name=congenitalDisease</option><option>//input[@name='congenitalDisease']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=input[name="congenitalDisease"]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=congenitalDisease<datalist><option>name=congenitalDisease</option><option>//input[@name='congenitalDisease']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=input[name="congenitalDisease"]</option></datalist></td><td>-</td>
+</tr>
+<tr><td>click</td><td>name=annotation<datalist><option>name=annotation</option><option>//textarea[@name='annotation']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[6]/div/div/textarea</option><option>//textarea</option><option>css=textarea[name="annotation"]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=annotation<datalist><option>name=annotation</option><option>//textarea[@name='annotation']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[6]/div/div/textarea</option><option>//textarea</option><option>css=textarea[name="annotation"]</option></datalist></td><td>-</td>
+</tr>
+<tr><td>click</td><td>name=dateTime<datalist><option>name=dateTime</option><option>//input[@name='dateTime']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[7]/div/div/input</option><option>//div[7]/div/div/input</option><option>css=input[name="dateTime"]</option></datalist></td><td></td>
+</tr>
+<tr><td>setText</td><td>name=dateTime<datalist><option>name=dateTime</option><option>//input[@name='dateTime']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[7]/div/div/input</option><option>//div[7]/div/div/input</option><option>css=input[name="dateTime"]</option></datalist></td><td>2021-01-21T18:44</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>id=swal2-content<datalist><option>id=swal2-content</option><option>//div[@id='swal2-content']</option><option>//div[2]/div/div[2]/div</option><option>css=#swal2-content</option></datalist></td><td>อาการเเพ้ต้องมี 5 ตัวอักษรขึ้นไป</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">ไม่มีโรคประจําตัว เเล้วไม่ใส่ " - "</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/DrugAllergy<datalist><option>http://localhost:3000/DrugAllergy</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div/div/a/h6<datalist><option>//div[@id='root']/div/div/div/a/h6</option><option>//a/h6</option><option>css=a.makeStyles-root-8.makeStyles-open-10.makeStyles-selected-18 &gt; h6.MuiTypography-root.makeStyles-label-11.MuiTypography-subtitle2</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-patient<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-patient</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-patient']/div[3]/ul/li[6]<datalist><option>//div[@id='menu-patient']/div[3]/ul/li[6]</option><option>//li[6]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-medicine<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-medicine</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-medicine']/div[3]/ul/li[2]<datalist><option>//div[@id='menu-medicine']/div[3]/ul/li[2]</option><option>//li[2]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>name=symptom<datalist><option>name=symptom</option><option>//input[@name='symptom']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=input[name="symptom"]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=symptom<datalist><option>name=symptom</option><option>//input[@name='symptom']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=input[name="symptom"]</option></datalist></td><td>หัวใจเต้นไม่ผิดปกติ</td>
+</tr>
+<tr><td>click</td><td>name=congenitalDisease<datalist><option>name=congenitalDisease</option><option>//input[@name='congenitalDisease']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=input[name="congenitalDisease"]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>name=annotation<datalist><option>name=annotation</option><option>//textarea[@name='annotation']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[6]/div/div/textarea</option><option>//textarea</option><option>css=textarea[name="annotation"]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=annotation<datalist><option>name=annotation</option><option>//textarea[@name='annotation']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[6]/div/div/textarea</option><option>//textarea</option><option>css=textarea[name="annotation"]</option></datalist></td><td>-</td>
+</tr>
+<tr><td>click</td><td>name=dateTime<datalist><option>name=dateTime</option><option>//input[@name='dateTime']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[7]/div/div/input</option><option>//div[7]/div/div/input</option><option>css=input[name="dateTime"]</option></datalist></td><td></td>
+</tr>
+<tr><td>setText</td><td>name=dateTime<datalist><option>name=dateTime</option><option>//input[@name='dateTime']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[7]/div/div/input</option><option>//div[7]/div/div/input</option><option>css=input[name="dateTime"]</option></datalist></td><td>2021-01-21T18:53</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>id=swal2-content<datalist><option>id=swal2-content</option><option>//div[@id='swal2-content']</option><option>//div[2]/div/div[2]/div</option><option>css=#swal2-content</option></datalist></td><td>ถ้าไม่มีโรคประจําตัวกรุณาใส่เครื่องหมาย " - "</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">ไม่ใส่หมายเหตุ เเล้วไม่ใส่ " - "</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/DrugAllergy<datalist><option>http://localhost:3000/DrugAllergy</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div/div/a/h6<datalist><option>//div[@id='root']/div/div/div/a/h6</option><option>//a/h6</option><option>css=a.makeStyles-root-8.makeStyles-open-10.makeStyles-selected-18 &gt; h6.MuiTypography-root.makeStyles-label-11.MuiTypography-subtitle2</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-patient<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-patient</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-patient']/div[3]/ul/li[6]<datalist><option>//div[@id='menu-patient']/div[3]/ul/li[6]</option><option>//li[6]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[2]/div/div<datalist><option>//div[2]/div/div</option><option>css=div.swal2-header</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=mui-component-select-medicine<datalist><option>//body</option><option>css=body</option><option>id=mui-component-select-medicine</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='menu-medicine']/div[3]/ul/li[2]<datalist><option>//div[@id='menu-medicine']/div[3]/ul/li[2]</option><option>//li[2]</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>name=symptom<datalist><option>name=symptom</option><option>//input[@name='symptom']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=input[name="symptom"]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=symptom<datalist><option>name=symptom</option><option>//input[@name='symptom']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[4]/div/div/input</option><option>//div[4]/div/div/input</option><option>css=input[name="symptom"]</option></datalist></td><td>หัวใจเต้นผิดปกติ</td>
+</tr>
+<tr><td>click</td><td>name=congenitalDisease<datalist><option>name=congenitalDisease</option><option>//input[@name='congenitalDisease']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=input[name="congenitalDisease"]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=congenitalDisease<datalist><option>name=congenitalDisease</option><option>//input[@name='congenitalDisease']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[5]/div/div/input</option><option>//div[5]/div/div/input</option><option>css=input[name="congenitalDisease"]</option></datalist></td><td>-</td>
+</tr>
+<tr><td>click</td><td>name=dateTime<datalist><option>name=dateTime</option><option>//input[@name='dateTime']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[7]/div/div/input</option><option>//div[7]/div/div/input</option><option>css=input[name="dateTime"]</option></datalist></td><td></td>
+</tr>
+<tr><td>setText</td><td>name=dateTime<datalist><option>name=dateTime</option><option>//input[@name='dateTime']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/div[7]/div/div/input</option><option>//div[7]/div/div/input</option><option>css=input[name="dateTime"]</option></datalist></td><td>2021-01-21T18:55</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[2]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div[2]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>id=swal2-content<datalist><option>id=swal2-content</option><option>//div[@id='swal2-content']</option><option>//div[2]/div/div[2]/div</option><option>css=#swal2-content</option></datalist></td><td>ถ้าไม่มีหมายเหตุกรุณาใส่เครื่องหมาย " - "</td>
+</tr>
+</tbody></table>
+</body>
+</html>

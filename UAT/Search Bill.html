@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+	<title>test search Bill</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Sucess</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/SearchBill<datalist><option>http://localhost:3000/SearchBill</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>name=amount<datalist><option>name=amount</option><option>//input[@name='amount']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/input</option><option>//input</option><option>css=input[name="amount"]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=amount<datalist><option>name=amount</option><option>//input[@name='amount']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/input</option><option>//input</option><option>css=input[name="amount"]</option></datalist></td><td>1</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[4]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div[4]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyText</td><td>id=swal2-title<datalist><option>id=swal2-title</option><option>//h2[@id='swal2-title']</option><option>//h2</option><option>css=#swal2-title</option></datalist></td><td>ค้นหาข้อมูลสำเร็จ</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">show All</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/SearchBill<datalist><option>http://localhost:3000/SearchBill</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div<datalist><option>//div[@id='root']/div/div[2]/article/div</option><option>//article/div</option><option>css=div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-2.MuiGrid-align-items-xs-flex-start.MuiGrid-justify-xs-space-evenly</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[4]/button/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div[4]/button/span</option><option>//button/span</option><option>css=span.MuiButton-label</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyText</td><td>id=swal2-title<datalist><option>id=swal2-title</option><option>//h2[@id='swal2-title']</option><option>//h2</option><option>css=#swal2-title</option></datalist></td><td>ข้อมูลประวัติการชำระค่ายาทั้งหมด</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Fail</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:3000/SearchBill<datalist><option>http://localhost:3000/SearchBill</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>name=amount<datalist><option>name=amount</option><option>//input[@name='amount']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/input</option><option>//input</option><option>css=input[name="amount"]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=amount<datalist><option>name=amount</option><option>//input[@name='amount']</option><option>//div[@id='root']/div/div[2]/article/div/div/div/div/div/input</option><option>//input</option><option>css=input[name="amount"]</option></datalist></td><td>3</td>
+</tr>
+<tr><td>click</td><td>//div[@id='root']/div/div[2]/article/div/div[4]/button/span/span<datalist><option>//div[@id='root']/div/div[2]/article/div/div[4]/button/span/span</option><option>//button/span/span</option><option>css=span.MuiTypography-root.MuiTypography-button</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyText</td><td>id=swal2-title<datalist><option>id=swal2-title</option><option>//h2[@id='swal2-title']</option><option>//h2</option><option>css=#swal2-title</option></datalist></td><td>ไม่พบข้อมูลประวัติการจ่ายยาของผู้ป่วยที่ค้นหา</td>
+</tr>
+</tbody></table>
+</body>
+</html>

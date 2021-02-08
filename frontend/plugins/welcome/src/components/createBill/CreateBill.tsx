@@ -280,46 +280,6 @@ const Bill: FC<{}> = () => {
   }
 
 
-  // function CreateDispenseMedicines data
-  /* const CreateDispenseMedicines = async () => {
-    if (
-      sBill.annotation != undefined &&
-      sPharmacistID != 0 &&
-      sBill.payment != 0 &&
-      sBill.dispensemedicine != 0 &&
-      sBill.amount != 0
-    ) {
-      const Bills = {
-        amount: sBill.amount,
-        annotation: sBill.annotation,
-        payer: sBill.payer,
-        dispenseMedicine: sBill.dispensemedicine,
-        payment: sBill.payment,
-        pharmacist: sPharmacistID,
-        };
-
-      const res: any = await api.createBill({
-        bill: Bills,
-      });
-      console.log(sBill);
-
-      setStatus(true);
-      if (res.id != '') {
-        setAlert(true);
-        setLoading(true);
-        clear();
-      } else {
-        setAlert(false);
-      }
-    } else {
-      setStatus(true);
-      setAlert(false);
-    }
-    setTimeout(() => {
-      setStatus(false);
-    }, 5000);
-  }; */
-
   const Create_Bill = async () => {
     const Bills = {
       amount: sBill.amount,

@@ -1402,7 +1402,7 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EntBillFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntBillFromJSON((jsonValue)));
     }
 
     /**

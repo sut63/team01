@@ -13,6 +13,7 @@ import Order from './components/Order';
 import CreateBill from './components/createBill';
 import table_presrciption from './components/table_prescription';
 import SearchOrder from './components/Searchorder'
+import SearchBill from './components/SearchBill'
 export const plugin = createPlugin({
   id: 'welcome',
   register({ router }) {
@@ -35,5 +36,6 @@ export const plugin = createPlugin({
     router.registerRoute('/SearchDispenseMedicine', SearchDispenseMedicine);
     //
     router.registerRoute('/Bill', CreateBill);
+    router.registerRoute('/SearchBill', SearchBill);
   },
 });

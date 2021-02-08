@@ -126,7 +126,7 @@ export const AppSidebar = () => (
       ) : sPositionData == 'Bill' ? (
         <>
           <SidebarItem icon={ReceiptOutlinedIcon} to="Bill" text="ชำระค่ายา" />
-          <SidebarItem icon={SearchRoundedIcon} to="" text="ค้นหา------" />
+          <SidebarItem icon={SearchRoundedIcon} to="SearchBill" text="ค้นหาประวัติการชำระค่ายา" />
         </>
       ) : null
     ) : null}

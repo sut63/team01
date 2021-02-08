@@ -8,9 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sut63/team01/ent"
 	"github.com/sut63/team01/ent/bill"
-	"github.com/sut63/team01/ent/pharmacist"
-	"github.com/sut63/team01/ent/payment"
 	"github.com/sut63/team01/ent/dispensemedicine"
+	"github.com/sut63/team01/ent/payment"
+	"github.com/sut63/team01/ent/pharmacist"
 )
 
 // BillController defines the struct for the bill controller
@@ -21,12 +21,12 @@ type BillController struct {
 
 //Bill Structure
 type Bill struct {
-	Annotation   		 string
-	Amount				 int
-	Payer				 string
-	Payment		  		 int
-	DispenseMedicine     int
-	Pharmacist	 		 int
+	Annotation       string
+	Amount           int
+	Payer            string
+	Payment          int
+	DispenseMedicine int
+	Pharmacist       int
 }
 
 // CreateBill handles POST requests for adding bill entities
@@ -53,7 +53,7 @@ func (ctl *BillController) CreateBill(c *gin.Context) {
 		Query().
 		Where(payment.IDEQ(int(obj.Payment))).
 		Only(context.Background())
-		if err != nil {
+	if err != nil {
 		c.JSON(400, gin.H{
 			"error": "prescription not found",
 		})
@@ -94,14 +94,14 @@ func (ctl *BillController) CreateBill(c *gin.Context) {
 	if err != nil {
 		c.JSON(400, gin.H{
 			"status": false,
-			"error": err,
+			"error":  err,
 		})
 		return
 	}
 
 	c.JSON(200, gin.H{
 		"status": true,
-		"data": dm,
+		"data":   dm,
 	})
 }
 
@@ -129,17 +129,25 @@ func (ctl *BillController) GetBill(c *gin.Context) {
 		Query().
 		WithPharmacists().
 		WithPayments().
-		WithDispenseMedicines().
+		WithDispenseMedicines((func(pq *ent.DispenseMedicineQuery) {
+			pq.WithPrescription((func(pqq *ent.PrescriptionQuery) {
+				pqq.WithPrescriptionpatient()
+			}))
+		})).
 		Where(bill.IDEQ(int(id))).
 		Only(context.Background())
 	if err != nil {
 		c.JSON(404, gin.H{
-			"error": err.Error(),
+			"status": false,
+			"error":  err,
 		})
 		return
 	}
 
-	c.JSON(200, dm)
+	c.JSON(200, gin.H{
+		"status": true,
+		"data":   dm,
+	})
 }
 
 // ListBill handles request to get a list of bill entities
@@ -282,7 +290,7 @@ func (ctl *BillController) UpdateBill(c *gin.Context) {
 		})
 		return
 	}
-	
+
 	dm, err := ctl.client.Bill.
 		UpdateOneID(int(id)).
 		SetAmount(obj.Amount).

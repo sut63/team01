@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import Swal from 'sweetalert2'; // alert
 
 import { Content, Header, Page, pageTheme } from '@backstage/core';
@@ -7,13 +6,10 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 import {
   FormControl,
-  MenuItem,
   TextField,
   Button,
   Typography,
   Grid,
-  Card,
-  CardContent,
   Table,
   TableBody,
   TableCell,
@@ -22,7 +18,6 @@ import {
   TableRow,
   Paper,
   Avatar,
-  Select,
 } from '@material-ui/core';
 
 import { DefaultApi } from '../../api/apis'; // Api Gennerate From Command
@@ -86,15 +81,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Bill: FC<{}> = () => {
   const classes = useStyles();
-  const profile = { givenName: 'บันทึกการชำระค่ายา' };
+  const profile = { givenName: 'ค้นหารายการการชำระค่ายา' };
   const cookies = new Cookies();
   const api = new DefaultApi();
   const [loading, setLoading] = useState(true);
-  const [status, setStatus] = useState(false);
-  const [alert, setAlert] = useState(true);
-  const [amountError, setamountError] = React.useState('');
-  const [payerError, setpayerError] = React.useState('');
-  const [annotationError, setannotationError] = React.useState('');
   const [statusTable, setStatusTable] = useState(false);
   const [table1, setable1] = useState(true);
   const [table2, setable2] = useState(false);
@@ -173,66 +163,11 @@ const Bill: FC<{}> = () => {
   ) => {
     const name = event.target.name as keyof typeof Bill;
     const { value } = event.target;
-    const validateValue = value as string;
-    checkPattern(name, validateValue);
     setbillid(value);
     console.log(billid);
   };
 
-  //check and Alart massge
-  const validatename = (val: string) => {
-    return val != null ? true : false;
-  };
-  const validateannotation = (val: string) => {
-    return val != null ? true : false;
-  };
-  const validateamount = (val: string) => {
-    return val.charCodeAt(0) != 48 ? true : false;
-  };
-  const checkPattern = (id: string, value: string) => {
-    switch (id) {
-      case 'Payer':
-        validatename(value)
-          ? setpayerError('')
-          : setpayerError('กรุณากรอกชื่อผู้จ่ายเงิน');
-        return;
-      case 'annotation':
-        validateannotation(value)
-          ? setannotationError('')
-          : setannotationError('กรุณากรอกหมายเหตุ ถ้าไม่มีใส่ -');
-        return;
-      case 'amount':
-        validateamount(value)
-          ? setamountError('')
-          : setamountError('กรุณากรอกค่ารักษา หรือราคาต้องไม่ติดลบ');
-        return;
-      default:
-        return;
-    }
-  };
-
-  const alertMessage = (icon: any, title: any) => {
-    Toast.fire({
-      icon: icon,
-      title: title,
-    });
-  };
-  const checkCaseSaveError = (field: string) => {
-    switch (field) {
-      case 'payer':
-        alertMessage('error', 'กรุณากรอกชื่อผู้จ่ายเงิน');
-        return;
-      case 'amount':
-        alertMessage('error', 'กรุณากรอกค่ารักษา หรือราคาต้องไม่ติดลบ');
-        return;
-      case 'annotation':
-        alertMessage('error', 'กรุณากรอกหมายเหตุ ถ้าไม่มีใส่ -');
-        return;
-      default:
-        alertMessage('error', 'ค้นหาข้อมูลไม่สำเร็จ');
-        return;
-    }
-  };
+  
 
   //function SetData selectPrescriptions
 
@@ -240,36 +175,41 @@ const Bill: FC<{}> = () => {
 
   const SearchBill = async () => {
     if (billid > 0) {
-      try {
+      
         const apiUrl = 'http://localhost:8080/api/v1/bills/' + billid;
         const requestOptions = {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
         };
-
+        
         fetch(apiUrl, requestOptions)
           .then(response => response.json())
           .then(async data => {
             console.log(data);
             ssetApiBills(data.data);
             console.log(sapibill);
-            Toast.fire({
-              icon: 'success',
-              title: 'ค้นหาข้อมูลสำเร็จ',
-            });
-            console.log(sapibill?.edges?.Payments?.pay);
+            if (data.status === true) {
+              Toast.fire({
+                icon: 'success',
+                title: 'ค้นหาข้อมูลสำเร็จ',
+              });
+              console.log(sapibill?.edges?.Payments?.pay);
             setable1(false);
             setable2(true);
+            } else {
+              Toast.fire({
+                icon: 'error',
+                title: 'ไม่พบข้อมูลประวัติการจ่ายยาของผู้ป่วยที่ค้นหา',
+              });
+              setable1(false);
+              setable2(false);
+    
+            }
+            
+            
           });
-      } catch (e) {
-        Toast.fire({
-          icon: 'error',
-          title: 'ไม่พบข้อมูลประวัติการจ่ายยาของผู้ป่วยที่ค้นหา',
-        });
-        setable1(false);
-        setable2(false);
-        console.log(e);
-      }
+        
+
       /* } else if (validateCardNumberError != '') {
       Toast.fire({
         icon: 'error',

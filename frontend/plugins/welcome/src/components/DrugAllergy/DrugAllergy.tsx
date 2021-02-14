@@ -180,41 +180,51 @@ const DrugAllergy: FC<{}> = () => {
 
     // function save data
     function save() {
-        const drugallergy = {
-            patient: drugAllergy.patient,
-            medicine: drugAllergy.medicine,
-            pharmacist: Number(drugAllergy.pharmacist),
-            symptom: drugAllergy.symptom,
-            congenitalDisease: drugAllergy.congenitalDisease,
-            annotation: drugAllergy.annotation,
-            dateTime: drugAllergy.dateTime + ":00+07:00",
-        };
-        const api = 'http://localhost:8080/api/v1/drugallergys';
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(drugallergy),
-        };
-        fetch(api, requestOptions)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                if (data.status === true) {
-                    //console.log(data.data)
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'บันทึกข้อมูลสำเร็จ',
-                    });
-                    clear();
-                } else {
-                    if (data.error.Name === undefined) {
-                        checkCaseError(data.error)
+        if (symptomError === "" && annotationError === "" && congenitalDiseaseError === "") {
+            const drugallergy = {
+                patient: drugAllergy.patient,
+                medicine: drugAllergy.medicine,
+                pharmacist: Number(drugAllergy.pharmacist),
+                symptom: drugAllergy.symptom,
+                congenitalDisease: drugAllergy.congenitalDisease,
+                annotation: drugAllergy.annotation,
+                dateTime: drugAllergy.dateTime + ":00+07:00",
+            };
+            const api = 'http://localhost:8080/api/v1/drugallergys';
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(drugallergy),
+            };
+            fetch(api, requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    if (data.status === true) {
+                        //console.log(data.data)
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'บันทึกข้อมูลสำเร็จ',
+                        });
+                        clear();
+                    } else {
+                        if (data.error.Name === undefined) {
+                            checkCaseError(data.error)
+                        }
+                        else {
+                            checkCaseError(data.error.Name)
+                        }
                     }
-                    else {
-                        checkCaseError(data.error.Name)
-                    }
-                }
-            });
+                });
+        }else {
+            if(symptomError !== ""){
+                checkCaseError("symptom") 
+            }else if(congenitalDiseaseError !== ""){
+                checkCaseError("congenitalDisease") 
+            }else{
+                checkCaseError("annotation") 
+            }  
+        }
     }
 
     const clear = async () => {
@@ -223,11 +233,11 @@ const DrugAllergy: FC<{}> = () => {
     }
 
     const checkPosition = async () => {
-        if(cookies.get('PositionData') != 'DrugAllergy'){
-          history.pushState('', '', '/' + cookies.get('PositionData'));
-          window.location.reload(false); 
+        if (cookies.get('PositionData') != 'DrugAllergy') {
+            history.pushState('', '', '/' + cookies.get('PositionData'));
+            window.location.reload(false);
         }
-      };
+    };
 
     // Lifecycle Hooks
     useEffect(() => {
